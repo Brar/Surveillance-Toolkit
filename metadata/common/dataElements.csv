@@ -1,0 +1,19 @@
+code,name,shortName,fieldMask,formName,domainType,valueType,aggregationType,zeroIsSignificant,url,optionSetCode,description
+NEOIPC_BSI_INF_DATE,NeoIPC BSI Infection date,NeoIPC BSI Inf. date,,Infection date,TRACKER,DATE,DEFAULT,False,,,The day the first infection symptoms appeared. 
+NEOIPC_BSI_AB_TREATMENT,NeoIPC BSI Antibiotic treatment,NeoIPC BSI Antibiotic treatment,,Treatment with five or more days of intravenous antibiotics was initiated:,TRACKER,TRUE_ONLY,DEFAULT,False,,,
+NEOIPC_BSI_DEV_ASS,NeoIPC BSI Device association,NeoIPC BSI Dev.-ass.,,Device association,TRACKER,INTEGER_ZERO_OR_POSITIVE,DEFAULT,True,,NEOIPC_BSI_DEVICE_ASS,
+NEOIPC_BSI_TEMPERATURE,NeoIPC BSI Temperature,NeoIPC BSI Temperature,,"Temperature instability or fever ( >38°C), or hypothermia (<36.5°C)",TRACKER,BOOLEAN,DEFAULT,True,,,"Temperature instability or fever ( >38°C), or hypothermia (<36,5°C)"
+NEOIPC_BSI_NO_POS_CULTURE,NeoIPC BSI No positive culture,NeoIPC BSI No positive culture,,No positive blood/cerebrospinal fluid culture,TRACKER,TRUE_ONLY,DEFAULT,False,,,"Check this box it there was no positive microbiological blood and/or cerebrospinal fluid culture during this sepsis episode. This also applies when no sample was taken or when tha sample could not be processed in the lab."
+NEOIPC_BSI_BRADYCARDIA,NeoIPC BSI Bradycardia,NeoIPC BSI Bradycardia,,Increased bradycardia ( < 80l/min) or new onset resting tachycardia (>200/min).,TRACKER,BOOLEAN,DEFAULT,True,,,"Increased bradycardia ( < 80l/min) or new onset resting tachycardia (>200/min)."
+NEOIPC_BSI_PERFUSION,NeoIPC BSI Perfusion,NeoIPC BSI Perfusion,,Capillary refill time of > 3s or skin mottling or core/peripheral temperature gap > 2°C,TRACKER,BOOLEAN,DEFAULT,True,,,"Capillary refill time of > 3s or skin mottling or core/peripheral temperature gap > 2°C"
+NEOIPC_BSI_APNOEA,NeoIPC BSI Apnoea,NeoIPC BSI Apnoea,,New/more frequent apnoea (>20s) or increase in oxygen requirement or ventilator support,TRACKER,BOOLEAN,DEFAULT,True,,,"New/more frequent apnoea (>20s) or increase in oxygen requirement or ventilator support"
+NEOIPC_BSI_ACIDOSIS,NeoIPC BSI Acidosis,NeoIPC BSI Acidosis,,unexplained metabolic acidosis (BE < -10 nmol/L),TRACKER,BOOLEAN,DEFAULT,True,,,"unexplained metabolic acidosis (BE < -10 nmol/L)"
+NEOIPC_BSI_HYPERGLYCAEMIA,NeoIPC BSI Hyperglycaemia ,NeoIPC BSI Hyperglycaemia ,,New hyperglycaemia (>140mg/dl),TRACKER,BOOLEAN,DEFAULT,True,,,"New onset of hyperglycaemia (>140mg/dl)"
+NEOIPC_BSI_FEEDING_INTOLERANCE,NeoIPC BSI Feeding intolerance,NeoIPC BSI Feeding intolerance,,Ileus or enteral feeds intolerance or abdominal distension,TRACKER,BOOLEAN,DEFAULT,True,,,
+NEOIPC_BSI_IRRITABILITY,NeoIPC BSI Irritability,NeoIPC BSI Irritability,,"Irritability, lethargy, apathy or unstable condition",TRACKER,BOOLEAN,DEFAULT,True,,,
+NEOIPC_BSI_WBC,NeoIPC BSI White blood cell count,NeoIPC BSI WBC,,WBC < 4 × 10^9/L or > 20 × 10^9/L,TRACKER,BOOLEAN,DEFAULT,True,,,"A White blood cell count(WBC) < 4 × 10^9/L or > 20 × 10^9/L"
+NEOIPC_BSI_PLATELET_COUNT,NeoIPC BSI Platelet count,NeoIPC BSI Platelet,,Platelet count of < 100 × 10^9/L,TRACKER,BOOLEAN,DEFAULT,True,,,
+NEOIPC_BSI_CRP,NeoIPC BSI CRP,NeoIPC BSI CRP,,CRP > 10.0 mg/dl ,TRACKER,BOOLEAN,DEFAULT,True,,,
+NEOIPC_BSI_PROCALCITONIN,NeoIPC BSI Procalcitonin,NeoIPC BSI Procalcitonin,,Procalcitonin ≥ 2ng/ml,TRACKER,BOOLEAN,DEFAULT,True,,,
+NEOIPC_BSI_IT_RATIO,NeoIPC BSI I/T ratio,NeoIPC BSI I/T,,I/T ratio of neutrophil blood cells > 0.2,TRACKER,BOOLEAN,DEFAULT,True,,,"I/T ratio of neutrophil blood cells > 0.2"
+NEOIPC_BSI_INTERLEUKIN,NeoIPC BSI Interleukin,NeoIPC BSI Interleukin,,Increased levels of interleukin (IL) 6 or 8,TRACKER,BOOLEAN,DEFAULT,True,,,
