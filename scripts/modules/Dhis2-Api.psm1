@@ -102,25 +102,27 @@ function Set-Dhis2Defaults {
                   }
             }
       }
-      elseif ($Apibase) {
-            if ([string]::IsNullOrWhiteSpace($Apibase) -or -not (Test-ApiBase $Apibase)) {
-                  return
+      else {
+            if ($Apibase) {
+                  if ([string]::IsNullOrWhiteSpace($Apibase) -or -not (Test-ApiBase $Apibase)) {
+                        return
+                  }
+                  $script:Dhis2DefaultApiBase = $Apibase
             }
-            $script:Dhis2DefaultApiBase = $Apibase
-      }
-      elseif ($PersonalAccessToken) {
-            if ($PersonalAccessToken.Length -eq 0) {
-                  Reset-Dhis2Defaults -PersonalAccessToken
+            if ($PersonalAccessToken) {
+                  if ($PersonalAccessToken.Length -eq 0) {
+                        Reset-Dhis2Defaults -PersonalAccessToken
+                  }
+                  else {
+                        $script:Dhis2DefaultToken = $PersonalAccessToken
+                  }
             }
-            else {
-                  $script:Dhis2DefaultToken = $PersonalAccessToken
+            if ($UserName) {
+                  $script:Dhis2DefaultUserName = $UserName
             }
-      }
-      elseif ($UserName) {
-            $script:Dhis2DefaultUserName = $UserName
-      }
-      elseif ($Password) {
-            $script:Dhis2DefaultPassword = $Password
+            if ($Password) {
+                  $script:Dhis2DefaultPassword = $Password
+            }
       }
 }
 
@@ -170,7 +172,8 @@ function Get-Dhis2Object {
       [CmdletBinding(DefaultParameterSetName = 'UsernamePasswordHash')]
       param (
             [Parameter(Position = 0, Mandatory, ValueFromPipelineByPropertyName, HelpMessage = 'Enter the DHIS2 API object to read')]
-            [ArgumentCompletions('dataElements/', 'dataValueSets', 'metadata/version', 'options', 'optionSets/', 'organisationUnits/', 'system/id', 'system/info')]
+            [ArgumentCompletions('dataElements/', 'dataValueSets', 'me', 'me/authorities', 'me/authorities/ALL', 'metadata/version', 'options', 'optionSets/', 'organisationUnits/',
+            'programs/', 'programStages/', 'programStageSections/', 'system/id', 'system/info')]
             [string] $ApiObject,
 
             [Parameter(Position = 1, ParameterSetName = 'PersonalAccessTokenArray', ValueFromPipeline, ValueFromPipelineByPropertyName, HelpMessage = 'Enter the query parameters as array of ValueTuple[string,string]')]
@@ -665,7 +668,7 @@ function New-Dhis2DataElement {
             if ($FormName) { $obj.formName = $FormName }
             if ($Description) { $obj.description = $Description }
             if ($OptionSetId) { $obj.optionSet = @{ id = $OptionSetId } }
-            if ($CommentOptionSetId) { $obj.commentOptionSetId = @{ id = $CommentOptionSetId } }
+            if ($CommentOptionSetId) { $obj.commentOptionSet = @{ id = $CommentOptionSetId } }
             if ($Id) { $obj.id = $Id }
             if ($FieldMask) { $obj.fieldMask = $FieldMask }
             if ($ZeroIsSignificant) { $obj.zeroIsSignificant = $ZeroIsSignificant.ToString() }
@@ -1037,20 +1040,21 @@ function New-Dhis2Program {
             [Parameter(ValueFromPipelineByPropertyName)]
             [switch]$OnlyEnrollOnce,
 
+            # We might want to have a separate generator function for this
             [Parameter(ValueFromPipelineByPropertyName)]
             [ValidateScript({if($null -eq $_){$true} else {foreach($att in @($_)){if(-not [System.Text.RegularExpressions.Regex]::IsMatch($att.trackedEntityAttribute.id, '^[A-Za-z][A-Za-z0-9]{10}$')){throw}}}$true},
             ErrorMessage = 'The value ''{0}'' is not valid as DHIS2 programTrackedEntityAttributes.')]
-            [object[]]$TrackedEntityAttributes,
+            [object[]]$ProgramTrackedEntityAttributes,
 
             [Parameter(ValueFromPipelineByPropertyName)]
-            [ValidateScript({if($null -eq $_){$true}else {foreach($att in $_){if(-not [System.Text.RegularExpressions.Regex]::IsMatch($att, '^[A-Za-z][A-Za-z0-9]{10}$')){ throw }}}},
+            [ValidateScript({if($null -eq $_){$true}else{foreach($att in $_){if(-not [System.Text.RegularExpressions.Regex]::IsMatch($att, '^[A-Za-z][A-Za-z0-9]{10}$')){throw}}}$true},
             ErrorMessage = 'The value ''{0}'' contains an invalid DHIS2 id. DHIS2 ids must be 11 characters long, ' +
                   'consist of alphanumeric characters (A-Za-z0-9) only, and start with an alphabetic character (A-Za-z). ' +
                   'See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/maintenance.html#webapi_system_resource_generate_identifiers')]
             [string[]]$ProgramStageIds,
 
             [Parameter(ValueFromPipelineByPropertyName)]
-            [ValidateScript({if($null -eq $_){$true}else {foreach($att in $_){if(-not [System.Text.RegularExpressions.Regex]::IsMatch($att, '^[A-Za-z][A-Za-z0-9]{10}$')){ throw }}}},
+            [ValidateScript({if($null -eq $_){$true}else{foreach($att in $_){if(-not [System.Text.RegularExpressions.Regex]::IsMatch($att, '^[A-Za-z][A-Za-z0-9]{10}$')){throw}}}$true},
             ErrorMessage = 'The value ''{0}'' contains an invalid DHIS2 id. DHIS2 ids must be 11 characters long, ' +
                   'consist of alphanumeric characters (A-Za-z0-9) only, and start with an alphabetic character (A-Za-z). ' +
                   'See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/maintenance.html#webapi_system_resource_generate_identifiers')]
@@ -1062,7 +1066,6 @@ function New-Dhis2Program {
                   'consist of alphanumeric characters (A-Za-z0-9) only, and start with an alphabetic character (A-Za-z). ' +
                   'See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/maintenance.html#webapi_system_resource_generate_identifiers')]
             [string]$Id
-
       )
 
       process {
@@ -1090,9 +1093,297 @@ function New-Dhis2Program {
             if ($null -ne $MinAttributesRequiredToSearch) { $obj.minAttributesRequiredToSearch = $MinAttributesRequiredToSearch.ToString([System.Globalization.NumberFormatInfo]::InvariantInfo) }
             if ($null -ne $MaxTeiCountToReturn) { $obj.maxTeiCountToReturn = $MaxTeiCountToReturn.ToString([System.Globalization.NumberFormatInfo]::InvariantInfo) }
             if ($OnlyEnrollOnce) { $obj.onlyEnrollOnce = $OnlyEnrollOnce.ToString() }
-            if ($TrackedEntityAttributes) { $obj.programTrackedEntityAttributes = $TrackedEntityAttributes }
+            if ($ProgramTrackedEntityAttributes) { $obj.programTrackedEntityAttributes = $ProgramTrackedEntityAttributes }
             if ($ProgramStageIds) { $obj.programStages = @( $ProgramStageIds | ForEach-Object{ @{ id = $_ } } ) }
             if ($OrganisationUnitIds) { $obj.organisationUnits = @( $OrganisationUnitIds | ForEach-Object{ @{ id = $_ } } ) }
+            if ($Id) { $obj.id = $Id }
+            return $obj
+      }
+}
+
+function New-Dhis2ProgramTrackedEntityAttribute {
+      [CmdletBinding()]
+      param (
+            [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+            [ValidateScript({ [System.Text.RegularExpressions.Regex]::IsMatch($_, '^[A-Za-z][A-Za-z0-9]{10}$') },
+            ErrorMessage = 'The value ''{0}'' is not a valid DHIS2 id. DHIS2 ids must be 11 characters long, ' +
+                  'consist of alphanumeric characters (A-Za-z0-9) only, and start with an alphabetic character (A-Za-z). ' +
+                  "See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/maintenance.html#webapi_system_resource_generate_identifiers")]
+            [string]$TrackedEntityAttributeId,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$DisplayInList,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$Mandatory,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$Searchable,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [System.Nullable[int]]$SortOrder,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [ValidateScript({ if ([string]::IsNullOrEmpty($_)) { $true } else { [System.Text.RegularExpressions.Regex]::IsMatch($_, '^[A-Za-z][A-Za-z0-9]{10}$') } },
+            ErrorMessage = 'The value ''{0}'' is not a valid DHIS2 id. DHIS2 ids must be 11 characters long, ' +
+                  'consist of alphanumeric characters (A-Za-z0-9) only, and start with an alphabetic character (A-Za-z). ' +
+                  'See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/maintenance.html#webapi_system_resource_generate_identifiers')]
+            [string]$ProgramId,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [ValidateScript({ if ([string]::IsNullOrEmpty($_)) { $true } else { [System.Text.RegularExpressions.Regex]::IsMatch($_, '^[A-Za-z][A-Za-z0-9]{10}$') } },
+            ErrorMessage = 'The value ''{0}'' is not a valid DHIS2 id. DHIS2 ids must be 11 characters long, ' +
+                  'consist of alphanumeric characters (A-Za-z0-9) only, and start with an alphabetic character (A-Za-z). ' +
+                  'See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/maintenance.html#webapi_system_resource_generate_identifiers')]
+            [string]$Id
+      )
+
+      process {
+            if (-not  $TrackedEntityAttributeId) { return }
+            $obj = @{
+                  trackedEntityAttribute = @{ id = $TrackedEntityAttributeId }
+            }
+            if ($DisplayInList) { $obj.displayInList = $DisplayInList.ToString() }
+            if ($Mandatory) { $obj.mandatory = $Mandatory.ToString() }
+            if ($Searchable) { $obj.searchable = $Searchable.ToString() }
+            if ($null -ne $SortOrder) { $obj.sortOrder = $SortOrder.ToString([System.Globalization.NumberFormatInfo]::InvariantInfo) }
+            if ($ProgramId) { $obj.program = @{ id = $ProgramId } }
+            if ($Id) { $obj.id = $Id }
+            return $obj
+      }
+}
+
+function New-Dhis2ProgramStage {
+      [CmdletBinding()]
+      param (
+            [Parameter(Position = 0, Mandatory, ValueFromPipelineByPropertyName, HelpMessage = 'The proram stage name.')]
+            [ValidateLength(1,230)]
+            [string]$Name,
+
+            [Parameter(Position = 1, Mandatory, ValueFromPipelineByPropertyName)]
+            [ValidateScript({ [System.Text.RegularExpressions.Regex]::IsMatch($_, '^[A-Za-z][A-Za-z0-9]{10}$') },
+            ErrorMessage = 'The value ''{0}'' is not a valid DHIS2 id. DHIS2 ids must be 11 characters long, ' +
+                  'consist of alphanumeric characters (A-Za-z0-9) only, and start with an alphabetic character (A-Za-z). ' +
+                  'See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/maintenance.html#webapi_system_resource_generate_identifiers')]
+            [string]$ProgramId,
+
+            [Parameter(ValueFromPipelineByPropertyName, HelpMessage = 'The description of the program stage.')]
+            [string]$Description,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [System.Nullable[uint]]$MinDaysFromStart,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [ValidateSet('BiWeekly')]
+            [string]$PeriodType,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$Repeatable,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$DisplayGenerateEventBox,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$AutoGenerateEvent,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$OpenAfterEnrollment,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$EnableUserAssignment,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$BlockEntryForm,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$RemindCompleted,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$AllowGenerateNextVisit,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$GeneratedByEnrollmentDate,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$HideDueDate,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$PreGenerateUID,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [System.Nullable[int]]$SortOrder,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [ValidateScript({if($null -eq $_){$true} else {foreach($att in @($_)){if(-not [System.Text.RegularExpressions.Regex]::IsMatch($att.dataElement.id, '^[A-Za-z][A-Za-z0-9]{10}$')){throw}}}$true},
+            ErrorMessage = 'The value ''{0}'' is not valid as DHIS2 programTrackedEntityAttributes.')]
+            [object[]]$ProgramStageDataElements,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [ValidateScript({if($null -eq $_){$true}else{foreach($att in $_){if(-not [System.Text.RegularExpressions.Regex]::IsMatch($att, '^[A-Za-z][A-Za-z0-9]{10}$')){throw}}}$true},
+            ErrorMessage = 'The value ''{0}'' contains an invalid DHIS2 id. DHIS2 ids must be 11 characters long, ' +
+                  'consist of alphanumeric characters (A-Za-z0-9) only, and start with an alphabetic character (A-Za-z). ' +
+                  'See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/maintenance.html#webapi_system_resource_generate_identifiers')]
+            [string[]]$ProgramStageSectionIds,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [ValidateScript({ if ([string]::IsNullOrEmpty($_)) { $true } else { [System.Text.RegularExpressions.Regex]::IsMatch($_, '^[A-Za-z][A-Za-z0-9]{10}$') } },
+            ErrorMessage = 'The value ''{0}'' is not a valid DHIS2 id. DHIS2 ids must be 11 characters long, ' +
+                  'consist of alphanumeric characters (A-Za-z0-9) only, and start with an alphabetic character (A-Za-z). ' +
+                  'See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/maintenance.html#webapi_system_resource_generate_identifiers')]
+            [string]$Id
+      )
+
+      process {
+            if (-not  $Name) { return }
+            if (-not  $ProgramId) { return }
+            $obj = @{
+                  name = $Name
+                  program = @{ id = $ProgramId }
+                  # Always pass the following flags since the DHIS2 default is true
+                  displayGenerateEventBox = $DisplayGenerateEventBox.ToString()
+                  autoGenerateEvent = $AutoGenerateEvent.ToString()
+            }
+            if ($Description) { $obj.description = $Description }
+            if ($null -ne $MinDaysFromStart) { $obj.minDaysFromStart = $MinDaysFromStart.ToString([System.Globalization.NumberFormatInfo]::InvariantInfo) }
+            if ($PeriodType) { $obj.periodType = $PeriodType }
+            if ($Repeatable) { $obj.repeatable = $Repeatable.ToString() }
+            if ($OpenAfterEnrollment) { $obj.openAfterEnrollment = $OpenAfterEnrollment.ToString() }
+            if ($EnableUserAssignment) { $obj.enableUserAssignment = $EnableUserAssignment.ToString() }
+            if ($BlockEntryForm) { $obj.blockEntryForm = $BlockEntryForm.ToString() }
+            if ($RemindCompleted) { $obj.remindCompleted = $RemindCompleted.ToString() }
+            if ($AllowGenerateNextVisit) { $obj.allowGenerateNextVisit = $AllowGenerateNextVisit.ToString() }
+            if ($GeneratedByEnrollmentDate) { $obj.generatedByEnrollmentDate = $GeneratedByEnrollmentDate.ToString() }
+            if ($HideDueDate) { $obj.hideDueDate = $HideDueDate.ToString() }
+            if ($PreGenerateUID) { $obj.preGenerateUID = $PreGenerateUID.ToString() }
+            if ($null -ne $SortOrder) { $obj.sortOrder = $SortOrder.ToString([System.Globalization.NumberFormatInfo]::InvariantInfo) }
+            if ($ProgramStageDataElements) { $obj.programStageDataElements = $ProgramStageDataElements }
+            if ($ProgramStageSectionIds) { $obj.programStageSections = @( $ProgramStageSectionIds | ForEach-Object{ @{ id = $_ } } ) }
+            if ($Id) { $obj.id = $Id }
+            return $obj
+      }
+}
+
+function New-Dhis2ProgramStageDataElement {
+      [CmdletBinding(DefaultParameterSetName = 'Searchable')]
+      param (
+            [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+            [ValidateScript({ [System.Text.RegularExpressions.Regex]::IsMatch($_, '^[A-Za-z][A-Za-z0-9]{10}$') },
+            ErrorMessage = 'The value ''{0}'' is not a valid DHIS2 id. DHIS2 ids must be 11 characters long, ' +
+                  'consist of alphanumeric characters (A-Za-z0-9) only, and start with an alphabetic character (A-Za-z). ' +
+                  "See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/maintenance.html#webapi_system_resource_generate_identifiers")]
+            [string]$DataElementId,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$AllowProvidedElsewhere,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$Compulsory,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$DisplayInReports,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [ValidateSet('VERTICAL_RADIOBUTTONS')]
+            [string]$DesktopRenderType,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [ValidateSet('VERTICAL_RADIOBUTTONS')]
+            [string]$MobileRenderType,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [System.Nullable[int]]$SortOrder,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [ValidateScript({ if ([string]::IsNullOrEmpty($_)) { $true } else { [System.Text.RegularExpressions.Regex]::IsMatch($_, '^[A-Za-z][A-Za-z0-9]{10}$') } },
+            ErrorMessage = 'The value ''{0}'' is not a valid DHIS2 id. DHIS2 ids must be 11 characters long, ' +
+                  'consist of alphanumeric characters (A-Za-z0-9) only, and start with an alphabetic character (A-Za-z). ' +
+                  'See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/maintenance.html#webapi_system_resource_generate_identifiers')]
+            [string]$ProgramStageId,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [ValidateScript({ if ([string]::IsNullOrEmpty($_)) { $true } else { [System.Text.RegularExpressions.Regex]::IsMatch($_, '^[A-Za-z][A-Za-z0-9]{10}$') } },
+            ErrorMessage = 'The value ''{0}'' is not a valid DHIS2 id. DHIS2 ids must be 11 characters long, ' +
+                  'consist of alphanumeric characters (A-Za-z0-9) only, and start with an alphabetic character (A-Za-z). ' +
+                  'See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/maintenance.html#webapi_system_resource_generate_identifiers')]
+            [string]$Id
+      )
+
+      process {
+            if (-not  $DataElementId) { return }
+            $obj = @{
+                  dataElement = @{ id = $DataElementId }
+            }
+            if ($AllowProvidedElsewhere) { $obj.allowProvidedElsewhere = $AllowProvidedElsewhere.ToString() }
+            if ($Compulsory) { $obj.compulsory = $Compulsory.ToString() }
+            if ($DisplayInReports) { $obj.displayInReports = $DisplayInReports.ToString() }
+            if ($DesktopRenderType -and $MobileRenderType) { $obj.renderType = @{ DESKTOP = @{ type = $DesktopRenderType }; MOBILE = @{ type = $MobileRenderType } } }
+            elseif ($DesktopRenderType) { $obj.renderType = @{ DESKTOP = @{ type = $DesktopRenderType } } }
+            elseif ($MobileRenderType) { $obj.renderType = @{ MOBILE = @{ type = $MobileRenderType } } }
+            if ($null -ne $SortOrder) { $obj.sortOrder = $SortOrder.ToString([System.Globalization.NumberFormatInfo]::InvariantInfo) }
+            if ($ProgramStageId) { $obj.programStage = @{ id = $ProgramStageId } }
+            if ($Id) { $obj.id = $Id }
+            return $obj
+      }
+}
+
+function New-Dhis2ProgramStageSection {
+      [CmdletBinding()]
+      param (
+            [Parameter(Position = 0, Mandatory, ValueFromPipelineByPropertyName, HelpMessage = 'The proram stage name.')]
+            [ValidateLength(1,230)]
+            [string]$Name,
+
+            [Parameter(Position = 1, Mandatory, ValueFromPipelineByPropertyName)]
+            [ValidateScript({ [System.Text.RegularExpressions.Regex]::IsMatch($_, '^[A-Za-z][A-Za-z0-9]{10}$') },
+            ErrorMessage = 'The value ''{0}'' is not a valid DHIS2 id. DHIS2 ids must be 11 characters long, ' +
+                  'consist of alphanumeric characters (A-Za-z0-9) only, and start with an alphabetic character (A-Za-z). ' +
+                  "See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/maintenance.html#webapi_system_resource_generate_identifiers")]
+            [string]$ProgramStageId,
+
+            [Parameter(ValueFromPipelineByPropertyName, HelpMessage = 'The description of the program.')]
+            [string]$Description,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [ValidateScript({if($null -eq $_){$true}else{foreach($att in $_){if(-not [System.Text.RegularExpressions.Regex]::IsMatch($att, '^[A-Za-z][A-Za-z0-9]{10}$')){throw}}}$true},
+            ErrorMessage = 'The value ''{0}'' contains an invalid DHIS2 id. DHIS2 ids must be 11 characters long, ' +
+                  'consist of alphanumeric characters (A-Za-z0-9) only, and start with an alphabetic character (A-Za-z). ' +
+                  'See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/maintenance.html#webapi_system_resource_generate_identifiers')]
+            [string[]]$DataElementIds,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [System.Nullable[int]]$SortOrder,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [ValidateSet('LISTING')]
+            [string]$DesktopRenderType = 'LISTING',
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [ValidateSet('LISTING')]
+            [string]$MobileRenderType = 'LISTING',
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [ValidateScript({ if ([string]::IsNullOrEmpty($_)) { $true } else { [System.Text.RegularExpressions.Regex]::IsMatch($_, '^[A-Za-z][A-Za-z0-9]{10}$') } },
+            ErrorMessage = 'The value ''{0}'' is not a valid DHIS2 id. DHIS2 ids must be 11 characters long, ' +
+                  'consist of alphanumeric characters (A-Za-z0-9) only, and start with an alphabetic character (A-Za-z). ' +
+                  'See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/maintenance.html#webapi_system_resource_generate_identifiers')]
+            [string]$Id
+      )
+
+      process {
+            if (-not  $Name) { return }
+            if (-not  $ProgramStageId) { return }
+            $obj = @{
+                  name = $Name
+                  programStage = @{ id = $ProgramStageId }
+                  # Hard-coded default for now
+                  programIndicators = @()
+            }
+            if ($Description) { $obj.description = $Description }
+            if ($DataElementIds) { $obj.dataElements = @( $DataElementIds | ForEach-Object{ @{ id = $_ } } ) }
+            if ($null -ne $SortOrder) { $obj.sortOrder = $SortOrder.ToString([System.Globalization.NumberFormatInfo]::InvariantInfo) }
+            if ($DesktopRenderType -and $MobileRenderType) { $obj.renderType = @{ DESKTOP = @{ type = $DesktopRenderType }; MOBILE = @{ type = $MobileRenderType } } }
+            elseif ($DesktopRenderType) { $obj.renderType = @{ DESKTOP = @{ type = $DesktopRenderType } } }
+            elseif ($MobileRenderType) { $obj.renderType = @{ MOBILE = @{ type = $MobileRenderType } } }
             if ($Id) { $obj.id = $Id }
             return $obj
       }
@@ -1109,6 +1400,10 @@ Export-ModuleMember -Function @(
       'Remove-Dhis2Object'
       'New-Dhis2DataElement'
       'New-Dhis2Program'
+      'New-Dhis2ProgramTrackedEntityAttribute'
+      'New-Dhis2ProgramStage'
+      'New-Dhis2ProgramStageDataElement'
+      'New-Dhis2ProgramStageSection'
       'New-Dhis2ProgramRuleVariable'
       'New-Dhis2ProgramRule'
       'New-Dhis2ProgramRuleAction'

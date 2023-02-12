@@ -17,7 +17,7 @@ $rootOrgUnit = $organisationUnits | Where-Object { $_.parent_code -eq '' }
 $orgUnitMap = @{}
 $rootOrgUnit | Select-Object -ExcludeProperty parent_code | Add-Dhis2Object organisationUnits -CodeMap $orgUnitMap > $null
 
-# Now add the lower level organisation units recursively
+# Now add the lower level organisation units
 $tmpMap = $orgUnitMap.Clone()
 while ($tmpMap.Keys.Count -gt 0) {
     $codes = @($tmpMap.Keys)
@@ -251,7 +251,8 @@ $trackedEntityAttributes | Add-Dhis2Object trackedEntityAttributes -CodeMap $tra
 # trackedEntityTypes #
 ######################
 # Here we emulate the payload that the web-GUI generates which is weird and also hard to generate.
-# This is pretty ugly and probably has room for improvement
+# This is pretty ugly and has a lot of room for improvement
+# In any case, below here things are pretty hacky and mostly hard coded because I need to get things ready.
 $trackedEntityTypesRaw = Import-Csv $PSScriptRoot/../metadata/common/trackedEntityTypes.csv -Encoding utf8NoBOM
 $trackedEntityTypeAttributes = Import-Csv $PSScriptRoot/../metadata/common/trackedEntityTypeAttributes.csv -Encoding utf8NoBOM
 
@@ -296,5 +297,44 @@ $trackedEntityTypes = $trackedEntityTypesRaw | ForEach-Object {
         })
     $result
 }
+$trackedEntityTypes | Add-Dhis2Object trackedEntityTypes > $null
 
-$trackedEntityTypes | Add-Dhis2Object trackedEntityTypes -CodeMap $map > $null
+###########
+# program #
+###########
+#  hard-coded for now
+$programMap = @{}
+$programMap.NEOIPC_CORE = Get-Dhis2Object 'system/id' -Unwrap
+$metadata = @{
+    programs = @(
+        # Double-checked with UI-generated SQL
+        New-Dhis2Program `
+            -Name 'NeoIPC Core' `
+            -ShortName 'NeoIPC Core' `
+            -Code 'NEOIPC_CORE' `
+            -Description 'The NeoIPC Core Module for surveillance in high risk neonates (birth weight <1500g or gestational age < 32 weeks)' `
+            -TrackedEntityTypeId (Get-Dhis2Object trackedEntityTypes @{paging='false';fields='id';filter='name:eq:NeoIPC Patient'} -Unwrap | Select-Object -ExpandProperty id) `
+            -DisplayFrontPageList `
+            -UseFirstStageDuringRegistration `
+            -AccessLevel OPEN `
+            -OnlyEnrollOnce `
+            -ProgramTrackedEntityAttributes @(
+                New-Dhis2ProgramTrackedEntityAttribute -TrackedEntityAttributeId $trackedEntityAttributeMap.NEOIPC_PATIENT_ID -DisplayInList -Mandatory -SortOrder 1 -Id (Get-Dhis2Object 'system/id' -Unwrap)
+                ) `
+            -OrganisationUnitIds @(Get-Dhis2Object organisationUnits @{paging='false';filter='level:eq:5';fields='id'} -Unwrap | Select-Object -ExpandProperty id) `
+            -Id $programMap.NEOIPC_CORE
+    )
+    programStages = @(
+        New-Dhis2ProgramStage `
+            -ProgramId $programMap.NEOIPC_CORE `
+            -Name 'Primary Sepsis/BSI' `
+            -Description 'The surveillance event where a primiary blood stream infection (including clinical sepsis) is recorded.' `
+            -Repeatable
+            -EnableUserAssignment
+            -BlockEntryForm
+            -HideDueDate
+
+    )
+}
+
+Add-Dhis2Object metadata $metadata
