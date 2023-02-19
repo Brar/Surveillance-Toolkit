@@ -7,6 +7,8 @@
 
 Import-Module $PSScriptRoot/modules/Dhis2-Api -Force
 
+$IdGenerator = [Dhis2Api.IdGenerator]::new()
+
 #####################
 # organisationUnits #
 #####################
@@ -15,7 +17,7 @@ $organisationUnits = Import-Csv $PSScriptRoot/../metadata/play/organisationUnits
 # First get the root organisation unit and add it
 $rootOrgUnit = $organisationUnits | Where-Object { $_.parent_code -eq '' }
 $orgUnitMap = @{}
-$rootOrgUnit | Select-Object -ExcludeProperty parent_code | Add-Dhis2Object organisationUnits -CodeMap $orgUnitMap > $null
+$rootOrgUnit | Select-Object -ExcludeProperty parent_code | Add-Dhis2Object organisationUnits -CodeMap $orgUnitMap
 
 # Now add the lower level organisation units
 $tmpMap = $orgUnitMap.Clone()
@@ -25,7 +27,7 @@ while ($tmpMap.Keys.Count -gt 0) {
         $organisationUnits | 
              Where-Object { $_.parent_code -eq $code } |
              Select-Object *,@{Name = 'parent'; Expression = {@{id=$tmpMap[$code]}}} -ExcludeProperty parent_code |
-             Add-Dhis2Object organisationUnits -CodeMap $tmpMap > $null
+             Add-Dhis2Object organisationUnits -CodeMap $tmpMap
         $tmpMap.Remove($code)
     }
 }
@@ -62,7 +64,7 @@ Add-Dhis2Object filledOrganisationUnitLevels @{
             offlineLevels = '5'
         }
     )
-} > $null
+}
 
 ########################################################
 # Add access rights for the the root organisation unit #
@@ -85,22 +87,22 @@ Update-Dhis2Object "users/$userId" @(
         path = '/teiSearchOrganisationUnits'
         value = @( @{ id = $rootOrgUnitId } )
     }
-) > $null
+)
 
 # ##############
 # # optionSets #
 # ##############
 $optionSets = Import-Csv $PSScriptRoot/../metadata/common/optionSets.csv -Encoding utf8NoBOM
 $optionSetMap = @{}
-$optionSets | Add-Dhis2Object optionSets -CodeMap $optionSetMap > $null
+$optionSets | Add-Dhis2Object optionSets -CodeMap $optionSetMap
 Remove-Variable optionSets
 
 ###########
 # options #
 ###########
 $options = Import-Csv $PSScriptRoot/../metadata/common/options.csv -Encoding utf8NoBOM |
-    Select-Object code,sortOrder,name,@{Name = 'optionSet'; Expression = {@{id=$optionSetMap[$_.optionSetCode]}}}
-$options | Add-Dhis2Object options > $null
+    Select-Object code,name,description,formName,sortOrder,@{Name = 'optionSet'; Expression = {@{id=$optionSetMap[$_.optionSet_code]}}}
+$options | Add-Dhis2Object options
 Remove-Variable options
 
 # The pathogens, their attributes, and their synonyms are maintained as sparate lists that are used to
@@ -120,18 +122,14 @@ $PathogenOptions +=
     @($PathogenSynonyms | Select-Object @{Name = 'code'; Expression = {$_.id}},@{Name = 'name'; Expression = {"$($_.synonym) [synonym]"}}) |
     Sort-Object -Property name | Select-Object *,@{Name = 'sortOrder'; Expression = {$script:sortOrder++;$script:sortOrder}},@{Name = 'optionSet'; Expression = {@{id=$pathogenOptionSetId}}}
 
-$PathogenOptions | Add-Dhis2Object options > $null
+$PathogenOptions | Add-Dhis2Object options
 Remove-Variable PathogenConcepts,PathogenSynonyms,PathogenOptions
 
 ################
 # dataElements #
 ################
 
-$dataElements = [System.Collections.ArrayList]::new((Import-Csv $PSScriptRoot/../metadata/common/dataElements.csv -Encoding utf8NoBOM |
-    Select-Object -ExcludeProperty optionSetCode,zeroIsSignificant `
-        *,`
-        @{Name = 'optionSet'; Expression = {if($_.optionSetCode){@{id=$optionSetMap[$_.optionSetCode]}}}},`
-        @{Name = 'zeroIsSignificant'; Expression = {[bool]$_.zeroIsSignificant}} | New-Dhis2DataElement))
+$dataElements = [System.Collections.ArrayList]::new((Import-Csv $PSScriptRoot/../metadata/common/dataElements.csv -Encoding utf8NoBOM | ConvertTo-Dhis2DataElement -OptionSetCodeMap $optionSetMap))
 
 # Pathogen-related data elements
 # The outermost loop iterates the different infection entities we capture
@@ -237,7 +235,7 @@ $yesNoNotTestedOptionSetId = $optionSetMap.NEOIPC_YES_NO_NOTTESTED
 }
 
 $dataElementMap = @{}
-$dataElements | Add-Dhis2Object dataElements -CodeMap $dataElementMap > $null
+$dataElements | Add-Dhis2Object dataElements -CodeMap $dataElementMap
 
 ###########################
 # trackedEntityAttributes #
@@ -245,7 +243,7 @@ $dataElements | Add-Dhis2Object dataElements -CodeMap $dataElementMap > $null
 $trackedEntityAttributes = Import-Csv $PSScriptRoot/../metadata/common/trackedEntityAttributes.csv -Encoding utf8NoBOM |
     Select-Object *,@{Name = 'optionSet'; Expression = {if($_.optionSetCode){@{id=$optionSetMap[$_.optionSetCode]}}}} -ExcludeProperty optionSetCode
 $trackedEntityAttributeMap = @{}
-$trackedEntityAttributes | Add-Dhis2Object trackedEntityAttributes -CodeMap $trackedEntityAttributeMap > $null
+$trackedEntityAttributes | Add-Dhis2Object trackedEntityAttributes -CodeMap $trackedEntityAttributeMap
 
 ######################
 # trackedEntityTypes #
@@ -297,44 +295,43 @@ $trackedEntityTypes = $trackedEntityTypesRaw | ForEach-Object {
         })
     $result
 }
-$trackedEntityTypes | Add-Dhis2Object trackedEntityTypes > $null
+$trackedEntityTypes | Add-Dhis2Object trackedEntityTypes
+
+# We need to map the name, not the code for trackedEntityTypes
+$trackedEntityTypeMap=@{}
+Get-Dhis2Object trackedEntityTypes @{paging='false';fields='id,name'} -Unwrap |
+    ForEach-Object { $trackedEntityTypeMap[$_.name] = $_.id }
 
 ###########
 # program #
 ###########
-#  hard-coded for now
 $programMap = @{}
-$programMap.NEOIPC_CORE = Get-Dhis2Object 'system/id' -Unwrap
-$metadata = @{
-    programs = @(
-        # Double-checked with UI-generated SQL
-        New-Dhis2Program `
-            -Name 'NeoIPC Core' `
-            -ShortName 'NeoIPC Core' `
-            -Code 'NEOIPC_CORE' `
-            -Description 'The NeoIPC Core Module for surveillance in high risk neonates (birth weight <1500g or gestational age < 32 weeks)' `
-            -TrackedEntityTypeId (Get-Dhis2Object trackedEntityTypes @{paging='false';fields='id';filter='name:eq:NeoIPC Patient'} -Unwrap | Select-Object -ExpandProperty id) `
-            -DisplayFrontPageList `
-            -UseFirstStageDuringRegistration `
-            -AccessLevel OPEN `
-            -OnlyEnrollOnce `
-            -ProgramTrackedEntityAttributes @(
-                New-Dhis2ProgramTrackedEntityAttribute -TrackedEntityAttributeId $trackedEntityAttributeMap.NEOIPC_PATIENT_ID -DisplayInList -Mandatory -SortOrder 1 -Id (Get-Dhis2Object 'system/id' -Unwrap)
-                ) `
-            -OrganisationUnitIds @(Get-Dhis2Object organisationUnits @{paging='false';filter='level:eq:5';fields='id'} -Unwrap | Select-Object -ExpandProperty id) `
-            -Id $programMap.NEOIPC_CORE
-    )
-    programStages = @(
-        New-Dhis2ProgramStage `
-            -ProgramId $programMap.NEOIPC_CORE `
-            -Name 'Primary Sepsis/BSI' `
-            -Description 'The surveillance event where a primiary blood stream infection (including clinical sepsis) is recorded.' `
-            -Repeatable
-            -EnableUserAssignment
-            -BlockEntryForm
-            -HideDueDate
+$programs = Import-Csv $PSScriptRoot/../metadata/common/programs.csv -Encoding utf8NoBOM |
+    ConvertTo-Dhis2Program -TrackedEntityTypeNameMap $trackedEntityTypeMap |
+    ForEach-Object { $id = Get-Dhis2Object 'system/id' -Unwrap; $_.id = $id; $programMap[$_.code] = $id; $_ }
 
-    )
+$programStageMap = @{}
+$programStages = Import-Csv $PSScriptRoot/../metadata/common/programStages.csv -Encoding utf8NoBOM |
+    ConvertTo-Dhis2ProgramStage -ProgramCodeMap $programMap |
+    ForEach-Object { $id = Get-Dhis2Object 'system/id' -Unwrap; $_.id = $id; $programStageMap[$_.name] = $id; $programs | Where-Object id -EQ $_.program.id | ForEach-Object { $_.programStages += @(@{id=$id}) }; $_ }
+
+Import-Csv $PSScriptRoot/../metadata/common/programStageDataElements.csv -Encoding utf8NoBOM |
+    ConvertTo-Dhis2ProgramStageDataElement -ProgramCodeMap $programMap -ProgramStageNameMap $programStageMap -DataElementCodeMap $dataElementMap |
+    ForEach-Object { $psde = $_; $psde.id = Get-Dhis2Object 'system/id' -Unwrap; $programStages | Where-Object id -EQ $psde.programStage.id | ForEach-Object { $_.programStageDataElements += @($psde) } }
+
+$programStageSectionMap = @{}
+$programStageSections = Import-Csv $PSScriptRoot/../metadata/common/programStageSections.csv -Encoding utf8NoBOM |
+    ConvertTo-Dhis2ProgramStageSection -ProgramStageNameMap $programStageMap |
+    ForEach-Object { $id = Get-Dhis2Object 'system/id' -Unwrap; $_.id = $id; $programStageSectionMap[$_.name] = $id; $programStages | Where-Object id -EQ $_.programStage.id | ForEach-Object { $_.programStageSections += @(@{id=$id}) }; $_ }
+
+Import-Csv $PSScriptRoot/../metadata/common/programStageSections_dataElements.csv -Encoding utf8NoBOM |
+    ForEach-Object { $dataElementId = $dataElementMap[$_.dataElement_code]; $programStageSections | Where-Object name -EQ $_.programStageSection_name | ForEach-Object { $_.dataElements += @(@{id=$dataElementId}) } }
+
+
+$metadata = @{
+    programs = @($programs)
+    programStages = @($programStages)
+    programStageSections = @($programStageSections)
 }
 
 Add-Dhis2Object metadata $metadata

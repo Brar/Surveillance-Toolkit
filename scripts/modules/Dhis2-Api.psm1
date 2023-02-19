@@ -3,6 +3,43 @@
 [securestring]$Dhis2DefaultPassword
 [securestring]$Dhis2DefaultToken
 
+Add-Type -Language CSharp -TypeDefinition @"
+namespace Dhis2Api
+{
+    public class IdGenerator
+    {
+        const string Values = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        const int FirstLength = 52;
+        const int RestLength = 62;
+        readonly System.Collections.Generic.HashSet<string> _existing = new();
+
+        public string[] GenerateIds(int count)
+        {
+            var ids = new string[count];
+            for (var i = 0; i < count; i++)
+                ids[i] = GenerateId();
+            return ids;
+        }
+
+        public string GenerateId()
+        {
+            string id;
+            do
+            {
+                System.Span<char> buffer = stackalloc char[11];
+                buffer[0] = Values[System.Security.Cryptography.RandomNumberGenerator.GetInt32(FirstLength)];
+                for (var i = buffer.Length - 1; i >= 1; i--)
+                    buffer[i] = Values[System.Security.Cryptography.RandomNumberGenerator.GetInt32(RestLength)];
+                id = new(buffer);
+            } while (_existing.Contains(id));
+
+            _existing.Add(id);
+            return id;
+        }
+    }
+}
+"@
+
 function Reset-Dhis2Defaults {
       param (
             [Parameter(HelpMessage = 'The DHIS2 API base URL to use as default.')]
@@ -656,6 +693,12 @@ function New-Dhis2DataElement {
       )
 
       process {
+            if (-not  $DomainType) { return }
+            if (-not  $ValueType) { return }
+            if (-not  $Name) { return }
+            if (-not  $ShortName) { return }
+            if (-not  $AggregationType) { return }
+            if (-not  $CategoryComboId) { return }
             $obj = @{
                   domainType = $DomainType
                   valueType = $ValueType
@@ -674,6 +717,80 @@ function New-Dhis2DataElement {
             if ($ZeroIsSignificant) { $obj.zeroIsSignificant = $ZeroIsSignificant.ToString() }
             if ($Url) { $obj.url = $Url }
             return $obj
+      }
+}
+
+function ConvertTo-Dhis2DataElement {
+      [CmdletBinding()]
+      param (
+            [Parameter(Position = 0, Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
+            [object]$InputObject,
+
+            [Parameter()]
+            [System.Collections.Hashtable]$OptionSetCodeMap,
+
+            [Parameter()]
+            [System.Collections.Hashtable]$CategoryComboCodeMap
+      )
+      process {
+            if ($InputObject.optionSet_id) {
+                  $optionSetId = $InputObject.optionSet_id
+            } elseif ($InputObject.optionSetId) {
+                  $optionSetId = $InputObject.optionSetId
+            } elseif ($OptionSetCodeMap -and $InputObject.optionSet_code) {
+                  $optionSetId = $OptionSetCodeMap[$InputObject.optionSet_code]
+                  if (-not $optionSetId){Write-Error "Failed to find the id for optionSet '$($InputObject.optionSet_code)'."}
+            } elseif ($OptionSetCodeMap -and $InputObject.optionSetCode) {
+                  $optionSetId = $OptionSetCodeMap[$InputObject.optionSetCode]
+                  if (-not $optionSetId){Write-Error "Failed to find the id for optionSet '$($InputObject.optionSetCode)'."}
+            } else {
+                  $optionSetId = $null
+            }
+            if ($InputObject.commentOptionSet_id) {
+                  $commentOptionSetId = $InputObject.commentOptionSet_id
+            } elseif ($InputObject.commentOptionSetId) {
+                  $commentOptionSetId = $InputObject.commentOptionSetId
+            } elseif ($OptionSetCodeMap -and $InputObject.commentOptionSet_code) {
+                  $commentOptionSetId = $OptionSetCodeMap[$InputObject.commentOptionSet_code]
+                  if (-not $commentOptionSetId){Write-Error "Failed to find the id for commentOptionSet '$($InputObject.commentOptionSet_code)'."}
+            } elseif ($OptionSetCodeMap -and $InputObject.commentOptionSetCode) {
+                  $commentOptionSetId = $OptionSetCodeMap[$InputObject.commentOptionSetCode]
+                  if (-not $commentOptionSetId){Write-Error "Failed to find the id for commentOptionSet '$($InputObject.commentOptionSetCode)'."}
+            } else {
+                  $commentOptionSetId = $null
+            }
+            if ($InputObject.categoryCombo_id) {
+                  $categoryComboId = $InputObject.categoryCombo_id
+            } elseif ($InputObject.categoryComboId) {
+                  $categoryComboId = $InputObject.categoryComboId
+            } elseif ($categorCategoryComboCodeMapyComboCodeMap -and $InputObject.categoryCombo_code) {
+                  $categoryComboId = $CategoryComboCodeMap[$InputObject.categoryCombo_code]
+                  if (-not $categoryComboId -and $InputObject.categoryCombo_code -eq 'default'){$categoryComboId = 'bjDvmb4bfuf'}
+                  elseif (-not $categoryComboId){Write-Error "Failed to find the id for category combination '$($InputObject.categoryCombo_code)'."}
+            } elseif ($CategoryComboCodeMap -and $InputObject.categoryComboCode) {
+                  $categoryComboId = $CategoryComboCodeMap[$InputObject.categoryComboCode]
+                  if (-not $categoryComboId -and $InputObject.categoryComboCode -eq 'default'){$categoryComboId = 'bjDvmb4bfuf'}
+                  elseif (-not $categoryComboId){Write-Error "Failed to find the id for category combination '$($InputObject.categoryComboCode)'."}
+            } else {
+                  $categoryComboId = 'bjDvmb4bfuf'
+            }
+            $argHash = @{
+                  OptionSetId = $optionSetId
+                  CommentOptionSetId = $commentOptionSetId
+                  CategoryComboId = $categoryComboId
+                  Code = $InputObject.code
+                  Name = $InputObject.name
+                  AggregationType = $InputObject.aggregationType
+                  Description = $InputObject.description
+                  DomainType = $InputObject.domainType
+                  FieldMask = $InputObject.fieldMask
+                  FormName = $InputObject.formName
+                  ShortName = $InputObject.shortName
+                  Url = $InputObject.url
+                  ValueType = $InputObject.valueType
+                  ZeroIsSignificant = [System.Convert]::ToBoolean($InputObject.zeroIsSignificant)
+              }
+              New-Dhis2DataElement @argHash
       }
 }
 
@@ -993,23 +1110,28 @@ function New-Dhis2ProgramRuleAction {
 function New-Dhis2Program {
       [CmdletBinding()]
       param (
-            [Parameter(Position = 0, Mandatory, ValueFromPipelineByPropertyName, HelpMessage = 'The proram name.')]
+
+            [Parameter(Position = 0, Mandatory, ValueFromPipelineByPropertyName)]
+            [ValidateSet('WITH_REGISTRATION','WITHOUT_REGISTRATION')]
+            [string]$ProgramType,
+
+            [Parameter(Position = 1, Mandatory, ValueFromPipelineByPropertyName, HelpMessage = 'The proram name.')]
             [ValidateLength(1,230)]
             [string]$Name,
 
-            [Parameter(Position = 1, Mandatory, ValueFromPipelineByPropertyName, HelpMessage = 'The short name of the program.')]
+            [Parameter(Position = 2, Mandatory, ValueFromPipelineByPropertyName, HelpMessage = 'The short name of the program.')]
             [ValidateLength(1,50)]
             [string]$ShortName,
 
-            [Parameter(Position = 2, Mandatory, ValueFromPipelineByPropertyName)]
+            [Parameter(Position = 3, Mandatory, ValueFromPipelineByPropertyName)]
             [ValidateScript({ [System.Text.RegularExpressions.Regex]::IsMatch($_, '^[A-Za-z][A-Za-z0-9]{10}$') },
             ErrorMessage = 'The value ''{0}'' is not a valid DHIS2 id. DHIS2 ids must be 11 characters long, ' +
                   'consist of alphanumeric characters (A-Za-z0-9) only, and start with an alphabetic character (A-Za-z). ' +
                   "See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/maintenance.html#webapi_system_resource_generate_identifiers")]
             [string]$TrackedEntityTypeId,
 
-            [Parameter(Position = 3, Mandatory, ValueFromPipelineByPropertyName)]
-            [ValidateSet('OPEN')]
+            [Parameter(Position = 4, Mandatory, ValueFromPipelineByPropertyName)]
+            [ValidateSet('OPEN','AUDITED','PROTECTED','CLOSED')]
             [string]$AccessLevel,
 
             [Parameter(ValueFromPipelineByPropertyName, HelpMessage = 'The code of the program.')]
@@ -1061,6 +1183,45 @@ function New-Dhis2Program {
             [string[]]$OrganisationUnitIds,
 
             [Parameter(ValueFromPipelineByPropertyName)]
+            [ValidateSet($null,'BI_MONTHLY','BI_WEEKLY','DAILY','FINANCIAL_APRIL',`
+                  'FINANCIAL_JULY','FINANCIAL_NOV','FINANCIAL_OCT','MONTHLY',`
+                  'QUARTERLY','SIX_MONTHLY_APRIL','SIX_MONTHLY_NOV','SIX_MONTHLY',`
+                  'TWO_YEARLY','WEEKLY','WEEKLY_SATURDAY','WEEKLY_SUNDAY','WEEKLY_THURSDAY',`
+                  'WEEKLY_WEDNESDAY','YEARLY')]
+            [string]$ExpiryPeriodType,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$DisplayIncidentDate,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [string]$EnrollmentDateLabel,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [string]$FormName,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [ValidateSet('','NONE','MULTI_POLYGON','POLYGON','POINT','SYMBOL')]
+            [string]$FeatureType,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$IgnoreOverdueEvents,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [string]$IncidentDateLabel,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [System.Nullable[int]]$OpenDaysAfterCoEndDate,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$SelectEnrollmentDatesInFuture,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$SelectIncidentDatesInFuture,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$SkipOffline,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
             [ValidateScript({ if ([string]::IsNullOrEmpty($_)) { $true } else { [System.Text.RegularExpressions.Regex]::IsMatch($_, '^[A-Za-z][A-Za-z0-9]{10}$') } },
             ErrorMessage = 'The value ''{0}'' is not a valid DHIS2 id. DHIS2 ids must be 11 characters long, ' +
                   'consist of alphanumeric characters (A-Za-z0-9) only, and start with an alphabetic character (A-Za-z). ' +
@@ -1069,11 +1230,13 @@ function New-Dhis2Program {
       )
 
       process {
+            if (-not  $ProgramType) { return }
             if (-not  $Name) { return }
             if (-not  $ShortName) { return }
             if (-not  $TrackedEntityTypeId) { return }
             if (-not  $AccessLevel) { return }
             $obj = @{
+                  programType = $ProgramType
                   name = $Name
                   shortName = $ShortName
                   trackedEntityType = @{ id = $TrackedEntityTypeId }
@@ -1082,7 +1245,8 @@ function New-Dhis2Program {
                   categoryCombo = @{ id = 'bjDvmb4bfuf' }
                   notificationTemplates = @()
                   programSections = @()
-                  programType = 'WITH_REGISTRATION'
+                  # Always pass this since the default is true.
+                  displayIncidentDate = $DisplayIncidentDate.ToString()
             }
             if ($Code) { $obj.code = $Code }
             if ($Description) { $obj.description = $Description }
@@ -1096,8 +1260,78 @@ function New-Dhis2Program {
             if ($ProgramTrackedEntityAttributes) { $obj.programTrackedEntityAttributes = $ProgramTrackedEntityAttributes }
             if ($ProgramStageIds) { $obj.programStages = @( $ProgramStageIds | ForEach-Object{ @{ id = $_ } } ) }
             if ($OrganisationUnitIds) { $obj.organisationUnits = @( $OrganisationUnitIds | ForEach-Object{ @{ id = $_ } } ) }
+            if ($ExpiryPeriodType) { $obj.expiryPeriodType = $ExpiryPeriodType }
+            if ($EnrollmentDateLabel) { $obj.enrollmentDateLabel = $EnrollmentDateLabel }
+            if ($FormName) { $obj.formName = $FormName }
+            if ($FeatureType) { $obj.featureType = $FeatureType }
+            if ($IgnoreOverdueEvents) { $obj.ignoreOverdueEvents = $IgnoreOverdueEvents.ToString() }
+            if ($IncidentDateLabel) { $obj.incidentDateLabel = $IncidentDateLabel }
+            if ($null -ne $OpenDaysAfterCoEndDate) { $obj.openDaysAfterCoEndDate = $OpenDaysAfterCoEndDate.ToString([System.Globalization.NumberFormatInfo]::InvariantInfo) }
+            if ($SelectEnrollmentDatesInFuture) { $obj.selectEnrollmentDatesInFuture = $SelectEnrollmentDatesInFuture.ToString() }
+            if ($SelectIncidentDatesInFuture) { $obj.selectIncidentDatesInFuture = $SelectIncidentDatesInFuture.ToString() }
+            if ($SkipOffline) { $obj.skipOffline = $SkipOffline.ToString() }
             if ($Id) { $obj.id = $Id }
             return $obj
+      }
+}
+
+function ConvertTo-Dhis2Program {
+      [CmdletBinding()]
+      param (
+            [Parameter(Position = 0, Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
+            [object]$InputObject,
+
+            [Parameter()]
+            [System.Collections.Hashtable]$TrackedEntityTypeCodeMap,
+
+            [Parameter()]
+            [System.Collections.Hashtable]$TrackedEntityTypeNameMap
+      )
+      process {
+            if ($InputObject.trackedEntityType_id) {
+                  $trackedEntityTypeId = $InputObject.trackedEntityType_id
+            } elseif ($InputObject.trackedEntityTypeId) {
+                  $trackedEntityTypeId = $InputObject.trackedEntityTypeId
+            } elseif ($TrackedEntityTypeCodeMap -and $InputObject.trackedEntityType_code) {
+                  $trackedEntityTypeId = $TrackedEntityTypeCodeMap[$InputObject.trackedEntityType_code]
+            } elseif ($TrackedEntityTypeCodeMap -and $InputObject.trackedEntityTypeCode) {
+                  $trackedEntityTypeId = $TrackedEntityTypeCodeMap[$InputObject.trackedEntityTypeCode]
+            } elseif ($TrackedEntityTypeNameMap -and $InputObject.trackedEntityType_name) {
+                  $trackedEntityTypeId = $TrackedEntityTypeNameMap[$InputObject.trackedEntityType_name]
+            } elseif ($TrackedEntityTypeNameMap -and $InputObject.trackedEntityTypeName) {
+                  $trackedEntityTypeId = $TrackedEntityTypeNameMap[$InputObject.trackedEntityTypeName]
+            } else {
+                  $trackedEntityTypeId = $null
+            }
+            $argHash = @{
+                  Id = $InputObject.id
+                  Code = $InputObject.code
+                  AccessLevel = $InputObject.accessLevel
+                  CompleteEventsExpiryDays = $InputObject.completeEventsExpiryDays
+                  Description = $InputObject.description
+                  DisplayFrontPageList = [System.Convert]::ToBoolean($InputObject.displayFrontPageList)
+                  DisplayIncidentDate = [System.Convert]::ToBoolean($InputObject.displayIncidentDate)
+                  EnrollmentDateLabel = $InputObject.enrollmentDateLabel
+                  ExpiryDays = $InputObject.expiryDays
+                  ExpiryPeriodType = if($InputObject.expiryPeriodType){$InputObject.expiryPeriodType}
+                  FeatureType = $InputObject.featureType
+                  FormName = $InputObject.formName
+                  IgnoreOverdueEvents = [System.Convert]::ToBoolean($InputObject.ignoreOverdueEvents)
+                  IncidentDateLabel = $InputObject.incidentDateLabel
+                  MaxTeiCountToReturn = $InputObject.maxTeiCountToReturn
+                  MinAttributesRequiredToSearch = $InputObject.minAttributesRequiredToSearch
+                  Name = $InputObject.name
+                  OnlyEnrollOnce = [System.Convert]::ToBoolean($InputObject.onlyEnrollOnce)
+                  OpenDaysAfterCoEndDate = $InputObject.openDaysAfterCoEndDate
+                  ProgramType = $InputObject.programType
+                  SelectEnrollmentDatesInFuture = [System.Convert]::ToBoolean($InputObject.selectEnrollmentDatesInFuture)
+                  SelectIncidentDatesInFuture = [System.Convert]::ToBoolean($InputObject.selectIncidentDatesInFuture)
+                  ShortName = $InputObject.shortName
+                  SkipOffline = [System.Convert]::ToBoolean($InputObject.skipOffline)
+                  UseFirstStageDuringRegistration = [System.Convert]::ToBoolean($InputObject.useFirstStageDuringRegistration)
+                  TrackedEntityTypeId = $trackedEntityTypeId
+              }
+              New-Dhis2Program @argHash
       }
 }
 
@@ -1174,7 +1408,11 @@ function New-Dhis2ProgramStage {
             [System.Nullable[uint]]$MinDaysFromStart,
 
             [Parameter(ValueFromPipelineByPropertyName)]
-            [ValidateSet('BiWeekly')]
+            [ValidateSet($null,'BI_MONTHLY','BI_WEEKLY','DAILY','FINANCIAL_APRIL',`
+                  'FINANCIAL_JULY','FINANCIAL_NOV','FINANCIAL_OCT','MONTHLY',`
+                  'QUARTERLY','SIX_MONTHLY_APRIL','SIX_MONTHLY_NOV','SIX_MONTHLY',`
+                  'TWO_YEARLY','WEEKLY','WEEKLY_SATURDAY','WEEKLY_SUNDAY','WEEKLY_THURSDAY',`
+                  'WEEKLY_WEDNESDAY','YEARLY')]
             [string]$PeriodType,
 
             [Parameter(ValueFromPipelineByPropertyName)]
@@ -1212,6 +1450,29 @@ function New-Dhis2ProgramStage {
 
             [Parameter(ValueFromPipelineByPropertyName)]
             [System.Nullable[int]]$SortOrder,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [string]$DueDateLabel,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [string]$ExecutionDateLabel,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [ValidateSet('NONE','MULTI_POLYGON','POLYGON','POINT','SYMBOL')]
+            [string]$FeatureType,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [string]$FormName,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [string]$ReportDateToUse,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [System.Nullable[int]]$StandardInterval,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [ValidateSet('ON_COMPLETE','ON_UPDATE_AND_INSERT')]
+            [string]$ValidationStrategy,
 
             [Parameter(ValueFromPipelineByPropertyName)]
             [ValidateScript({if($null -eq $_){$true} else {foreach($att in @($_)){if(-not [System.Text.RegularExpressions.Regex]::IsMatch($att.dataElement.id, '^[A-Za-z][A-Za-z0-9]{10}$')){throw}}}$true},
@@ -1258,20 +1519,95 @@ function New-Dhis2ProgramStage {
             if ($null -ne $SortOrder) { $obj.sortOrder = $SortOrder.ToString([System.Globalization.NumberFormatInfo]::InvariantInfo) }
             if ($ProgramStageDataElements) { $obj.programStageDataElements = $ProgramStageDataElements }
             if ($ProgramStageSectionIds) { $obj.programStageSections = @( $ProgramStageSectionIds | ForEach-Object{ @{ id = $_ } } ) }
+            if ($DueDateLabel) { $obj.dueDateLabel = $DueDateLabel }
+            if ($ExecutionDateLabel) { $obj.executionDateLabel = $ExecutionDateLabel }
+            if ($FeatureType) { $obj.featureType = $FeatureType }
+            if ($FormName) { $obj.formName = $FormName }
+            if ($ReportDateToUse) { $obj.reportDateToUse = $ReportDateToUse }
+            if ($null -ne $StandardInterval) { $obj.standardInterval = $StandardInterval.ToString([System.Globalization.NumberFormatInfo]::InvariantInfo) }
+            if ($ValidationStrategy) { $obj.validationStrategy = $ValidationStrategy }
             if ($Id) { $obj.id = $Id }
             return $obj
+      }
+}
+
+function ConvertTo-Dhis2ProgramStage {
+      [CmdletBinding()]
+      param (
+            [Parameter(Position = 0, Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
+            [object]$InputObject,
+
+            [Parameter()]
+            [System.Collections.Hashtable]$ProgramCodeMap
+      )
+      process {
+            if ($InputObject.program_id) {
+                  $programId = $InputObject.program_id
+            } elseif ($InputObject.programId) {
+                  $programId = $InputObject.programId
+            } elseif ($ProgramCodeMap -and $InputObject.program_code) {
+                  $programId = $ProgramCodeMap[$InputObject.program_code]
+            } elseif ($ProgramCodeMap -and $InputObject.programCode) {
+                  $programId = $ProgramCodeMap[$InputObject.programCode]
+            } else {
+                  $programId = $null
+            }
+            $argHash = @{
+                  ProgramId = $programId
+                  Name = $InputObject.name
+                  AllowGenerateNextVisit = [System.Convert]::ToBoolean($InputObject.allowGenerateNextVisit)
+                  AutoGenerateEvent = [System.Convert]::ToBoolean($InputObject.autoGenerateEvent)
+                  BlockEntryForm = [System.Convert]::ToBoolean($InputObject.blockEntryForm)
+                  Description = $InputObject.description
+                  DisplayGenerateEventBox = [System.Convert]::ToBoolean($InputObject.displayGenerateEventBox)
+                  DueDateLabel = $InputObject.dueDateLabel
+                  EnableUserAssignment = [System.Convert]::ToBoolean($InputObject.enableUserAssignment)
+                  ExecutionDateLabel = $InputObject.executionDateLabel
+                  FeatureType = if($InputObject.periodType){$InputObject.featureType}else{'NONE'}
+                  FormName = $InputObject.formName
+                  GeneratedByEnrollmentDate = [System.Convert]::ToBoolean($InputObject.generatedByEnrollmentDate)
+                  HideDueDate = [System.Convert]::ToBoolean($InputObject.hideDueDate)
+                  MinDaysFromStart = $InputObject.minDaysFromStart
+                  OpenAfterEnrollment = [System.Convert]::ToBoolean($InputObject.openAfterEnrollment)
+                  PeriodType = if($InputObject.periodType){$InputObject.periodType}
+                  PreGenerateUID = [System.Convert]::ToBoolean($InputObject.preGenerateUID)
+                  RemindCompleted = [System.Convert]::ToBoolean($InputObject.remindCompleted)
+                  Repeatable = [System.Convert]::ToBoolean($InputObject.repeatable)
+                  ReportDateToUse = $InputObject.reportDateToUse
+                  SortOrder = $InputObject.sortOrder
+                  StandardInterval = $InputObject.standardInterval
+                  ValidationStrategy = $InputObject.validationStrategy
+              }
+              New-Dhis2ProgramStage @argHash
       }
 }
 
 function New-Dhis2ProgramStageDataElement {
       [CmdletBinding(DefaultParameterSetName = 'Searchable')]
       param (
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [ValidateScript({ [System.Text.RegularExpressions.Regex]::IsMatch($_, '^[A-Za-z][A-Za-z0-9]{10}$') },
+            ErrorMessage = 'The value ''{0}'' is not a valid DHIS2 id. DHIS2 ids must be 11 characters long, ' +
+                  'consist of alphanumeric characters (A-Za-z0-9) only, and start with an alphabetic character (A-Za-z). ' +
+                  'See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/maintenance.html#webapi_system_resource_generate_identifiers')]
+            [string]$ProgramId,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [ValidateScript({ [System.Text.RegularExpressions.Regex]::IsMatch($_, '^[A-Za-z][A-Za-z0-9]{10}$') },
+            ErrorMessage = 'The value ''{0}'' is not a valid DHIS2 id. DHIS2 ids must be 11 characters long, ' +
+                  'consist of alphanumeric characters (A-Za-z0-9) only, and start with an alphabetic character (A-Za-z). ' +
+                  'See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/maintenance.html#webapi_system_resource_generate_identifiers')]
+            [string]$ProgramStageId,
+
             [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
             [ValidateScript({ [System.Text.RegularExpressions.Regex]::IsMatch($_, '^[A-Za-z][A-Za-z0-9]{10}$') },
             ErrorMessage = 'The value ''{0}'' is not a valid DHIS2 id. DHIS2 ids must be 11 characters long, ' +
                   'consist of alphanumeric characters (A-Za-z0-9) only, and start with an alphabetic character (A-Za-z). ' +
                   "See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/maintenance.html#webapi_system_resource_generate_identifiers")]
             [string]$DataElementId,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$AllowFutureDate,
 
             [Parameter(ValueFromPipelineByPropertyName)]
             [switch]$AllowProvidedElsewhere,
@@ -1283,22 +1619,33 @@ function New-Dhis2ProgramStageDataElement {
             [switch]$DisplayInReports,
 
             [Parameter(ValueFromPipelineByPropertyName)]
-            [ValidateSet('VERTICAL_RADIOBUTTONS')]
-            [string]$DesktopRenderType,
+            [ValidateSet('DEFAULT','DROPDOWN','VERTICAL_RADIOBUTTONS','HORIZONTAL_RADIOBUTTONS',`
+                  'VERTICAL_CHECKBOXES','HORIZONTAL_CHECKBOXES','SHARED_HEADER_RADIOBUTTONS',`
+                  'ICONS_AS_BUTTONS','SPINNER','ICON','TOGGLE','VALUE','SLIDER','LINEAR_SCALE',`
+                  'AUTOCOMPLETE','QR_CODE','BAR_CODE','GS1_DATAMATRIX')]
+            [string]$DesktopRenderType = 'DEFAULT',
 
             [Parameter(ValueFromPipelineByPropertyName)]
-            [ValidateSet('VERTICAL_RADIOBUTTONS')]
-            [string]$MobileRenderType,
+            [ValidateSet('DEFAULT','DROPDOWN','VERTICAL_RADIOBUTTONS','HORIZONTAL_RADIOBUTTONS',`
+                  'VERTICAL_CHECKBOXES','HORIZONTAL_CHECKBOXES','SHARED_HEADER_RADIOBUTTONS',`
+                  'ICONS_AS_BUTTONS','SPINNER','ICON','TOGGLE','VALUE','SLIDER','LINEAR_SCALE',`
+                  'AUTOCOMPLETE','QR_CODE','BAR_CODE','GS1_DATAMATRIX')]
+            [string]$MobileRenderType = 'DEFAULT',
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$RenderOptionsAsRadio,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$SkipAnalytics,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [switch]$SkipSynchronization,
+
+            [Parameter(ValueFromPipelineByPropertyName)]
+            [string]$ExecutionDateLabel,
 
             [Parameter(ValueFromPipelineByPropertyName)]
             [System.Nullable[int]]$SortOrder,
-
-            [Parameter(ValueFromPipelineByPropertyName)]
-            [ValidateScript({ if ([string]::IsNullOrEmpty($_)) { $true } else { [System.Text.RegularExpressions.Regex]::IsMatch($_, '^[A-Za-z][A-Za-z0-9]{10}$') } },
-            ErrorMessage = 'The value ''{0}'' is not a valid DHIS2 id. DHIS2 ids must be 11 characters long, ' +
-                  'consist of alphanumeric characters (A-Za-z0-9) only, and start with an alphabetic character (A-Za-z). ' +
-                  'See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/maintenance.html#webapi_system_resource_generate_identifiers')]
-            [string]$ProgramStageId,
 
             [Parameter(ValueFromPipelineByPropertyName)]
             [ValidateScript({ if ([string]::IsNullOrEmpty($_)) { $true } else { [System.Text.RegularExpressions.Regex]::IsMatch($_, '^[A-Za-z][A-Za-z0-9]{10}$') } },
@@ -1309,30 +1656,123 @@ function New-Dhis2ProgramStageDataElement {
       )
 
       process {
+            if (-not  $ProgramId) { return }
+            if (-not  $ProgramStageId) { return }
             if (-not  $DataElementId) { return }
             $obj = @{
+                  program = @{ id = $ProgramId }
+                  programStage = @{ id = $ProgramStageId }
                   dataElement = @{ id = $DataElementId }
             }
+            if ($AllowFutureDate) { $obj.allowFutureDate = $AllowFutureDate.ToString() }
             if ($AllowProvidedElsewhere) { $obj.allowProvidedElsewhere = $AllowProvidedElsewhere.ToString() }
             if ($Compulsory) { $obj.compulsory = $Compulsory.ToString() }
             if ($DisplayInReports) { $obj.displayInReports = $DisplayInReports.ToString() }
             if ($DesktopRenderType -and $MobileRenderType) { $obj.renderType = @{ DESKTOP = @{ type = $DesktopRenderType }; MOBILE = @{ type = $MobileRenderType } } }
             elseif ($DesktopRenderType) { $obj.renderType = @{ DESKTOP = @{ type = $DesktopRenderType } } }
             elseif ($MobileRenderType) { $obj.renderType = @{ MOBILE = @{ type = $MobileRenderType } } }
+            if ($RenderOptionsAsRadio) { $obj.renderOptionsAsRadio = $RenderOptionsAsRadio.ToString() }
+            if ($SkipAnalytics) { $obj.skipAnalytics = $SkipAnalytics.ToString() }
+            if ($SkipSynchronization) { $obj.skipSynchronization = $SkipSynchronization.ToString() }
+            if ($ExecutionDateLabel) { $obj.executionDateLabel = $ExecutionDateLabel }
             if ($null -ne $SortOrder) { $obj.sortOrder = $SortOrder.ToString([System.Globalization.NumberFormatInfo]::InvariantInfo) }
-            if ($ProgramStageId) { $obj.programStage = @{ id = $ProgramStageId } }
             if ($Id) { $obj.id = $Id }
             return $obj
+      }
+}
+
+function ConvertTo-Dhis2ProgramStageDataElement {
+      [CmdletBinding()]
+      param (
+            [Parameter(Position = 0, Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
+            [object]$InputObject,
+
+            [Parameter()]
+            [System.Collections.Hashtable]$ProgramCodeMap,
+
+            [Parameter()]
+            [System.Collections.Hashtable]$ProgramStageNameMap,
+
+            [Parameter()]
+            [System.Collections.Hashtable]$DataElementCodeMap
+      )
+      process {
+            if ($InputObject.program_id) {
+                  $programId = $InputObject.program_id
+            } elseif ($InputObject.programId) {
+                  $programId = $InputObject.programId
+            } elseif ($ProgramCodeMap -and $InputObject.program_code) {
+                  $programId = $ProgramCodeMap[$InputObject.program_code]
+                  if (-not $programId){Write-Error "Failed to find the id for program '$($InputObject.program_code)'."}
+            } elseif ($ProgramCodeMap -and $InputObject.programCode) {
+                  $programId = $ProgramCodeMap[$InputObject.programCode]
+                  if (-not $programId){Write-Error "Failed to find the id for program '$($InputObject.programCode)'."}
+            } else {
+                  $programId = $null
+            }
+            if ($InputObject.programStage_id) {
+                  $programStageId = $InputObject.programStage_id
+            } elseif ($InputObject.programStageId) {
+                  $programStageId = $InputObject.programStageId
+            } elseif ($ProgramStageNameMap -and $InputObject.programStage_name) {
+                  $programStageId = $ProgramStageNameMap[$InputObject.programStage_name]
+                  if (-not $programStageId){Write-Error "Failed to find the id for program stage '$($InputObject.programStage_name)'."}
+            } elseif ($ProgramStageNameMap -and $InputObject.programStageName) {
+                  $programStageId = $ProgramStageNameMap[$InputObject.programStageName]
+                  if (-not $programStageId){Write-Error "Failed to find the id for program stage '$($InputObject.programStageName)'."}
+            } else {
+                  $programStageId = $null
+            }
+            if ($InputObject.dataElement_id) {
+                  $dataElementId = $InputObject.dataElement_id
+            } elseif ($InputObject.dataElementId) {
+                  $dataElementId = $InputObject.dataElementId
+            } elseif ($DataElementCodeMap -and $InputObject.dataElement_code) {
+                  $dataElementId = $DataElementCodeMap[$InputObject.dataElement_code]
+                  if (-not $dataElementId){Write-Error "Failed to find the id for data element '$($InputObject.dataElement_code)'."}
+            } elseif ($DataElementCodeMap -and $InputObject.dataElementCode) {
+                  $dataElementId = $DataElementCodeMap[$InputObject.dataElementCode]
+                  if (-not $dataElementId){Write-Error "Failed to find the id for data element '$($InputObject.dataElementCode)'."}
+            } else {
+                  $dataElementId = $null
+            }
+            if ($InputObject.DesktopRenderType) {
+                  $DesktopRenderType = $InputObject.DesktopRenderType
+            } elseif ($InputObject.RenderType_Desktop) {
+                  $DesktopRenderType = $InputObject.RenderType_Desktop
+            } else {
+                  $DesktopRenderType = 'DEFAULT'
+            }
+            if ($InputObject.MobileRenderType) {
+                  $MobileRenderType = $InputObject.MobileRenderType
+            } elseif ($InputObject.RenderType_Mobile) {
+                  $MobileRenderType = $InputObject.RenderType_Mobile
+            } else {
+                  $MobileRenderType = 'DEFAULT'
+            }
+            $argHash = @{
+                  ProgramId = $programId
+                  ProgramStageId = $programStageId
+                  DataElementId = $dataElementId
+                  AllowFutureDate = [System.Convert]::ToBoolean($InputObject.allowFutureDate)
+                  AllowProvidedElsewhere = [System.Convert]::ToBoolean($InputObject.allowProvidedElsewhere)
+                  Compulsory = [System.Convert]::ToBoolean($InputObject.compulsory)
+                  DisplayInReports = [System.Convert]::ToBoolean($InputObject.displayInReports)
+                  RenderOptionsAsRadio = [System.Convert]::ToBoolean($InputObject.renderOptionsAsRadio)
+                  DesktopRenderType = $DesktopRenderType
+                  MobileRenderType = $MobileRenderType
+                  SkipAnalytics = [System.Convert]::ToBoolean($InputObject.skipAnalytics)
+                  SkipSynchronization = [System.Convert]::ToBoolean($InputObject.skipSynchronization)
+                  ExecutionDateLabel = $InputObject.executionDateLabel
+                  SortOrder = $InputObject.sortOrder
+              }
+              New-Dhis2ProgramStageDataElement @argHash
       }
 }
 
 function New-Dhis2ProgramStageSection {
       [CmdletBinding()]
       param (
-            [Parameter(Position = 0, Mandatory, ValueFromPipelineByPropertyName, HelpMessage = 'The proram stage name.')]
-            [ValidateLength(1,230)]
-            [string]$Name,
-
             [Parameter(Position = 1, Mandatory, ValueFromPipelineByPropertyName)]
             [ValidateScript({ [System.Text.RegularExpressions.Regex]::IsMatch($_, '^[A-Za-z][A-Za-z0-9]{10}$') },
             ErrorMessage = 'The value ''{0}'' is not a valid DHIS2 id. DHIS2 ids must be 11 characters long, ' +
@@ -1340,8 +1780,15 @@ function New-Dhis2ProgramStageSection {
                   "See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/maintenance.html#webapi_system_resource_generate_identifiers")]
             [string]$ProgramStageId,
 
-            [Parameter(ValueFromPipelineByPropertyName, HelpMessage = 'The description of the program.')]
+            [Parameter(Position = 2, Mandatory, ValueFromPipelineByPropertyName, HelpMessage = 'The proram stage section name.')]
+            [ValidateLength(1,230)]
+            [string]$Name,
+
+            [Parameter(ValueFromPipelineByPropertyName, HelpMessage = 'The description of the program stage section.')]
             [string]$Description,
+
+            [Parameter(ValueFromPipelineByPropertyName, HelpMessage = 'The form name of the program stage section.')]
+            [string]$FormName,
 
             [Parameter(ValueFromPipelineByPropertyName)]
             [ValidateScript({if($null -eq $_){$true}else{foreach($att in $_){if(-not [System.Text.RegularExpressions.Regex]::IsMatch($att, '^[A-Za-z][A-Za-z0-9]{10}$')){throw}}}$true},
@@ -1354,11 +1801,11 @@ function New-Dhis2ProgramStageSection {
             [System.Nullable[int]]$SortOrder,
 
             [Parameter(ValueFromPipelineByPropertyName)]
-            [ValidateSet('LISTING')]
+            [ValidateSet('LISTING','SEQUENTIAL','MATRIX')]
             [string]$DesktopRenderType = 'LISTING',
 
             [Parameter(ValueFromPipelineByPropertyName)]
-            [ValidateSet('LISTING')]
+            [ValidateSet('LISTING','SEQUENTIAL','MATRIX')]
             [string]$MobileRenderType = 'LISTING',
 
             [Parameter(ValueFromPipelineByPropertyName)]
@@ -1370,15 +1817,18 @@ function New-Dhis2ProgramStageSection {
       )
 
       process {
-            if (-not  $Name) { return }
             if (-not  $ProgramStageId) { return }
+            if (-not  $Name) { return }
             $obj = @{
-                  name = $Name
+                  program = @{ id = $ProgramId }
                   programStage = @{ id = $ProgramStageId }
+                  name = $Name
                   # Hard-coded default for now
                   programIndicators = @()
             }
+            #program_code,formName
             if ($Description) { $obj.description = $Description }
+            if ($FormName) { $obj.formName = $FormName }
             if ($DataElementIds) { $obj.dataElements = @( $DataElementIds | ForEach-Object{ @{ id = $_ } } ) }
             if ($null -ne $SortOrder) { $obj.sortOrder = $SortOrder.ToString([System.Globalization.NumberFormatInfo]::InvariantInfo) }
             if ($DesktopRenderType -and $MobileRenderType) { $obj.renderType = @{ DESKTOP = @{ type = $DesktopRenderType }; MOBILE = @{ type = $MobileRenderType } } }
@@ -1389,7 +1839,66 @@ function New-Dhis2ProgramStageSection {
       }
 }
 
+function ConvertTo-Dhis2ProgramStageSection {
+      [CmdletBinding()]
+      param (
+            [Parameter(Position = 0, Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
+            [object]$InputObject,
+
+            [Parameter()]
+            [System.Collections.Hashtable]$ProgramCodeMap,
+
+            [Parameter()]
+            [System.Collections.Hashtable]$ProgramStageNameMap
+      )
+      process {
+            if ($InputObject.programStage_id) {
+                  $programStageId = $InputObject.programStage_id
+            } elseif ($InputObject.programStageId) {
+                  $programStageId = $InputObject.programStageId
+            } elseif ($ProgramStageNameMap -and $InputObject.programStage_name) {
+                  $programStageId = $ProgramStageNameMap[$InputObject.programStage_name]
+                  if (-not $programStageId){Write-Error "Failed to find the id for program stage '$($InputObject.programStage_name)'."}
+            } elseif ($ProgramStageNameMap -and $InputObject.programStageName) {
+                  $programStageId = $ProgramStageNameMap[$InputObject.programStageName]
+                  if (-not $programStageId){Write-Error "Failed to find the id for program stage '$($InputObject.programStageName)'."}
+            } else {
+                  $programStageId = $null
+            }
+            if ($InputObject.DesktopRenderType) {
+                  $DesktopRenderType = $InputObject.DesktopRenderType
+            } elseif ($InputObject.RenderType_Desktop) {
+                  $DesktopRenderType = $InputObject.RenderType_Desktop
+            } else {
+                  $DesktopRenderType = 'LISTING'
+            }
+            if ($InputObject.MobileRenderType) {
+                  $MobileRenderType = $InputObject.MobileRenderType
+            } elseif ($InputObject.RenderType_Mobile) {
+                  $MobileRenderType = $InputObject.RenderType_Mobile
+            } else {
+                  $MobileRenderType = 'LISTING'
+            }
+            $argHash = @{
+                  ProgramStageId = $programStageId
+                  Name = $InputObject.name
+                  Description = $InputObject.description
+                  FormName = $InputObject.formName
+                  DesktopRenderType = $DesktopRenderType
+                  MobileRenderType = $MobileRenderType
+                  SortOrder = $InputObject.sortOrder
+              }
+              New-Dhis2ProgramStageSection @argHash
+      }
+}
+
 Export-ModuleMember -Function @(
+      'ConvertTo-Dhis2DataElement'
+      'ConvertTo-Dhis2Option'
+      'ConvertTo-Dhis2Program'
+      'ConvertTo-Dhis2ProgramStage'
+      'ConvertTo-Dhis2ProgramStageDataElement'
+      'ConvertTo-Dhis2ProgramStageSection'
       'Get-Dhis2Defaults'
       'Set-Dhis2Defaults'
       'Reset-Dhis2Defaults'
@@ -1400,11 +1909,13 @@ Export-ModuleMember -Function @(
       'Remove-Dhis2Object'
       'New-Dhis2DataElement'
       'New-Dhis2Program'
-      'New-Dhis2ProgramTrackedEntityAttribute'
       'New-Dhis2ProgramStage'
       'New-Dhis2ProgramStageDataElement'
       'New-Dhis2ProgramStageSection'
-      'New-Dhis2ProgramRuleVariable'
+      'New-Dhis2ProgramTrackedEntityAttribute'
       'New-Dhis2ProgramRule'
       'New-Dhis2ProgramRuleAction'
-)
+      'New-Dhis2ProgramRuleVariable'
+      'New-Dhis2Option'
+      'New-Dhis2OptionSet'
+  )
