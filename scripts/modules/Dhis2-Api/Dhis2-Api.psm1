@@ -27,6 +27,38 @@ if (-not (Get-Variable -Name HardCodedDhis2DefaultPassword -ErrorAction Silently
 [string]$Dhis2DefaultUserName = $HardCodedDhis2DefaultUserName
 [securestring]$Dhis2DefaultPassword = $HardCodedDhis2DefaultPassword
 
+class QueryStringBuilder {
+      [System.Text.StringBuilder] hidden $buffer = [System.Text.StringBuilder]::new('?')
+
+      [void]Append([string]$name, [string]$value) {
+            if ([string]::IsNullOrWhiteSpace($name)) { throw "Invalid query string parameter name." }
+            if ($value) {
+                  $this.buffer.Append([System.Web.HttpUtility]::UrlEncode($name)).Append('=').Append([System.Web.HttpUtility]::UrlEncode($value)).Append('&') > $null
+            }
+      }
+
+      [void]Append([string]$name, [string[]]$values) {
+            if ([string]::IsNullOrWhiteSpace($name)) { throw "Invalid query string parameter name." }
+            if ($values) {
+                  foreach ($value in $values) {
+                        $this.buffer.Append([System.Web.HttpUtility]::UrlEncode($name)).Append('=').Append([System.Web.HttpUtility]::UrlEncode($value)).Append('&') > $null
+                  }
+            }
+      }
+
+      [string]BuildAndReset() {
+            if ($this.buffer.Length -eq 1) {
+                  return ''
+            }
+            else {
+                  $this.buffer.Length--
+                  $str = $this.buffer.ToString()
+                  $this.buffer.Length = 1
+                  return $str
+            }
+      }
+}
+
 <#
 .SYNOPSIS
 
@@ -382,7 +414,9 @@ function New-Client {
             [Parameter(Mandatory, Position = 1, ParameterSetName = 'PersonalAccessToken')]
             [securestring] $PersonalAccessToken
       )
-
+      if (-not $Dhis2ApiBase.EndsWith('/')) {
+            $Dhis2ApiBase += '/'
+      }
       $client = [System.Net.Http.HttpClient]::new()
       $client.BaseAddress = $Dhis2ApiBase
       Write-Debug "BaseAddress is $Dhis2ApiBase"
@@ -410,12 +444,44 @@ Gets a DHIS2 API object from a DHIS2 server.
 .PARAMETER RelativeApiEndpoint
 The relative endpoint in the DHIS2 API.
 
-.PARAMETER QueryParameterHash
-The query parameters as HashTable.
+.PARAMETER Fields
+The fields to return, including transformers.
+See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/metadata.html#webapi_metadata_field_filter
 
-.PARAMETER QueryParametersArray
-The query parameters as array of ValueTuple<string,string>
-(e.g., if you want to use multiple filters).
+.PARAMETER Filter
+The object filters.
+See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/metadata.html#webapi_metadata_object_filter
+
+.PARAMETER Order
+Order the output using a specified order, only properties that are both
+persisted and simple (no collections, idObjects etc) are supported.
+iasc and idesc are case insensitive sorting.
+
+.PARAMETER Paging
+Set this switch to return lists of elements in pages.
+
+.PARAMETER Page
+Defines which page number to return.
+
+.PARAMETER PageSize
+Defines the number of elements to return for each page.
+
+.PARAMETER Translate
+Translate display* properties in metadata output (displayName, displayShortName,
+displayDescription, and displayFormName for data elements and tracked entity attributes).
+
+.PARAMETER Locale
+Translate metadata output using a specified locale (requires translate=true).
+
+.PARAMETER RootJunction
+Switch the root logical operator from AND to OR
+
+.PARAMETER IndexableOnly
+For tracked entity attributes, there is a special filter in addition to the previous
+mentioned filtering capabilities. Some of the tracked entity attributes are candidates
+for creating a trigram index for better lookup performance. Using the indexableOnly
+parameter set to true, the results can be filtered to include only the attributes that
+are trigram indexable.
 
 .PARAMETER UserName
 The DHIS2 user name to use for this query.
@@ -442,15 +508,15 @@ System.Management.Automation.PSObject.
 
 .EXAMPLE
 
-PS> Get-Dhis2Object dataElements @{paging='false';fields='*';filter='code:$like:NEOIPC'}
+PS> Get-Dhis2Object dataElements '*' 'code:$like:NEOIPC'
+
+.EXAMPLE
+
+PS> Get-Dhis2Object -RelativeApiEndpoint dataElements -Fields '*' -Filter 'code:$like:NEOIPC' -Order 'shortName:desc'
 
 .EXAMPLE
 
 PS> Get-Dhis2Object categoryCombos/bjDvmb4bfuf
-
-.EXAMPLE
-
-PS> Get-Dhis2Object @([System.ValueTuple]::Create('paging','false'),[System.ValueTuple]::Create('fields','*'),[System.ValueTuple]::Create('filter','name:$ilike:NeoIPC'),[System.ValueTuple]::Create('filter','name:!ilike:BSI'))
 
 .LINK
 
@@ -494,32 +560,48 @@ function Get-Dhis2Object {
                         'me', 'me/authorities', 'me/authorities/ALL', 'system/id', 'system/info')]
             [string] $RelativeApiEndpoint,
 
-            [Parameter(Position = 1, ParameterSetName = 'PersonalAccessTokenHash', HelpMessage = 'The query parameters as HashTable')]
-            [Parameter(Position = 1, ParameterSetName = 'UsernamePasswordHash', HelpMessage = 'Enter the query parameters as HashTable')]
-            [ArgumentCompletions('@{paging=''false'';fields=''*''}', '@{paging=''false'';fields=''*'';filter=''code:eq:TODO''}')]
-            [hashtable] $QueryParameterHash,
+            [Parameter(Position = 1, HelpMessage = 'The fields to return, including transformers. See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/metadata.html#webapi_metadata_field_filter')]
+            [string[]] $Fields,
 
-            [Parameter(Position = 1, ParameterSetName = 'PersonalAccessTokenArray',
-                  HelpMessage = 'Enter the query parameters as array of ValueTuple<string,string> (e.g., if you want to use multiple filters)')]
-            [Parameter(Position = 1, ParameterSetName = 'UsernamePasswordArray',
-                  HelpMessage = 'Enter the query parameters as array of ValueTuple<string,string> (e.g., if you want to use multiple filters).')]
-            [ArgumentCompletions('@([System.ValueTuple]::Create(''paging'',''false''),[System.ValueTuple]::Create(''fields'',''*''),[System.ValueTuple]::Create(''filter'',''name:$ilike:NeoIPC''),[System.ValueTuple]::Create(''filter'',''name:!ilike:BSI''))')]
-            [System.ValueTuple[string, string][]] $QueryParametersArray,
+            [Parameter(Position = 2, HelpMessage = 'The object filters. See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/metadata.html#webapi_metadata_object_filter')]
+            [string[]] $Filter,
+
+            [Parameter(HelpMessage = 'Order the output using a specified order, only properties that are both persisted and simple (no collections, idObjects etc) are supported. iasc and idesc are case insensitive sorting.')]
+            [string[]] $Order,
+
+            [Parameter(HelpMessage = 'Set this switch to return lists of elements in pages.')]
+            [switch] $Paging,
+
+            [Parameter(HelpMessage = 'Defines which page number to return.')]
+            [uint] $Page,
+
+            [Parameter(HelpMessage = 'Defines the number of elements to return for each page.')]
+            [uint] $PageSize,
+
+            [Parameter(HelpMessage = 'Translate display* properties in metadata output (displayName, displayShortName, displayDescription, and displayFormName for data elements and tracked entity attributes).')]
+            [switch] $Translate,
+
+            [Parameter(HelpMessage = 'Translate metadata output using a specified locale (requires translate=true).')]
+            [string] $Locale,
+
+            [Parameter(HelpMessage = 'Switch the root logical operator from AND to OR')]
+            [ValidateSet('OR')]
+            [string] $RootJunction,
+
+            [Parameter(HelpMessage = 'Include only the attributes that are trigram indexable.')]
+            [switch] $IndexableOnly,
 
             [Parameter(ParameterSetName = 'UsernamePasswordHash', HelpMessage = 'Enter your username')]
-            [Parameter(ParameterSetName = 'UsernamePasswordArray', HelpMessage = 'Enter your username')]
             [string] $UserName = $Dhis2DefaultUserName,
 
             [Parameter(ParameterSetName = 'UsernamePasswordHash', HelpMessage = 'Enter your password')]
-            [Parameter(ParameterSetName = 'UsernamePasswordArray', HelpMessage = 'Enter your password')]
             [securestring] $Password = $Dhis2DefaultPassword,
 
             [Parameter(Mandatory, ParameterSetName = 'PersonalAccessTokenHash', HelpMessage = 'Enter your personal access token for the DHIS2 API')]
-            [Parameter(Mandatory, ParameterSetName = 'PersonalAccessTokenArray', HelpMessage = 'Enter your personal access token for the DHIS2 API')]
             [securestring] $PersonalAccessToken = $Dhis2DefaultToken,
 
             [Parameter(HelpMessage = 'Enter the DHIS2 API base URL')]
-            [ArgumentCompletions('http://localhost/api', 'http://localhost:8080/api/39', 'https://play.dhis2.org/2.39.1.1/api')]
+            [ArgumentCompletions('''http://localhost/api''', '''http://localhost:8080/api/39''', '''https://play.dhis2.org/2.39.1.1/api''')]
             [string] $Dhis2ApiBase = $Dhis2DefaultApiBase,
 
             [Parameter(HelpMessage = 'Set this switch to unwrap the list returned from DHIS2')]
@@ -531,32 +613,31 @@ function Get-Dhis2Object {
             else {
                   $client = New-Client $Dhis2ApiBase $UserName $Password
             }
+            $queryStringBuilder = [QueryStringBuilder]::new()
       }
       process {
             try {
-                  Write-Verbose "Getting $RelativeApiEndpoint"
-                  $requestUri = $RelativeApiEndpoint
-                  if ($QueryParametersArray.Count -gt 0) {
-                        $sb = [System.Text.StringBuilder]::new('?')
-                        foreach ($tuple in $QueryParametersArray) {
-                              $sb.Append([System.Web.HttpUtility]::UrlEncode($tuple.Item1)).Append('=').Append([System.Web.HttpUtility]::UrlEncode($tuple.Item2)).Append('&') > $null
+                  $queryStringBuilder.Append('fields', ($Fields | Join-String -Separator ','))
+                  $queryStringBuilder.Append('filter', $Filter)
+                  $queryStringBuilder.Append('order', $Order)
+                  $queryStringBuilder.Append('paging', $Paging.ToString().ToLowerInvariant())
+                  if ($Page) { $queryStringBuilder.Append('page', $Page.ToString()) }
+                  if ($PageSize) { $queryStringBuilder.Append('pageSize', $PageSize.ToString()) }
+                  $queryStringBuilder.Append('translate', $Translate.ToString().ToLowerInvariant())
+                  $queryStringBuilder.Append('locale', $Locale)
+                  $queryStringBuilder.Append('rootJunction', $RootJunction)
+                  if ($IndexableOnly) {
+                        if ($RelativeApiEndpoint -cnotmatch '^/?trackedEntityAttributtes') {
+                              throw "The -IndexableOnly switch can only be used for trackedEntityAttributtes."
                         }
-                        $sb.Length = $sb.Length - 1
-                        $requestUri += $sb.ToString()
+                        $queryStringBuilder.Append('indexableOnly', $IndexableOnly.ToString().ToLowerInvariant())
                   }
-                  elseif ($QueryParameterHash.Count -gt 0) {
-                        $sb = [System.Text.StringBuilder]::new('?')
-                        foreach ($key in $QueryParameterHash.Keys) {
-                              $value = $QueryParameterHash[$key]
-                              if ($value -isnot [string]) {
-                                    Write-Warning "The value of the QueryParameterHash parameter is not a string. This is unsupported and may lead to unexpected results."
-                              }
-                              $sb.Append([System.Web.HttpUtility]::UrlEncode($key)).Append('=').Append([System.Web.HttpUtility]::UrlEncode($value)).Append('&') > $null
-                        }
-                        $sb.Length = $sb.Length - 1
-                        $requestUri += $sb.ToString()
-                  }
-                  Write-Debug "Query: $requestUri"
+
+                  $queryString = $queryStringBuilder.BuildAndReset()
+                  Write-Debug "Path: $RelativeApiEndpoint"
+                  Write-Debug "Query string: '$queryString'"
+                  $requestUri = $RelativeApiEndpoint + $queryString
+                  Write-Verbose "HTTP GET $requestUri"
                   $request = [System.Net.Http.HttpRequestMessage]::new([System.Net.Http.HttpMethod]::Get, $requestUri)
                   $response = $client.Send($request)
                   $ms = [System.IO.MemoryStream]::new()
@@ -565,17 +646,28 @@ function Get-Dhis2Object {
                   Write-Debug "Response content: $contentString"
                   if (-not $response.IsSuccessStatusCode) {
                         if ($contentString) {
-                              throw $contentString | ConvertFrom-Json
+                              try {
+                                    $contentObject = $contentString | ConvertFrom-Json
+                              }
+                              catch {
+                                    throw $contentString
+                              }
+                              throw $contentString
                         }
                         elseif ($response.ReasonPhrase) {
-                              throw "Error: Status: $($response.StatusCode), Reason: $($response.ReasonPhrase)"
+                              throw "Status: $($response.StatusCode), Reason: $($response.ReasonPhrase)"
                         }
                         else {
-                              throw "Error: Status: $($response.StatusCode)"
+                              throw "Status: $($response.StatusCode)"
                         }
                   }
                   else {
-                        $contentObject = $contentString | ConvertFrom-Json
+                        try {
+                              $contentObject = $contentString | ConvertFrom-Json
+                        }
+                        catch {
+                              throw $contentString
+                        }
                         if ($Unwrap) {
                               return $contentObject.PSObject.Properties | Select-Object -First 1 | ForEach-Object { $_.Value }
                         }
@@ -655,7 +747,7 @@ Export-ModuleMember -Function @(
       'Reset-Dhis2Defaults'
       'Set-Dhis2Defaults'
       'Get-Dhis2Defaults'
-      # 'Get-Dhis2Object'
+      'Get-Dhis2Object'
       # 'Add-Dhis2Object'
       # 'Set-Dhis2Object'
       # 'Update-Dhis2Object'

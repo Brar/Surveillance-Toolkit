@@ -352,7 +352,7 @@ SaveTranslations -InputObject $programRules -ObjectName programRules -UseName
 $programRules | ForEach-Object {
     $programRule = $_
     $programCode = $programs | Where-Object id -EQ $programRule.program.id | Select-Object -ExpandProperty code
-    SaveTranslations -InputObject $programRule.programRuleActions -ObjectName programRuleActions -UseName -ParentObjectProperty @{l='programRule_name';e={$programRule.name}} -GrandparentObjectProperty @{l='program_code';e={$programCode}}
+    SaveTranslations -InputObject $programRule.programRuleActions -ObjectName programRuleActions -ParentObjectProperty @{l='programRule_name';e={$programRule.name}} -GrandparentObjectProperty @{l='program_code';e={$programCode}}
     $programRule.programRuleActions | Select-Object `
         @{Name = 'program_code'; Expression = {$programCode }},`
         @{Name = 'programRule_name'; Expression = { $programRule.name }},`
