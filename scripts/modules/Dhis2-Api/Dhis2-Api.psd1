@@ -15,7 +15,7 @@ FunctionsToExport = @(
     'Set-Dhis2Defaults'
     'Get-Dhis2Defaults'
     'Get-Dhis2Object'
-    # 'Add-Dhis2Object'
+    'Add-Dhis2Object'
     # 'Set-Dhis2Object'
     # 'Update-Dhis2Object'
     # 'Remove-Dhis2Object'

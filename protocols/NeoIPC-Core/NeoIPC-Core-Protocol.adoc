@@ -1,0 +1,27 @@
+= Infection Surveillance for Neonatology: Core Module Very Low Birth Weight (VLBW) Very Preterm (VPT) Infants
+Gizem Karadağ <gizem.karadag@charite.de>; Brar Piening <brar.piening@charite.de>
+1.0, 2022-09-30
+:doctype: book
+:lang: en
+:imagesdir: ../img
+include::../locale/attributes.adoc[]
+ifdef::backend-html5[]
+:full-width: role=full-width
+endif::[]
+ifdef::backend-pdf[]
+:full-width: pdfwidth=100%
+endif::[]
+ifdef::backend-docbook5[]
+:full-width: scaledwidth=100%
+endif::[]
+:toc:
+
+NeoIPC Project
+
+https://neoipc.org/
+
+= Introduction
+== What are you reading here?
+This document is the surveillance protocol for the core module of the NeoIPC surveillance which covers surveillance of nosocomial infections in Very Low Birth Weight (VLBW) / Very Preterm (VPT) Infants.
+It is part of a toolkit for the surveillance of healthcare-associated infections (HAI) in neonatology that we developed within the NeoIPC project.
+If you want to perform surveillance of early-onset infections or of nosocomial infections in infants with a birth weight above 1&#8239;500{nbsp}g and a gestational age greater than 32{nbsp}weeks, the toolkit provides additional methods that are covered in separate protocols.

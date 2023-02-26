@@ -444,6 +444,9 @@ Gets a DHIS2 API object from a DHIS2 server.
 .PARAMETER RelativeApiEndpoint
 The relative endpoint in the DHIS2 API.
 
+.PARAMETER Id
+The DHIS2 object id as string.
+
 .PARAMETER Fields
 The fields to return, including transformers.
 See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/metadata.html#webapi_metadata_field_filter
@@ -484,19 +487,19 @@ parameter set to true, the results can be filtered to include only the attribute
 are trigram indexable.
 
 .PARAMETER UserName
-The DHIS2 user name to use for this query.
+The user name to use for authentication on the DHIS2 server.
 
 .PARAMETER Password
-The DHIS2 password to use for this query.
+The password to use for authentication on the DHIS2 server.
 
 .PARAMETER PersonalAccessToken
-The DHIS2 personal access token to use for this query.
+The personal access token to use for authentication on the DHIS2 server.
 
 .PARAMETER Dhis2ApiBase
-The DHIS2 API base URL to use for this query.
+The DHIS2 API base URL.
 
-.PARAMETER Unwrap
-Unwrap the first property of the returned object.
+.PARAMETER ExpandFirstProperty
+Expand the first property of the object returned from DHIS2.
 
 .INPUTS
 
@@ -518,14 +521,25 @@ PS> Get-Dhis2Object -RelativeApiEndpoint dataElements -Fields '*' -Filter 'code:
 
 PS> Get-Dhis2Object categoryCombos/bjDvmb4bfuf
 
+.EXAMPLE
+
+PS> Get-Dhis2Object -Id bjDvmb4bfuf
+
+.EXAMPLE
+
+PS> Get-Dhis2Object categoryCombos bjDvmb4bfuf
+
 .LINK
 
 https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/introduction.html
 #>
 function Get-Dhis2Object {
-      [CmdletBinding(DefaultParameterSetName = 'UsernamePasswordHash')]
+      [CmdletBinding(DefaultParameterSetName = 'UsernamePasswordQuery')]
       param (
-            [Parameter(Position = 0, Mandatory, HelpMessage = 'The relative endpoint in the DHIS2 API')]
+            [Parameter(ParameterSetName = 'UsernamePasswordId', Position = 0, HelpMessage = 'The relative endpoint in the DHIS2 API')]
+            [Parameter(ParameterSetName = 'PersonalAccessTokenId', Position = 0, HelpMessage = 'The relative endpoint in the DHIS2 API')]
+            [Parameter(ParameterSetName = 'UsernamePasswordQuery', Position = 0, Mandatory, HelpMessage = 'The relative endpoint in the DHIS2 API')]
+            [Parameter(ParameterSetName = 'PersonalAccessTokenQuery', Position = 0, Mandatory, HelpMessage = 'The relative endpoint in the DHIS2 API')]
             [ArgumentCompletions('aggregateDataExchanges', 'analyticsTableHooks', 'apiToken', 'attributes', 'categories', 'categoryCombos', `
                         'categoryOptionCombos', 'categoryOptionGroups', 'categoryOptionGroupSets', 'categoryOptions', 'constants', 'dashboardItems', `
                         'dashboards', 'dataApprovalLevels', 'dataApprovalWorkflows', 'dataElementGroups', 'dataElementGroupSets', 'dataElementOperands', `
@@ -560,52 +574,80 @@ function Get-Dhis2Object {
                         'me', 'me/authorities', 'me/authorities/ALL', 'system/id', 'system/info')]
             [string] $RelativeApiEndpoint,
 
-            [Parameter(Position = 1, HelpMessage = 'The fields to return, including transformers. See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/metadata.html#webapi_metadata_field_filter')]
+            [Parameter(ParameterSetName = 'UsernamePasswordId', Position = 1, Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName, HelpMessage = 'The DHIS2 object id as string')]
+            [Parameter(ParameterSetName = 'PersonalAccessTokenId', Position = 1, Mandatory, HelpMessage = 'The DHIS2 object id as string')]
+            [ValidateScript({ [System.Text.RegularExpressions.Regex]::IsMatch($_, '^[A-Za-z][A-Za-z0-9]{10}$') },
+            ErrorMessage = "The value '{0}' is not a valid DHIS2 id. DHIS2 ids must be 11 characters long, consist of alphanumeric characters (A-Za-z0-9) only, and start with an alphabetic "+
+                  'character (A-Za-z). See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/maintenance.html#webapi_system_resource_generate_identifiers')]
+            [string] $Id,
+
+            [Parameter(ParameterSetName = 'UsernamePasswordQuery', Position = 1, HelpMessage = 'The fields to return, including transformers. '+
+                  'See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/metadata.html#webapi_metadata_field_filter')]
+            [Parameter(ParameterSetName = 'PersonalAccessTokenQuery', Position = 1, HelpMessage = 'The fields to return, including transformers. '+
+                  'See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/metadata.html#webapi_metadata_field_filter')]
             [string[]] $Fields,
 
-            [Parameter(Position = 2, HelpMessage = 'The object filters. See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/metadata.html#webapi_metadata_object_filter')]
+            [Parameter(ParameterSetName = 'UsernamePasswordQuery', Position = 2, HelpMessage = 'The object filters. '+
+                  'See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/metadata.html#webapi_metadata_object_filter')]
+            [Parameter(ParameterSetName = 'PersonalAccessTokenQuery', Position = 2, HelpMessage = 'The object filters. '+
+                  'See: https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-master/metadata.html#webapi_metadata_object_filter')]
             [string[]] $Filter,
 
-            [Parameter(HelpMessage = 'Order the output using a specified order, only properties that are both persisted and simple (no collections, idObjects etc) are supported. iasc and idesc are case insensitive sorting.')]
+            [Parameter(ParameterSetName = 'UsernamePasswordQuery', HelpMessage = 'Order the output using a specified order, only properties that are both persisted and simple '+
+                  '(no collections, idObjects etc) are supported. iasc and idesc are case insensitive sorting.')]
+            [Parameter(ParameterSetName = 'PersonalAccessTokenQuery', HelpMessage = 'Order the output using a specified order, only properties that are both persisted and simple '+
+                  '(no collections, idObjects etc) are supported. iasc and idesc are case insensitive sorting.')]
             [string[]] $Order,
 
-            [Parameter(HelpMessage = 'Set this switch to return lists of elements in pages.')]
+            [Parameter(ParameterSetName = 'UsernamePasswordQuery', HelpMessage = 'Return lists of elements in pages.')]
+            [Parameter(ParameterSetName = 'PersonalAccessTokenQuery', HelpMessage = 'Return lists of elements in pages.')]
             [switch] $Paging,
 
-            [Parameter(HelpMessage = 'Defines which page number to return.')]
+            [Parameter(ParameterSetName = 'UsernamePasswordQuery', HelpMessage = 'Sets the page number to return.')]
+            [Parameter(ParameterSetName = 'PersonalAccessTokenQuery', HelpMessage = 'Sets which the number to return.')]
             [uint] $Page,
 
-            [Parameter(HelpMessage = 'Defines the number of elements to return for each page.')]
+            [Parameter(ParameterSetName = 'UsernamePasswordQuery', HelpMessage = 'Sets the number of elements to return for each page.')]
+            [Parameter(ParameterSetName = 'PersonalAccessTokenQuery', HelpMessage = 'Sets the number of elements to return for each page.')]
             [uint] $PageSize,
 
-            [Parameter(HelpMessage = 'Translate display* properties in metadata output (displayName, displayShortName, displayDescription, and displayFormName for data elements and tracked entity attributes).')]
+            [Parameter(ParameterSetName = 'UsernamePasswordQuery', HelpMessage = 'Translate display* properties in metadata output (displayName, displayShortName, '+
+                  'displayDescription, and displayFormName for data elements and tracked entity attributes).')]
+            [Parameter(ParameterSetName = 'PersonalAccessTokenQuery', HelpMessage = 'Translate display* properties in metadata output (displayName, displayShortName, '+
+                  'displayDescription, and displayFormName for data elements and tracked entity attributes).')]
             [switch] $Translate,
 
-            [Parameter(HelpMessage = 'Translate metadata output using a specified locale (requires translate=true).')]
+            [Parameter(ParameterSetName = 'UsernamePasswordQuery', HelpMessage = 'Translate metadata output using a specified locale (requires translate=true).')]
+            [Parameter(ParameterSetName = 'PersonalAccessTokenQuery', HelpMessage = 'Translate metadata output using a specified locale (requires translate=true).')]
             [string] $Locale,
 
-            [Parameter(HelpMessage = 'Switch the root logical operator from AND to OR')]
+            [Parameter(ParameterSetName = 'UsernamePasswordQuery', HelpMessage = 'Switch the root logical operator from AND to OR')]
+            [Parameter(ParameterSetName = 'PersonalAccessTokenQuery', HelpMessage = 'Switch the root logical operator from AND to OR')]
             [ValidateSet('OR')]
             [string] $RootJunction,
 
-            [Parameter(HelpMessage = 'Include only the attributes that are trigram indexable.')]
+            [Parameter(ParameterSetName = 'UsernamePasswordQuery', HelpMessage = 'Include only the attributes that are trigram indexable.')]
+            [Parameter(ParameterSetName = 'PersonalAccessTokenQuery', HelpMessage = 'Include only the attributes that are trigram indexable.')]
             [switch] $IndexableOnly,
 
-            [Parameter(ParameterSetName = 'UsernamePasswordHash', HelpMessage = 'Enter your username')]
+            [Parameter(ParameterSetName = 'UsernamePasswordId', HelpMessage = 'The user name to use for authentication on the DHIS2 server.')]
+            [Parameter(ParameterSetName = 'UsernamePasswordQuery', HelpMessage = 'The user name to use for authentication on the DHIS2 server.')]
             [string] $UserName = $Dhis2DefaultUserName,
 
-            [Parameter(ParameterSetName = 'UsernamePasswordHash', HelpMessage = 'Enter your password')]
+            [Parameter(ParameterSetName = 'UsernamePasswordId', HelpMessage = 'The password to use for authentication on the DHIS2 server.')]
+            [Parameter(ParameterSetName = 'UsernamePasswordQuery', HelpMessage = 'The password to use for authentication on the DHIS2 server.')]
             [securestring] $Password = $Dhis2DefaultPassword,
 
-            [Parameter(Mandatory, ParameterSetName = 'PersonalAccessTokenHash', HelpMessage = 'Enter your personal access token for the DHIS2 API')]
+            [Parameter(Mandatory, ParameterSetName = 'PersonalAccessTokenId', HelpMessage = 'The personal access token to use for authentication on the DHIS2 server.')]
+            [Parameter(Mandatory, ParameterSetName = 'PersonalAccessTokenQuery', HelpMessage = 'The personal access token to use for authentication on the DHIS2 server.')]
             [securestring] $PersonalAccessToken = $Dhis2DefaultToken,
 
-            [Parameter(HelpMessage = 'Enter the DHIS2 API base URL')]
+            [Parameter(HelpMessage = 'The DHIS2 API base URL.')]
             [ArgumentCompletions('''http://localhost/api''', '''http://localhost:8080/api/39''', '''https://play.dhis2.org/2.39.1.1/api''')]
             [string] $Dhis2ApiBase = $Dhis2DefaultApiBase,
 
-            [Parameter(HelpMessage = 'Set this switch to unwrap the list returned from DHIS2')]
-            [switch] $Unwrap)
+            [Parameter(HelpMessage = 'Expand the first property of the object returned from DHIS2.')]
+            [switch] $ExpandFirstProperty)
       begin {
             if ($PersonalAccessToken) {
                   $client = New-Client $Dhis2ApiBase $PersonalAccessToken
@@ -614,35 +656,48 @@ function Get-Dhis2Object {
                   $client = New-Client $Dhis2ApiBase $UserName $Password
             }
             $queryStringBuilder = [QueryStringBuilder]::new()
+            $contentBuffer = [System.IO.MemoryStream]::new()
       }
       process {
             try {
-                  $queryStringBuilder.Append('fields', ($Fields | Join-String -Separator ','))
-                  $queryStringBuilder.Append('filter', $Filter)
-                  $queryStringBuilder.Append('order', $Order)
-                  $queryStringBuilder.Append('paging', $Paging.ToString().ToLowerInvariant())
-                  if ($Page) { $queryStringBuilder.Append('page', $Page.ToString()) }
-                  if ($PageSize) { $queryStringBuilder.Append('pageSize', $PageSize.ToString()) }
-                  $queryStringBuilder.Append('translate', $Translate.ToString().ToLowerInvariant())
-                  $queryStringBuilder.Append('locale', $Locale)
-                  $queryStringBuilder.Append('rootJunction', $RootJunction)
-                  if ($IndexableOnly) {
-                        if ($RelativeApiEndpoint -cnotmatch '^/?trackedEntityAttributtes') {
-                              throw "The -IndexableOnly switch can only be used for trackedEntityAttributtes."
+                  if ($Id) {
+                        if ($RelativeApiEndpoint) {
+                              $requestUri = "$RelativeApiEndpoint/$Id"
+                              Write-Debug "Path: $requestUri"
                         }
-                        $queryStringBuilder.Append('indexableOnly', $IndexableOnly.ToString().ToLowerInvariant())
+                        else {
+                              $requestUri = "identifiableObjects/$Id"
+                              Write-Debug "Path: $requestUri"
+                        }
                   }
+                  else {
+                        $queryStringBuilder.Append('fields', ($Fields | Join-String -Separator ','))
+                        $queryStringBuilder.Append('filter', $Filter)
+                        $queryStringBuilder.Append('order', $Order)
+                        $queryStringBuilder.Append('paging', $Paging.ToString().ToLowerInvariant())
+                        if ($Page) { $queryStringBuilder.Append('page', $Page.ToString()) }
+                        if ($PageSize) { $queryStringBuilder.Append('pageSize', $PageSize.ToString()) }
+                        $queryStringBuilder.Append('translate', $Translate.ToString().ToLowerInvariant())
+                        $queryStringBuilder.Append('locale', $Locale)
+                        $queryStringBuilder.Append('rootJunction', $RootJunction)
+                        if ($IndexableOnly) {
+                              if ($RelativeApiEndpoint -cnotmatch '^/?trackedEntityAttributtes') {
+                                    throw "The -IndexableOnly switch can only be used for trackedEntityAttributtes."
+                              }
+                              $queryStringBuilder.Append('indexableOnly', $IndexableOnly.ToString().ToLowerInvariant())
+                        }
 
-                  $queryString = $queryStringBuilder.BuildAndReset()
-                  Write-Debug "Path: $RelativeApiEndpoint"
-                  Write-Debug "Query string: '$queryString'"
-                  $requestUri = $RelativeApiEndpoint + $queryString
-                  Write-Verbose "HTTP GET $requestUri"
+                        $queryString = $queryStringBuilder.BuildAndReset()
+                        Write-Debug "Path: $RelativeApiEndpoint"
+                        Write-Debug "Query string: '$queryString'"
+                        $requestUri = $RelativeApiEndpoint + $queryString
+                  }
+                  Write-Verbose "GET $($client.BaseAddress)$requestUri"
                   $request = [System.Net.Http.HttpRequestMessage]::new([System.Net.Http.HttpMethod]::Get, $requestUri)
                   $response = $client.Send($request)
-                  $ms = [System.IO.MemoryStream]::new()
-                  $response.Content.CopyTo($ms, $null, [System.Threading.CancellationToken]::None) > $null
-                  $contentString = [System.Text.Encoding]::UTF8.GetString($ms.ToArray())
+                  $contentBuffer.SetLength(0)
+                  $response.Content.CopyTo($contentBuffer, $null, [System.Threading.CancellationToken]::None) > $null
+                  $contentString = [System.Text.Encoding]::UTF8.GetString($contentBuffer.GetBuffer(), 0, $contentBuffer.Length)
                   Write-Debug "Response content: $contentString"
                   if (-not $response.IsSuccessStatusCode) {
                         if ($contentString) {
@@ -652,7 +707,7 @@ function Get-Dhis2Object {
                               catch {
                                     throw $contentString
                               }
-                              throw $contentString
+                              throw $contentObject
                         }
                         elseif ($response.ReasonPhrase) {
                               throw "Status: $($response.StatusCode), Reason: $($response.ReasonPhrase)"
@@ -664,15 +719,400 @@ function Get-Dhis2Object {
                   else {
                         try {
                               $contentObject = $contentString | ConvertFrom-Json
+                              if ($ExpandFirstProperty) {
+                                    return $contentObject.PSObject.Properties | Select-Object -First 1 | ForEach-Object { $_.Value }
+                              }
+                              else {
+                                    return $contentObject
+                              }
                         }
                         catch {
                               throw $contentString
                         }
-                        if ($Unwrap) {
-                              return $contentObject.PSObject.Properties | Select-Object -First 1 | ForEach-Object { $_.Value }
+                  }
+            }
+            finally {
+                  if ($request) { $request.Dispose() }
+                  if ($response) { $response.Dispose() }
+            }
+      }
+      clean { if ($client) { $client.Dispose() } }
+}
+
+<#
+.SYNOPSIS
+
+Add an object to a DHIS2 a server.
+
+.DESCRIPTION
+
+Add a DHIS2 object to a server via the DHIS2 API.
+
+.PARAMETER RelativeApiEndpoint
+The relative endpoint in the DHIS2 API.
+
+.PARAMETER PayloadString
+The JSON payload as string.
+
+.PARAMETER PayloadObject
+The payload as object.
+
+.PARAMETER PreheatCache
+Turn cache-map preheating on/off.
+This is on by default, turning this off will make initial load time
+ for importer much shorter (but will make the import itself slower).
+ This is mostly used for cases where you have a small XML/JSON file
+ you want to import, and don't want to wait for cache-map preheating.
+
+.PARAMETER ImportStrategy
+Import strategy to use.
+
+.PARAMETER MergeMode
+Strategy for merging of objects when doing updates.
+REPLACE will just overwrite the property with the new value provided,
+MERGE will only set the property if it is not null (only if the
+property was provided).
+
+.PARAMETER ReturnId
+Return the id of the created object instead of the whole response.
+
+.PARAMETER UserName
+The username to use for authentication on the DHIS2 server.
+
+.PARAMETER Password
+The password to use for authentication on the DHIS2 server.
+
+.PARAMETER PersonalAccessToken
+The personal access token to use for authentication on the DHIS2 server.
+
+.PARAMETER Dhis2ApiBase
+The DHIS2 API base URL.
+
+.INPUTS
+
+System.String or System.Object.
+
+.OUTPUTS
+
+System.Management.Automation.PSObject.
+
+.LINK
+
+https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-239/metadata.html#webapi_metadata_crud
+#>
+function Add-Dhis2Object {
+      [CmdletBinding(DefaultParameterSetName = 'UsernamePasswordObject')]
+      param (
+            [Parameter(Position = 0, Mandatory, HelpMessage = 'The relative endpoint in the DHIS2 API')]
+            [ArgumentCompletions('aggregateDataExchanges','analyticsTableHooks','apiToken','attributes','categories','categoryCombos',`
+            'categoryOptionCombos','categoryOptionGroups','categoryOptionGroupSets','categoryOptions','constants','dashboardItems',`
+            'dashboards','dataApprovalLevels','dataApprovalWorkflows','dataElementGroups','dataElementGroupSets','dataElementOperands',`
+            'dataElements','dataEntryForms','dataSetNotificationTemplates','dataSets','dataStore','documents','eventCharts',`
+            'eventFilters','eventReports','eventVisualizations','externalFileResources','externalMapLayers','fileResources','icons',`
+            'indicatorGroups','indicatorGroupSets','indicators','indicatorTypes','interpretations','jobConfigurations','legendSets',`
+            'maps','mapViews','messageConversations','metadata/proposals','metadata/version','minMaxDataElements','oAuth2Clients',`
+            'optionGroups','optionGroupSets','options','optionSets','organisationUnitGroups','organisationUnitGroupSets',`
+            'organisationUnitLevels','organisationUnits','predictorGroups','predictors','programDataElements','programIndicatorGroups',`
+            'programIndicators','programNotificationTemplates','programRuleActions','programRules','programRuleVariables','programs',`
+            'programSections','programStages','programStageSections','programTrackedEntityAttributeGroups','pushAnalysis','relationships',`
+            'relationshipTypes','reports','sections','smsCommands','sqlViews','trackedEntityAttributes','trackedEntityInstanceFilters',`
+            'trackedEntityInstances','trackedEntityTypes','userGroups','userRoles','users','validationNotificationTemplates',`
+            'validationResults','validationRuleGroups','validationRules','visualizations')]
+            [string] $RelativeApiEndpoint,
+
+            [Parameter(Position = 1, Mandatory, ParameterSetName = 'PersonalAccessTokenString', ValueFromPipeline, ValueFromPipelineByPropertyName, HelpMessage = 'The JSON payload as string.')]
+            [Parameter(Position = 1, Mandatory, ParameterSetName = 'UsernamePasswordString', ValueFromPipeline, ValueFromPipelineByPropertyName, HelpMessage = 'The JSON payload as string.')]
+            [string] $PayloadString,
+
+            [Parameter(Position = 1, Mandatory, ParameterSetName = 'PersonalAccessTokenObject', ValueFromPipeline, ValueFromPipelineByPropertyName, HelpMessage = 'The payload as object.')]
+            [Parameter(Position = 1, Mandatory, ParameterSetName = 'UsernamePasswordObject', ValueFromPipeline, ValueFromPipelineByPropertyName, HelpMessage = 'The payload as object.')]
+            [object] $PayloadObject,
+
+            [Parameter(HelpMessage = 'Turn cache-map preheating on/off.')]
+            [System.Nullable[bool]] $PreheatCache,
+
+            [Parameter(HelpMessage = 'Return the id of the created object instead of the whole response.')]
+            [switch] $ReturnId,
+
+            [Parameter(HelpMessage = 'Import strategy to use.')]
+            [ValidateSet('CREATE_AND_UPDATE','CREATE','UPDATE','DELETE')]
+            [string] $ImportStrategy,
+
+            [Parameter(HelpMessage = 'Import strategy to use.')]
+            [ValidateSet('REPLACE','MERGE')]
+            [string] $MergeMode,
+
+            [Parameter(ParameterSetName = 'UsernamePasswordObject', HelpMessage = 'The username to use for authentication on the DHIS2 server.')]
+            [Parameter(ParameterSetName = 'UsernamePasswordString', HelpMessage = 'The username to use for authentication on the DHIS2 server.')]
+            [string] $UserName = $Dhis2DefaultUserName,
+
+            [Parameter(ParameterSetName = 'UsernamePasswordObject', HelpMessage = 'The password to use for authentication on the DHIS2 server.')]
+            [Parameter(ParameterSetName = 'UsernamePasswordString', HelpMessage = 'The password to use for authentication on the DHIS2 server.')]
+            [securestring] $Password = $Dhis2DefaultPassword,
+
+            [Parameter(Mandatory, ParameterSetName = 'PersonalAccessTokenObject', HelpMessage = 'The personal access token to use for authentication on the DHIS2 server.')]
+            [Parameter(Mandatory, ParameterSetName = 'PersonalAccessTokenString', HelpMessage = 'The personal access token to use for authentication on the DHIS2 server.')]
+            [securestring] $PersonalAccessToken = $Dhis2DefaultToken,
+
+            [Parameter(HelpMessage = 'The DHIS2 API base URL')]
+            [ArgumentCompletions('''http://localhost/api''', '''http://localhost:8080/api/39''', '''https://play.dhis2.org/2.39.1.1/api''')]
+            [string] $Dhis2ApiBase = $Dhis2DefaultApiBase)
+      begin {
+            if ($PersonalAccessToken) {
+                  $client = New-Client $Dhis2ApiBase $PersonalAccessToken
+            }
+            else {
+                  $client = New-Client $Dhis2ApiBase $UserName $Password
+            }
+            $queryStringBuilder = [QueryStringBuilder]::new()
+            $contentBuffer = [System.IO.MemoryStream]::new()
+      }
+      process {
+            try {
+                  if ($PayloadObject) {
+                        $payload = ConvertTo-Json $PayloadObject -Compress -Depth 100
+                  }
+                  else {
+                        $payload = $PayloadString
+                  }
+                  if ($PreheatCache.HasValue) { $queryStringBuilder.Append('page', $PreheatCache.Value.ToString().ToLowerInvariant()) }
+                  $queryStringBuilder.Append('importStrategy', $ImportStrategy)
+                  $queryStringBuilder.Append('mergeMode', $MergeMode)
+                  $queryString = $queryStringBuilder.BuildAndReset()
+                  Write-Debug "Path: $RelativeApiEndpoint"
+                  Write-Debug "Query string: '$queryString'"
+                  Write-Debug "Payload: $payload"
+                  $requestUri = $RelativeApiEndpoint + $queryString
+                  Write-Verbose "POST $($client.BaseAddress)$requestUri $(if ($payload.Length -gt 80) { $payload.Substring(76) + '...}' } else { $payload })"
+                  $request = [System.Net.Http.HttpRequestMessage]::new([System.Net.Http.HttpMethod]::Post, $RelativeApiEndpoint)
+                  $request.Content = [System.Net.Http.StringContent]::new($payload, [System.Text.Encoding]::UTF8, 'application/json')
+                  $response = $client.Send($request)
+                  $contentBuffer.SetLength(0)
+                  $response.Content.CopyTo($contentBuffer, $null, [System.Threading.CancellationToken]::None) > $null
+                  $contentString = [System.Text.Encoding]::UTF8.GetString($contentBuffer.GetBuffer(), 0, $contentBuffer.Length)
+                  Write-Debug "Response content: $contentString"
+                  if (-not $response.IsSuccessStatusCode) {
+                        if ($contentString) {
+                              try {
+                                    $contentObject = $contentString | ConvertFrom-Json
+                              }
+                              catch {
+                                    throw $contentString
+                              }
+                              throw $contentObject
+                        }
+                        elseif ($response.ReasonPhrase) {
+                              throw "Status: $($response.StatusCode), Reason: $($response.ReasonPhrase)"
                         }
                         else {
-                              return $contentObject
+                              throw "Status: $($response.StatusCode)"
+                        }
+                  }
+                  else {
+                        try {
+                              $contentObject = $contentString | ConvertFrom-Json
+                              if ($ReturnId) {
+                                    return $contentObject.response.uid
+                              }
+                              else {
+                                    return $contentObject
+                              }
+                        }
+                        catch {
+                              throw $contentString
+                        }
+                  }
+            }
+            finally {
+                  if ($request) { $request.Dispose() }
+                  if ($response) { $response.Dispose() }
+            }
+      }
+      clean { if ($client) { $client.Dispose() } }
+}
+
+
+<#
+.SYNOPSIS
+
+Add or update an object to a DHIS2 a server.
+
+.DESCRIPTION
+
+Add or update a DHIS2 object to a server via the DHIS2 API.
+
+.PARAMETER RelativeApiEndpoint
+The relative endpoint in the DHIS2 API.
+
+.PARAMETER PayloadString
+The JSON payload as string.
+
+.PARAMETER PayloadObject
+The payload as object.
+
+.PARAMETER PreheatCache
+Turn cache-map preheating on/off.
+This is on by default, turning this off will make initial load time
+ for importer much shorter (but will make the import itself slower).
+ This is mostly used for cases where you have a small XML/JSON file
+ you want to import, and don't want to wait for cache-map preheating.
+
+.PARAMETER ImportStrategy
+Import strategy to use.
+
+.PARAMETER MergeMode
+Strategy for merging of objects when doing updates.
+REPLACE will just overwrite the property with the new value provided,
+MERGE will only set the property if it is not null (only if the
+property was provided).
+
+.PARAMETER ReturnId
+Return the id of the created object instead of the whole response.
+
+.PARAMETER UserName
+The username to use for authentication on the DHIS2 server.
+
+.PARAMETER Password
+The password to use for authentication on the DHIS2 server.
+
+.PARAMETER PersonalAccessToken
+The personal access token to use for authentication on the DHIS2 server.
+
+.PARAMETER Dhis2ApiBase
+The DHIS2 API base URL.
+
+.INPUTS
+
+System.String or System.Object.
+
+.OUTPUTS
+
+System.Management.Automation.PSObject.
+
+.LINK
+
+https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-239/metadata.html#webapi_metadata_crud
+#>
+function Set-Dhis2Object {
+      [CmdletBinding(DefaultParameterSetName = 'UsernamePasswordObject')]
+      param (
+            [Parameter(Position = 0, Mandatory, HelpMessage = 'The relative endpoint in the DHIS2 API')]
+            [ArgumentCompletions('aggregateDataExchanges','analyticsTableHooks','apiToken','attributes','categories','categoryCombos',`
+            'categoryOptionCombos','categoryOptionGroups','categoryOptionGroupSets','categoryOptions','constants','dashboardItems',`
+            'dashboards','dataApprovalLevels','dataApprovalWorkflows','dataElementGroups','dataElementGroupSets','dataElementOperands',`
+            'dataElements','dataEntryForms','dataSetNotificationTemplates','dataSets','dataStore','documents','eventCharts',`
+            'eventFilters','eventReports','eventVisualizations','externalFileResources','externalMapLayers','fileResources','icons',`
+            'indicatorGroups','indicatorGroupSets','indicators','indicatorTypes','interpretations','jobConfigurations','legendSets',`
+            'maps','mapViews','messageConversations','metadata/proposals','metadata/version','minMaxDataElements','oAuth2Clients',`
+            'optionGroups','optionGroupSets','options','optionSets','organisationUnitGroups','organisationUnitGroupSets',`
+            'organisationUnitLevels','organisationUnits','predictorGroups','predictors','programDataElements','programIndicatorGroups',`
+            'programIndicators','programNotificationTemplates','programRuleActions','programRules','programRuleVariables','programs',`
+            'programSections','programStages','programStageSections','programTrackedEntityAttributeGroups','pushAnalysis','relationships',`
+            'relationshipTypes','reports','sections','smsCommands','sqlViews','trackedEntityAttributes','trackedEntityInstanceFilters',`
+            'trackedEntityInstances','trackedEntityTypes','userGroups','userRoles','users','validationNotificationTemplates',`
+            'validationResults','validationRuleGroups','validationRules','visualizations')]
+            [string] $RelativeApiEndpoint,
+
+            [Parameter(Position = 1, Mandatory, ParameterSetName = 'PersonalAccessTokenString', ValueFromPipeline, ValueFromPipelineByPropertyName, HelpMessage = 'The JSON payload as string.')]
+            [Parameter(Position = 1, Mandatory, ParameterSetName = 'UsernamePasswordString', ValueFromPipeline, ValueFromPipelineByPropertyName, HelpMessage = 'The JSON payload as string.')]
+            [string] $PayloadString,
+
+            [Parameter(Position = 1, Mandatory, ParameterSetName = 'PersonalAccessTokenObject', ValueFromPipeline, ValueFromPipelineByPropertyName, HelpMessage = 'The payload as object.')]
+            [Parameter(Position = 1, Mandatory, ParameterSetName = 'UsernamePasswordObject', ValueFromPipeline, ValueFromPipelineByPropertyName, HelpMessage = 'The payload as object.')]
+            [object] $PayloadObject,
+
+            [Parameter(HelpMessage = 'Turn cache-map preheating on/off.')]
+            [System.Nullable[bool]] $PreheatCache,
+
+            [Parameter(HelpMessage = 'Return the id of the created object instead of the whole response.')]
+            [switch] $ReturnId,
+
+            [Parameter(HelpMessage = 'Import strategy to use.')]
+            [ValidateSet('CREATE_AND_UPDATE','CREATE','UPDATE','DELETE')]
+            [string] $ImportStrategy,
+
+            [Parameter(HelpMessage = 'Import strategy to use.')]
+            [ValidateSet('REPLACE','MERGE')]
+            [string] $MergeMode,
+
+            [Parameter(ParameterSetName = 'UsernamePasswordObject', HelpMessage = 'The username to use for authentication on the DHIS2 server.')]
+            [Parameter(ParameterSetName = 'UsernamePasswordString', HelpMessage = 'The username to use for authentication on the DHIS2 server.')]
+            [string] $UserName = $Dhis2DefaultUserName,
+
+            [Parameter(ParameterSetName = 'UsernamePasswordObject', HelpMessage = 'The password to use for authentication on the DHIS2 server.')]
+            [Parameter(ParameterSetName = 'UsernamePasswordString', HelpMessage = 'The password to use for authentication on the DHIS2 server.')]
+            [securestring] $Password = $Dhis2DefaultPassword,
+
+            [Parameter(Mandatory, ParameterSetName = 'PersonalAccessTokenObject', HelpMessage = 'The personal access token to use for authentication on the DHIS2 server.')]
+            [Parameter(Mandatory, ParameterSetName = 'PersonalAccessTokenString', HelpMessage = 'The personal access token to use for authentication on the DHIS2 server.')]
+            [securestring] $PersonalAccessToken = $Dhis2DefaultToken,
+
+            [Parameter(HelpMessage = 'The DHIS2 API base URL')]
+            [ArgumentCompletions('''http://localhost/api''', '''http://localhost:8080/api/39''', '''https://play.dhis2.org/2.39.1.1/api''')]
+            [string] $Dhis2ApiBase = $Dhis2DefaultApiBase)
+      begin {
+            if ($PersonalAccessToken) {
+                  $client = New-Client $Dhis2ApiBase $PersonalAccessToken
+            }
+            else {
+                  $client = New-Client $Dhis2ApiBase $UserName $Password
+            }
+            $queryStringBuilder = [QueryStringBuilder]::new()
+            $contentBuffer = [System.IO.MemoryStream]::new()
+      }
+      process {
+            try {
+                  if ($PayloadObject) {
+                        $payload = ConvertTo-Json $PayloadObject -Compress -Depth 100
+                  }
+                  else {
+                        $payload = $PayloadString
+                  }
+                  if ($PreheatCache.HasValue) { $queryStringBuilder.Append('page', $PreheatCache.Value.ToString().ToLowerInvariant()) }
+                  $queryStringBuilder.Append('importStrategy', $ImportStrategy)
+                  $queryStringBuilder.Append('mergeMode', $MergeMode)
+                  $queryString = $queryStringBuilder.BuildAndReset()
+                  Write-Debug "Path: $RelativeApiEndpoint"
+                  Write-Debug "Query string: '$queryString'"
+                  Write-Debug "Payload: $payload"
+                  $requestUri = $RelativeApiEndpoint + $queryString
+                  Write-Verbose "PUT $($client.BaseAddress)$requestUri $(if ($payload.Length -gt 80) { $payload.Substring(76) + '...}' } else { $payload })"
+                  $request = [System.Net.Http.HttpRequestMessage]::new([System.Net.Http.HttpMethod]::Put, $RelativeApiEndpoint)
+                  $request.Content = [System.Net.Http.StringContent]::new($payload, [System.Text.Encoding]::UTF8, 'application/json')
+                  $response = $client.Send($request)
+                  $contentBuffer.SetLength(0)
+                  $response.Content.CopyTo($contentBuffer, $null, [System.Threading.CancellationToken]::None) > $null
+                  $contentString = [System.Text.Encoding]::UTF8.GetString($contentBuffer.GetBuffer(), 0, $contentBuffer.Length)
+                  Write-Debug "Response content: $contentString"
+                  if (-not $response.IsSuccessStatusCode) {
+                        if ($contentString) {
+                              try {
+                                    $contentObject = $contentString | ConvertFrom-Json
+                              }
+                              catch {
+                                    throw $contentString
+                              }
+                              throw $contentObject
+                        }
+                        elseif ($response.ReasonPhrase) {
+                              throw "Status: $($response.StatusCode), Reason: $($response.ReasonPhrase)"
+                        }
+                        else {
+                              throw "Status: $($response.StatusCode)"
+                        }
+                  }
+                  else {
+                        try {
+                              $contentObject = $contentString | ConvertFrom-Json
+                              if ($ReturnId) {
+                                    return $contentObject.response.uid
+                              }
+                              else {
+                                    return $contentObject
+                              }
+                        }
+                        catch {
+                              throw $contentString
                         }
                   }
             }
@@ -748,7 +1188,7 @@ Export-ModuleMember -Function @(
       'Set-Dhis2Defaults'
       'Get-Dhis2Defaults'
       'Get-Dhis2Object'
-      # 'Add-Dhis2Object'
+      'Add-Dhis2Object'
       # 'Set-Dhis2Object'
       # 'Update-Dhis2Object'
       # 'Remove-Dhis2Object'

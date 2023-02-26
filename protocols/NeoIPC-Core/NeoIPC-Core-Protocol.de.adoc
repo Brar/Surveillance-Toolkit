@@ -1,0 +1,27 @@
+= Infektionssurveillance für die Neonatologie: Kernmodul Very Low Birth Weight (VLBW) Very Preterm (VPT) Neugeborene
+Gizem Karadağ <gizem.karadag@charite.de>; Brar Piening <brar.piening@charite.de>
+1.0, 30.09.2022
+:doctype: book
+:lang: de
+:imagesdir: ./img
+include::../locale/attributes.adoc[]
+ifdef::backend-html5[]
+:full-width: role=full-width
+endif::[]
+ifdef::backend-pdf[]
+:full-width: pdfwidth=100%
+endif::[]
+ifdef::backend-docbook5[]
+:full-width: scaledwidth=100%
+endif::[]
+:toc:
+
+NeoIPC Projekt
+
+https://neoipc.org/
+
+= Einleitung
+== Was lesen Sie hier?
+Dieses Dokument ist das Surveillance-Protokoll für das Kernmodul der NeoIPC-Surveillance, das die Surveillance von nosokomialen Infektionen bei Neugeborenen mit sehr niedrigem Geburtsgewicht (VLBW) bzw. sehr frühgeborenen Kindern (VPT) behandelt.
+Es ist Teil eines Toolkits zur Surveillance von nosokomialen Infektionen (NI) in der Neonatologie, das wir im Rahmen des NeoIPC-Projekts entwickelt haben.
+Wenn Sie eine Surveillance von vertikalen (early-onset) Infektionen oder von nosokomiale Infektionen bei Kindern mit einem Geburtsgewicht über 1.500g und einem Gestationsalter von mehr als 32 Wochen durchführen möchten, bietet das Toolkit zusätzliche Methoden, die in separaten Protokollen behandelt werden.

@@ -1,0 +1,46 @@
+name: Build surveillance protocol
+
+on:
+  push:
+    branches: [ 'main', 'work' ]
+  pull_request:
+    branches: [ 'main' ]
+  workflow_dispatch:
+
+env:
+  locales: "'','de'"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        protocol: [ 'NeoIPC-Core' ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Asciidoctor
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -qq asciidoctor
+          sudo gem install asciidoctor-pdf
+        shell: bash
+
+      - name: Build HTML5 and PDF for all locales
+        run: |
+          foreach ($targetCulture in ${{ env.locales }})
+          {
+            if ('' -eq $targetCulture){ $langSuffix = '' }
+            else { $langSuffix = ".$targetCulture" }
+            asciidoctor --backend html5 --warnings --trace --failure-level WARN --destination-dir ${{ github.workspace }}/out --out-file index$langSuffix.html ${{ github.workspace }}/protocols/${{ matrix.protocol }}/${{ matrix.protocol }}-Protocol$langSuffix.adoc
+            asciidoctor-pdf --warnings --trace --failure-level WARN --destination-dir ${{ github.workspace }}/out --out-file ${{ matrix.protocol }}-Protocol$langSuffix.pdf ${{ github.workspace }}/protocols/${{ matrix.protocol }}/${{ matrix.protocol }}-Protocol$langSuffix.adoc
+          }
+        shell: pwsh
+
+      - name: Upload build results
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.protocol }}-Protocol
+          path: ${{ github.workspace }}/out
