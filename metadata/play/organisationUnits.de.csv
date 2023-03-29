@@ -1,0 +1,537 @@
+code,property,needs_translation,default,translated
+AL0_TEST,NAME,t,Testhospital - Shqipëria,Testkrankenhaus - Albanien
+AL0_TEST,SHORT_NAME,t,Testhosp. AL0,Testkrh. AL0
+AL0_TEST_TEST,NAME,t,Testdepartment - Shqipëria,Testabteilung - Albanien
+AL0_TEST_TEST,SHORT_NAME,t,Testdep. AL0,Testabt. AL0
+AT1_TEST,NAME,t,Testhospital - Ostösterreich,Testkrankenhaus - Ostösterreich
+AT1_TEST,SHORT_NAME,t,Testhosp. AT1,Testkrh. AT1
+AT1_TEST_TEST,NAME,t,Testdepartment - Ostösterreich,Testabteilung - Ostösterreich
+AT1_TEST_TEST,SHORT_NAME,t,Testdep. AT1,Testabt. AT1
+AT2_TEST,NAME,t,Testhospital - Südösterreich,Testkrankenhaus - Südösterreich
+AT2_TEST,SHORT_NAME,t,Testhosp. AT2,Testkrh. AT2
+AT2_TEST_TEST,NAME,t,Testdepartment - Südösterreich,Testabteilung - Südösterreich
+AT2_TEST_TEST,SHORT_NAME,t,Testdep. AT2,Testabt. AT2
+AT3_TEST,NAME,t,Testhospital - Westösterreich,Testkrankenhaus - Westösterreich
+AT3_TEST,SHORT_NAME,t,Testhosp. AT3,Testkrh. AT3
+AT3_TEST_TEST,NAME,t,Testdepartment - Westösterreich,Testabteilung - Westösterreich
+AT3_TEST_TEST,SHORT_NAME,t,Testdep. AT3,Testabt. AT3
+BE1_TEST,NAME,t,Testhospital - Région de Bruxelles-Capitale/Brussels Hoofdstedelijk Gewest,Testkrankenhaus - Region Brüssel-Hauptstadt
+BE1_TEST,SHORT_NAME,t,Testhosp. BE1,Testkrh. BE1
+BE1_TEST_TEST,NAME,t,Testdepartment - Région de Bruxelles-Capitale/Brussels Hoofdstedelijk Gewest,Testabteilung - Region Brüssel-Hauptstadt
+BE1_TEST_TEST,SHORT_NAME,t,Testdep. BE1,Testabt. BE1
+BE2_TEST,NAME,t,Testhospital - Vlaams Gewest,Testkrankenhaus - Flämische Region
+BE2_TEST,SHORT_NAME,t,Testhosp. BE2,Testkrh. BE2
+BE2_TEST_TEST,NAME,t,Testdepartment - Vlaams Gewest,Testabteilung - Flämische Region
+BE2_TEST_TEST,SHORT_NAME,t,Testdep. BE2,Testabt. BE2
+BE3_TEST,NAME,t,Testhospital - Région wallonne,Testkrankenhaus - Wallonische Region
+BE3_TEST,SHORT_NAME,t,Testhosp. BE3,Testkrh. BE3
+BE3_TEST_TEST,NAME,t,Testdepartment - Région wallonne,Testabteilung - Wallonische Region
+BE3_TEST_TEST,SHORT_NAME,t,Testdep. BE3,Testabt. BE3
+BG3_TEST,NAME,t,Testhospital - Северна и Югоизточна България,Testkrankenhaus - Nord- und Südostbulgarien
+BG3_TEST,SHORT_NAME,t,Testhosp. BG3,Testkrh. BG3
+BG3_TEST_TEST,NAME,t,Testdepartment - Северна и Югоизточна България,Testabteilung - Nord- und Südostbulgarien
+BG3_TEST_TEST,SHORT_NAME,t,Testdep. BG3,Testabt. BG3
+BG4_TEST,NAME,t,Testhospital - Югозападна и Южна централна България,Testkrankenhaus - Südwest- und Südzentralbulgarien
+BG4_TEST,SHORT_NAME,t,Testhosp. BG4,Testkrh. BG4
+BG4_TEST_TEST,NAME,t,Testdepartment - Югозападна и Южна централна България,Testabteilung - Südwest- und Südzentralbulgarien
+BG4_TEST_TEST,SHORT_NAME,t,Testdep. BG4,Testabt. BG4
+CH0_TEST,NAME,t,Testhospital - Schweiz/Suisse/Svizzera,Testkrankenhaus - Schweiz
+CH0_TEST,SHORT_NAME,t,Testhosp. CH0,Testkrh. CH0
+CH0_TEST_TEST,NAME,t,Testdepartment - Schweiz/Suisse/Svizzera,Testabteilung - Schweiz
+CH0_TEST_TEST,SHORT_NAME,t,Testdep. CH0,Testabt. CH0
+CY0_TEST,NAME,t,Testhospital - Κύπρος,Testkrankenhaus - Zypern
+CY0_TEST,SHORT_NAME,t,Testhosp. CY0,Testkrh. CY0
+CY0_TEST_TEST,NAME,t,Testdepartment - Κύπρος,Testabteilung - Zypern
+CY0_TEST_TEST,SHORT_NAME,t,Testdep. CY0,Testabt. CY0
+CZ0_TEST,NAME,t,Testhospital - Česko,Testkrankenhaus - Tschechien
+CZ0_TEST,SHORT_NAME,t,Testhosp. CZ0,Testkrh. CZ0
+CZ0_TEST_TEST,NAME,t,Testdepartment - Česko,Testabteilung - Tschechien
+CZ0_TEST_TEST,SHORT_NAME,t,Testdep. CZ0,Testabt. CZ0
+DE1_TEST,NAME,t,Testhospital - Baden-Württemberg,Testkrankenhaus - Baden-Württemberg
+DE1_TEST,SHORT_NAME,t,Testhosp. DE1,Testkrh. DE1
+DE1_TEST_TEST,NAME,t,Testdepartment - Baden-Württemberg,Testabteilung - Baden-Württemberg
+DE1_TEST_TEST,SHORT_NAME,t,Testdep. DE1,Testabt. DE1
+DE2_TEST,NAME,t,Testhospital - Bayern,Testkrankenhaus - Bayern
+DE2_TEST,SHORT_NAME,t,Testhosp. DE2,Testkrh. DE2
+DE2_TEST_TEST,NAME,t,Testdepartment - Bayern,Testabteilung - Bayern
+DE2_TEST_TEST,SHORT_NAME,t,Testdep. DE2,Testabt. DE2
+DE3_TEST,NAME,t,Testhospital - Berlin,Testkrankenhaus - Berlin
+DE3_TEST,SHORT_NAME,t,Testhosp. DE3,Testkrh. DE3
+DE3_TEST_TEST,NAME,t,Testdepartment - Berlin,Testabteilung - Berlin
+DE3_TEST_TEST,SHORT_NAME,t,Testdep. DE3,Testabt. DE3
+DE4_TEST,NAME,t,Testhospital - Brandenburg,Testkrankenhaus - Brandenburg
+DE4_TEST,SHORT_NAME,t,Testhosp. DE4,Testkrh. DE4
+DE4_TEST_TEST,NAME,t,Testdepartment - Brandenburg,Testabteilung - Brandenburg
+DE4_TEST_TEST,SHORT_NAME,t,Testdep. DE4,Testabt. DE4
+DE5_TEST,NAME,t,Testhospital - Bremen,Testkrankenhaus - Bremen
+DE5_TEST,SHORT_NAME,t,Testhosp. DE5,Testkrh. DE5
+DE5_TEST_TEST,NAME,t,Testdepartment - Bremen,Testabteilung - Bremen
+DE5_TEST_TEST,SHORT_NAME,t,Testdep. DE5,Testabt. DE5
+DE6_TEST,NAME,t,Testhospital - Hamburg,Testkrankenhaus - Hamburg
+DE6_TEST,SHORT_NAME,t,Testhosp. DE6,Testkrh. DE6
+DE6_TEST_TEST,NAME,t,Testdepartment - Hamburg,Testabteilung - Hamburg
+DE6_TEST_TEST,SHORT_NAME,t,Testdep. DE6,Testabt. DE6
+DE7_TEST,NAME,t,Testhospital - Hessen,Testkrankenhaus - Hessen
+DE7_TEST,SHORT_NAME,t,Testhosp. DE7,Testkrh. DE7
+DE7_TEST_TEST,NAME,t,Testdepartment - Hessen,Testabteilung - Hessen
+DE7_TEST_TEST,SHORT_NAME,t,Testdep. DE7,Testabt. DE7
+DE8_TEST,NAME,t,Testhospital - Mecklenburg-Vorpommern,Testkrankenhaus - Mecklenburg-Vorpommern
+DE8_TEST,SHORT_NAME,t,Testhosp. DE8,Testkrh. DE8
+DE8_TEST_TEST,NAME,t,Testdepartment - Mecklenburg-Vorpommern,Testabteilung - Mecklenburg-Vorpommern
+DE8_TEST_TEST,SHORT_NAME,t,Testdep. DE8,Testabt. DE8
+DE9_TEST,NAME,t,Testhospital - Niedersachsen,Testkrankenhaus - Niedersachsen
+DE9_TEST,SHORT_NAME,t,Testhosp. DE9,Testkrh. DE9
+DE9_TEST_TEST,NAME,t,Testdepartment - Niedersachsen,Testabteilung - Niedersachsen
+DE9_TEST_TEST,SHORT_NAME,t,Testdep. DE9,Testabt. DE9
+DEA_TEST,NAME,t,Testhospital - Nordrhein-Westfalen,Testkrankenhaus - Nordrhein-Westfalen
+DEA_TEST,SHORT_NAME,t,Testhosp. DEA,Testkrh. DEA
+DEA_TEST_TEST,NAME,t,Testdepartment - Nordrhein-Westfalen,Testabteilung - Nordrhein-Westfalen
+DEA_TEST_TEST,SHORT_NAME,t,Testdep. DEA,Testabt. DEA
+DEB_TEST,NAME,t,Testhospital - Rheinland-Pfalz,Testkrankenhaus - Rheinland-Pfalz
+DEB_TEST,SHORT_NAME,t,Testhosp. DEB,Testkrh. DEB
+DEB_TEST_TEST,NAME,t,Testdepartment - Rheinland-Pfalz,Testabteilung - Rheinland-Pfalz
+DEB_TEST_TEST,SHORT_NAME,t,Testdep. DEB,Testabt. DEB
+DEC_TEST,NAME,t,Testhospital - Saarland,Testkrankenhaus - Saarland
+DEC_TEST,SHORT_NAME,t,Testhosp. DEC,Testkrh. DEC
+DEC_TEST_TEST,NAME,t,Testdepartment - Saarland,Testabteilung - Saarland
+DEC_TEST_TEST,SHORT_NAME,t,Testdep. DEC,Testabt. DEC
+DED_TEST,NAME,t,Testhospital - Sachsen,Testkrankenhaus - Sachsen
+DED_TEST,SHORT_NAME,t,Testhosp. DED,Testkrh. DED
+DED_TEST_TEST,NAME,t,Testdepartment - Sachsen,Testabteilung - Sachsen
+DED_TEST_TEST,SHORT_NAME,t,Testdep. DED,Testabt. DED
+DEE_TEST,NAME,t,Testhospital - Sachsen-Anhalt,Testkrankenhaus - Sachsen-Anhalt
+DEE_TEST,SHORT_NAME,t,Testhosp. DEE,Testkrh. DEE
+DEE_TEST_TEST,NAME,t,Testdepartment - Sachsen-Anhalt,Testabteilung - Sachsen-Anhalt
+DEE_TEST_TEST,SHORT_NAME,t,Testdep. DEE,Testabt. DEE
+DEF_TEST,NAME,t,Testhospital - Schleswig-Holstein,Testkrankenhaus - Schleswig-Holstein
+DEF_TEST,SHORT_NAME,t,Testhosp. DEF,Testkrh. DEF
+DEF_TEST_TEST,NAME,t,Testdepartment - Schleswig-Holstein,Testabteilung - Schleswig-Holstein
+DEF_TEST_TEST,SHORT_NAME,t,Testdep. DEF,Testabt. DEF
+DEG_TEST,NAME,t,Testhospital - Thüringen,Testkrankenhaus - Thüringen
+DEG_TEST,SHORT_NAME,t,Testhosp. DEG,Testkrh. DEG
+DEG_TEST_TEST,NAME,t,Testdepartment - Thüringen,Testabteilung - Thüringen
+DEG_TEST_TEST,SHORT_NAME,t,Testdep. DEG,Testabt. DEG
+DK0_TEST,NAME,t,Testhospital - Danmark,Testkrankenhaus - Dänemark
+DK0_TEST,SHORT_NAME,t,Testhosp. DK0,Testkrh. DK0
+DK0_TEST_TEST,NAME,t,Testdepartment - Danmark,Testabteilung - Dänemark
+DK0_TEST_TEST,SHORT_NAME,t,Testdep. DK0,Testabt. DK0
+EE0_TEST,NAME,t,Testhospital - Eesti,Testkrankenhaus - Estland
+EE0_TEST,SHORT_NAME,t,Testhosp. EE0,Testkrh. EE0
+EE0_TEST_TEST,NAME,t,Testdepartment - Eesti,Testabteilung - Estland
+EE0_TEST_TEST,SHORT_NAME,t,Testdep. EE0,Testabt. EE0
+EL3_TEST,NAME,t,Testhospital - Αττική,Testkrankenhaus - Attika
+EL3_TEST,SHORT_NAME,t,Testhosp. EL3,Testkrh. EL3
+EL3_TEST_TEST,NAME,t,Testdepartment - Αττική,Testabteilung - Attika
+EL3_TEST_TEST,SHORT_NAME,t,Testdep. EL3,Testabt. EL3
+EL4_TEST,NAME,t,"Testhospital - Νησιά Αιγαίου, Κρήτη","Testkrankenhaus - Ägaische Inseln, Kreta"
+EL4_TEST,SHORT_NAME,t,Testhosp. EL4,Testkrh. EL4
+EL4_TEST_TEST,NAME,t,"Testdepartment - Νησιά Αιγαίου, Κρήτη","Testabteilung - Ägaische Inseln, Kreta"
+EL4_TEST_TEST,SHORT_NAME,t,Testdep. EL4,Testabt. EL4
+EL5_TEST,NAME,t,Testhospital - Βόρεια Ελλάδα,Testkrankenhaus - Nordgriechenland
+EL5_TEST,SHORT_NAME,t,Testhosp. EL5,Testkrh. EL5
+EL5_TEST_TEST,NAME,t,Testdepartment - Βόρεια Ελλάδα,Testabteilung - Nordgriechenland
+EL5_TEST_TEST,SHORT_NAME,t,Testdep. EL5,Testabt. EL5
+EL6_TEST,NAME,t,Testhospital - Κεντρική Ελλάδα,Testkrankenhaus - Zentralgriechenland
+EL6_TEST,SHORT_NAME,t,Testhosp. EL6,Testkrh. EL6
+EL6_TEST_TEST,NAME,t,Testdepartment - Κεντρική Ελλάδα,Testabteilung - Zentralgriechenland
+EL6_TEST_TEST,SHORT_NAME,t,Testdep. EL6,Testabt. EL6
+ES1_TEST,NAME,t,Testhospital - Noroeste,Testkrankenhaus - Nordwesten
+ES1_TEST,SHORT_NAME,t,Testhosp. ES1,Testkrh. ES1
+ES1_TEST_TEST,NAME,t,Testdepartment - Noroeste,Testabteilung - Nordwesten
+ES1_TEST_TEST,SHORT_NAME,t,Testdep. ES1,Testabt. ES1
+ES2_TEST,NAME,t,Testhospital - Noreste,Testkrankenhaus - Nordosten
+ES2_TEST,SHORT_NAME,t,Testhosp. ES2,Testkrh. ES2
+ES2_TEST_TEST,NAME,t,Testdepartment - Noreste,Testabteilung - Nordosten
+ES2_TEST_TEST,SHORT_NAME,t,Testdep. ES2,Testabt. ES2
+ES3_TEST,NAME,t,Testhospital - Comunidad de Madrid,Testkrankenhaus - Autonome Gemeinschaft Madrid
+ES3_TEST,SHORT_NAME,t,Testhosp. ES3,Testkrh. ES3
+ES3_TEST_TEST,NAME,t,Testdepartment - Comunidad de Madrid,Testabteilung - Autonome Gemeinschaft Madrid
+ES3_TEST_TEST,SHORT_NAME,t,Testdep. ES3,Testabt. ES3
+ES4_TEST,NAME,t,Testhospital - Centro (ES),Testkrankenhaus - Zentrum
+ES4_TEST,SHORT_NAME,t,Testhosp. ES4,Testkrh. ES4
+ES4_TEST_TEST,NAME,t,Testdepartment - Centro (ES),Testabteilung - Zentrum
+ES4_TEST_TEST,SHORT_NAME,t,Testdep. ES4,Testabt. ES4
+ES5_TEST,NAME,t,Testhospital - Este,Testkrankenhaus - Osten
+ES5_TEST,SHORT_NAME,t,Testhosp. ES5,Testkrh. ES5
+ES5_TEST_TEST,NAME,t,Testdepartment - Este,Testabteilung - Osten
+ES5_TEST_TEST,SHORT_NAME,t,Testdep. ES5,Testabt. ES5
+ES6_TEST,NAME,t,Testhospital - Sur,Testkrankenhaus - Süden
+ES6_TEST,SHORT_NAME,t,Testhosp. ES6,Testkrh. ES6
+ES6_TEST_TEST,NAME,t,Testdepartment - Sur,Testabteilung - Süden
+ES6_TEST_TEST,SHORT_NAME,t,Testdep. ES6,Testabt. ES6
+ES7_TEST,NAME,t,Testhospital - Canarias,Testkrankenhaus - Kanaren
+ES7_TEST,SHORT_NAME,t,Testhosp. ES7,Testkrh. ES7
+ES7_TEST_TEST,NAME,t,Testdepartment - Canarias,Testabteilung - Kanaren
+ES7_TEST_TEST,SHORT_NAME,t,Testdep. ES7,Testabt. ES7
+FI1_TEST,NAME,t,Testhospital - Manner-Suomi,Testkrankenhaus - Festländisches Finnland
+FI1_TEST,SHORT_NAME,t,Testhosp. FI1,Testkrh. FI1
+FI1_TEST_TEST,NAME,t,Testdepartment - Manner-Suomi,Testabteilung - Festländisches Finnland
+FI1_TEST_TEST,SHORT_NAME,t,Testdep. FI1,Testabt. FI1
+FI2_TEST,NAME,t,Testhospital - Åland,Testkrankenhaus - Åland
+FI2_TEST,SHORT_NAME,t,Testhosp. FI2,Testkrh. FI2
+FI2_TEST_TEST,NAME,t,Testdepartment - Åland,Testabteilung - Åland
+FI2_TEST_TEST,SHORT_NAME,t,Testdep. FI2,Testabt. FI2
+FR1_TEST,NAME,t,Testhospital - Ile-de-France,Testkrankenhaus - Île-de-France
+FR1_TEST,SHORT_NAME,t,Testhosp. FR1,Testkrh. FR1
+FR1_TEST_TEST,NAME,t,Testdepartment - Ile-de-France,Testabteilung - Île-de-France
+FR1_TEST_TEST,SHORT_NAME,t,Testdep. FR1,Testabt. FR1
+FRB_TEST,NAME,t,Testhospital - Centre — Val de Loire,Testkrankenhaus - Zentrum-Loiretal
+FRB_TEST,SHORT_NAME,t,Testhosp. FRB,Testkrh. FRB
+FRB_TEST_TEST,NAME,t,Testdepartment - Centre — Val de Loire,Testabteilung - Zentrum-Loiretal
+FRB_TEST_TEST,SHORT_NAME,t,Testdep. FRB,Testabt. FRB
+FRC_TEST,NAME,t,Testhospital - Bourgogne-Franche-Comté,Testkrankenhaus - Bourgogne-Franche-Comté
+FRC_TEST,SHORT_NAME,t,Testhosp. FRC,Testkrh. FRC
+FRC_TEST_TEST,NAME,t,Testdepartment - Bourgogne-Franche-Comté,Testabteilung - Bourgogne-Franche-Comté
+FRC_TEST_TEST,SHORT_NAME,t,Testdep. FRC,Testabt. FRC
+FRD_TEST,NAME,t,Testhospital - Normandie,Testkrankenhaus - Normandie
+FRD_TEST,SHORT_NAME,t,Testhosp. FRD,Testkrh. FRD
+FRD_TEST_TEST,NAME,t,Testdepartment - Normandie,Testabteilung - Normandie
+FRD_TEST_TEST,SHORT_NAME,t,Testdep. FRD,Testabt. FRD
+FRE_TEST,NAME,t,Testhospital - Hauts-de-France,Testkrankenhaus - Hauts-de-France
+FRE_TEST,SHORT_NAME,t,Testhosp. FRE,Testkrh. FRE
+FRE_TEST_TEST,NAME,t,Testdepartment - Hauts-de-France,Testabteilung - Hauts-de-France
+FRE_TEST_TEST,SHORT_NAME,t,Testdep. FRE,Testabt. FRE
+FRF_TEST,NAME,t,Testhospital - Grand Est,Testkrankenhaus - Grand Est
+FRF_TEST,SHORT_NAME,t,Testhosp. FRF,Testkrh. FRF
+FRF_TEST_TEST,NAME,t,Testdepartment - Grand Est,Testabteilung - Grand Est
+FRF_TEST_TEST,SHORT_NAME,t,Testdep. FRF,Testabt. FRF
+FRG_TEST,NAME,t,Testhospital - Pays de la Loire,Testkrankenhaus - Pays de la Loire
+FRG_TEST,SHORT_NAME,t,Testhosp. FRG,Testkrh. FRG
+FRG_TEST_TEST,NAME,t,Testdepartment - Pays de la Loire,Testabteilung - Pays de la Loire
+FRG_TEST_TEST,SHORT_NAME,t,Testdep. FRG,Testabt. FRG
+FRH_TEST,NAME,t,Testhospital - Bretagne,Testkrankenhaus - Bretagne
+FRH_TEST,SHORT_NAME,t,Testhosp. FRH,Testkrh. FRH
+FRH_TEST_TEST,NAME,t,Testdepartment - Bretagne,Testabteilung - Bretagne
+FRH_TEST_TEST,SHORT_NAME,t,Testdep. FRH,Testabt. FRH
+FRI_TEST,NAME,t,Testhospital - Nouvelle-Aquitaine,Testkrankenhaus - Nouvelle-Aquitaine
+FRI_TEST,SHORT_NAME,t,Testhosp. FRI,Testkrh. FRI
+FRI_TEST_TEST,NAME,t,Testdepartment - Nouvelle-Aquitaine,Testabteilung - Nouvelle-Aquitaine
+FRI_TEST_TEST,SHORT_NAME,t,Testdep. FRI,Testabt. FRI
+FRJ_TEST,NAME,t,Testhospital - Occitanie,Testkrankenhaus - Occitanie
+FRJ_TEST,SHORT_NAME,t,Testhosp. FRJ,Testkrh. FRJ
+FRJ_TEST_TEST,NAME,t,Testdepartment - Occitanie,Testabteilung - Occitanie
+FRJ_TEST_TEST,SHORT_NAME,t,Testdep. FRJ,Testabt. FRJ
+FRK_TEST,NAME,t,Testhospital - Auvergne-Rhône-Alpes,Testkrankenhaus - Auvergne-Rhône-Alpes
+FRK_TEST,SHORT_NAME,t,Testhosp. FRK,Testkrh. FRK
+FRK_TEST_TEST,NAME,t,Testdepartment - Auvergne-Rhône-Alpes,Testabteilung - Auvergne-Rhône-Alpes
+FRK_TEST_TEST,SHORT_NAME,t,Testdep. FRK,Testabt. FRK
+FRL_TEST,NAME,t,Testhospital - Provence-Alpes-Côte d’Azur,Testkrankenhaus - Provence-Alpes-Côte d’Azur
+FRL_TEST,SHORT_NAME,t,Testhosp. FRL,Testkrh. FRL
+FRL_TEST_TEST,NAME,t,Testdepartment - Provence-Alpes-Côte d’Azur,Testabteilung - Provence-Alpes-Côte d’Azur
+FRL_TEST_TEST,SHORT_NAME,t,Testdep. FRL,Testabt. FRL
+FRM_TEST,NAME,t,Testhospital - Corse,Testkrankenhaus - Korsika
+FRM_TEST,SHORT_NAME,t,Testhosp. FRM,Testkrh. FRM
+FRM_TEST_TEST,NAME,t,Testdepartment - Corse,Testabteilung - Korsika
+FRM_TEST_TEST,SHORT_NAME,t,Testdep. FRM,Testabt. FRM
+FRY_TEST,NAME,t,Testhospital - RUP FR — Régions Ultrapériphériques Françaises,Testkrankenhaus - Gebiete in äußerster Randlage Frankreichs
+FRY_TEST,SHORT_NAME,t,Testhosp. FRY,Testkrh. FRY
+FRY_TEST_TEST,NAME,t,Testdepartment - RUP FR — Régions Ultrapériphériques Françaises,Testabteilung - Gebiete in äußerster Randlage Frankreichs
+FRY_TEST_TEST,SHORT_NAME,t,Testdep. FRY,Testabt. FRY
+HR0_TEST,NAME,t,Testhospital - Hrvatska,Testkrankenhaus - Kroatien
+HR0_TEST,SHORT_NAME,t,Testhosp. HR0,Testkrh. HR0
+HR0_TEST_TEST,NAME,t,Testdepartment - Hrvatska,Testabteilung - Kroatien
+HR0_TEST_TEST,SHORT_NAME,t,Testdep. HR0,Testabt. HR0
+HU1_TEST,NAME,t,Testhospital - Közép-Magyarország,Testkrankenhaus - Mittelungarn
+HU1_TEST,SHORT_NAME,t,Testhosp. HU1,Testkrh. HU1
+HU1_TEST_TEST,NAME,t,Testdepartment - Közép-Magyarország,Testabteilung - Mittelungarn
+HU1_TEST_TEST,SHORT_NAME,t,Testdep. HU1,Testabt. HU1
+HU2_TEST,NAME,t,Testhospital - Dunántúl,Testkrankenhaus - Transdanubien
+HU2_TEST,SHORT_NAME,t,Testhosp. HU2,Testkrh. HU2
+HU2_TEST_TEST,NAME,t,Testdepartment - Dunántúl,Testabteilung - Transdanubien
+HU2_TEST_TEST,SHORT_NAME,t,Testdep. HU2,Testabt. HU2
+HU3_TEST,NAME,t,Testhospital - Alföld és Észak,Testkrankenhaus - Norden und Tiefebene
+HU3_TEST,SHORT_NAME,t,Testhosp. HU3,Testkrh. HU3
+HU3_TEST_TEST,NAME,t,Testdepartment - Alföld és Észak,Testabteilung - Norden und Tiefebene
+HU3_TEST_TEST,SHORT_NAME,t,Testdep. HU3,Testabt. HU3
+IE0_TEST,NAME,t,Testhospital - Ireland,Testkrankenhaus - Irland
+IE0_TEST,SHORT_NAME,t,Testhosp. IE0,Testkrh. IE0
+IE0_TEST_TEST,NAME,t,Testdepartment - Ireland,Testabteilung - Irland
+IE0_TEST_TEST,SHORT_NAME,t,Testdep. IE0,Testabt. IE0
+IS0_TEST,NAME,t,Testhospital - Ísland,Testkrankenhaus - Island
+IS0_TEST,SHORT_NAME,t,Testhosp. IS0,Testkrh. IS0
+IS0_TEST_TEST,NAME,t,Testdepartment - Ísland,Testabteilung - Island
+IS0_TEST_TEST,SHORT_NAME,t,Testdep. IS0,Testabt. IS0
+ITC_TEST,NAME,t,Testhospital - Nord-Ovest,Testkrankenhaus - Nordwesten
+ITC_TEST,SHORT_NAME,t,Testhosp. ITC,Testkrh. ITC
+ITC_TEST_TEST,NAME,t,Testdepartment - Nord-Ovest,Testabteilung - Nordwesten
+ITC_TEST_TEST,SHORT_NAME,t,Testdep. ITC,Testabt. ITC
+ITF_TEST,NAME,t,Testhospital - Sud,Testkrankenhaus - Süden
+ITF_TEST,SHORT_NAME,t,Testhosp. ITF,Testkrh. ITF
+ITF_TEST_TEST,NAME,t,Testdepartment - Sud,Testabteilung - Süden
+ITF_TEST_TEST,SHORT_NAME,t,Testdep. ITF,Testabt. ITF
+ITG_TEST,NAME,t,Testhospital - Isole,Testkrankenhaus - Inseln
+ITG_TEST,SHORT_NAME,t,Testhosp. ITG,Testkrh. ITG
+ITG_TEST_TEST,NAME,t,Testdepartment - Isole,Testabteilung - Inseln
+ITG_TEST_TEST,SHORT_NAME,t,Testdep. ITG,Testabt. ITG
+ITH_TEST,NAME,t,Testhospital - Nord-Est,Testkrankenhaus - Nordosten
+ITH_TEST,SHORT_NAME,t,Testhosp. ITH,Testkrh. ITH
+ITH_TEST_TEST,NAME,t,Testdepartment - Nord-Est,Testabteilung - Nordosten
+ITH_TEST_TEST,SHORT_NAME,t,Testdep. ITH,Testabt. ITH
+ITI_TEST,NAME,t,Testhospital - Centro (IT),Testkrankenhaus - Mitte
+ITI_TEST,SHORT_NAME,t,Testhosp. ITI,Testkrh. ITI
+ITI_TEST_TEST,NAME,t,Testdepartment - Centro (IT),Testabteilung - Mitte
+ITI_TEST_TEST,SHORT_NAME,t,Testdep. ITI,Testabt. ITI
+LI0_TEST,NAME,t,Testhospital - Liechtenstein,Testkrankenhaus - Liechtenstein
+LI0_TEST,SHORT_NAME,t,Testhosp. LI0,Testkrh. LI0
+LI0_TEST_TEST,NAME,t,Testdepartment - Liechtenstein,Testabteilung - Liechtenstein
+LI0_TEST_TEST,SHORT_NAME,t,Testdep. LI0,Testabt. LI0
+LT0_TEST,NAME,t,Testhospital - Lietuva,Testkrankenhaus - Litauen
+LT0_TEST,SHORT_NAME,t,Testhosp. LT0,Testkrh. LT0
+LT0_TEST_TEST,NAME,t,Testdepartment - Lietuva,Testabteilung - Litauen
+LT0_TEST_TEST,SHORT_NAME,t,Testdep. LT0,Testabt. LT0
+LU0_TEST,NAME,t,Testhospital - Luxembourg,Testkrankenhaus - Luxemburg
+LU0_TEST,SHORT_NAME,t,Testhosp. LU0,Testkrh. LU0
+LU0_TEST_TEST,NAME,t,Testdepartment - Luxembourg,Testabteilung - Luxemburg
+LU0_TEST_TEST,SHORT_NAME,t,Testdep. LU0,Testabt. LU0
+LV0_TEST,NAME,t,Testhospital - Latvija,Testkrankenhaus - Lettland
+LV0_TEST,SHORT_NAME,t,Testhosp. LV0,Testkrh. LV0
+LV0_TEST_TEST,NAME,t,Testdepartment - Latvija,Testabteilung - Lettland
+LV0_TEST_TEST,SHORT_NAME,t,Testdep. LV0,Testabt. LV0
+ME0_TEST,NAME,t,Testhospital - Црна Гора,Testkrankenhaus - Montenegro
+ME0_TEST,SHORT_NAME,t,Testhosp. ME0,Testkrh. ME0
+ME0_TEST_TEST,NAME,t,Testdepartment - Црна Гора,Testabteilung - Montenegro
+ME0_TEST_TEST,SHORT_NAME,t,Testdep. ME0,Testabt. ME0
+MK0_TEST,NAME,t,Testhospital - Северна Македонија,Testkrankenhaus - Nordmazedonien
+MK0_TEST,SHORT_NAME,t,Testhosp. MK0,Testkrh. MK0
+MK0_TEST_TEST,NAME,t,Testdepartment - Северна Македонија,Testabteilung - Nordmazedonien
+MK0_TEST_TEST,SHORT_NAME,t,Testdep. MK0,Testabt. MK0
+MT0_TEST,NAME,t,Testhospital - Malta,Testkrankenhaus - Malta
+MT0_TEST,SHORT_NAME,t,Testhosp. MT0,Testkrh. MT0
+MT0_TEST_TEST,NAME,t,Testdepartment - Malta,Testabteilung - Malta
+MT0_TEST_TEST,SHORT_NAME,t,Testdep. MT0,Testabt. MT0
+NL1_TEST,NAME,t,Testhospital - Noord-Nederland,Testkrankenhaus - Nord-Niederlande
+NL1_TEST,SHORT_NAME,t,Testhosp. NL1,Testkrh. NL1
+NL1_TEST_TEST,NAME,t,Testdepartment - Noord-Nederland,Testabteilung - Nord-Niederlande
+NL1_TEST_TEST,SHORT_NAME,t,Testdep. NL1,Testabt. NL1
+NL2_TEST,NAME,t,Testhospital - Oost-Nederland,Testkrankenhaus - Ost-Niederlande
+NL2_TEST,SHORT_NAME,t,Testhosp. NL2,Testkrh. NL2
+NL2_TEST_TEST,NAME,t,Testdepartment - Oost-Nederland,Testabteilung - Ost-Niederlande
+NL2_TEST_TEST,SHORT_NAME,t,Testdep. NL2,Testabt. NL2
+NL3_TEST,NAME,t,Testhospital - West-Nederland,Testkrankenhaus - West-Niederlande
+NL3_TEST,SHORT_NAME,t,Testhosp. NL3,Testkrh. NL3
+NL3_TEST_TEST,NAME,t,Testdepartment - West-Nederland,Testabteilung - West-Niederlande
+NL3_TEST_TEST,SHORT_NAME,t,Testdep. NL3,Testabt. NL3
+NL4_TEST,NAME,t,Testhospital - Zuid-Nederland,Testkrankenhaus - Süd-Niederlande
+NL4_TEST,SHORT_NAME,t,Testhosp. NL4,Testkrh. NL4
+NL4_TEST_TEST,NAME,t,Testdepartment - Zuid-Nederland,Testabteilung - Süd-Niederlande
+NL4_TEST_TEST,SHORT_NAME,t,Testdep. NL4,Testabt. NL4
+NO0_TEST,NAME,t,Testhospital - Norge,Testkrankenhaus - Norwegen
+NO0_TEST,SHORT_NAME,t,Testhosp. NO0,Testkrh. NO0
+NO0_TEST_TEST,NAME,t,Testdepartment - Norge,Testabteilung - Norwegen
+NO0_TEST_TEST,SHORT_NAME,t,Testdep. NO0,Testabt. NO0
+PL2_TEST,NAME,t,Testhospital - Makroregion południowy,Testkrankenhaus - Makroregion południowy
+PL2_TEST,SHORT_NAME,t,Testhosp. PL2,Testkrh. PL2
+PL2_TEST_TEST,NAME,t,Testdepartment - Makroregion południowy,Testabteilung - Makroregion południowy
+PL2_TEST_TEST,SHORT_NAME,t,Testdep. PL2,Testabt. PL2
+PL4_TEST,NAME,t,Testhospital - Makroregion północno-zachodni,Testkrankenhaus - Makroregion północno-zachodni
+PL4_TEST,SHORT_NAME,t,Testhosp. PL4,Testkrh. PL4
+PL4_TEST_TEST,NAME,t,Testdepartment - Makroregion północno-zachodni,Testabteilung - Makroregion północno-zachodni
+PL4_TEST_TEST,SHORT_NAME,t,Testdep. PL4,Testabt. PL4
+PL5_TEST,NAME,t,Testhospital - Makroregion południowo-zachodni,Testkrankenhaus - Makroregion południowo-zachodni
+PL5_TEST,SHORT_NAME,t,Testhosp. PL5,Testkrh. PL5
+PL5_TEST_TEST,NAME,t,Testdepartment - Makroregion południowo-zachodni,Testabteilung - Makroregion południowo-zachodni
+PL5_TEST_TEST,SHORT_NAME,t,Testdep. PL5,Testabt. PL5
+PL6_TEST,NAME,t,Testhospital - Makroregion północny,Testkrankenhaus - Makroregion północny
+PL6_TEST,SHORT_NAME,t,Testhosp. PL6,Testkrh. PL6
+PL6_TEST_TEST,NAME,t,Testdepartment - Makroregion północny,Testabteilung - Makroregion północny
+PL6_TEST_TEST,SHORT_NAME,t,Testdep. PL6,Testabt. PL6
+PL7_TEST,NAME,t,Testhospital - Makroregion centralny,Testkrankenhaus - Makroregion centralny
+PL7_TEST,SHORT_NAME,t,Testhosp. PL7,Testkrh. PL7
+PL7_TEST_TEST,NAME,t,Testdepartment - Makroregion centralny,Testabteilung - Makroregion centralny
+PL7_TEST_TEST,SHORT_NAME,t,Testdep. PL7,Testabt. PL7
+PL8_TEST,NAME,t,Testhospital - Makroregion wschodni,Testkrankenhaus - Makroregion wschodni
+PL8_TEST,SHORT_NAME,t,Testhosp. PL8,Testkrh. PL8
+PL8_TEST_TEST,NAME,t,Testdepartment - Makroregion wschodni,Testabteilung - Makroregion wschodni
+PL8_TEST_TEST,SHORT_NAME,t,Testdep. PL8,Testabt. PL8
+PL9_TEST,NAME,t,Testhospital - Makroregion województwo mazowieckie,Testkrankenhaus - Makroregion województwo mazowieckie
+PL9_TEST,SHORT_NAME,t,Testhosp. PL9,Testkrh. PL9
+PL9_TEST_TEST,NAME,t,Testdepartment - Makroregion województwo mazowieckie,Testabteilung - Makroregion województwo mazowieckie
+PL9_TEST_TEST,SHORT_NAME,t,Testdep. PL9,Testabt. PL9
+PT1_TEST,NAME,t,Testhospital - Continente,Testkrankenhaus - Kontinentalportugal
+PT1_TEST,SHORT_NAME,t,Testhosp. PT1,Testkrh. PT1
+PT1_TEST_TEST,NAME,t,Testdepartment - Continente,Testabteilung - Kontinentalportugal
+PT1_TEST_TEST,SHORT_NAME,t,Testdep. PT1,Testabt. PT1
+PT2_TEST,NAME,t,Testhospital - Região Autónoma dos Açores,Testkrankenhaus - Azoren
+PT2_TEST,SHORT_NAME,t,Testhosp. PT2,Testkrh. PT2
+PT2_TEST_TEST,NAME,t,Testdepartment - Região Autónoma dos Açores,Testabteilung - Azoren
+PT2_TEST_TEST,SHORT_NAME,t,Testdep. PT2,Testabt. PT2
+PT3_TEST,NAME,t,Testhospital - Região Autónoma da Madeira,Testkrankenhaus - Madeira
+PT3_TEST,SHORT_NAME,t,Testhosp. PT3,Testkrh. PT3
+PT3_TEST_TEST,NAME,t,Testdepartment - Região Autónoma da Madeira,Testabteilung - Madeira
+PT3_TEST_TEST,SHORT_NAME,t,Testdep. PT3,Testabt. PT3
+RO1_TEST,NAME,t,Testhospital - Macroregiunea Unu,Testkrankenhaus - Makroregion Eins
+RO1_TEST,SHORT_NAME,t,Testhosp. RO1,Testkrh. RO1
+RO1_TEST_TEST,NAME,t,Testdepartment - Macroregiunea Unu,Testabteilung - Makroregion Eins
+RO1_TEST_TEST,SHORT_NAME,t,Testdep. RO1,Testabt. RO1
+RO2_TEST,NAME,t,Testhospital - Macroregiunea Doi,Testkrankenhaus - Makroregion Zwei
+RO2_TEST,SHORT_NAME,t,Testhosp. RO2,Testkrh. RO2
+RO2_TEST_TEST,NAME,t,Testdepartment - Macroregiunea Doi,Testabteilung - Makroregion Zwei
+RO2_TEST_TEST,SHORT_NAME,t,Testdep. RO2,Testabt. RO2
+RO3_TEST,NAME,t,Testhospital - Macroregiunea Trei,Testkrankenhaus - Makroregion Drei
+RO3_TEST,SHORT_NAME,t,Testhosp. RO3,Testkrh. RO3
+RO3_TEST_TEST,NAME,t,Testdepartment - Macroregiunea Trei,Testabteilung - Makroregion Drei
+RO3_TEST_TEST,SHORT_NAME,t,Testdep. RO3,Testabt. RO3
+RO4_TEST,NAME,t,Testhospital - Macroregiunea Patru,Testkrankenhaus - Makroregion Vier
+RO4_TEST,SHORT_NAME,t,Testhosp. RO4,Testkrh. RO4
+RO4_TEST_TEST,NAME,t,Testdepartment - Macroregiunea Patru,Testabteilung - Makroregion Vier
+RO4_TEST_TEST,SHORT_NAME,t,Testdep. RO4,Testabt. RO4
+RS1_TEST,NAME,t,Testhospital - Србија - север,Testkrankenhaus - Serbien - Norden
+RS1_TEST,SHORT_NAME,t,Testhosp. RS1,Testkrh. RS1
+RS1_TEST_TEST,NAME,t,Testdepartment - Србија - север,Testabteilung - Serbien - Norden
+RS1_TEST_TEST,SHORT_NAME,t,Testdep. RS1,Testabt. RS1
+RS2_TEST,NAME,t,Testhospital - Србија - југ,Testkrankenhaus - Serbien - Süden
+RS2_TEST,SHORT_NAME,t,Testhosp. RS2,Testkrh. RS2
+RS2_TEST_TEST,NAME,t,Testdepartment - Србија - југ,Testabteilung - Serbien - Süden
+RS2_TEST_TEST,SHORT_NAME,t,Testdep. RS2,Testabt. RS2
+SE1_TEST,NAME,t,Testhospital - Östra Sverige,Testkrankenhaus - Östliches Schweden
+SE1_TEST,SHORT_NAME,t,Testhosp. SE1,Testkrh. SE1
+SE1_TEST_TEST,NAME,t,Testdepartment - Östra Sverige,Testabteilung - Östliches Schweden
+SE1_TEST_TEST,SHORT_NAME,t,Testdep. SE1,Testabt. SE1
+SE2_TEST,NAME,t,Testhospital - Södra Sverige,Testkrankenhaus - Südliches Schweden
+SE2_TEST,SHORT_NAME,t,Testhosp. SE2,Testkrh. SE2
+SE2_TEST_TEST,NAME,t,Testdepartment - Södra Sverige,Testabteilung - Südliches Schweden
+SE2_TEST_TEST,SHORT_NAME,t,Testdep. SE2,Testabt. SE2
+SE3_TEST,NAME,t,Testhospital - Norra Sverige,Testkrankenhaus - Nördliches Schweden
+SE3_TEST,SHORT_NAME,t,Testhosp. SE3,Testkrh. SE3
+SE3_TEST_TEST,NAME,t,Testdepartment - Norra Sverige,Testabteilung - Nördliches Schweden
+SE3_TEST_TEST,SHORT_NAME,t,Testdep. SE3,Testabt. SE3
+SI0_TEST,NAME,t,Testhospital - Slovenija,Testkrankenhaus - Slowenien
+SI0_TEST,SHORT_NAME,t,Testhosp. SI0,Testkrh. SI0
+SI0_TEST_TEST,NAME,t,Testdepartment - Slovenija,Testabteilung - Slowenien
+SI0_TEST_TEST,SHORT_NAME,t,Testdep. SI0,Testabt. SI0
+SK0_TEST,NAME,t,Testhospital - Slovensko,Testkrankenhaus - Slowakei
+SK0_TEST,SHORT_NAME,t,Testhosp. SK0,Testkrh. SK0
+SK0_TEST_TEST,NAME,t,Testdepartment - Slovensko,Testabteilung - Slowakei
+SK0_TEST_TEST,SHORT_NAME,t,Testdep. SK0,Testabt. SK0
+TR1_TEST,NAME,t,Testhospital - İstanbul,Testkrankenhaus - Istanbul
+TR1_TEST,SHORT_NAME,t,Testhosp. TR1,Testkrh. TR1
+TR1_TEST_TEST,NAME,t,Testdepartment - İstanbul,Testabteilung - Istanbul
+TR1_TEST_TEST,SHORT_NAME,t,Testdep. TR1,Testabt. TR1
+TR2_TEST,NAME,t,Testhospital - Batı Marmara,Testkrankenhaus - West-Marmara
+TR2_TEST,SHORT_NAME,t,Testhosp. TR2,Testkrh. TR2
+TR2_TEST_TEST,NAME,t,Testdepartment - Batı Marmara,Testabteilung - West-Marmara
+TR2_TEST_TEST,SHORT_NAME,t,Testdep. TR2,Testabt. TR2
+TR3_TEST,NAME,t,Testhospital - Ege,Testkrankenhaus - Ägäis
+TR3_TEST,SHORT_NAME,t,Testhosp. TR3,Testkrh. TR3
+TR3_TEST_TEST,NAME,t,Testdepartment - Ege,Testabteilung - Ägäis
+TR3_TEST_TEST,SHORT_NAME,t,Testdep. TR3,Testabt. TR3
+TR4_TEST,NAME,t,Testhospital - Doğu Marmara,Testkrankenhaus - Ost-Marmara
+TR4_TEST,SHORT_NAME,t,Testhosp. TR4,Testkrh. TR4
+TR4_TEST_TEST,NAME,t,Testdepartment - Doğu Marmara,Testabteilung - Ost-Marmara
+TR4_TEST_TEST,SHORT_NAME,t,Testdep. TR4,Testabt. TR4
+TR5_TEST,NAME,t,Testhospital - Batı Anadolu,Testkrankenhaus - West-Anatolien
+TR5_TEST,SHORT_NAME,t,Testhosp. TR5,Testkrh. TR5
+TR5_TEST_TEST,NAME,t,Testdepartment - Batı Anadolu,Testabteilung - West-Anatolien
+TR5_TEST_TEST,SHORT_NAME,t,Testdep. TR5,Testabt. TR5
+TR6_TEST,NAME,t,Testhospital - Akdeniz,Testkrankenhaus - Mittelmeer
+TR6_TEST,SHORT_NAME,t,Testhosp. TR6,Testkrh. TR6
+TR6_TEST_TEST,NAME,t,Testdepartment - Akdeniz,Testabteilung - Mittelmeer
+TR6_TEST_TEST,SHORT_NAME,t,Testdep. TR6,Testabt. TR6
+TR7_TEST,NAME,t,Testhospital - Orta Anadolu,Testkrankenhaus - Zentral-Anatolien
+TR7_TEST,SHORT_NAME,t,Testhosp. TR7,Testkrh. TR7
+TR7_TEST_TEST,NAME,t,Testdepartment - Orta Anadolu,Testabteilung - Zentral-Anatolien
+TR7_TEST_TEST,SHORT_NAME,t,Testdep. TR7,Testabt. TR7
+TR8_TEST,NAME,t,Testhospital - Batı Karadeniz,Testkrankenhaus - West-Schwarzmeer
+TR8_TEST,SHORT_NAME,t,Testhosp. TR8,Testkrh. TR8
+TR8_TEST_TEST,NAME,t,Testdepartment - Batı Karadeniz,Testabteilung - West-Schwarzmeer
+TR8_TEST_TEST,SHORT_NAME,t,Testdep. TR8,Testabt. TR8
+TR9_TEST,NAME,t,Testhospital - Doğu Karadeniz,Testkrankenhaus - Ost-Schwarzmeer
+TR9_TEST,SHORT_NAME,t,Testhosp. TR9,Testkrh. TR9
+TR9_TEST_TEST,NAME,t,Testdepartment - Doğu Karadeniz,Testabteilung - Ost-Schwarzmeer
+TR9_TEST_TEST,SHORT_NAME,t,Testdep. TR9,Testabt. TR9
+TRA_TEST,NAME,t,Testhospital - Kuzeydoğu Anadolu,Testkrankenhaus - Nordost-Anatolien
+TRA_TEST,SHORT_NAME,t,Testhosp. TRA,Testkrh. TRA
+TRA_TEST_TEST,NAME,t,Testdepartment - Kuzeydoğu Anadolu,Testabteilung - Nordost-Anatolien
+TRA_TEST_TEST,SHORT_NAME,t,Testdep. TRA,Testabt. TRA
+TRB_TEST,NAME,t,Testhospital - Ortadoğu Anadolu,Testkrankenhaus - Zentral-Ostanatolien
+TRB_TEST,SHORT_NAME,t,Testhosp. TRB,Testkrh. TRB
+TRB_TEST_TEST,NAME,t,Testdepartment - Ortadoğu Anadolu,Testabteilung - Zentral-Ostanatolien
+TRB_TEST_TEST,SHORT_NAME,t,Testdep. TRB,Testabt. TRB
+TRC_TEST,NAME,t,Testhospital - Güneydoğu Anadolu,Testkrankenhaus - Südost-Anatolien
+TRC_TEST,SHORT_NAME,t,Testhosp. TRC,Testkrh. TRC
+TRC_TEST_TEST,NAME,t,Testdepartment - Güneydoğu Anadolu,Testabteilung - Südost-Anatolien
+TRC_TEST_TEST,SHORT_NAME,t,Testdep. TRC,Testabt. TRC
+UKC_TEST,NAME,t,Testhospital - North East (England),Testkrankenhaus - Nordostengland
+UKC_TEST,SHORT_NAME,t,Testhosp. UKC,Testkrh. UKC
+UKC_TEST_TEST,NAME,t,Testdepartment - North East (England),Testabteilung - Nordostengland
+UKC_TEST_TEST,SHORT_NAME,t,Testdep. UKC,Testabt. UKC
+UKD_TEST,NAME,t,Testhospital - North West (England),Testkrankenhaus - Nordwestengland
+UKD_TEST,SHORT_NAME,t,Testhosp. UKD,Testkrh. UKD
+UKD_TEST_TEST,NAME,t,Testdepartment - North West (England),Testabteilung - Nordwestengland
+UKD_TEST_TEST,SHORT_NAME,t,Testdep. UKD,Testabt. UKD
+UKE_TEST,NAME,t,Testhospital - Yorkshire and the Humber,Testkrankenhaus - Yorkshire and the Humber
+UKE_TEST,SHORT_NAME,t,Testhosp. UKE,Testkrh. UKE
+UKE_TEST_TEST,NAME,t,Testdepartment - Yorkshire and the Humber,Testabteilung - Yorkshire and the Humber
+UKE_TEST_TEST,SHORT_NAME,t,Testdep. UKE,Testabt. UKE
+UKF_TEST,NAME,t,Testhospital - East Midlands (England),Testkrankenhaus - Ost-Midlands
+UKF_TEST,SHORT_NAME,t,Testhosp. UKF,Testkrh. UKF
+UKF_TEST_TEST,NAME,t,Testdepartment - East Midlands (England),Testabteilung - Ost-Midlands
+UKF_TEST_TEST,SHORT_NAME,t,Testdep. UKF,Testabt. UKF
+UKG_TEST,NAME,t,Testhospital - West Midlands (England),Testkrankenhaus - West-Midlands
+UKG_TEST,SHORT_NAME,t,Testhosp. UKG,Testkrh. UKG
+UKG_TEST_TEST,NAME,t,Testdepartment - West Midlands (England),Testabteilung - West-Midlands
+UKG_TEST_TEST,SHORT_NAME,t,Testdep. UKG,Testabt. UKG
+UKH_TEST,NAME,t,Testhospital - East of England,Testkrankenhaus - Ostengland
+UKH_TEST,SHORT_NAME,t,Testhosp. UKH,Testkrh. UKH
+UKH_TEST_TEST,NAME,t,Testdepartment - East of England,Testabteilung - Ostengland
+UKH_TEST_TEST,SHORT_NAME,t,Testdep. UKH,Testabt. UKH
+UKI_TEST,NAME,t,Testhospital - London,Testkrankenhaus - London
+UKI_TEST,SHORT_NAME,t,Testhosp. UKI,Testkrh. UKI
+UKI_TEST_TEST,NAME,t,Testdepartment - London,Testabteilung - London
+UKI_TEST_TEST,SHORT_NAME,t,Testdep. UKI,Testabt. UKI
+UKJ_TEST,NAME,t,Testhospital - South East (England),Testkrankenhaus - Südostengland
+UKJ_TEST,SHORT_NAME,t,Testhosp. UKJ,Testkrh. UKJ
+UKJ_TEST_TEST,NAME,t,Testdepartment - South East (England),Testabteilung - Südostengland
+UKJ_TEST_TEST,SHORT_NAME,t,Testdep. UKJ,Testabt. UKJ
+UKK_TEST,NAME,t,Testhospital - South West (England),Testkrankenhaus - Südwestengland
+UKK_TEST,SHORT_NAME,t,Testhosp. UKK,Testkrh. UKK
+UKK_TEST_TEST,NAME,t,Testdepartment - South West (England),Testabteilung - Südwestengland
+UKK_TEST_TEST,SHORT_NAME,t,Testdep. UKK,Testabt. UKK
+UKL_TEST,NAME,t,Testhospital - Wales,Testkrankenhaus - Wales
+UKL_TEST,SHORT_NAME,t,Testhosp. UKL,Testkrh. UKL
+UKL_TEST_TEST,NAME,t,Testdepartment - Wales,Testabteilung - Wales
+UKL_TEST_TEST,SHORT_NAME,t,Testdep. UKL,Testabt. UKL
+UKM_TEST,NAME,t,Testhospital - Scotland,Testkrankenhaus - Schottland
+UKM_TEST,SHORT_NAME,t,Testhosp. UKM,Testkrh. UKM
+UKM_TEST_TEST,NAME,t,Testdepartment - Scotland,Testabteilung - Schottland
+UKM_TEST_TEST,SHORT_NAME,t,Testdep. UKM,Testabt. UKM
+UKN_TEST,NAME,t,Testhospital - Northern Ireland,Testkrankenhaus - Nordirland
+UKN_TEST,SHORT_NAME,t,Testhosp. UKN,Testkrh. UKN
+UKN_TEST_TEST,NAME,t,Testdepartment - Northern Ireland,Testabteilung - Nordirland
+UKN_TEST_TEST,SHORT_NAME,t,Testdep. UKN,Testabt. UKN
+ZA_EC_TEST,NAME,t,Testhospital - Eastern Cape,Testkrankenhaus - Ostkap
+ZA_EC_TEST,SHORT_NAME,t,Testhosp. ZA_EC,Testkrh. ZA_EC
+ZA_EC_TEST_TEST,NAME,t,Testdepartment - Eastern Cape,Testabteilung - Ostkap
+ZA_EC_TEST_TEST,SHORT_NAME,t,Testdep. ZA_EC,Testabt. ZA_EC
+ZA_FS_TEST,NAME,t,Testhospital - Free State,Testkrankenhaus - Freistaat
+ZA_FS_TEST,SHORT_NAME,t,Testhosp. ZA_FS,Testkrh. ZA_FS
+ZA_FS_TEST_TEST,NAME,t,Testdepartment - Free State,Testabteilung - Freistaat
+ZA_FS_TEST_TEST,SHORT_NAME,t,Testdep. ZA_FS,Testabt. ZA_FS
+ZA_GP_TEST,NAME,t,Testhospital - Gauteng,Testkrankenhaus - Gauteng
+ZA_GP_TEST,SHORT_NAME,t,Testhosp. ZA_GP,Testkrh. ZA_GP
+ZA_GP_TEST_TEST,NAME,t,Testdepartment - Gauteng,Testabteilung - Gauteng
+ZA_GP_TEST_TEST,SHORT_NAME,t,Testdep. ZA_GP,Testabt. ZA_GP
+ZA_KZN_TEST,NAME,t,Testhospital - KwaZulu-Natal,Testkrankenhaus - KwaZulu-Natal
+ZA_KZN_TEST,SHORT_NAME,t,Testhosp. ZA_KZN,Testkrh. ZA_KZN
+ZA_KZN_TEST_TEST,NAME,t,Testdepartment - KwaZulu-Natal,Testabteilung - KwaZulu-Natal
+ZA_KZN_TEST_TEST,SHORT_NAME,t,Testdep. ZA_KZN,Testabt. ZA_KZN
+ZA_LP_TEST,NAME,t,Testhospital - Limpopo,Testkrankenhaus - Limpopo
+ZA_LP_TEST,SHORT_NAME,t,Testhosp. ZA_LP,Testkrh. ZA_LP
+ZA_LP_TEST_TEST,NAME,t,Testdepartment - Limpopo,Testabteilung - Limpopo
+ZA_LP_TEST_TEST,SHORT_NAME,t,Testdep. ZA_LP,Testabt. ZA_LP
+ZA_MP_TEST,NAME,t,Testhospital - Mpumalanga,Testkrankenhaus - Mpumalanga
+ZA_MP_TEST,SHORT_NAME,t,Testhosp. ZA_MP,Testkrh. ZA_MP
+ZA_MP_TEST_TEST,NAME,t,Testdepartment - Mpumalanga,Testabteilung - Mpumalanga
+ZA_MP_TEST_TEST,SHORT_NAME,t,Testdep. ZA_MP,Testabt. ZA_MP
+ZA_NC_TEST,NAME,t,Testhospital - Northern Cape,Testkrankenhaus - Nordkap
+ZA_NC_TEST,SHORT_NAME,t,Testhosp. ZA_NC,Testkrh. ZA_NC
+ZA_NC_TEST_TEST,NAME,t,Testdepartment - Northern Cape,Testabteilung - Nordkap
+ZA_NC_TEST_TEST,SHORT_NAME,t,Testdep. ZA_NC,Testabt. ZA_NC
+ZA_NW_TEST,NAME,t,Testhospital - North West,Testkrankenhaus - Nordwest
+ZA_NW_TEST,SHORT_NAME,t,Testhosp. ZA_NW,Testkrh. ZA_NW
+ZA_NW_TEST_TEST,NAME,t,Testdepartment - North West,Testabteilung - Nordwest
+ZA_NW_TEST_TEST,SHORT_NAME,t,Testdep. ZA_NW,Testabt. ZA_NW
+ZA_WC_TEST,NAME,t,Testhospital - Western Cape,Testkrankenhaus - Westkap
+ZA_WC_TEST,SHORT_NAME,t,Testhosp. ZA_WC,Testkrh. ZA_WC
+ZA_WC_TEST_TEST,NAME,t,Testdepartment - Western Cape,Testabteilung - Westkap
+ZA_WC_TEST_TEST,SHORT_NAME,t,Testdep. ZA_WC,Testabt. ZA_WC

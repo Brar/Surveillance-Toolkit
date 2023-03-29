@@ -1,0 +1,269 @@
+code,name,shortName,openingDate,parent_code
+AL0_TEST,Testhospital - Shqipëria,Testhosp. AL0,2023-01-01,AL0
+AT1_TEST,Testhospital - Ostösterreich,Testhosp. AT1,2023-01-01,AT1
+AT2_TEST,Testhospital - Südösterreich,Testhosp. AT2,2023-01-01,AT2
+AT3_TEST,Testhospital - Westösterreich,Testhosp. AT3,2023-01-01,AT3
+BE1_TEST,Testhospital - Région de Bruxelles-Capitale/Brussels Hoofdstedelijk Gewest,Testhosp. BE1,2023-01-01,BE1
+BE2_TEST,Testhospital - Vlaams Gewest,Testhosp. BE2,2023-01-01,BE2
+BE3_TEST,Testhospital - Région wallonne,Testhosp. BE3,2023-01-01,BE3
+BG3_TEST,Testhospital - Северна и Югоизточна България,Testhosp. BG3,2023-01-01,BG3
+BG4_TEST,Testhospital - Югозападна и Южна централна България,Testhosp. BG4,2023-01-01,BG4
+CH0_TEST,Testhospital - Schweiz/Suisse/Svizzera,Testhosp. CH0,2023-01-01,CH0
+CY0_TEST,Testhospital - Κύπρος,Testhosp. CY0,2023-01-01,CY0
+CZ0_TEST,Testhospital - Česko,Testhosp. CZ0,2023-01-01,CZ0
+DE1_TEST,Testhospital - Baden-Württemberg,Testhosp. DE1,2023-01-01,DE1
+DE2_TEST,Testhospital - Bayern,Testhosp. DE2,2023-01-01,DE2
+DE3_TEST,Testhospital - Berlin,Testhosp. DE3,2023-01-01,DE3
+DE4_TEST,Testhospital - Brandenburg,Testhosp. DE4,2023-01-01,DE4
+DE5_TEST,Testhospital - Bremen,Testhosp. DE5,2023-01-01,DE5
+DE6_TEST,Testhospital - Hamburg,Testhosp. DE6,2023-01-01,DE6
+DE7_TEST,Testhospital - Hessen,Testhosp. DE7,2023-01-01,DE7
+DE8_TEST,Testhospital - Mecklenburg-Vorpommern,Testhosp. DE8,2023-01-01,DE8
+DE9_TEST,Testhospital - Niedersachsen,Testhosp. DE9,2023-01-01,DE9
+DEA_TEST,Testhospital - Nordrhein-Westfalen,Testhosp. DEA,2023-01-01,DEA
+DEB_TEST,Testhospital - Rheinland-Pfalz,Testhosp. DEB,2023-01-01,DEB
+DEC_TEST,Testhospital - Saarland,Testhosp. DEC,2023-01-01,DEC
+DED_TEST,Testhospital - Sachsen,Testhosp. DED,2023-01-01,DED
+DEE_TEST,Testhospital - Sachsen-Anhalt,Testhosp. DEE,2023-01-01,DEE
+DEF_TEST,Testhospital - Schleswig-Holstein,Testhosp. DEF,2023-01-01,DEF
+DEG_TEST,Testhospital - Thüringen,Testhosp. DEG,2023-01-01,DEG
+DK0_TEST,Testhospital - Danmark,Testhosp. DK0,2023-01-01,DK0
+EE0_TEST,Testhospital - Eesti,Testhosp. EE0,2023-01-01,EE0
+EL3_TEST,Testhospital - Αττική,Testhosp. EL3,2023-01-01,EL3
+EL4_TEST,"Testhospital - Νησιά Αιγαίου, Κρήτη",Testhosp. EL4,2023-01-01,EL4
+EL5_TEST,Testhospital - Βόρεια Ελλάδα,Testhosp. EL5,2023-01-01,EL5
+EL6_TEST,Testhospital - Κεντρική Ελλάδα,Testhosp. EL6,2023-01-01,EL6
+ES1_TEST,Testhospital - Noroeste,Testhosp. ES1,2023-01-01,ES1
+ES2_TEST,Testhospital - Noreste,Testhosp. ES2,2023-01-01,ES2
+ES3_TEST,Testhospital - Comunidad de Madrid,Testhosp. ES3,2023-01-01,ES3
+ES4_TEST,Testhospital - Centro (ES),Testhosp. ES4,2023-01-01,ES4
+ES5_TEST,Testhospital - Este,Testhosp. ES5,2023-01-01,ES5
+ES6_TEST,Testhospital - Sur,Testhosp. ES6,2023-01-01,ES6
+ES7_TEST,Testhospital - Canarias,Testhosp. ES7,2023-01-01,ES7
+FI1_TEST,Testhospital - Manner-Suomi,Testhosp. FI1,2023-01-01,FI1
+FI2_TEST,Testhospital - Åland,Testhosp. FI2,2023-01-01,FI2
+FR1_TEST,Testhospital - Île-de-France,Testhosp. FR1,2023-01-01,FR1
+FRB_TEST,Testhospital - Centre — Val de Loire,Testhosp. FRB,2023-01-01,FRB
+FRC_TEST,Testhospital - Bourgogne-Franche-Comté,Testhosp. FRC,2023-01-01,FRC
+FRD_TEST,Testhospital - Normandie,Testhosp. FRD,2023-01-01,FRD
+FRE_TEST,Testhospital - Hauts-de-France,Testhosp. FRE,2023-01-01,FRE
+FRF_TEST,Testhospital - Grand Est,Testhosp. FRF,2023-01-01,FRF
+FRG_TEST,Testhospital - Pays de la Loire,Testhosp. FRG,2023-01-01,FRG
+FRH_TEST,Testhospital - Bretagne,Testhosp. FRH,2023-01-01,FRH
+FRI_TEST,Testhospital - Nouvelle-Aquitaine,Testhosp. FRI,2023-01-01,FRI
+FRJ_TEST,Testhospital - Occitanie,Testhosp. FRJ,2023-01-01,FRJ
+FRK_TEST,Testhospital - Auvergne-Rhône-Alpes,Testhosp. FRK,2023-01-01,FRK
+FRL_TEST,Testhospital - Provence-Alpes-Côte d’Azur,Testhosp. FRL,2023-01-01,FRL
+FRM_TEST,Testhospital - Corse,Testhosp. FRM,2023-01-01,FRM
+FRY_TEST,Testhospital - RUP FR — Régions Ultrapériphériques Françaises,Testhosp. FRY,2023-01-01,FRY
+HR0_TEST,Testhospital - Hrvatska,Testhosp. HR0,2023-01-01,HR0
+HU1_TEST,Testhospital - Közép-Magyarország,Testhosp. HU1,2023-01-01,HU1
+HU2_TEST,Testhospital - Dunántúl,Testhosp. HU2,2023-01-01,HU2
+HU3_TEST,Testhospital - Alföld és Észak,Testhosp. HU3,2023-01-01,HU3
+IE0_TEST,Testhospital - Ireland,Testhosp. IE0,2023-01-01,IE0
+IS0_TEST,Testhospital - Ísland,Testhosp. IS0,2023-01-01,IS0
+ITC_TEST,Testhospital - Nord-Ovest,Testhosp. ITC,2023-01-01,ITC
+ITF_TEST,Testhospital - Sud,Testhosp. ITF,2023-01-01,ITF
+ITG_TEST,Testhospital - Isole,Testhosp. ITG,2023-01-01,ITG
+ITH_TEST,Testhospital - Nord-Est,Testhosp. ITH,2023-01-01,ITH
+ITI_TEST,Testhospital - Centro (IT),Testhosp. ITI,2023-01-01,ITI
+LI0_TEST,Testhospital - Liechtenstein,Testhosp. LI0,2023-01-01,LI0
+LT0_TEST,Testhospital - Lietuva,Testhosp. LT0,2023-01-01,LT0
+LU0_TEST,Testhospital - Luxembourg,Testhosp. LU0,2023-01-01,LU0
+LV0_TEST,Testhospital - Latvija,Testhosp. LV0,2023-01-01,LV0
+ME0_TEST,Testhospital - Црна Гора,Testhosp. ME0,2023-01-01,ME0
+MK0_TEST,Testhospital - Северна Македонија,Testhosp. MK0,2023-01-01,MK0
+MT0_TEST,Testhospital - Malta,Testhosp. MT0,2023-01-01,MT0
+NL1_TEST,Testhospital - Noord-Nederland,Testhosp. NL1,2023-01-01,NL1
+NL2_TEST,Testhospital - Oost-Nederland,Testhosp. NL2,2023-01-01,NL2
+NL3_TEST,Testhospital - West-Nederland,Testhosp. NL3,2023-01-01,NL3
+NL4_TEST,Testhospital - Zuid-Nederland,Testhosp. NL4,2023-01-01,NL4
+NO0_TEST,Testhospital - Norge,Testhosp. NO0,2023-01-01,NO0
+PL2_TEST,Testhospital - Makroregion południowy,Testhosp. PL2,2023-01-01,PL2
+PL4_TEST,Testhospital - Makroregion północno-zachodni,Testhosp. PL4,2023-01-01,PL4
+PL5_TEST,Testhospital - Makroregion południowo-zachodni,Testhosp. PL5,2023-01-01,PL5
+PL6_TEST,Testhospital - Makroregion północny,Testhosp. PL6,2023-01-01,PL6
+PL7_TEST,Testhospital - Makroregion centralny,Testhosp. PL7,2023-01-01,PL7
+PL8_TEST,Testhospital - Makroregion wschodni,Testhosp. PL8,2023-01-01,PL8
+PL9_TEST,Testhospital - Makroregion województwo mazowieckie,Testhosp. PL9,2023-01-01,PL9
+PT1_TEST,Testhospital - Continente,Testhosp. PT1,2023-01-01,PT1
+PT2_TEST,Testhospital - Região Autónoma dos Açores,Testhosp. PT2,2023-01-01,PT2
+PT3_TEST,Testhospital - Região Autónoma da Madeira,Testhosp. PT3,2023-01-01,PT3
+RO1_TEST,Testhospital - Macroregiunea Unu,Testhosp. RO1,2023-01-01,RO1
+RO2_TEST,Testhospital - Macroregiunea Doi,Testhosp. RO2,2023-01-01,RO2
+RO3_TEST,Testhospital - Macroregiunea Trei,Testhosp. RO3,2023-01-01,RO3
+RO4_TEST,Testhospital - Macroregiunea Patru,Testhosp. RO4,2023-01-01,RO4
+RS1_TEST,Testhospital - Србија - север,Testhosp. RS1,2023-01-01,RS1
+RS2_TEST,Testhospital - Србија - југ,Testhosp. RS2,2023-01-01,RS2
+SE1_TEST,Testhospital - Östra Sverige,Testhosp. SE1,2023-01-01,SE1
+SE2_TEST,Testhospital - Södra Sverige,Testhosp. SE2,2023-01-01,SE2
+SE3_TEST,Testhospital - Norra Sverige,Testhosp. SE3,2023-01-01,SE3
+SI0_TEST,Testhospital - Slovenija,Testhosp. SI0,2023-01-01,SI0
+SK0_TEST,Testhospital - Slovensko,Testhosp. SK0,2023-01-01,SK0
+TR1_TEST,Testhospital - İstanbul,Testhosp. TR1,2023-01-01,TR1
+TR2_TEST,Testhospital - Batı Marmara,Testhosp. TR2,2023-01-01,TR2
+TR3_TEST,Testhospital - Ege,Testhosp. TR3,2023-01-01,TR3
+TR4_TEST,Testhospital - Doğu Marmara,Testhosp. TR4,2023-01-01,TR4
+TR5_TEST,Testhospital - Batı Anadolu,Testhosp. TR5,2023-01-01,TR5
+TR6_TEST,Testhospital - Akdeniz,Testhosp. TR6,2023-01-01,TR6
+TR7_TEST,Testhospital - Orta Anadolu,Testhosp. TR7,2023-01-01,TR7
+TR8_TEST,Testhospital - Batı Karadeniz,Testhosp. TR8,2023-01-01,TR8
+TR9_TEST,Testhospital - Doğu Karadeniz,Testhosp. TR9,2023-01-01,TR9
+TRA_TEST,Testhospital - Kuzeydoğu Anadolu,Testhosp. TRA,2023-01-01,TRA
+TRB_TEST,Testhospital - Ortadoğu Anadolu,Testhosp. TRB,2023-01-01,TRB
+TRC_TEST,Testhospital - Güneydoğu Anadolu,Testhosp. TRC,2023-01-01,TRC
+UKC_TEST,Testhospital - North East (England),Testhosp. UKC,2023-01-01,UKC
+UKD_TEST,Testhospital - North West (England),Testhosp. UKD,2023-01-01,UKD
+UKE_TEST,Testhospital - Yorkshire and the Humber,Testhosp. UKE,2023-01-01,UKE
+UKF_TEST,Testhospital - East Midlands (England),Testhosp. UKF,2023-01-01,UKF
+UKG_TEST,Testhospital - West Midlands (England),Testhosp. UKG,2023-01-01,UKG
+UKH_TEST,Testhospital - East of England,Testhosp. UKH,2023-01-01,UKH
+UKI_TEST,Testhospital - London,Testhosp. UKI,2023-01-01,UKI
+UKJ_TEST,Testhospital - South East (England),Testhosp. UKJ,2023-01-01,UKJ
+UKK_TEST,Testhospital - South West (England),Testhosp. UKK,2023-01-01,UKK
+UKL_TEST,Testhospital - Wales,Testhosp. UKL,2023-01-01,UKL
+UKM_TEST,Testhospital - Scotland,Testhosp. UKM,2023-01-01,UKM
+UKN_TEST,Testhospital - Northern Ireland,Testhosp. UKN,2023-01-01,UKN
+ZA_EC_TEST,Testhospital - Eastern Cape,Testhosp. ZA_EC,2023-01-01,ZA_EC
+ZA_FS_TEST,Testhospital - Free State,Testhosp. ZA_FS,2023-01-01,ZA_FS
+ZA_GP_TEST,Testhospital - Gauteng,Testhosp. ZA_GP,2023-01-01,ZA_GP
+ZA_KZN_TEST,Testhospital - KwaZulu-Natal,Testhosp. ZA_KZN,2023-01-01,ZA_KZN
+ZA_LP_TEST,Testhospital - Limpopo,Testhosp. ZA_LP,2023-01-01,ZA_LP
+ZA_MP_TEST,Testhospital - Mpumalanga,Testhosp. ZA_MP,2023-01-01,ZA_MP
+ZA_NC_TEST,Testhospital - Northern Cape,Testhosp. ZA_NC,2023-01-01,ZA_NC
+ZA_NW_TEST,Testhospital - North West,Testhosp. ZA_NW,2023-01-01,ZA_NW
+ZA_WC_TEST,Testhospital - Western Cape,Testhosp. ZA_WC,2023-01-01,ZA_WC
+AL0_TEST_TEST,Testdepartment - Shqipëria,Testdep. AL0,2023-01-01,AL0_TEST
+AT1_TEST_TEST,Testdepartment - Ostösterreich,Testdep. AT1,2023-01-01,AT1_TEST
+AT2_TEST_TEST,Testdepartment - Südösterreich,Testdep. AT2,2023-01-01,AT2_TEST
+AT3_TEST_TEST,Testdepartment - Westösterreich,Testdep. AT3,2023-01-01,AT3_TEST
+BE1_TEST_TEST,Testdepartment - Région de Bruxelles-Capitale/Brussels Hoofdstedelijk Gewest,Testdep. BE1,2023-01-01,BE1_TEST
+BE2_TEST_TEST,Testdepartment - Vlaams Gewest,Testdep. BE2,2023-01-01,BE2_TEST
+BE3_TEST_TEST,Testdepartment - Région wallonne,Testdep. BE3,2023-01-01,BE3_TEST
+BG3_TEST_TEST,Testdepartment - Северна и Югоизточна България,Testdep. BG3,2023-01-01,BG3_TEST
+BG4_TEST_TEST,Testdepartment - Югозападна и Южна централна България,Testdep. BG4,2023-01-01,BG4_TEST
+CH0_TEST_TEST,Testdepartment - Schweiz/Suisse/Svizzera,Testdep. CH0,2023-01-01,CH0_TEST
+CY0_TEST_TEST,Testdepartment - Κύπρος,Testdep. CY0,2023-01-01,CY0_TEST
+CZ0_TEST_TEST,Testdepartment - Česko,Testdep. CZ0,2023-01-01,CZ0_TEST
+DE1_TEST_TEST,Testdepartment - Baden-Württemberg,Testdep. DE1,2023-01-01,DE1_TEST
+DE2_TEST_TEST,Testdepartment - Bayern,Testdep. DE2,2023-01-01,DE2_TEST
+DE3_TEST_TEST,Testdepartment - Berlin,Testdep. DE3,2023-01-01,DE3_TEST
+DE4_TEST_TEST,Testdepartment - Brandenburg,Testdep. DE4,2023-01-01,DE4_TEST
+DE5_TEST_TEST,Testdepartment - Bremen,Testdep. DE5,2023-01-01,DE5_TEST
+DE6_TEST_TEST,Testdepartment - Hamburg,Testdep. DE6,2023-01-01,DE6_TEST
+DE7_TEST_TEST,Testdepartment - Hessen,Testdep. DE7,2023-01-01,DE7_TEST
+DE8_TEST_TEST,Testdepartment - Mecklenburg-Vorpommern,Testdep. DE8,2023-01-01,DE8_TEST
+DE9_TEST_TEST,Testdepartment - Niedersachsen,Testdep. DE9,2023-01-01,DE9_TEST
+DEA_TEST_TEST,Testdepartment - Nordrhein-Westfalen,Testdep. DEA,2023-01-01,DEA_TEST
+DEB_TEST_TEST,Testdepartment - Rheinland-Pfalz,Testdep. DEB,2023-01-01,DEB_TEST
+DEC_TEST_TEST,Testdepartment - Saarland,Testdep. DEC,2023-01-01,DEC_TEST
+DED_TEST_TEST,Testdepartment - Sachsen,Testdep. DED,2023-01-01,DED_TEST
+DEE_TEST_TEST,Testdepartment - Sachsen-Anhalt,Testdep. DEE,2023-01-01,DEE_TEST
+DEF_TEST_TEST,Testdepartment - Schleswig-Holstein,Testdep. DEF,2023-01-01,DEF_TEST
+DEG_TEST_TEST,Testdepartment - Thüringen,Testdep. DEG,2023-01-01,DEG_TEST
+DK0_TEST_TEST,Testdepartment - Danmark,Testdep. DK0,2023-01-01,DK0_TEST
+EE0_TEST_TEST,Testdepartment - Eesti,Testdep. EE0,2023-01-01,EE0_TEST
+EL3_TEST_TEST,Testdepartment - Αττική,Testdep. EL3,2023-01-01,EL3_TEST
+EL4_TEST_TEST,"Testdepartment - Νησιά Αιγαίου, Κρήτη",Testdep. EL4,2023-01-01,EL4_TEST
+EL5_TEST_TEST,Testdepartment - Βόρεια Ελλάδα,Testdep. EL5,2023-01-01,EL5_TEST
+EL6_TEST_TEST,Testdepartment - Κεντρική Ελλάδα,Testdep. EL6,2023-01-01,EL6_TEST
+ES1_TEST_TEST,Testdepartment - Noroeste,Testdep. ES1,2023-01-01,ES1_TEST
+ES2_TEST_TEST,Testdepartment - Noreste,Testdep. ES2,2023-01-01,ES2_TEST
+ES3_TEST_TEST,Testdepartment - Comunidad de Madrid,Testdep. ES3,2023-01-01,ES3_TEST
+ES4_TEST_TEST,Testdepartment - Centro (ES),Testdep. ES4,2023-01-01,ES4_TEST
+ES5_TEST_TEST,Testdepartment - Este,Testdep. ES5,2023-01-01,ES5_TEST
+ES6_TEST_TEST,Testdepartment - Sur,Testdep. ES6,2023-01-01,ES6_TEST
+ES7_TEST_TEST,Testdepartment - Canarias,Testdep. ES7,2023-01-01,ES7_TEST
+FI1_TEST_TEST,Testdepartment - Manner-Suomi,Testdep. FI1,2023-01-01,FI1_TEST
+FI2_TEST_TEST,Testdepartment - Åland,Testdep. FI2,2023-01-01,FI2_TEST
+FR1_TEST_TEST,Testdepartment - Île-de-France,Testdep. FR1,2023-01-01,FR1_TEST
+FRB_TEST_TEST,Testdepartment - Centre — Val de Loire,Testdep. FRB,2023-01-01,FRB_TEST
+FRC_TEST_TEST,Testdepartment - Bourgogne-Franche-Comté,Testdep. FRC,2023-01-01,FRC_TEST
+FRD_TEST_TEST,Testdepartment - Normandie,Testdep. FRD,2023-01-01,FRD_TEST
+FRE_TEST_TEST,Testdepartment - Hauts-de-France,Testdep. FRE,2023-01-01,FRE_TEST
+FRF_TEST_TEST,Testdepartment - Grand Est,Testdep. FRF,2023-01-01,FRF_TEST
+FRG_TEST_TEST,Testdepartment - Pays de la Loire,Testdep. FRG,2023-01-01,FRG_TEST
+FRH_TEST_TEST,Testdepartment - Bretagne,Testdep. FRH,2023-01-01,FRH_TEST
+FRI_TEST_TEST,Testdepartment - Nouvelle-Aquitaine,Testdep. FRI,2023-01-01,FRI_TEST
+FRJ_TEST_TEST,Testdepartment - Occitanie,Testdep. FRJ,2023-01-01,FRJ_TEST
+FRK_TEST_TEST,Testdepartment - Auvergne-Rhône-Alpes,Testdep. FRK,2023-01-01,FRK_TEST
+FRL_TEST_TEST,Testdepartment - Provence-Alpes-Côte d’Azur,Testdep. FRL,2023-01-01,FRL_TEST
+FRM_TEST_TEST,Testdepartment - Corse,Testdep. FRM,2023-01-01,FRM_TEST
+FRY_TEST_TEST,Testdepartment - RUP FR — Régions Ultrapériphériques Françaises,Testdep. FRY,2023-01-01,FRY_TEST
+HR0_TEST_TEST,Testdepartment - Hrvatska,Testdep. HR0,2023-01-01,HR0_TEST
+HU1_TEST_TEST,Testdepartment - Közép-Magyarország,Testdep. HU1,2023-01-01,HU1_TEST
+HU2_TEST_TEST,Testdepartment - Dunántúl,Testdep. HU2,2023-01-01,HU2_TEST
+HU3_TEST_TEST,Testdepartment - Alföld és Észak,Testdep. HU3,2023-01-01,HU3_TEST
+IE0_TEST_TEST,Testdepartment - Ireland,Testdep. IE0,2023-01-01,IE0_TEST
+IS0_TEST_TEST,Testdepartment - Ísland,Testdep. IS0,2023-01-01,IS0_TEST
+ITC_TEST_TEST,Testdepartment - Nord-Ovest,Testdep. ITC,2023-01-01,ITC_TEST
+ITF_TEST_TEST,Testdepartment - Sud,Testdep. ITF,2023-01-01,ITF_TEST
+ITG_TEST_TEST,Testdepartment - Isole,Testdep. ITG,2023-01-01,ITG_TEST
+ITH_TEST_TEST,Testdepartment - Nord-Est,Testdep. ITH,2023-01-01,ITH_TEST
+ITI_TEST_TEST,Testdepartment - Centro (IT),Testdep. ITI,2023-01-01,ITI_TEST
+LI0_TEST_TEST,Testdepartment - Liechtenstein,Testdep. LI0,2023-01-01,LI0_TEST
+LT0_TEST_TEST,Testdepartment - Lietuva,Testdep. LT0,2023-01-01,LT0_TEST
+LU0_TEST_TEST,Testdepartment - Luxembourg,Testdep. LU0,2023-01-01,LU0_TEST
+LV0_TEST_TEST,Testdepartment - Latvija,Testdep. LV0,2023-01-01,LV0_TEST
+ME0_TEST_TEST,Testdepartment - Црна Гора,Testdep. ME0,2023-01-01,ME0_TEST
+MK0_TEST_TEST,Testdepartment - Северна Македонија,Testdep. MK0,2023-01-01,MK0_TEST
+MT0_TEST_TEST,Testdepartment - Malta,Testdep. MT0,2023-01-01,MT0_TEST
+NL1_TEST_TEST,Testdepartment - Noord-Nederland,Testdep. NL1,2023-01-01,NL1_TEST
+NL2_TEST_TEST,Testdepartment - Oost-Nederland,Testdep. NL2,2023-01-01,NL2_TEST
+NL3_TEST_TEST,Testdepartment - West-Nederland,Testdep. NL3,2023-01-01,NL3_TEST
+NL4_TEST_TEST,Testdepartment - Zuid-Nederland,Testdep. NL4,2023-01-01,NL4_TEST
+NO0_TEST_TEST,Testdepartment - Norge,Testdep. NO0,2023-01-01,NO0_TEST
+PL2_TEST_TEST,Testdepartment - Makroregion południowy,Testdep. PL2,2023-01-01,PL2_TEST
+PL4_TEST_TEST,Testdepartment - Makroregion północno-zachodni,Testdep. PL4,2023-01-01,PL4_TEST
+PL5_TEST_TEST,Testdepartment - Makroregion południowo-zachodni,Testdep. PL5,2023-01-01,PL5_TEST
+PL6_TEST_TEST,Testdepartment - Makroregion północny,Testdep. PL6,2023-01-01,PL6_TEST
+PL7_TEST_TEST,Testdepartment - Makroregion centralny,Testdep. PL7,2023-01-01,PL7_TEST
+PL8_TEST_TEST,Testdepartment - Makroregion wschodni,Testdep. PL8,2023-01-01,PL8_TEST
+PL9_TEST_TEST,Testdepartment - Makroregion województwo mazowieckie,Testdep. PL9,2023-01-01,PL9_TEST
+PT1_TEST_TEST,Testdepartment - Continente,Testdep. PT1,2023-01-01,PT1_TEST
+PT2_TEST_TEST,Testdepartment - Região Autónoma dos Açores,Testdep. PT2,2023-01-01,PT2_TEST
+PT3_TEST_TEST,Testdepartment - Região Autónoma da Madeira,Testdep. PT3,2023-01-01,PT3_TEST
+RO1_TEST_TEST,Testdepartment - Macroregiunea Unu,Testdep. RO1,2023-01-01,RO1_TEST
+RO2_TEST_TEST,Testdepartment - Macroregiunea Doi,Testdep. RO2,2023-01-01,RO2_TEST
+RO3_TEST_TEST,Testdepartment - Macroregiunea Trei,Testdep. RO3,2023-01-01,RO3_TEST
+RO4_TEST_TEST,Testdepartment - Macroregiunea Patru,Testdep. RO4,2023-01-01,RO4_TEST
+RS1_TEST_TEST,Testdepartment - Србија - север,Testdep. RS1,2023-01-01,RS1_TEST
+RS2_TEST_TEST,Testdepartment - Србија - југ,Testdep. RS2,2023-01-01,RS2_TEST
+SE1_TEST_TEST,Testdepartment - Östra Sverige,Testdep. SE1,2023-01-01,SE1_TEST
+SE2_TEST_TEST,Testdepartment - Södra Sverige,Testdep. SE2,2023-01-01,SE2_TEST
+SE3_TEST_TEST,Testdepartment - Norra Sverige,Testdep. SE3,2023-01-01,SE3_TEST
+SI0_TEST_TEST,Testdepartment - Slovenija,Testdep. SI0,2023-01-01,SI0_TEST
+SK0_TEST_TEST,Testdepartment - Slovensko,Testdep. SK0,2023-01-01,SK0_TEST
+TR1_TEST_TEST,Testdepartment - İstanbul,Testdep. TR1,2023-01-01,TR1_TEST
+TR2_TEST_TEST,Testdepartment - Batı Marmara,Testdep. TR2,2023-01-01,TR2_TEST
+TR3_TEST_TEST,Testdepartment - Ege,Testdep. TR3,2023-01-01,TR3_TEST
+TR4_TEST_TEST,Testdepartment - Doğu Marmara,Testdep. TR4,2023-01-01,TR4_TEST
+TR5_TEST_TEST,Testdepartment - Batı Anadolu,Testdep. TR5,2023-01-01,TR5_TEST
+TR6_TEST_TEST,Testdepartment - Akdeniz,Testdep. TR6,2023-01-01,TR6_TEST
+TR7_TEST_TEST,Testdepartment - Orta Anadolu,Testdep. TR7,2023-01-01,TR7_TEST
+TR8_TEST_TEST,Testdepartment - Batı Karadeniz,Testdep. TR8,2023-01-01,TR8_TEST
+TR9_TEST_TEST,Testdepartment - Doğu Karadeniz,Testdep. TR9,2023-01-01,TR9_TEST
+TRA_TEST_TEST,Testdepartment - Kuzeydoğu Anadolu,Testdep. TRA,2023-01-01,TRA_TEST
+TRB_TEST_TEST,Testdepartment - Ortadoğu Anadolu,Testdep. TRB,2023-01-01,TRB_TEST
+TRC_TEST_TEST,Testdepartment - Güneydoğu Anadolu,Testdep. TRC,2023-01-01,TRC_TEST
+UKC_TEST_TEST,Testdepartment - North East (England),Testdep. UKC,2023-01-01,UKC_TEST
+UKD_TEST_TEST,Testdepartment - North West (England),Testdep. UKD,2023-01-01,UKD_TEST
+UKE_TEST_TEST,Testdepartment - Yorkshire and the Humber,Testdep. UKE,2023-01-01,UKE_TEST
+UKF_TEST_TEST,Testdepartment - East Midlands (England),Testdep. UKF,2023-01-01,UKF_TEST
+UKG_TEST_TEST,Testdepartment - West Midlands (England),Testdep. UKG,2023-01-01,UKG_TEST
+UKH_TEST_TEST,Testdepartment - East of England,Testdep. UKH,2023-01-01,UKH_TEST
+UKI_TEST_TEST,Testdepartment - London,Testdep. UKI,2023-01-01,UKI_TEST
+UKJ_TEST_TEST,Testdepartment - South East (England),Testdep. UKJ,2023-01-01,UKJ_TEST
+UKK_TEST_TEST,Testdepartment - South West (England),Testdep. UKK,2023-01-01,UKK_TEST
+UKL_TEST_TEST,Testdepartment - Wales,Testdep. UKL,2023-01-01,UKL_TEST
+UKM_TEST_TEST,Testdepartment - Scotland,Testdep. UKM,2023-01-01,UKM_TEST
+UKN_TEST_TEST,Testdepartment - Northern Ireland,Testdep. UKN,2023-01-01,UKN_TEST
+ZA_EC_TEST_TEST,Testdepartment - Eastern Cape,Testdep. ZA_EC,2023-01-01,ZA_EC_TEST
+ZA_FS_TEST_TEST,Testdepartment - Free State,Testdep. ZA_FS,2023-01-01,ZA_FS_TEST
+ZA_GP_TEST_TEST,Testdepartment - Gauteng,Testdep. ZA_GP,2023-01-01,ZA_GP_TEST
+ZA_KZN_TEST_TEST,Testdepartment - KwaZulu-Natal,Testdep. ZA_KZN,2023-01-01,ZA_KZN_TEST
+ZA_LP_TEST_TEST,Testdepartment - Limpopo,Testdep. ZA_LP,2023-01-01,ZA_LP_TEST
+ZA_MP_TEST_TEST,Testdepartment - Mpumalanga,Testdep. ZA_MP,2023-01-01,ZA_MP_TEST
+ZA_NC_TEST_TEST,Testdepartment - Northern Cape,Testdep. ZA_NC,2023-01-01,ZA_NC_TEST
+ZA_NW_TEST_TEST,Testdepartment - North West,Testdep. ZA_NW,2023-01-01,ZA_NW_TEST
+ZA_WC_TEST_TEST,Testdepartment - Western Cape,Testdep. ZA_WC,2023-01-01,ZA_WC_TEST
