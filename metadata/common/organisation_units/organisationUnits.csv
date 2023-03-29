@@ -1,0 +1,174 @@
+code,name,shortName,openingDate,parent_code
+NEOIPC,The NeoIPC Project,NeoIPC,2023-01-01,
+AL,Shqipëria,Shqipëria,2023-01-01,NEOIPC
+AL0,Shqipëria,Shqipëria,2023-01-01,AL
+AT,Österreich,Österreich,2023-01-01,NEOIPC
+AT1,Ostösterreich,Ostösterreich,2023-01-01,AT
+AT2,Südösterreich,Südösterreich,2023-01-01,AT
+AT3,Westösterreich,Westösterreich,2023-01-01,AT
+BE,Belgique/België,Belgique/België,2023-01-01,NEOIPC
+BE1,Région de Bruxelles-Capitale/Brussels Hoofdstedelijk Gewest,Bruxelles-Capitale/Brussels Hoofdstedelijk,2023-01-01,BE
+BE2,Vlaams Gewest,Vlaams Gewest,2023-01-01,BE
+BE3,Région wallonne,Région wallonne,2023-01-01,BE
+BG,България [Bulgaria],България,2023-01-01,NEOIPC
+BG3,Северна и Югоизточна България [Severna i Yugoiztochna Bulgaria],Северна и Югоизточна България,2023-01-01,BG
+BG4,Югозападна и Южна централна България [Yugozapadna i Yuzhna tsentralna Bulgaria],Югозападна и Южна централна България,2023-01-01,BG
+CH,Schweiz/Suisse/Svizzera,Schweiz/Suisse/Svizzera,2023-01-01,NEOIPC
+CH0,Schweiz/Suisse/Svizzera,Schweiz/Suisse/Svizzera,2023-01-01,CH
+CY,Κύπρος [Kýpros],Κύπρος,2023-01-01,NEOIPC
+CY0,Κύπρος [Kýpros],Κύπρος,2023-01-01,CY
+CZ,Česko,Česko,2023-01-01,NEOIPC
+CZ0,Česko,Česko,2023-01-01,CZ
+DE,Deutschland,Deutschland,2023-01-01,NEOIPC
+DE1,Baden-Württemberg,Baden-Württemberg,2023-01-01,DE
+DE2,Bayern,Bayern,2023-01-01,DE
+DE3,Berlin,Berlin,2023-01-01,DE
+DE4,Brandenburg,Brandenburg,2023-01-01,DE
+DE5,Bremen,Bremen,2023-01-01,DE
+DE6,Hamburg,Hamburg,2023-01-01,DE
+DE7,Hessen,Hessen,2023-01-01,DE
+DE8,Mecklenburg-Vorpommern,Mecklenburg-Vorpommern,2023-01-01,DE
+DE9,Niedersachsen,Niedersachsen,2023-01-01,DE
+DEA,Nordrhein-Westfalen,Nordrhein-Westfalen,2023-01-01,DE
+DEB,Rheinland-Pfalz,Rheinland-Pfalz,2023-01-01,DE
+DEC,Saarland,Saarland,2023-01-01,DE
+DED,Sachsen,Sachsen,2023-01-01,DE
+DEE,Sachsen-Anhalt,Sachsen-Anhalt,2023-01-01,DE
+DEF,Schleswig-Holstein,Schleswig-Holstein,2023-01-01,DE
+DEG,Thüringen,Thüringen,2023-01-01,DE
+DK,Danmark,Danmark,2023-01-01,NEOIPC
+DK0,Danmark,Danmark,2023-01-01,DK
+EE,Eesti,Eesti,2023-01-01,NEOIPC
+EE0,Eesti,Eesti,2023-01-01,EE
+EL,Ελλάδα [Elláda],Ελλάδα,2023-01-01,NEOIPC
+EL3,Αττική [Attiki],Αττική,2023-01-01,EL
+EL4,"Νησιά Αιγαίου, Κρήτη [Nisia Aigaiou, Kriti]","Νησιά Αιγαίου, Κρήτη",2023-01-01,EL
+EL5,Βόρεια Ελλάδα [Voreia Elláda],Βόρεια Ελλάδα,2023-01-01,EL
+EL6,Κεντρική Ελλάδα [Kentriki Elláda],Κεντρική Ελλάδα,2023-01-01,EL
+ES,España,España,2023-01-01,NEOIPC
+ES1,Noroeste,Noroeste,2023-01-01,ES
+ES2,Noreste,Noreste,2023-01-01,ES
+ES3,Comunidad de Madrid,Comunidad de Madrid,2023-01-01,ES
+ES4,Centro (ES),Centro (ES),2023-01-01,ES
+ES5,Este,Este,2023-01-01,ES
+ES6,Sur,Sur,2023-01-01,ES
+ES7,Canarias,Canarias,2023-01-01,ES
+FI,Suomi/Finland,Suomi/Finland,2023-01-01,NEOIPC
+FI1,Manner-Suomi,Manner-Suomi,2023-01-01,FI
+FI2,Åland,Åland,2023-01-01,FI
+FR,France,France,2023-01-01,NEOIPC
+FR1,Ile-de-France,Ile-de-France,2023-01-01,FR
+FRB,Centre — Val de Loire,Centre — Val de Loire,2023-01-01,FR
+FRC,Bourgogne-Franche-Comté,Bourgogne-Franche-Comté,2023-01-01,FR
+FRD,Normandie,Normandie,2023-01-01,FR
+FRE,Hauts-de-France,Hauts-de-France,2023-01-01,FR
+FRF,Grand Est,Grand Est,2023-01-01,FR
+FRG,Pays de la Loire,Pays de la Loire,2023-01-01,FR
+FRH,Bretagne,Bretagne,2023-01-01,FR
+FRI,Nouvelle-Aquitaine,Nouvelle-Aquitaine,2023-01-01,FR
+FRJ,Occitanie,Occitanie,2023-01-01,FR
+FRK,Auvergne-Rhône-Alpes,Auvergne-Rhône-Alpes,2023-01-01,FR
+FRL,Provence-Alpes-Côte d’Azur,Provence-Alpes-Côte d’Azur,2023-01-01,FR
+FRM,Corse,Corse,2023-01-01,FR
+FRY,RUP FR — Régions Ultrapériphériques Françaises,RUP FR — Régions Ultrapériphériques Françaises,2023-01-01,FR
+HR,Hrvatska,Hrvatska,2023-01-01,NEOIPC
+HR0,Hrvatska,Hrvatska,2023-01-01,HR
+HU,Magyarország,Magyarország,2023-01-01,NEOIPC
+HU1,Közép-Magyarország,Közép-Magyarország,2023-01-01,HU
+HU2,Dunántúl,Dunántúl,2023-01-01,HU
+HU3,Alföld és Észak,Alföld és Észak,2023-01-01,HU
+IE,Éire/Ireland,Éire/Ireland,2023-01-01,NEOIPC
+IE0,Ireland,Ireland,2023-01-01,IE
+IS,Ísland,Ísland,2023-01-01,NEOIPC
+IS0,Ísland,Ísland,2023-01-01,IS
+IT,Italia,Italia,2023-01-01,NEOIPC
+ITC,Nord-Ovest,Nord-Ovest,2023-01-01,IT
+ITF,Sud,Sud,2023-01-01,IT
+ITG,Isole,Isole,2023-01-01,IT
+ITH,Nord-Est,Nord-Est,2023-01-01,IT
+ITI,Centro (IT),Centro (IT),2023-01-01,IT
+LI,Liechtenstein,Liechtenstein,2023-01-01,NEOIPC
+LI0,Liechtenstein,Liechtenstein,2023-01-01,LI
+LT,Lietuva,Lietuva,2023-01-01,NEOIPC
+LT0,Lietuva,Lietuva,2023-01-01,LT
+LU,Luxembourg,Luxembourg,2023-01-01,NEOIPC
+LU0,Luxembourg,Luxembourg,2023-01-01,LU
+LV,Latvija,Latvija,2023-01-01,NEOIPC
+LV0,Latvija,Latvija,2023-01-01,LV
+ME,Црна Гора [Crna Gora],Црна Гора,2023-01-01,NEOIPC
+ME0,Црна Гора [Crna Gora],Црна Гора,2023-01-01,ME
+MK,Северна Македонија [Severna Makedonija],Северна Македонија,2023-01-01,NEOIPC
+MK0,Северна Македонија [Severna Makedonija],Северна Македонија,2023-01-01,MK
+MT,Malta,Malta,2023-01-01,NEOIPC
+MT0,Malta,Malta,2023-01-01,MT
+NL,Nederland,Nederland,2023-01-01,NEOIPC
+NL1,Noord-Nederland,Noord-Nederland,2023-01-01,NL
+NL2,Oost-Nederland,Oost-Nederland,2023-01-01,NL
+NL3,West-Nederland,West-Nederland,2023-01-01,NL
+NL4,Zuid-Nederland,Zuid-Nederland,2023-01-01,NL
+NO,Norge,Norge,2023-01-01,NEOIPC
+NO0,Norge,Norge,2023-01-01,NO
+PL,Polska,Polska,2023-01-01,NEOIPC
+PL2,Makroregion południowy,Makroregion południowy,2023-01-01,PL
+PL4,Makroregion północno-zachodni,Makroregion północno-zachodni,2023-01-01,PL
+PL5,Makroregion południowo-zachodni,Makroregion południowo-zachodni,2023-01-01,PL
+PL6,Makroregion północny,Makroregion północny,2023-01-01,PL
+PL7,Makroregion centralny,Makroregion centralny,2023-01-01,PL
+PL8,Makroregion wschodni,Makroregion wschodni,2023-01-01,PL
+PL9,Makroregion województwo mazowieckie,Makroregion województwo mazowieckie,2023-01-01,PL
+PT,Portugal,Portugal,2023-01-01,NEOIPC
+PT1,Continente,Continente,2023-01-01,PT
+PT2,Região Autónoma dos Açores,Região Autónoma dos Açores,2023-01-01,PT
+PT3,Região Autónoma da Madeira,Região Autónoma da Madeira,2023-01-01,PT
+RO,România,România,2023-01-01,NEOIPC
+RO1,Macroregiunea Unu,Macroregiunea Unu,2023-01-01,RO
+RO2,Macroregiunea Doi,Macroregiunea Doi,2023-01-01,RO
+RO3,Macroregiunea Trei,Macroregiunea Trei,2023-01-01,RO
+RO4,Macroregiunea Patru,Macroregiunea Patru,2023-01-01,RO
+RS,Srbija/Сpбија [Serbia],Srbija/Сpбија,2023-01-01,NEOIPC
+RS1,Србија - север [Serbia - sever],Србија - север,2023-01-01,RS
+RS2,Србија - југ [Serbia - jug],Србија - југ,2023-01-01,RS
+SE,Sverige,Sverige,2023-01-01,NEOIPC
+SE1,Östra Sverige,Östra Sverige,2023-01-01,SE
+SE2,Södra Sverige,Södra Sverige,2023-01-01,SE
+SE3,Norra Sverige,Norra Sverige,2023-01-01,SE
+SI,Slovenija,Slovenija,2023-01-01,NEOIPC
+SI0,Slovenija,Slovenija,2023-01-01,SI
+SK,Slovensko,Slovensko,2023-01-01,NEOIPC
+SK0,Slovensko,Slovensko,2023-01-01,SK
+TR,Türkiye,Türkiye,2023-01-01,NEOIPC
+TR1,İstanbul,İstanbul,2023-01-01,TR
+TR2,Batı Marmara,Batı Marmara,2023-01-01,TR
+TR3,Ege,Ege,2023-01-01,TR
+TR4,Doğu Marmara,Doğu Marmara,2023-01-01,TR
+TR5,Batı Anadolu,Batı Anadolu,2023-01-01,TR
+TR6,Akdeniz,Akdeniz,2023-01-01,TR
+TR7,Orta Anadolu,Orta Anadolu,2023-01-01,TR
+TR8,Batı Karadeniz,Batı Karadeniz,2023-01-01,TR
+TR9,Doğu Karadeniz,Doğu Karadeniz,2023-01-01,TR
+TRA,Kuzeydoğu Anadolu,Kuzeydoğu Anadolu,2023-01-01,TR
+TRB,Ortadoğu Anadolu,Ortadoğu Anadolu,2023-01-01,TR
+TRC,Güneydoğu Anadolu,Güneydoğu Anadolu,2023-01-01,TR
+UK,United Kingdom,United Kingdom,2023-01-01,NEOIPC
+UKC,North East (England),North East (England),2023-01-01,UK
+UKD,North West (England),North West (England),2023-01-01,UK
+UKE,Yorkshire and the Humber,Yorkshire and the Humber,2023-01-01,UK
+UKF,East Midlands (England),East Midlands (England),2023-01-01,UK
+UKG,West Midlands (England),West Midlands (England),2023-01-01,UK
+UKH,East of England,East of England,2023-01-01,UK
+UKI,London,London,2023-01-01,UK
+UKJ,South East (England),South East (England),2023-01-01,UK
+UKK,South West (England),South West (England),2023-01-01,UK
+UKL,Wales,Wales,2023-01-01,UK
+UKM,Scotland,Scotland,2023-01-01,UK
+UKN,Northern Ireland,Northern Ireland,2023-01-01,UK
+ZA,South Africa,South Africa,2023-01-01,NEOIPC
+ZA_EC,Eastern Cape,Eastern Cape,2023-01-01,ZA
+ZA_FS,Free State,Free State,2023-01-01,ZA
+ZA_GP,Gauteng,Gauteng,2023-01-01,ZA
+ZA_KZN,KwaZulu-Natal,KwaZulu-Natal,2023-01-01,ZA
+ZA_LP,Limpopo,Limpopo,2023-01-01,ZA
+ZA_MP,Mpumalanga,Mpumalanga,2023-01-01,ZA
+ZA_NC,Northern Cape,Northern Cape,2023-01-01,ZA
+ZA_NW,North West,North West,2023-01-01,ZA
+ZA_WC,Western Cape,Western Cape,2023-01-01,ZA

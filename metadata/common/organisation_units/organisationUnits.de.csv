@@ -1,0 +1,347 @@
+code,property,needs_translation,default,translated
+NEOIPC,NAME,t,The NeoIPC Project,Das NeoIPC Projekt
+NEOIPC,SHORT_NAME,f,NeoIPC,
+AL,NAME,t,Shqipëria,Albanien
+AL,SHORT_NAME,t,Shqipëria,Albanien
+AL0,NAME,t,Shqipëria,Albanien
+AL0,SHORT_NAME,t,Shqipëria,Albanien
+AT,NAME,f,Österreich,
+AT,SHORT_NAME,f,Österreich,
+AT1,NAME,f,Ostösterreich,
+AT1,SHORT_NAME,f,Ostösterreich,
+AT2,NAME,f,Südösterreich,
+AT2,SHORT_NAME,f,Südösterreich,
+AT3,NAME,f,Westösterreich,
+AT3,SHORT_NAME,f,Westösterreich,
+BE,NAME,t,Belgique/België,Belgien
+BE,SHORT_NAME,t,Belgique/België,Belgien
+BE1,NAME,t,Région de Bruxelles-Capitale/Brussels Hoofdstedelijk Gewest,Region Brüssel-Hauptstadt
+BE1,SHORT_NAME,t,Bruxelles-Capitale/Brussels Hoofdstedelijk,Region Brüssel-Hauptstadt
+BE2,NAME,t,Vlaams Gewest,Flämische Region
+BE2,SHORT_NAME,t,Vlaams Gewest,Flämische Region
+BE3,NAME,t,Région wallonne,Wallonische Region
+BE3,SHORT_NAME,t,Région wallonne,Wallonische Region
+BG,NAME,t,България [Bulgaria],Bulgarien
+BG,SHORT_NAME,t,България,Bulgarien
+BG3,NAME,t,Северна и Югоизточна България [Severna i Yugoiztochna Bulgaria],Nord- und Südostbulgarien
+BG3,SHORT_NAME,t,Северна и Югоизточна България,Nord- und Südostbulgarien
+BG4,NAME,t,Югозападна и Южна централна България [Yugozapadna i Yuzhna tsentralna Bulgaria],Südwest- und Südzentralbulgarien
+BG4,SHORT_NAME,t,Югозападна и Южна централна България,Südwest- und Südzentralbulgarien
+CH,NAME,t,Schweiz/Suisse/Svizzera,Schweiz
+CH,SHORT_NAME,t,Schweiz/Suisse/Svizzera,Schweiz
+CH0,NAME,t,Schweiz/Suisse/Svizzera,Schweiz
+CH0,SHORT_NAME,t,Schweiz/Suisse/Svizzera,Schweiz
+CY,NAME,t,Κύπρος [Kýpros],Zypern
+CY,SHORT_NAME,t,Κύπρος,Zypern
+CY0,NAME,t,Κύπρος [Kýpros],Zypern
+CY0,SHORT_NAME,t,Κύπρος,Zypern
+CZ,NAME,t,Česko,Tschechien
+CZ,SHORT_NAME,t,Česko,Tschechien
+CZ0,NAME,t,Česko,Tschechien
+CZ0,SHORT_NAME,t,Česko,Tschechien
+DE,NAME,f,Deutschland,
+DE,SHORT_NAME,f,Deutschland,
+DE1,NAME,f,Baden-Württemberg,
+DE1,SHORT_NAME,f,Baden-Württemberg,
+DE2,NAME,f,Bayern,
+DE2,SHORT_NAME,f,Bayern,
+DE3,NAME,f,Berlin,
+DE3,SHORT_NAME,f,Berlin,
+DE4,NAME,f,Brandenburg,
+DE4,SHORT_NAME,f,Brandenburg,
+DE5,NAME,f,Bremen,
+DE5,SHORT_NAME,f,Bremen,
+DE6,NAME,f,Hamburg,
+DE6,SHORT_NAME,f,Hamburg,
+DE7,NAME,f,Hessen,
+DE7,SHORT_NAME,f,Hessen,
+DE8,NAME,f,Mecklenburg-Vorpommern,
+DE8,SHORT_NAME,f,Mecklenburg-Vorpommern,
+DE9,NAME,f,Niedersachsen,
+DE9,SHORT_NAME,f,Niedersachsen,
+DEA,NAME,f,Nordrhein-Westfalen,
+DEA,SHORT_NAME,f,Nordrhein-Westfalen,
+DEB,NAME,f,Rheinland-Pfalz,
+DEB,SHORT_NAME,f,Rheinland-Pfalz,
+DEC,NAME,f,Saarland,
+DEC,SHORT_NAME,f,Saarland,
+DED,NAME,f,Sachsen,
+DED,SHORT_NAME,f,Sachsen,
+DEE,NAME,f,Sachsen-Anhalt,
+DEE,SHORT_NAME,f,Sachsen-Anhalt,
+DEF,NAME,f,Schleswig-Holstein,
+DEF,SHORT_NAME,f,Schleswig-Holstein,
+DEG,NAME,f,Thüringen,
+DEG,SHORT_NAME,f,Thüringen,
+DK,NAME,t,Danmark,Dänemark
+DK,SHORT_NAME,t,Danmark,Dänemark
+DK0,NAME,t,Danmark,Dänemark
+DK0,SHORT_NAME,t,Danmark,Dänemark
+EE,NAME,t,Eesti,Estland
+EE,SHORT_NAME,t,Eesti,Estland
+EE0,NAME,t,Eesti,Estland
+EE0,SHORT_NAME,t,Eesti,Estland
+EL,NAME,t,Ελλάδα [Elláda],Griechenland
+EL,SHORT_NAME,t,Ελλάδα,Griechenland
+EL3,NAME,t,Αττική [Attiki],Attika
+EL3,SHORT_NAME,t,Αττική,Attika
+EL4,NAME,t,"Νησιά Αιγαίου, Κρήτη [Nisia Aigaiou, Kriti]","Ägaische Inseln, Kreta"
+EL4,SHORT_NAME,t,"Νησιά Αιγαίου, Κρήτη","Ägaische Inseln, Kreta"
+EL5,NAME,t,Βόρεια Ελλάδα [Voreia Elláda],Nordgriechenland
+EL5,SHORT_NAME,t,Βόρεια Ελλάδα,Nordgriechenland
+EL6,NAME,t,Κεντρική Ελλάδα [Kentriki Elláda],Zentralgriechenland
+EL6,SHORT_NAME,t,Κεντρική Ελλάδα,Zentralgriechenland
+ES,NAME,t,España,Spanien
+ES,SHORT_NAME,t,España,Spanien
+ES1,NAME,t,Noroeste,Nordwesten
+ES1,SHORT_NAME,t,Noroeste,Nordwesten
+ES2,NAME,t,Noreste,Nordosten
+ES2,SHORT_NAME,t,Noreste,Nordosten
+ES3,NAME,t,Comunidad de Madrid,Autonome Gemeinschaft Madrid
+ES3,SHORT_NAME,t,Comunidad de Madrid,Autonome Gemeinschaft Madrid
+ES4,NAME,t,Centro (ES),Zentrum
+ES4,SHORT_NAME,t,Centro (ES),Zentrum
+ES5,NAME,t,Este,Osten
+ES5,SHORT_NAME,t,Este,Osten
+ES6,NAME,t,Sur,Süden
+ES6,SHORT_NAME,t,Sur,Süden
+ES7,NAME,t,Canarias,Kanaren
+ES7,SHORT_NAME,t,Canarias,Kanaren
+FI,NAME,t,Suomi/Finland,Finnland
+FI,SHORT_NAME,t,Suomi/Finland,Finnland
+FI1,NAME,t,Manner-Suomi,Festländisches Finnland
+FI1,SHORT_NAME,t,Manner-Suomi,Festländisches Finnland
+FI2,NAME,f,Åland,
+FI2,SHORT_NAME,f,Åland,
+FR,NAME,t,France,Frankreich
+FR,SHORT_NAME,t,France,Frankreich
+FR1,NAME,f,Île-de-France,
+FR1,SHORT_NAME,f,Île-de-France,
+FRB,NAME,t,Centre — Val de Loire,Zentrum-Loiretal
+FRB,SHORT_NAME,t,Centre — Val de Loire,Zentrum-Loiretal
+FRC,NAME,f,Bourgogne-Franche-Comté,
+FRC,SHORT_NAME,f,Bourgogne-Franche-Comté,
+FRD,NAME,f,Normandie,
+FRD,SHORT_NAME,f,Normandie,
+FRE,NAME,f,Hauts-de-France,
+FRE,SHORT_NAME,f,Hauts-de-France,
+FRF,NAME,f,Grand Est,
+FRF,SHORT_NAME,f,Grand Est,
+FRG,NAME,f,Pays de la Loire,
+FRG,SHORT_NAME,f,Pays de la Loire,
+FRH,NAME,f,Bretagne,
+FRH,SHORT_NAME,f,Bretagne,
+FRI,NAME,f,Nouvelle-Aquitaine,
+FRI,SHORT_NAME,f,Nouvelle-Aquitaine,
+FRJ,NAME,f,Occitanie,
+FRJ,SHORT_NAME,f,Occitanie,
+FRK,NAME,f,Auvergne-Rhône-Alpes,
+FRK,SHORT_NAME,f,Auvergne-Rhône-Alpes,
+FRL,NAME,f,Provence-Alpes-Côte d’Azur,
+FRL,SHORT_NAME,f,Provence-Alpes-Côte d’Azur,
+FRM,NAME,t,Corse,Korsika
+FRM,SHORT_NAME,t,Corse,Korsika
+FRY,NAME,t,RUP FR — Régions Ultrapériphériques Françaises,Gebiete in äußerster Randlage Frankreichs
+FRY,SHORT_NAME,t,RUP FR — Régions Ultrapériphériques Françaises,Gebiete in äußerster Randlage Frankreichs
+HR,NAME,t,Hrvatska,Kroatien
+HR,SHORT_NAME,t,Hrvatska,Kroatien
+HR0,NAME,t,Hrvatska,Kroatien
+HR0,SHORT_NAME,t,Hrvatska,Kroatien
+HU,NAME,t,Magyarország,Ungarn
+HU,SHORT_NAME,t,Magyarország,Ungarn
+HU1,NAME,t,Közép-Magyarország,Mittelungarn
+HU1,SHORT_NAME,t,Közép-Magyarország,Mittelungarn
+HU2,NAME,t,Dunántúl,Transdanubien
+HU2,SHORT_NAME,t,Dunántúl,Transdanubien
+HU3,NAME,t,Alföld és Észak,Norden und Tiefebene
+HU3,SHORT_NAME,t,Alföld és Észak,Norden und Tiefebene
+IE,NAME,t,Éire/Ireland,Irland
+IE,SHORT_NAME,t,Éire/Ireland,Irland
+IE0,NAME,t,Ireland,Irland
+IE0,SHORT_NAME,t,Ireland,Irland
+IS,NAME,t,Ísland,Island
+IS,SHORT_NAME,t,Ísland,Island
+IS0,NAME,t,Ísland,Island
+IS0,SHORT_NAME,t,Ísland,Island
+IT,NAME,t,Italia,Italien
+IT,SHORT_NAME,t,Italia,Italien
+ITC,NAME,t,Nord-Ovest,Nordwesten
+ITC,SHORT_NAME,t,Nord-Ovest,Nordwesten
+ITF,NAME,t,Sud,Süden
+ITF,SHORT_NAME,t,Sud,Süden
+ITG,NAME,t,Isole,Inseln
+ITG,SHORT_NAME,t,Isole,Inseln
+ITH,NAME,t,Nord-Est,Nordosten
+ITH,SHORT_NAME,t,Nord-Est,Nordosten
+ITI,NAME,t,Centro (IT),Mitte
+ITI,SHORT_NAME,t,Centro (IT),Mitte
+LI,NAME,f,Liechtenstein,
+LI,SHORT_NAME,f,Liechtenstein,
+LI0,NAME,f,Liechtenstein,
+LI0,SHORT_NAME,f,Liechtenstein,
+LT,NAME,t,Lietuva,Litauen
+LT,SHORT_NAME,t,Lietuva,Litauen
+LT0,NAME,t,Lietuva,Litauen
+LT0,SHORT_NAME,t,Lietuva,Litauen
+LU,NAME,t,Luxembourg,Luxemburg
+LU,SHORT_NAME,t,Luxembourg,Luxemburg
+LU0,NAME,t,Luxembourg,Luxemburg
+LU0,SHORT_NAME,t,Luxembourg,Luxemburg
+LV,NAME,t,Latvija,Lettland
+LV,SHORT_NAME,t,Latvija,Lettland
+LV0,NAME,t,Latvija,Lettland
+LV0,SHORT_NAME,t,Latvija,Lettland
+ME,NAME,t,Црна Гора [Crna Gora],Montenegro
+ME,SHORT_NAME,t,Црна Гора,Montenegro
+ME0,NAME,t,Црна Гора [Crna Gora],Montenegro
+ME0,SHORT_NAME,t,Црна Гора,Montenegro
+MK,NAME,t,Северна Македонија [Severna Makedonija],Nordmazedonien
+MK,SHORT_NAME,t,Северна Македонија,Nordmazedonien
+MK0,NAME,t,Северна Македонија [Severna Makedonija],Nordmazedonien
+MK0,SHORT_NAME,t,Северна Македонија,Nordmazedonien
+MT,NAME,f,Malta,
+MT,SHORT_NAME,f,Malta,
+MT0,NAME,f,Malta,
+MT0,SHORT_NAME,f,Malta,
+NL,NAME,t,Nederland,Niederlande
+NL,SHORT_NAME,t,Nederland,Niederlande
+NL1,NAME,t,Noord-Nederland,Nord-Niederlande
+NL1,SHORT_NAME,t,Noord-Nederland,Nord-Niederlande
+NL2,NAME,t,Oost-Nederland,Ost-Niederlande
+NL2,SHORT_NAME,t,Oost-Nederland,Ost-Niederlande
+NL3,NAME,t,West-Nederland,West-Niederlande
+NL3,SHORT_NAME,t,West-Nederland,West-Niederlande
+NL4,NAME,t,Zuid-Nederland,Süd-Niederlande
+NL4,SHORT_NAME,t,Zuid-Nederland,Süd-Niederlande
+NO,NAME,t,Norge,Norwegen
+NO,SHORT_NAME,t,Norge,Norwegen
+NO0,NAME,t,Norge,Norwegen
+NO0,SHORT_NAME,t,Norge,Norwegen
+PL,NAME,t,Polska,Polen
+PL,SHORT_NAME,t,Polska,Polen
+PL2,NAME,f,Makroregion południowy,
+PL2,SHORT_NAME,f,Makroregion południowy,
+PL4,NAME,f,Makroregion północno-zachodni,
+PL4,SHORT_NAME,f,Makroregion północno-zachodni,
+PL5,NAME,f,Makroregion południowo-zachodni,
+PL5,SHORT_NAME,f,Makroregion południowo-zachodni,
+PL6,NAME,f,Makroregion północny,
+PL6,SHORT_NAME,f,Makroregion północny,
+PL7,NAME,f,Makroregion centralny,
+PL7,SHORT_NAME,f,Makroregion centralny,
+PL8,NAME,f,Makroregion wschodni,
+PL8,SHORT_NAME,f,Makroregion wschodni,
+PL9,NAME,f,Makroregion województwo mazowieckie,
+PL9,SHORT_NAME,f,Makroregion województwo mazowieckie,
+PT,NAME,f,Portugal,
+PT,SHORT_NAME,f,Portugal,
+PT1,NAME,t,Continente,Kontinentalportugal
+PT1,SHORT_NAME,t,Continente,Kontinentalportugal
+PT2,NAME,t,Região Autónoma dos Açores,Azoren
+PT2,SHORT_NAME,t,Região Autónoma dos Açores,Azoren
+PT3,NAME,t,Região Autónoma da Madeira,Madeira
+PT3,SHORT_NAME,t,Região Autónoma da Madeira,Madeira
+RO,NAME,t,România,Rumänien
+RO,SHORT_NAME,t,România,Rumänien
+RO1,NAME,t,Macroregiunea Unu,Makroregion Eins
+RO1,SHORT_NAME,t,Macroregiunea Unu,Makroregion Eins
+RO2,NAME,t,Macroregiunea Doi,Makroregion Zwei
+RO2,SHORT_NAME,t,Macroregiunea Doi,Makroregion Zwei
+RO3,NAME,t,Macroregiunea Trei,Makroregion Drei
+RO3,SHORT_NAME,t,Macroregiunea Trei,Makroregion Drei
+RO4,NAME,t,Macroregiunea Patru,Makroregion Vier
+RO4,SHORT_NAME,t,Macroregiunea Patru,Makroregion Vier
+RS,NAME,t,Srbija/Сpбија [Serbia],Serbien
+RS,SHORT_NAME,t,Srbija/Сpбија,Serbien
+RS1,NAME,t,Србија - север [Serbia - sever],Serbien - Norden
+RS1,SHORT_NAME,t,Србија - север,Serbien - Norden
+RS2,NAME,t,Србија - југ [Serbia - jug],Serbien - Süden
+RS2,SHORT_NAME,t,Србија - југ,Serbien - Süden
+SE,NAME,t,Sverige,Schweden
+SE,SHORT_NAME,t,Sverige,Schweden
+SE1,NAME,t,Östra Sverige,Östliches Schweden
+SE1,SHORT_NAME,t,Östra Sverige,Östliches Schweden
+SE2,NAME,t,Södra Sverige,Südliches Schweden
+SE2,SHORT_NAME,t,Södra Sverige,Südliches Schweden
+SE3,NAME,t,Norra Sverige,Nördliches Schweden
+SE3,SHORT_NAME,t,Norra Sverige,Nördliches Schweden
+SI,NAME,t,Slovenija,Slowenien
+SI,SHORT_NAME,t,Slovenija,Slowenien
+SI0,NAME,t,Slovenija,Slowenien
+SI0,SHORT_NAME,t,Slovenija,Slowenien
+SK,NAME,t,Slovensko,Slowakei
+SK,SHORT_NAME,t,Slovensko,Slowakei
+SK0,NAME,t,Slovensko,Slowakei
+SK0,SHORT_NAME,t,Slovensko,Slowakei
+TR,NAME,t,Türkiye,Türkei
+TR,SHORT_NAME,t,Türkiye,Türkei
+TR1,NAME,t,İstanbul,Istanbul
+TR1,SHORT_NAME,t,İstanbul,Istanbul
+TR2,NAME,t,Batı Marmara,West-Marmara
+TR2,SHORT_NAME,t,Batı Marmara,West-Marmara
+TR3,NAME,t,Ege,Ägäis
+TR3,SHORT_NAME,t,Ege,Ägäis
+TR4,NAME,t,Doğu Marmara,Ost-Marmara
+TR4,SHORT_NAME,t,Doğu Marmara,Ost-Marmara
+TR5,NAME,t,Batı Anadolu,West-Anatolien
+TR5,SHORT_NAME,t,Batı Anadolu,West-Anatolien
+TR6,NAME,t,Akdeniz,Mittelmeer
+TR6,SHORT_NAME,t,Akdeniz,Mittelmeer
+TR7,NAME,t,Orta Anadolu,Zentral-Anatolien
+TR7,SHORT_NAME,t,Orta Anadolu,Zentral-Anatolien
+TR8,NAME,t,Batı Karadeniz,West-Schwarzmeer
+TR8,SHORT_NAME,t,Batı Karadeniz,West-Schwarzmeer
+TR9,NAME,t,Doğu Karadeniz,Ost-Schwarzmeer
+TR9,SHORT_NAME,t,Doğu Karadeniz,Ost-Schwarzmeer
+TRA,NAME,t,Kuzeydoğu Anadolu,Nordost-Anatolien
+TRA,SHORT_NAME,t,Kuzeydoğu Anadolu,Nordost-Anatolien
+TRB,NAME,t,Ortadoğu Anadolu,Zentral-Ostanatolien
+TRB,SHORT_NAME,t,Ortadoğu Anadolu,Zentral-Ostanatolien
+TRC,NAME,t,Güneydoğu Anadolu,Südost-Anatolien
+TRC,SHORT_NAME,t,Güneydoğu Anadolu,Südost-Anatolien
+UK,NAME,t,United Kingdom,Vereinigtes Königreich
+UK,SHORT_NAME,t,United Kingdom,Vereinigtes Königreich
+UKC,NAME,t,North East (England),Nordostengland
+UKC,SHORT_NAME,t,North East (England),Nordostengland
+UKD,NAME,t,North West (England),Nordwestengland
+UKD,SHORT_NAME,t,North West (England),Nordwestengland
+UKE,NAME,f,Yorkshire and the Humber,
+UKE,SHORT_NAME,f,Yorkshire and the Humber,
+UKF,NAME,t,East Midlands (England),Ost-Midlands
+UKF,SHORT_NAME,t,East Midlands (England),Ost-Midlands
+UKG,NAME,t,West Midlands (England),West-Midlands
+UKG,SHORT_NAME,t,West Midlands (England),West-Midlands
+UKH,NAME,t,East of England,Ostengland
+UKH,SHORT_NAME,t,East of England,Ostengland
+UKI,NAME,f,London,
+UKI,SHORT_NAME,f,London,
+UKJ,NAME,t,South East (England),Südostengland
+UKJ,SHORT_NAME,t,South East (England),Südostengland
+UKK,NAME,t,South West (England),Südwestengland
+UKK,SHORT_NAME,t,South West (England),Südwestengland
+UKL,NAME,f,Wales,
+UKL,SHORT_NAME,f,Wales,
+UKM,NAME,t,Scotland,Schottland
+UKM,SHORT_NAME,t,Scotland,Schottland
+UKN,NAME,t,Northern Ireland,Nordirland
+UKN,SHORT_NAME,t,Northern Ireland,Nordirland
+ZA,NAME,t,South Africa,Südafrika
+ZA,SHORT_NAME,t,South Africa,Südafrika
+ZA_EC,NAME,t,Eastern Cape,Ostkap
+ZA_EC,SHORT_NAME,t,Eastern Cape,Ostkap
+ZA_FS,NAME,t,Free State,Freistaat
+ZA_FS,SHORT_NAME,t,Free State,Freistaat
+ZA_GP,NAME,f,Gauteng,
+ZA_GP,SHORT_NAME,f,Gauteng,
+ZA_KZN,NAME,f,KwaZulu-Natal,
+ZA_KZN,SHORT_NAME,f,KwaZulu-Natal,
+ZA_LP,NAME,f,Limpopo,
+ZA_LP,SHORT_NAME,f,Limpopo,
+ZA_MP,NAME,f,Mpumalanga,
+ZA_MP,SHORT_NAME,f,Mpumalanga,
+ZA_NC,NAME,t,Northern Cape,Nordkap
+ZA_NC,SHORT_NAME,t,Northern Cape,Nordkap
+ZA_NW,NAME,t,North West,Nordwest
+ZA_NW,SHORT_NAME,t,North West,Nordwest
+ZA_WC,NAME,t,Western Cape,Westkap
+ZA_WC,SHORT_NAME,t,Western Cape,Westkap
