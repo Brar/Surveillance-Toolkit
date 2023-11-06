@@ -1,0 +1,18 @@
+Gizem Karadağ; Adrie Bekker; Angela Dramowski; Paul Heath; Begoña Loureiro_Gonzalez; Jose_Ignacio Pijoan_Zubizarreta; Brar Piening
+:doctype: book
+:imagesdir: ./img
+ifdef::lang[:title-page-background-image: image:NeoIPC-Core-Title-Page.{lang}.svg[]]
+ifndef::lang[:title-page-background-image: image:NeoIPC-Core-Title-Page.svg[]]
+:title-logo-image: image:LOGO_NEOIPC.png[pdfwidth=60mm,align=center]
+include::../locale/attributes.adoc[]
+ifdef::backend-html5[]
+:full-width: role=full-width
+endif::[]
+ifdef::backend-pdf[]
+:full-width: pdfwidth=100%
+:pdf-theme: {docdir}/../NeoIPC.theme.yml
+endif::[]
+ifdef::backend-docbook5[]
+:full-width: scaledwidth=100%
+endif::[]
+:toc:

@@ -1,0 +1,84 @@
+= Infektionssurveillance für die Neonatologie: Kernmodul für Hochrisiko-Neugeborene mit < 1500 g Geburtsgewicht oder < 32 Wochen Gestationsalter
+:lang: de
+include::NeoIPC-Core-Protocol.header.adoc[]
+:revnumber: 1.2
+
+= Einleitung
+== Was lesen Sie hier?
+Dieses Dokument ist das Surveillance-Protokoll für das Kernmodul der NeoIPC-Surveillance, das die Surveillance nosokomialer Infektionen bei Säuglingen mit sehr niedrigem Geburtsgewicht [Very Low Birth Weight] (VLBW)/Sehr Frühgeborenen [Very Preterm] (VPT) umfasst.
+Es ist Teil eines Toolkits für die Surveillance von nosokomialen Infektionen (HAI) in der Neonatologie, das wir im Rahmen des NeoIPC-Projekts entwickelt haben.
+Wenn Sie eine Surveillance von früh auftretenden [early-onset] Infektionen oder nosokomialen Infektionen bei Neugeborenen mit einem Geburtsgewicht von über 1500 g und einem Gestationsalter von mehr als 32 Wochen durchführen möchten, bietet das Toolkit zusätzliche Methoden, die in separaten Protokollen behandelt werden.
+
+Dieses Protokoll bietet methodische Hinweise und Unterstützung für die Surveillance von nosokomialen Infektionen auf Neugeborenenstationen oder für diejenigen, die die Entwicklung eines Programms zur Surveillance von nosokomialen Infektionen planen.
+Wenn Sie sich an die hier aufgeführten Methoden und Definitionen halten, können Sie sicherstellen, dass die von Ihnen generierten Surveillance-Daten mit den Referenzdaten des NeoIPC-Projekts vergleichbar sind, auch wenn Sie nicht aktiv an dem Projekt beteiligt sind.
+
+== Was ist das NeoIPC Projekt
+Im Rahmen des NeoIPC-Projekts möchten wir Sie mit Interventionen und Strategien zur Infektionsprävention und -kontrolle (IPC) auf Ihrer Neugeborenen-Intensivstation unterstützen, insbesondere wenn Sie eine hohe Prävalenz von nosokomialen Infektionen oder multiresistenten Erregern (MRE) beobachten. Wir sind ein internationales Team von Klinikern und Wissenschaftlern aus 13 kooperierenden Partnerinstitutionen mit nachgewiesener Erfahrung in den Bereichen neonatologische Intensivmedizin, neonatale Infektionen, Infektionsprävention und -kontrolle (IPC), Implementierungswissenschaft, Mikrobiologie und Surveillance, die an diesem Projekt mitarbeiten um zwei übergeordnete Ziele zu erreichen:
+
+. Entwicklung und Umsetzung eines innovativen Ansatzes zur Bewertung von IPC-Interventionen in der Neonatologie durch:
+.. Robuste Bewertung der Wirksamkeit von Interventionen in einer randomisierten kontrollierten Studie (RCT)
+.. Identifizierung einer geeigneten Umsetzungsstrategie.
+. Generierung weithin relevanter und global übertragbarer Ergebnisse zur Verbesserung von IPC in der Neugeborenenversorgung durch:
+.. Bildung eines klinischen Praxisnetzwerks zur Unterstützung der Implementierung von IPC in der Neonatologie, in einer Vielzahl von unterschiedlichen Bereichen, wie Neugeborenen-Intensivstation (NICU), High Care-, Special Care- und Känguru-Pflege (KC) Stationen.
+.. Entwicklung einer offenen Struktur zur gezielten Überwachung von IPC-Prozessen und -Ergebnissen in einer Vielzahl von Umgebungen.
+
+Dieses Projekt wurde vom Forschungs- und Innovationsprogramm Horizon 2020 der Europäischen Union im Rahmen der Finanzhilfevereinbarung Nr. 965328 finanziert.
+
+== Hintergrund
+Weltweit gehören Neugeborene und insbesondere Frühgeborene zu den Patientengruppen mit der höchsten Inzidenz nosokomialer Infektionen. Einige dieser Infektionen können durch infektionspräventive Maßnahmen verhindert werden, die auf jeder einzelnen Neugeborenenstation umgesetzt und an die spezifischen Infektionsrisiken der Patienten angepasst werden müssen. In vielen Krankenhäusern in Europa und weltweit verfügen Ärzte und Pflegekräfte nicht über gute Daten, um die Krankheitslast durch nosokomiale Infektionen und die zu ihrer Entwicklung beitragenden Risikofaktoren einzuschätzen oder die Wirksamkeit von Maßnahmen zur Infektionsprävention zu bewerten. Unterstützung für die Surveillance von nosokomialen Infektionen bei Neugeborenen oder Referenzdaten für Benchmarking sind in den meisten Ländern nicht verfügbar. Wo nationale und supranationale Datenerhebungssysteme existieren, haben sie häufig einen breiten Ansatz, der nur begrenzt in der Lage ist, die Situation in Bezug auf Infektionsprävention und -kontrolle zu beurteilen. Kurzfristig versuchen wir, diese Situation zu verbessern, indem wir Menschen, die an IPC-Surveillance in der Neonatologie interessiert sind, Werkzeuge und Methoden für den Einstieg zur Verfügung stellen um möglicherweise langfristig zur Bildung regionaler Surveillance-Infrastrukturen beitragen.
+
+[#participation_requirements]
+== Hinweise zur Nutzung und Teilnahmevoraussetzungen
+Wenn Sie mit der Erfassung von Daten mithilfe der NeoIPC Surveillance-Methoden und -Werkzeuge beginnen möchten, können Sie dies einfach tun, ohne uns um Erlaubnis zu fragen oder Gebühren zu zahlen. Alle Handbücher und Tools können kostenlos verwendet werden, und Sie können sie sofort verwenden, wenn Sie der Meinung sind, dass sie zur Qualitätsverbesserung der Infektionsprävention in Ihrer Abteilung beitragen.
+
+Indem Sie mit Papierformularen beginnen und Berechnungen mit Stift und Papier oder mit einer Tabellenkalkulation durchführen, haben Sie eine sehr niedrige Eintrittsbarriere, und es kann Ihnen sogar helfen, ein gründliches Verständnis der Berechnungen zu erlangen, die intern von den fortgeschritteneren Tools durchgeführt werden. Wenn Sie die Dinge über einen längeren Zeitraum effektiv am Laufen halten möchten und über die erforderlichen Ressourcen verfügen, möchten Sie möglicherweise von der Verwendung der fortschrittlicheren Surveilance-Software vor Ort profitieren oder sich an NeoIPC oder einem regionalen Surveilance-Netzwerk auf der Grundlage seiner Methoden beteiligen.
+
+Für einen langfristigen Erfolg bei der Surveilance nosokomialer Infektionen ist es entscheidend, Daten zu sammeln und verlässliche und vergleichbare Informationen in Ihrer Abteilung über einen langen Zeitraum zu produzieren. Um die Erfassung solcher Daten zu erleichtern, möchten Sie möglicherweise Daten zum NeoIPC-Surveilance-Netzwerk beitragen. Diese Daten können verwendet werden, um Auswertungen zu erstellen und die Infektionsraten Ihrer Neugeborenenstation mit Anderen zu vergleichen.
+
+Wenn Sie Daten sammeln und übermitteln und für die Qualitätsverbesserung verantwortlich sind, ist es wichtig, dass Sie folgendes Dinge gut verstanden haben:
+
+* Einschlusskriterien für Patienten
+* Definitionen für jedes Datenelement
+* Verfahren zum Ausfüllen und Speichern von Formularen
+* Datensicherheit und Datenschutz (Schutz von Informationen, die zur Identifizierung eines Patienten außerhalb Ihrer Abteilung oder Ihres Krankenhauses verwendet werden könnten)
+* Verfahren zum Sammeln, Übermitteln und Korrigieren von Daten
+* Verfahren für Datenverwaltung und Datenabschluss
+* Verwendung von NeoIPC-Auswertungen zur Beobachtung und Verbesserung der Patientenversorgung
+
+Sie sollten sicherstellen, dass das gesamte Datenerfassungsteam in Ihrem Zentrum die in diesem Protokoll enthaltenen Definitionen akzeptiert und ihre Daten entsprechend übermittelt. Um regelmäßig aktuelle Referenzdaten erstellen zu können, fordert NeoIPC die Teilnehmer auf, regelmäßig Daten über die webbasierte Schnittstelle zu übermitteln und sicherzustellen, dass ihre Software- und Hardwaresysteme die Mindestanforderungen erfüllen.
+
+Die Richtlinien und Verfahren Ihres Zentrums müssen die Privatsphäre der Patienten und die Datensicherheit gewährleisten. Es ist wichtig, die personenbezogenen Daten der Patienten und andere Daten die zu ihrer Identifikation führen können, gemäß den für Ihr Zentrum geltenden Gesetzen und Richtlinien zu schützen. Senden Sie keine personenbezogenen Daten von Patienten an das NeoIPC-Netzwerk.
+
+Wir stellen sicher, dass die von den einzelnen Abteilungen übermittelten disaggregierten Daten streng vertraulich behandelt werden, und stellen Ihnen regelmäßig standardisierte und stratifizierte Referenzdaten zur Verfügung, die aggregierte Daten enthalten, sodass kein einzelner Patient oder keine einzelne Abteilung identifiziert werden kann.
+
+Um Sie bei der Anwendung der bereitgestellten Werkzeuge und Methoden zu unterstützen, bieten wir unter https://neoipc.org/surveillance/ Surveillance-Protokolle und Schulungsmaterialien an. Obwohl unsere Ressourcen für die persönliche Interaktion begrenzt sind, werden wir auch versuchen, Ihr Team zu unterstützen, wenn Sie Ihre Fragen an surveillance@neoipc.org senden.
+
+= Datenmanagement
+== Datenschutz und -sicherheit
+Die routinemäßige Surveillance nosokomialer Infektionen ist keine Forschung, sondern eine Art der Qualitätssicherung, die Teil der regulären Patientenversorgung ist. Aus diesem Grund ist die damit verbundene Datenerhebung in der Regel durch die regulären Krankenhausbehandlungsverträge oder spezielle Gesetze abgedeckt, die dies vorschreiben, und bedarf keiner ausdrücklichen Zustimmung der betroffenen Patienten oder ihrer Erziehungsberechtigten. Dennoch sollten Sie sich vergewissern, dass dies in Ihrem Land gilt, bevor Sie mit der Datenerhebung beginnen, und sich darüber hinaus an einige universelle Mindeststandards halten, die unabhängig von den gesetzlichen Rahmenbedingungen gelten sollten.
+
+=== Patienteninformationen
+Gesundheitsinformationen gehören in den meisten Kulturen zu den vertraulichsten Kategorien von Informationen über Menschen und sollten mit besonderer Sorgfalt behandelt werden. Wenn Informationen gespeichert oder übermittelt werden, die zur Identifizierung eines einzelnen Patienten führen können, sollte dies grundsätzlich so geschehen, dass kein unbefugter Dritter darauf zugreifen kann. Während dies bei typischen menschlichen Identifikatoren wie der Kombination aus Familienname, Vorname und Geburtsdatum meist sehr klar ist, kann bei Neugeborenen auch ein sehr seltenes Geburtsgewicht oder Gestationsalter zur Identifizierung eines individuellen Patienten führen wenn es mit genügend anderen Informationen, wie dem Geburtsdatum oder dem Krankenhaus, in dem der Patient behandelt wird, verknüpft wird. Denken Sie an dieses besondere Phänomen, wenn Sie Daten oder Informationen veröffentlichen, die aus Ihren Surveillance-bezogenen Aktivitäten resultieren, oder sie an ein System übermitteln, das nicht von Ihrem Krankenhaus zugelassen ist. Dies kann sogar für eine extern gewartete NeoIPC-Überwachungssoftware gelten, sofern keine Verträge bestehen, welche die Datenverarbeitung regeln.
+
+=== Krankenhausinformationen
+Informationen über Krankenhäuser sind im Allgemeinen nicht gesetzlich geschützt, aber einige Informationen können als Betriebsgeheimnis betrachtet werden und in diesem Fall dürfen Sie sie als Mitarbeiter normalerweise nicht offenlegen. Ob Surveillance-Informationen („Krankenhausinfektionsraten“) ein Betriebsgeheimnis sind oder sein sollten, ist Gegenstand umfangreicher Debatten und es ist verständlich, dass Patientenrechtsorganisationen diesbezüglich für Transparenz plädieren. Dennoch kann die Veröffentlichung von Surveillance-Daten sowohl die Wahrnehmung der Behandlungsqualität eines Krankenhauses als auch die Fähigkeit des Surveillance-Teams, die Surveillance ehrlich und selbstkritisch durchzuführen, nachteilig beeinflussen.
+
+Als Instrument der internen Qualitätssicherung kann die Surveillance nicht alle Formen von Subjektivität und Unehrlichkeit ausschließen, und öffentlicher Druck tendiert dazu, die Datenerhebung in Richtung einer übermäßig kritischen Bewertung von Infektionsaufzeichnungen zu verlagern, was zu niedrigen Raten führt, die nicht mehr zu Verbesserung von Behandlungsqualität genutzt werden können. Neben diesem Problem der "pro forma Surveillance" kann es durchaus legitime oder sogar ehrenwerte Gründe für hohe Infektionsraten in einem Krankenhaus geben, wie etwa die Behandlung von Patienten mit besonders hohem Infektionsrisiko, die mit einfachen statistischen Mitteln wie der Risiko-Standardisierung und -Stratifizierung nicht kompensiert werden können. Solche Zusammenhänge sind der Öffentlichkeit bekanntermaßen schwer zu vermitteln, was zu einer übermäßigen Vereinfachung und politischem Missbrauch führen kann.
+
+Da es für diese Probleme keine einfache Lösung gibt, wird NeoIPC die Identität einzelner teilnehmender Krankenhäuser nicht offenlegen und sicherstellen, dass Veröffentlichungen und Berichte keine Informationen enthalten, die zur Identifizierung eines einzelnen Krankenhauses führen könnten.
+
+Wenn Sie Daten selbst oder als regionales Netzwerk veröffentlichen, sollten Sie die möglichen Auswirkungen der Aufnahme von Informationen auf Krankenhausebene sorgfältig prüfen und dies in enger Abstimmung mit den verschiedenen Interessensgruppen tun.
+
+== Datenübermittlung
+Wie xref:participation_requirements[oben] erwähnt, können Sie die vom NeoIPC-Projekt entwickelten Werkzeuge und Methoden verwenden, um die Surveillance nosokomialer Infektionen in Ihrer neonatologischen Abteilung durchzuführen, ohne Informationen an das NeoIPC-Projekt oder ein regionales Netzwerk zu übermitteln.
+
+Wenn Sie sich jedoch für die Übermittlung von Daten entscheiden, empfehlen wir Ihnen dringend, das webbasierte Datenerfassungssystem zu verwenden, das wir auf der Grundlage des https://dhis2.org/[DHIS2-Systems] entwickelt haben.
+
+Diese Plattform können Sie sowohl für das interne Datenmanagement als auch für den Datenaustausch mit NeoIPC oder Ihrem regionalen Netzwerk nutzen. Darüber hinaus können Sie jederzeit Berichte für Ihre Abteilung erstellen und diese mit den jährlich erscheinenden NeoIPC-Referenzberichten vergleichen.
+
+Zur Erstellung der Referenzdaten führen wir jedes Jahr zu einem festgelegten Zeitpunkt eine Berechnung anhand der zu diesem Zeitpunkt in der NeoIPC-Datenbank vorhandenen Daten durch. Um dies zu ermöglichen, müssen Sie alle Dateneingaben und Ergänzungen fehlender Informationen des Vorjahres innerhalb von 6 Wochen nach Ende eines Kalenderjahres abgeschlossen haben. Dies gilt für Patienten, deren Surveillance-Zeitraum im Vorjahr endete.
+
+Wenn die DHIS2-Plattform aufgrund technischer Probleme vorübergehend nicht verfügbar ist, verwenden Sie in diesem Zeitraum bitte die papierbasierten Datenblätter zur Dokumentation. Bitte denken Sie daran, diese Daten so bald wie möglich in die Webplattform einzugeben, sobald diese wieder verfügbar ist.
+
+.Entscheidungsbaum zur Identifikation einzuschließender Kinder für das Kernmodul
+image::NeoIPC-Core-Decision-Flow.de.svg[Case eligibility decision flow,{full-width},opts=inline]

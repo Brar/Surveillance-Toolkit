@@ -1,0 +1,32 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+  pull_request:
+
+jobs:
+    build-docs:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Prepare environment
+              shell: bash
+              run: |
+                sudo apt-get update -qq
+                sudo apt-get install -qq pandoc
+                sudo gem install asciidoctor-pdf
+
+            - name: Build
+              shell: pwsh
+              run: ./doc/build.ps1
+
+            - name: Upload artifacts
+              uses: actions/upload-artifact@v3
+              with:
+                name: NeoIPC-Docs-Preview
+                path: ./doc/out/

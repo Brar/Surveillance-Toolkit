@@ -1,0 +1,8 @@
+extends: default
+role:
+  red:
+    font-color: #FF0000
+  green:
+    font-color: #008000
+svg:
+  fallback-font-family: Noto Serif
