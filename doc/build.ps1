@@ -64,14 +64,22 @@ $buildDir = "$PSScriptRoot/build"
 $outDir = "$PSScriptRoot/out"
 $protocolDir = "$PSScriptRoot/protocol"
 $imgDir = "$protocolDir/img"
+$buildSvgDir = "$buildDir/svg"
 $buildImgDir = "$buildDir/img"
 $resDir = "$protocolDir/res"
 $transDir = "$protocolDir/trans"
+$svgoConfig = "$PSScriptRoot/svgo.config.js"
 
 if (-not (Test-Path -LiteralPath $buildDir -PathType Container)) {
     Write-Debug -Message "Build directory does not exist."
     $p = (New-Item -Path $PSScriptRoot -Name build -ItemType Directory).FullName
     Write-Verbose -Message "Created build directory at '$p'."
+}
+
+if (-not (Test-Path -LiteralPath $buildSvgDir -PathType Container)) {
+    Write-Debug -Message "Build SVG image directory does not exist."
+    $p = (New-Item -Path $buildDir -Name svg -ItemType Directory).FullName
+    Write-Verbose -Message "Created build SVG image directory at '$p'."
 }
 
 if (-not (Test-Path -LiteralPath $buildImgDir -PathType Container)) {
@@ -126,21 +134,32 @@ foreach ($targetCulture in $targetCultures)
         $langSuffix = ".$lang"
         Write-Information "Creating NeoIPC documentation for language '$($targetCulture.DisplayName)'"
     }
-    if (Test-RebuildRequired $buildImgDir/NeoIPC-Core-Title-Page$langSuffix.svg $resDir/NeoIPC-Core-Title-Page$langSuffix.resx $transDir/NeoIPC-Core-Title-Page.xslt) {
+    if (Test-RebuildRequired $buildSvgDir/NeoIPC-Core-Title-Page$langSuffix.svg $resDir/NeoIPC-Core-Title-Page$langSuffix.resx $transDir/NeoIPC-Core-Title-Page.xslt) {
         Write-Verbose "Creating title page background SVG"
-        $titlePage.Transform("$resDir/NeoIPC-Core-Title-Page$langSuffix.resx", "$buildImgDir/NeoIPC-Core-Title-Page$langSuffix.svg")
+        $titlePage.Transform("$resDir/NeoIPC-Core-Title-Page$langSuffix.resx", "$buildSvgDir/NeoIPC-Core-Title-Page$langSuffix.svg")
+        Write-Verbose "Optimizing title page background SVG"
+        svgo -q --multipass --eol lf --config $svgoConfig -i $buildSvgDir/NeoIPC-Core-Title-Page$langSuffix.svg -o $buildImgDir/
     }
-    if (Test-RebuildRequired $buildImgDir/NeoIPC-Core-Decision-Flow$langSuffix.svg $resDir/NeoIPC-Core-Decision-Flow$langSuffix.resx $transDir/NeoIPC-Core-Decision-Flow.xslt) {
+    if (Test-RebuildRequired $buildSvgDir/NeoIPC-Core-Decision-Flow$langSuffix.svg $resDir/NeoIPC-Core-Decision-Flow$langSuffix.resx $transDir/NeoIPC-Core-Decision-Flow.xslt) {
         Write-Verbose "Creating decision flow SVG"
-        $decisionFlow.Transform("$resDir/NeoIPC-Core-Decision-Flow$langSuffix.resx", "$buildImgDir/NeoIPC-Core-Decision-Flow$langSuffix.svg")
+        $decisionFlow.Transform("$resDir/NeoIPC-Core-Decision-Flow$langSuffix.resx", "$buildSvgDir/NeoIPC-Core-Decision-Flow$langSuffix.svg")
+        Write-Verbose "Optimizing decision flow SVG"
+        svgo -q --multipass --eol lf --config $svgoConfig -i $buildSvgDir/NeoIPC-Core-Decision-Flow$langSuffix.svg -o $buildImgDir/
     }
-    if (Test-RebuildRequired $buildImgDir/NeoIPC-Core-Master-Data-Collection-Sheet$langSuffix.svg $resDir/NeoIPC-Core-Master-Data-Collection-Sheet$langSuffix.resx $transDir/NeoIPC-Core-Master-Data-Collection-Sheet.xslt) {
+    if (Test-RebuildRequired $buildSvgDir/NeoIPC-Core-Master-Data-Collection-Sheet$langSuffix.svg $resDir/NeoIPC-Core-Master-Data-Collection-Sheet$langSuffix.resx $transDir/NeoIPC-Core-Master-Data-Collection-Sheet.xslt) {
         Write-Verbose "Creating master data collection sheet SVG"
-        $masterDataSheet.Transform("$resDir/NeoIPC-Core-Master-Data-Collection-Sheet$langSuffix.resx", "$buildImgDir/NeoIPC-Core-Master-Data-Collection-Sheet$langSuffix.svg")
+        $masterDataSheet.Transform("$resDir/NeoIPC-Core-Master-Data-Collection-Sheet$langSuffix.resx", "$buildSvgDir/NeoIPC-Core-Master-Data-Collection-Sheet$langSuffix.svg")
+        Write-Verbose "Optimizing master data collection sheet SVG"
+        svgo -q --multipass --eol lf --config $svgoConfig -i $buildSvgDir/NeoIPC-Core-Master-Data-Collection-Sheet$langSuffix.svg -o $buildImgDir/
     }
-    if (Test-RebuildRequired $buildImgDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image$langSuffix.svg $resDir/NeoIPC-Core-Master-Data-Collection-Sheet$langSuffix.resx $transDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image.xslt) {
+    if (Test-RebuildRequired $buildSvgDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image$langSuffix.svg $resDir/NeoIPC-Core-Master-Data-Collection-Sheet$langSuffix.resx @(
+        "$transDir/NeoIPC-Core-Master-Data-Collection-Sheet.xslt"
+        "$transDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image.xslt"
+        )) {
         Write-Verbose "Creating master data collection sheet image SVG"
-        $masterDataSheetImage.Transform("$resDir/NeoIPC-Core-Master-Data-Collection-Sheet$langSuffix.resx", "$buildImgDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image$langSuffix.svg")
+        $masterDataSheetImage.Transform("$resDir/NeoIPC-Core-Master-Data-Collection-Sheet$langSuffix.resx", "$buildSvgDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image$langSuffix.svg")
+        Write-Verbose "Optimizing master data collection sheet image SVG"
+        svgo -q --multipass --eol lf --config $svgoConfig -i $buildSvgDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image$langSuffix.svg -o $buildImgDir/
     }
     if (Test-RebuildRequired $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc $protocolDir/NeoIPC-Core-Protocol$langSuffix.adoc) {
         Write-Debug "Copying Asciidoc files to build dir"
