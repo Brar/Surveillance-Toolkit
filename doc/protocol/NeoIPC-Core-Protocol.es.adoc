@@ -1,8 +1,11 @@
 = Vigilancia de infecciones en neonatología: Core Module for Very Low Birth Weight (VLBW) and Very Preterm (VPT) Infants (Módulo básico para recién nacidos de muy bajo peso y muy prematuros)
+:lang: es
 include::NeoIPC-Core-Protocol.header.adoc[]
 :revnumber: 2.0
 
+[#introduction]
 == Introducción
+[#introduction-what-are-you-reading-here]
 === ¿Qué está leyendo aquí?
 Este documento es el protocolo de vigilancia para el módulo central de la vigilancia NeoIPC que cubre la vigilancia de las infecciones nosocomiales en recién nacidos de muy bajo peso al nacer (MBPN)/muy prematuros (MPN).
 Forma parte de un conjunto de herramientas para la vigilancia de las infecciones relacionadas con la asistencia sanitaria (HAI) en neonatología que hemos desarrollado en el marco del proyecto NeoIPC.
@@ -11,6 +14,7 @@ Si desea realizar la vigilancia de las infecciones de aparición temprana o de l
 Este protocolo proporciona referencias metodológicas y apoyo para la vigilancia de las IRAS en las unidades neonatales o para aquellos que planean desarrollar un programa de vigilancia de las IRAS.
 Si se adhiere a los métodos y definiciones que especificamos aquí, podrá asegurarse de que los datos de vigilancia que genere sean comparables a los datos de referencia del proyecto NeoIPC, aunque no participe activamente en el proyecto.
 
+[#introduction-what-is-the-neo-ipc-project]
 === Qué es el proyecto NeoIPC
 Dentro del proyecto NeoIPC, queremos apoyarle con intervenciones y estrategias de prevención y control de infecciones (IPC) en su unidad de cuidados intensivos neonatales, especialmente si observa una alta prevalencia de infecciones adquiridas en el hospital o bacterias multirresistentes (MDR).
 Somos un equipo internacional de clínicos y científicos de 13 instituciones asociadas colaboradoras con un historial probado en las áreas de cuidados intensivos neonatales, infección neonatal, prevención y control de infecciones (CIP), ciencia de la implementación, microbiología y vigilancia, que colaboran en este proyecto para lograr dos objetivos generales:
@@ -24,6 +28,7 @@ Somos un equipo internacional de clínicos y científicos de 13 instituciones as
 
 Este proyecto ha recibido financiación del programa de investigación e innovación Horizonte 2020 de la Unión Europea en virtud del acuerdo de subvención nº 965328.
 
+[#introduction-background]
 === Antecedentes
 En todo el mundo, los recién nacidos, y especialmente los prematuros, se encuentran entre los grupos de pacientes con mayor incidencia de infecciones nosocomiales.
 Algunas de estas infecciones pueden evitarse con medidas de prevención de infecciones, que deben aplicarse en cada unidad neonatal y adaptarse a los riesgos de infección específicos de los pacientes.
@@ -32,7 +37,7 @@ En la mayoría de los países no se dispone de apoyo para la vigilancia de las i
 Cuando existen sistemas nacionales y supranacionales de recopilación de datos, suelen tener un enfoque amplio que resulta limitado en su capacidad para evaluar la situación con respecto a la prevención y el control de las infecciones.
 A corto plazo, pretendemos mejorar esta situación proporcionando a los interesados en la vigilancia de la CIP en neonatología herramientas y métodos para empezar, y a largo plazo contribuyendo potencialmente a la formación de infraestructuras regionales de vigilancia.
 
-[#requisitos_de_participación]
+[#introduction-advice-for-use-and-requirements-for-participation]
 === Consejos de uso y requisitos de participación
 Si desea empezar a recopilar datos utilizando los métodos y herramientas de vigilancia de NeoIPC, puede hacerlo sin pedirnos permiso ni pagar ninguna cuota.
 Todos los manuales y herramientas son de uso gratuito, y puede empezar a utilizarlos de inmediato si cree que le ayudarán a mejorar la calidad del control de infecciones en su departamento.
@@ -66,14 +71,15 @@ Nos aseguraremos de mantener la estricta confidencialidad de los datos desglosad
 Para ayudarle a navegar y utilizar mejor las herramientas proporcionadas, ponemos a su disposición manuales de vigilancia, hojas de datos y material de formación en https://neoipc.org/surveillance/.
 Aunque nuestros recursos para la interacción personal son limitados, también intentaremos apoyar a su equipo si envía sus preguntas a neoipc-support@charite.de.
 
+[#data-management]
 == Gestión de datos
-
+[#data-management-data-protection-and-security]
 === Protección y seguridad de los datos
-
 La vigilancia sistemática de las infecciones relacionadas con la asistencia sanitaria no es investigación, sino una forma de garantizar la calidad que forma parte de la atención habitual a los pacientes.
 Por ello, la recopilación de datos asociada suele estar cubierta por los contratos de tratamiento hospitalario habitual o por la legislación especial que lo ordena y no necesita el consentimiento explícito de los pacientes afectados o de sus tutores legales.
 No obstante, debe asegurarse de que esto se aplica en su país antes de empezar a recopilar datos y, además, cumplir algunas normas mínimas universales que deben aplicarse con independencia del marco jurídico.
 
+[#data-management-data-protection-and-security-patient-information]
 ==== Información del paciente
 La información sanitaria se encuentra entre las categorías más privadas de información sobre seres humanos en la mayoría de las culturas y debe tratarse con especial cuidado.
 Cuando se almacena o transmite información que puede llevar a la identificación de un paciente individual, esto debe hacerse generalmente de forma que ningún tercero no autorizado pueda acceder a ella.
@@ -81,10 +87,10 @@ Aunque esto suele estar muy claro en el caso de los identificadores humanos típ
 Piense en este fenómeno especial siempre que publique datos o información resultantes de sus actividades relacionadas con la vigilancia o los transmita a un sistema que no esté aprobado por su hospital.
 Esto puede aplicarse incluso a un software de vigilancia NeoIPC mantenido externamente si no existen contratos que regulen el procesamiento y la propiedad de los datos.
 
+[#data-management-data-protection-and-security-hospital-information]
 ==== Información sobre hospitales
 Por lo general, la información sobre los hospitales no está protegida por la ley, pero algunos datos pueden considerarse secreto de empresa y, en ese caso, como miembro del personal, normalmente no está permitido divulgarlos.
-Si la información de vigilancia ("tasas de infección hospitalaria") es secreto de empresa o debería serlo, es un tema de amplio debate.
-Es comprensible que las organizaciones de defensa de los derechos de los pacientes aboguen por la transparencia a este respecto.
+Si la información de vigilancia ("tasas de infección hospitalaria") es un secreto de empresa o debería serlo, es un tema de amplio debate y es comprensible que las organizaciones de defensa de los derechos de los pacientes aboguen por la transparencia a este respecto.
 Sin embargo, la publicación de los datos de vigilancia puede tener un efecto perjudicial tanto en la percepción de la calidad del tratamiento de un hospital como en la capacidad del equipo de vigilancia para realizar la vigilancia de forma honesta y autocrítica.
 
 Al tratarse de una herramienta de autoevaluación, la vigilancia no puede descartar todas las formas de subjetividad y deshonestidad, y la presión pública tiende a desviar la recopilación de datos hacia una evaluación excesivamente crítica de los registros de infecciones, lo que da lugar a tasas bajas sobre las que ya no se puede actuar.
@@ -95,8 +101,9 @@ Dado que no existe una solución fácil para estos problemas, NeoIPC no revelar�
 
 Cuando publique datos usted mismo o como red regional, deberá considerar detenidamente los posibles efectos de incluir información a nivel de hospital y hacerlo en estrecha coordinación con las partes interesadas.
 
+[#data-management-data-submission]
 === Presentación de datos
-Como se ha indicado xref:participation_requirements[arriba], puede utilizar las herramientas y métodos desarrollados por el proyecto NeoIPC para llevar a cabo la vigilancia de las infecciones nosocomiales en su departamento de neonatología sin enviar ninguna información al proyecto NeoIPC o a una red regional.
+Como se ha indicado xref:introduction-advice-for-use-and-requirements-for-participation[arriba], puede utilizar las herramientas y métodos desarrollados por el proyecto NeoIPC para llevar a cabo la vigilancia de las infecciones nosocomiales en su departamento de neonatología sin enviar ninguna información al proyecto NeoIPC o a una red regional.
 
 No obstante, si decide enviar datos, le recomendamos encarecidamente que utilice el sistema de notificación por Internet que hemos desarrollado basado en el sistema de gestión de la información sanitaria https://dhis2.org/[DHIS2].
 
@@ -114,6 +121,7 @@ Esto se aplica a los pacientes cuyo periodo de vigilancia finalizó el año ante
 
 Si el sistema de notificación basado en la web no está disponible temporalmente (por ejemplo, debido a mantenimiento o problemas técnicos), utilice las hojas de datos en papel para la documentación durante este período y recuerde introducir estos datos en la plataforma web lo antes posible una vez que vuelva a estar disponible.
 
+[#data-collection]
 == Recogida de datos
 El objetivo principal de los métodos utilizados por el sistema de vigilancia NeoIPC es respaldar las normas internas de garantía de calidad, realizar afirmaciones válidas sobre la frecuencia de infecciones relacionadas con la asistencia sanitaria en lactantes elegibles durante su estancia hospitalaria y promover la aplicación de estrategias de CIP en una unidad neonatal.
 
@@ -146,6 +154,7 @@ Todos los lactantes elegibles deben ser observados hasta el final del periodo de
 En caso de intervención quirúrgica, se realiza un seguimiento adicional de los pacientes para detectar ISQ durante 30 o 90 días, dependiendo de si hay un implante.
 Para más información, véase Infecciones del sitio quirúrgico.
 
+[#data-collection-case-eligibility-criteria-for-the-core-module]
 === Criterios de elegibilidad de casos para el módulo básico
 Cualquier lactante nacido vivo,
 
@@ -174,12 +183,12 @@ Ejemplos de lactantes aptos/no aptos para el módulo básico una vez ingresados 
 
 Un lactante que no sea apto en el módulo principal puede serlo en otro módulo de vigilancia de NeoIPC.
 
+[#data-collection-patient-data-collection]
 === Recogida de datos del paciente
-
 Siempre que un paciente elegible ingrese o reingrese en una de las salas de su departamento de neonatología, deberá registrarlo, preferiblemente de forma directa, en la plataforma de informes en línea.
 
+[#data-collection-patient-data-collection-pseudonymisation-table]
 ==== Tabla de seudonimización
-
 Si tiene un requisito legal o de otro tipo para identificar inequívocamente a los pacientes en la plataforma de informes en línea, debe asignar a cada paciente un NeoIPC-ID en el momento de la inscripción.
 El NeoIPC-ID es un identificador aleatorio único, que le permite identificar a ese paciente dentro de su departamento.
 Esto le permite utilizar los datos anónimos almacenados en el sistema para referirse a pacientes concretos, por ejemplo, en caso de readmisión o corrección de datos, pero imposibilita que terceros hagan lo mismo.
@@ -208,8 +217,8 @@ Ejemplo de lista de seudonimización
 |===
 
 <<<
+[#data-collection-patient-data-collection-master-data-collection-sheet]
 ==== Hoja maestra de recogida de datos
-
 Cada vez que un paciente elegible es admitido o readmitido en su departamento de neonatología, usted debe inscribir a este paciente, preferiblemente directamente en la plataforma de informes en línea.
 Después de inscribir a un paciente, debe introducir la información de admisión y seguir recopilando los datos de seguimiento utilizando los gráficos de evolución del paciente.
 Cuando el paciente recibe el alta, es trasladado a otro hospital o fallece, debe finalizar el seguimiento de este paciente, totalizar los datos registrados en el xref:patient-progress-chart[gráfico de evolución del paciente] y transferirlos a la hoja de datos maestros o introducirlos directamente en el sistema de introducción de datos en línea.
@@ -217,14 +226,13 @@ Cuando el paciente recibe el alta, es trasladado a otro hospital o fallece, debe
 Puede utilizar la hoja maestra de recogida de datos para guardar localmente la inscripción, la información de admisión y los datos de fin de vigilancia.
 Sin embargo, si envía datos a NeoIPC, la información que recoja en la hoja maestra de recogida de datos deberá introducirse en última instancia en el sistema de introducción de datos en línea.
 
-Hoja maestra de recogida de datos del paciente
+.Hoja maestra de recogida de datos del paciente
 //image::NeoIPC-Core-Master-Data-Collection-Sheet-Image.svg[Hoja maestra de recogida de datos para la recogida de datos de pacientes,{full-width},pdfwidth=75%,opts=inline,align="center"]
 image::NeoIPC-Core-Master-Data-Collection-Sheet-Image.png[Hoja maestra de recogida de datos para la recogida de datos de pacientes,{full-width},pdfwidth=75%,align="center"]
 
 <<<
-[patient-progress-chart]
+[#data-collection-patient-data-collection-patient-progress-chart]
 ==== Gráfico de progreso del paciente
-
 Los pacientes elegibles que han sido inscritos en el sistema deben ser seguidos utilizando gráficos de evolución del paciente hasta su muerte, traslado o alta.
 Los factores acumulativos de riesgo y protección, como los días de paciente, los días de dispositivo y los días de antibiótico, se registran en el gráfico, a ser posible diariamente.
 Este gráfico debe conservarse en su centro y para simplificar la recogida de datos y el seguimiento del paciente.
@@ -241,13 +249,13 @@ Deberá registrar los datos de los días no pasados en el departamento en el mom
 Si transcurren más de 48 horas entre el traslado y el reingreso, debe finalizar la recogida de datos para ese paciente y seleccionar "traslado" como motivo del fin de la vigilancia.
 En este caso, cualquier reingreso debe registrarse como un nuevo ingreso, y el tipo de ingreso debe seleccionarse como "trasladada a su centro ≥ 24h postnatal".
 
-Gráfico de evolución del paciente para la recogida de datos
+.Gráfico de evolución del paciente para la recogida de datos
 //image::NeoIPC-Core-Patient-Progress-Chart-Image.svg[Gráfico de evolución del paciente para la recogida de datos del paciente,{full-width},pdfwidth=100%,opts=inline,align="center"]
 image::NeoIPC-Core-Patient-Progress-Chart-Image.png[Gráfico de evolución del paciente para la recogida de datos del paciente,{full-width},pdfwidth=100%,align="center"]
 
 <<<
+[#data-collection-surgical-procedure-data-collection]
 === Recogida de datos de procedimientos quirúrgicos
-
 Siempre que deba realizarse una intervención quirúrgica en neonatos y especialmente en lactantes con MBPN/VPT es un indicador de un curso complicado y un factor de riesgo adicional de infecciones nosocomiales y de aparición de patógenos multirresistentes.
 Por esta razón, cada procedimiento quirúrgico que se realiza en un lactante elegible se registra en NeoIPC.
 Puede utilizar la hoja de papel de procedimientos quirúrgicos para la documentación local o introducir la información correspondiente directamente en el sistema de notificación.
@@ -257,8 +265,8 @@ Hoja de recogida de datos del procedimiento quirúrgico
 //image::NeoIPC-Core-Surgical-Procedure-Data-Collection-Sheet-Image.svg[Hoja de recogida de datos de la intervención quirúrgica,{full-width},pdfwidth=75%,opts=inline,align="center"]
 image::NeoIPC-Core-Surgical-Procedure-Data-Collection-Sheet-Image.png[Ficha de recogida de datos de procedimientos quirúrgicos,{full-width},pdfwidth=75%,align="center"]
 
+[#data-collection-infection-data-collection]
 === Recogida de datos sobre infecciones
-
 Las infecciones del torrente sanguíneo adquiridas en el hospital, la neumonía, la ECN y las infecciones del sitio quirúrgico en pacientes elegibles deben documentarse hasta el final del periodo de vigilancia.
 
 A grandes rasgos, las infecciones neonatales pueden dividirse en infecciones de aparición temprana y de aparición tardía.
@@ -279,8 +287,8 @@ En presencia de una infección previamente registrada, cuando se aísla un nuevo
 Se requiere un mínimo de 14 días y un periodo sin síntomas relevantes de infección para registrar de nuevo el mismo tipo de infección.
 
 <<<
+[#data-collection-infection-data-collection-primary-sepsis-bsi]
 ==== Sepsis primaria/BSI
-
 Si un lactante elegible desarrolla una sepsis primaria/infección del torrente sanguíneo adquirida en el hospital de acuerdo con los criterios de vigilancia de NeoIPC (ver Definiciones de infección: sepsis primaria/infección del torrente sanguíneo) durante el periodo de vigilancia, debe registrar y enviar los datos requeridos utilizando la hoja de recogida de datos que aparece a continuación y/o a través de la plataforma de notificación en línea.
 
 Hoja de recogida de datos de sepsis primaria/infección del torrente sanguíneo
@@ -288,8 +296,8 @@ Hoja de recogida de datos de sepsis primaria/infección del torrente sanguíneo
 image::NeoIPC-Core-Primary-Sepsis-BSI-Reporting-Sheet-Image.png[Hoja de información sobre sepsis/BSI primaria,{full-width},pdfwidth=75%,align="center"]
 
 <<<
+[#data-collection-infection-data-collection-necrotising-enterocolitis]
 ==== Enterocolitis necrotizante
-
 Si un lactante elegible desarrolla una enterocolitis necrotizante según los criterios de vigilancia del NeoIPC (ver Definiciones de infección: Enterocolitis necrotizante (ECN)) durante el periodo de vigilancia, deberá registrar y enviar los datos requeridos utilizando la hoja de recogida de datos que figura a continuación y/o a través de la plataforma de notificación en línea.
 
 Hoja de notificación de ECN
@@ -297,8 +305,8 @@ Hoja de notificación de ECN
 image::NeoIPC-Core-NEC-Reporting-Sheet-Image.png[Hoja de informe del NEC,{full-width},pdfwidth=75%,align="center"]
 
 <<<
+[#data-collection-infection-data-collection-pneumonia]
 ==== Neumonía
-
 Si un lactante elegible desarrolla una neumonía adquirida en el hospital de acuerdo con los criterios de vigilancia de NeoIPC (ver Definiciones de infección: neumonía) durante el periodo de vigilancia, debe registrar y enviar los datos requeridos utilizando la hoja de recogida de datos que aparece a continuación y/o a través de la plataforma de notificación online.
 
 Hoja de notificación de neumonía
@@ -306,8 +314,8 @@ Hoja de notificación de neumonía
 image::NeoIPC-Core-Pneumonia-Reporting-Sheet-Image.png[Hoja de informe de neumonía,{full-width},pdfwidth=75%,align="center"]
 
 <<<
+[#data-collection-infection-data-collection-surgical-site-infections]
 ==== Infecciones del sitio quirúrgico
-
 Si un lactante elegible desarrolla una infección del sitio quirúrgico según los criterios de vigilancia de NeoIPC (ver Definiciones: Infección del sitio quirúrgico (ISQ)) durante el periodo de vigilancia, debe registrar y enviar los datos requeridos utilizando la hoja de recopilación de datos que aparece a continuación y/o a través de la plataforma de notificación en línea.
 
 .hoja de notificación de ISQ
@@ -315,8 +323,8 @@ Si un lactante elegible desarrolla una infección del sitio quirúrgico según l
 image::NeoIPC-Core-SSI-Reporting-Sheet-Image.png[Hoja de informe SSI,{full-width},pdfwidth=75%,align="center"]
 
 <<<
+[#data-collection-infection-data-collection-device-associated-infection]
 ==== Infección asociada a dispositivos
-
 La terapia intravenosa y la ventilación mecánica son factores de riesgo establecidos para las infecciones nosocomiales en neonatología.
 Este tipo de infecciones se consideran típicamente infecciones asociadas a dispositivos y se registran en asociación con dispositivos médicos como catéteres vasculares o intubación.
 
@@ -349,9 +357,8 @@ Si un paciente que desarrolla una infección del torrente sanguíneo cumple los 
 Si se utilizó ventilación invasiva y no invasiva de forma intermitente, la neumonía debe registrarse como neumonía asociada a INV.
 
 <<<
-[#secondary_bsi]
+[#data-collection-infection-data-collection-secondary-bloodstream-infection]
 ==== Infección secundaria del torrente sanguíneo
-
 Dentro de la vigilancia de NeoIPC, es posible registrar las infecciones del torrente sanguíneo secundarias a neumonía, ECN e ISQ.
 La recopilación de datos sobre infecciones secundarias del torrente sanguíneo es opcional; por lo tanto, es posible seleccionar **"Desconocida "** si no está realizando un seguimiento de los pacientes por infecciones secundarias del torrente sanguíneo.
 
@@ -366,10 +373,10 @@ Recogida de datos de ICB secundaria
 //image::NeoIPC-Core-Secondary-BSI-Image.svg[Recopilación de datos de BSI secundaria,{full-width},pdfwidth=100%,opts=inline,align="center"]
 image::NeoIPC-Core-Secondary-BSI-Image.png[Recopilación de datos de ICB secundaria,{full-width},pdfwidth=100%,align="center"]
 
+[#infection-definitions]
 == Definiciones de infección
-
+[#infection-definitions-primary-sepsis-bloodstream-infection]
 === Sepsis primaria / Infección del torrente sanguíneo
-
 La sepsis se clasifica como cultivo negativo o cultivo comprobado en el sistema de vigilancia NeoIPC.
 Asimismo, la sepsis probada por cultivo (LCBSI = "Laboratory-confirmed bloodstream infection") se clasifica en dos categorías en función del resultado del cultivo.
 
@@ -384,17 +391,17 @@ Para obtener información detallada, consulte xref:secondary_bsi[Infección secu
 *Ver lista maestra de organismos en https://neoipc.org/surveillance/resources/
 
 <<<
+[#infection-definitions-clinical-sepsis]
 ==== Sepsis clínica
-
 include::NeoIPC-Core-Clinical-Sepsis-Definition.adoc[]
 
 <<<
+[#infection-definitions-lcbsi-caused-by-a-recognised-pathogen]
 ==== LCBSI causada por un patógeno reconocido
-
 include::NeoIPC-Core-LCBSI-With-Recognised-Pathogen-Definition.adoc[]
 
+[#infection-definitions-lcbsi-caused-by-common-commensals]
 ==== LCBSI causadas por comensales comunes
-
 Si los hemocultivos muestran crecimiento de uno o varios comensales comunes (por ejemplo, estafilococos coagulasa-negativos), en muchos casos no está claro si las bacterias detectadas son el agente causal de una presunta infección o si una contaminación conduce a un diagnóstico erróneo.
 Ha habido múltiples enfoques para resolver este problema adaptando las definiciones de vigilancia a este hecho.
 Desgraciadamente, todos estos enfoques están limitados por los hábitos de diagnóstico y la disponibilidad de recursos, lo que hace casi imposible la comparación de datos de diferentes entornos.
@@ -406,17 +413,17 @@ En cualquier caso, debido a este hecho, se debe tener mucho cuidado al comparar 
 
 include::NeoIPC-Core-LCBSI-With-Common-Commensal-Definition.adoc[]
 
-=== Enterocolitis necrotizante (ECN)
-
-Los criterios de vigilancia de la ECN consisten en una combinación de hallazgos radiológicos y signos clínicos o en un diagnóstico basado en pruebas quirúrgicas.
+[#infection-definitions-necrotising-enterocolitis]
+=== Enterocolitis necrotizante
+Los criterios de vigilancia de la enterocolitis necrotizante (ECN) consisten en una combinación de hallazgos radiológicos y signos clínicos o en un diagnóstico basado en pruebas quirúrgicas.
 El conjunto de datos de ECN incluye información sobre si el paciente presenta una perforación intestinal.
 Sin embargo, éste no es uno de los criterios de definición de la vigilancia.
 Esto significa que no se deben notificar como ECN los casos en los que se tenga evidencia quirúrgica de perforación intestinal sin evidencia de necrosis primaria o neumatosis intestinal (por ejemplo, perforación intestinal espontánea).
 
 include::NeoIPC-Core-Necrotising-Enterocolitis-Definition.adoc[]
 
+[#infection-definitions-pneumonia]
 === Neumonía
-
 La neumonía en neonatos es una entidad muy difícil de definir con fines de vigilancia, como puede deducirse del hecho de que muchos sistemas de vigilancia se abstienen de registrarla en absoluto, mientras que otros registran los eventos asociados a la ventilación, en los que la vigilancia se limita a los pacientes ventilados y la neumonía es sólo una de las entidades captadas por la definición.
 
 include::NeoIPC-Core-Pneumonia-Definition.adoc[]
@@ -426,7 +433,7 @@ La fecha más temprana del evento es el día 3 de ventilación.
 
 **Ejemplos**
 
-Neumonía adquirida en el hospital - asociación sin dispositivo
+.Neumonía adquirida en el hospital - asociación sin dispositivo
 [%unbreakable, cols=">1,1,2"]
 |===
 |Día del paciente |Estado del paciente |Comentarios
@@ -451,9 +458,9 @@ Neumonía adquirida en el hospital - asociación sin dispositivo
 |6 |0.90 |Sin mejoría
 |===
 
-=== Infección del sitio quirúrgico (ISQ)
-
-Una infección de la herida que se produce en la incisión o en el lecho quirúrgico se registra como infección del lecho quirúrgico si se produce en un intervalo de tiempo determinado después de un procedimiento quirúrgico que también se registró en el sistema de vigilancia NeoIPC.
+[#infection-definitions-surgical-site-infection]
+=== Infección del sitio quirúrgico
+Una infección de la herida que se produce en la incisión o en el lecho quirúrgico se registra como infección del sitio quirúrgico (ISQ) si se produce en un intervalo de tiempo determinado después de un procedimiento quirúrgico que también se registró en el sistema de vigilancia NeoIPC.
 
 Las ISQ que se producen en pacientes sin un registro de procedimiento quirúrgico en el sistema de vigilancia NeoIPC (por ejemplo, un paciente trasladado a su centro tras un procedimiento quirúrgico realizado en otro centro) no son elegibles.
 
@@ -485,154 +492,154 @@ El día de la infección en este caso sería el "Día 17".
 
 * El paciente no debe haber fallecido (por ejemplo, se excluye la cirugía post-mortem en caso de donación de órganos).
 
+[#infection-definitions-surgical-site-infection-superficial-incisional-ssi]
 ==== ISQ incisional superficial
-
 Pertenecen a esta categoría las infecciones del sitio quirúrgico que sólo afectan a la piel y al tejido subcutáneo.
 
 include::NeoIPC-Core-Superficial-Incisional-SSI-Definition.adoc[]
 
+[#infection-definitions-surgical-site-infection-deep-incisional-ssi]
 ==== ISQ incisional profunda
-
 Pertenecen a esta categoría las infecciones del sitio quirúrgico que afectan a los tejidos blandos profundos de la incisión (por ejemplo, las capas fasciales y musculares).
 
 include::NeoIPC-Core-Deep-Incisional-SSI-Definition.adoc[]
 
+[#infection-definitions-surgical-site-infection-organ-space-ssi]
 ==== ISQ de órgano/espacio
-
 Pertenecen a esta categoría las infecciones del sitio quirúrgico que afectan a cualquier parte del cuerpo más profunda que las capas fascial/muscular que se abre o manipula durante el procedimiento quirúrgico.
 
 include::NeoIPC-Core-Organ-Space-SSI-Definition.adoc[]
 
+[#data-dictionary]
 == Diccionario de datos
-
 Los siguientes elementos de datos aparecen en las hojas de documentación de NeoIPC o en la plataforma de informes.
 Algunos de ellos (por ejemplo, id de paciente y nombre de paciente) se utilizan sólo para su documentación local y no se utilizan en las herramientas de software NeoIPC.
 
+[#data-dictionary-patient-master-data]
 === Datos maestros del paciente
-
+[#data-dictionary-patient-master-data-enrolment]
 ==== Inscripción
-
-[[enrolment_enroling-organisation-unit]]Unidad de organización de inscripción:: La unidad en la que se quiere dar de alta al nuevo paciente.
-[[enrolment_neoipc-id]]NeoIPC-ID (identificador de paciente NeoIPC):: El id único que asignas al paciente para su seguimiento en la plataforma de informes.
+[[data-dictionary-patient-master-data-enrolment-enroling-organisation-unit]]Unidad de organización de inscripción:: La unidad en la que se quiere dar de alta al nuevo paciente.
+[[data-dictionary-patient-master-data-enrolment-neoipc-id]]NeoIPC-ID (identificador de paciente NeoIPC):: El id único que asignas al paciente para su seguimiento en la plataforma de informes.
 Le aconsejamos que almacene esta información en una lista de pseudonimización.
 +
 NOTE: Utilice este identificador para identificar de forma única a un paciente en el sistema.
 Lo ideal es utilizar una cadena de caracteres aleatoria y única.
 Si tiene la necesidad de identificar a un paciente que ha introducido aquí, puede utilizar este identificador como clave NeoIPC para la seudonimización.
 NUNCA utilice un identificador que se utilice en otro lugar y que no controle totalmente (por ejemplo, NO utilice el identificador de paciente de su sistema de información hospitalario).
-[[enrolment_patient-id]]Patient-ID:: El identificador único del paciente en el hospital, que la mayoría de las veces procede del sistema de información del hospital (HIS) o del sistema de gestión de datos del paciente (PDMS).
-[[enrolment_patient-name]]Nombre del paciente:: El nombre del paciente (por ejemplo, nombre seguido del apellido).
+[[data-dictionary-patient-master-data-enrolment-patient-id]]Patient-ID:: El identificador único del paciente en el hospital, que la mayoría de las veces procede del sistema de información del hospital (HIS) o del sistema de gestión de datos del paciente (PDMS).
+[[data-dictionary-patient-master-data-enrolment-patient-name]]Nombre del paciente:: El nombre del paciente (por ejemplo, nombre seguido del apellido).
 
 NOTE: El ID del paciente y el nombre del paciente no forman parte del conjunto de datos de NeoIPC y no deben enviarse a la plataforma de recogida de datos (por ejemplo, NO utilice ninguno de ellos como NeoIPC-ID).
 Están disponibles en las hojas de papel de recogida de datos para que pueda identificar al paciente dentro del hospital y para buscar el archivo en el sistema de información del hospital.
 
-[[enrolment_gestational-age]]Edad gestacional (EG):: La edad gestacional, expresada en semanas y días completos (por ejemplo, 25 semanas y 4 días: 25+4) en el momento del nacimiento.
+[[data-dictionary-patient-master-data-enrolment-gestational-age]]Edad gestacional (EG):: La edad gestacional, expresada en semanas y días completos (por ejemplo, 25 semanas y 4 días: 25+4) en el momento del nacimiento.
 Normalmente se refiere a la edad gestacional calculada o estimada por el obstetra de la madre, pero cuando no se dispone de ella (por ejemplo, en embarazos no observados) puede registrarse la edad gestacional evaluada por el médico tratante (por ejemplo, mediante la puntuación de Ballard).
-[[enrolment_birthweight]]Peso al nacer (PN):: El peso del bebé inmediatamente después del nacimiento en gramos.
+[[data-dictionary-patient-master-data-enrolment-birthweight]]Peso al nacer (PN):: El peso del bebé inmediatamente después del nacimiento en gramos.
 Normalmente, este valor se basa en una medición, pero en caso de que el peso al nacer sea desconocido o tenga un valor altamente patológico que no refleje la madurez del bebé (por ejemplo, hidropesía fetal), puede introducir el peso al nacer estimado por el médico tratante.
-[[enrolment_sex]]Sexo:: Típicamente el sexo fenotípico del paciente.
+[[data-dictionary-patient-master-data-enrolment-sex]]Sexo:: Típicamente el sexo fenotípico del paciente.
 Si el sexo no puede determinarse a partir del fenotipo o genotipo del paciente, o si el genotipo no es ni XX ni XY, se considera indeterminado a efectos de vigilancia.
 +
 * Mujer
 * Masculino
 * Indeterminado
-[[enrolment_delivery-mode]]Modo de parto:: El modo de parto del bebé.
+[[data-dictionary-patient-master-data-enrolment-delivery-mode]]Modo de parto:: El modo de parto del bebé.
 Puede ser uno de los siguientes:
 +
 * Vaginal (incluido el parto vaginal asistido)
 * Cesárea electiva
 * Cesárea de urgencia
-[[enrolment_multiple-birth]]Parto múltiple:: Marque este campo si el bebé forma parte de un parto múltiple.
-[[enrolment_number-of-infants]]Número de bebés al nacer:: El número de bebés nacidos del embarazo (múltiple) al que pertenece este bebé.
+[[data-dictionary-patient-master-data-enrolment-multiple-birth]]Parto múltiple:: Marque este campo si el bebé forma parte de un parto múltiple.
+[[data-dictionary-patient-master-data-enrolment-number-of-infants]]Número de bebés al nacer:: El número de bebés nacidos del embarazo (múltiple) al que pertenece este bebé.
 Indique el número total de lactantes, incluido el que registra aquí.
 
+[#data-dictionary-patient-master-data-admission-information]
 ==== Información de admisión
-
-[[admission-date]]Fecha de admisión:: El día en que el paciente ingresa en el hospital.
+[[data-dictionary-patient-master-data-admission-information-admission-date]]Fecha de admisión:: El día en que el paciente ingresa en el hospital.
 Para los niños nacidos en su hospital, esta fecha coincide con la fecha de nacimiento.
-[[admission-type]]Tipo de admisión:: Describe si el bebé nació en su hospital o si ingresó después de nacer y, en caso afirmativo, cuánto tiempo transcurrió desde el nacimiento:
+[[data-dictionary-patient-master-data-admission-information-admission-type]]Tipo de admisión:: Describe si el bebé nació en su hospital o si ingresó después de nacer y, en caso afirmativo, cuánto tiempo transcurrió desde el nacimiento:
 +
 * Admitido desde la sala de partos (admisión inicial para bebés nacidos en su hospital)
 * Trasladado/reingresado en su hospital el día del nacimiento
 * Trasladado/reingresado en su hospital al día siguiente del nacimiento o más tarde
-[[admission-day-of-life]]Admisión el día de vida:: Para los bebés que no hayan nacido en su propio hospital, registre el día de vida del bebé el día del ingreso (Día de nacimiento = Día de vida 1.
+[[data-dictionary-patient-master-data-admission-information-admission-day-of-life]]Admisión el día de vida:: Para los bebés que no hayan nacido en su propio hospital, registre el día de vida del bebé el día del ingreso (Día de nacimiento = Día de vida 1.
 El día siguiente, a partir de las 00:00, es el segundo día de vida).
 
+[#data-dictionary-patient-master-data-surveillance-end]
 ==== Fin de la vigilancia
-
-[[surveillance-end-date]]Fecha de finalización de la vigilancia:: El día en que se ha interrumpido la recogida de datos y el seguimiento del paciente.
-[[surveillance-end_reason]]Fecha de finalización de la vigilancia:: El motivo de finalización de la recogida de datos.
+[[data-dictionary-patient-master-data-surveillance-end-date]]Fecha de finalización de la vigilancia:: El día en que se ha interrumpido la recogida de datos y el seguimiento del paciente.
+[[data-dictionary-patient-master-data-surveillance-end-reason]]Fecha de finalización de la vigilancia:: El motivo de finalización de la recogida de datos.
 Uno de los siguientes:
 +
 * Alta o traslado
 * Fallecimiento.
-[[surveillance-end_patient-days]]Días-paciente:: El número acumulado de días que el paciente permaneció en el departamento, incluyendo el día de ingreso y el día de alta/traslado/muerte (sin duración mínima de estancia).
-[[surveillance-end_cvc-days]]Días CVC:: El número acumulado de días en los que un catéter venoso central estuvo colocado durante al menos 12 horas/día.
-[[surveillance-end_pvc-days]]Días de PVC:: Número acumulado de días en los que se colocó un catéter vascular periférico durante al menos 12 horas/día.
-[[surveillance-end_inv-days]]INV días:: El número acumulado de días en los que el lactante estuvo con ventilación invasiva (intubado) durante al menos 12 horas/día.
-[[surveillance-end_niv-days]]NIV days:: El número acumulado de días en los que el lactante estuvo en ventilación no invasiva (no intubado; por ejemplo, cánulas nasales de alto flujo o CPAP) durante al menos 12 horas/día.
-[[surveillance-end_human-milk-days]]Días de leche humana:: El número acumulado de días en que la alimentación enteral del paciente consiste exclusivamente en leche materna (de la propia madre o de donante).
+[[data-dictionary-patient-master-data-surveillance-end-patient-days]]Días-paciente:: El número acumulado de días que el paciente permaneció en el departamento, incluyendo el día de ingreso y el día de alta/traslado/muerte (sin duración mínima de estancia).
+[[data-dictionary-patient-master-data-surveillance-end-cvc-days]]Días CVC:: El número acumulado de días en los que un catéter venoso central estuvo colocado durante al menos 12 horas/día.
+[[data-dictionary-patient-master-data-surveillance-end-pvc-days]]Días de PVC:: Número acumulado de días en los que se colocó un catéter vascular periférico durante al menos 12 horas/día.
+[[data-dictionary-patient-master-data-surveillance-end-inv-days]]INV días:: El número acumulado de días en los que el lactante estuvo con ventilación invasiva (intubado) durante al menos 12 horas/día.
+[[data-dictionary-patient-master-data-surveillance-end-niv-days]]NIV days:: El número acumulado de días en los que el lactante estuvo en ventilación no invasiva (no intubado; por ejemplo, cánulas nasales de alto flujo o CPAP) durante al menos 12 horas/día.
+[[data-dictionary-patient-master-data-surveillance-end-human-milk-days]]Días de leche humana:: El número acumulado de días en que la alimentación enteral del paciente consiste exclusivamente en leche materna (de la propia madre o de donante).
 La leche materna enriquecida se considera leche materna.
-[[surveillance-end_kangaroo-care-days]]Días de cuidado canguro:: El número acumulado de días que el paciente recibió cuidados canguro (contacto intensivo piel con piel) durante al menos 2 horas.
-[[surveillance-end_probiotic-days]]Días probiótico:: El número acumulado de días que el paciente recibe un probiótico oral que contiene al menos uno de Lactobacillus spp. o Bifidobacterium spp., independientemente de la cantidad.
-[[surveillance-end_total-antibiotic-days]]Días de antibiótico, total:: El número acumulado de díasfootnote:ab-days-comment[Se cuentan el día de la primera dosis y el día de la última dosis de una terapia antibiótica, así como todos los días intermedios.
+[[data-dictionary-patient-master-data-surveillance-end-kangaroo-care-days]]Días de cuidado canguro:: El número acumulado de días que el paciente recibió cuidados canguro (contacto intensivo piel con piel) durante al menos 2 horas.
+[[data-dictionary-patient-master-data-surveillance-end-probiotic-days]]Días probiótico:: El número acumulado de días que el paciente recibe un probiótico oral que contiene al menos uno de Lactobacillus spp. o Bifidobacterium spp., independientemente de la cantidad.
+[[data-dictionary-patient-master-data-surveillance-end-total-antibiotic-days]]Días de antibiótico, total:: El número acumulado de díasfootnote:ab-days-comment[Se cuentan el día de la primera dosis y el día de la última dosis de una terapia antibiótica, así como todos los días intermedios.
 Los días en los que no se aplicó ninguna dosis entre la primera y la última dosis (por ejemplo, dosis omitidas debido a niveles altos del fármaco en la monitorización terapéutica de fármacos) se cuentan como si se hubiera aplicado una dosis.
 Los días posteriores a la última dosis no se cuentan independientemente del nivel de fármaco medido o supuesto en el paciente.] cuando el lactante recibió (cualquier) antibiótico sistémico.
 Sólo se puede registrar un día de antibiótico por día, lo que significa que un día en el que el paciente recibió varios antibióticos se sigue contando como un día de antibiótico.
-[[surveillance-end_antibiotic-substance-days]]Días de antibiótico, por sustancia 1,2,3,...:: El número acumulado de díasfootnote:ab-days-comment[] en los que el lactante recibió una sustancia antibiótica sistémica especificada.
+[[data-dictionary-patient-master-data-surveillance-end-antibiotic-substance-days]]Días de antibiótico, por sustancia 1,2,3,...:: El número acumulado de díasfootnote:ab-days-comment[] en los que el lactante recibió una sustancia antibiótica sistémica especificada.
 Ej: Días gentamicina
 
+[#data-dictionary-surgical-procedure]
 === Procedimiento quirúrgico
-
-[[surgical-procedure-date]]Fecha del procedimiento:: El día del procedimiento quirúrgico.
-[[surgical-procedure-description]]Descripción del procedimiento:: Un nombre o descripción legible por humanos del procedimiento quirúrgico tal y como lo denominan habitualmente los cirujanos de su institución (por ejemplo; ligadura de conducto arterial permeable).
-[[surgical-procedure_main-procedure-code]]Código del procedimiento principal:: El código de la Clasificación Internacional de Intervenciones Sanitarias (ICHI) del procedimiento principal realizado.
+[[data-dictionary-surgical-procedure-date]]Fecha del procedimiento:: El día del procedimiento quirúrgico.
+[[data-dictionary-surgical-procedure-description]]Descripción del procedimiento:: Un nombre o descripción legible por humanos del procedimiento quirúrgico tal y como lo denominan habitualmente los cirujanos de su institución (por ejemplo; ligadura de conducto arterial permeable).
+[[data-dictionary-surgical-procedure-main-procedure-code]]Código del procedimiento principal:: El código de la Clasificación Internacional de Intervenciones Sanitarias (ICHI) del procedimiento principal realizado.
 Si se realizan varios procedimientos diferentes durante una intervención quirúrgica, el cirujano decide cuál es el procedimiento principal (normalmente el más complejo o el que causa mayor riesgo de infección).
 Visite https://icd.who.int/dev11/l-ichi/en
-[[surgical-procedure_side-procedure-code]]Código de procedimiento secundario:: El código de la Clasificación Internacional de Intervenciones Sanitarias (ICHI) del procedimiento o procedimientos secundarios realizados.
+[[data-dictionary-surgical-procedure-side-procedure-code]]Código de procedimiento secundario:: El código de la Clasificación Internacional de Intervenciones Sanitarias (ICHI) del procedimiento o procedimientos secundarios realizados.
 Es posible capturar hasta dos procedimientos secundarios.
-[[surgical-procedure_duration]]Duración:: La duración del procedimiento quirúrgico en minutos (tiempo de incisión a sutura si está disponible).
-[[surgical-procedure_wound-class]]Clase de herida:: Evaluación del grado de contaminación de una herida quirúrgica en el momento del procedimiento quirúrgico según las directrices de los CDC.
+[[data-dictionary-surgical-procedure-duration]]Duración:: La duración del procedimiento quirúrgico en minutos (tiempo de incisión a sutura si está disponible).
+[[data-dictionary-surgical-procedure-wound-class]]Clase de herida:: Evaluación del grado de contaminación de una herida quirúrgica en el momento del procedimiento quirúrgico según las directrices de los CDC.
 Es asignada por una persona implicada en el procedimiento quirúrgico (por ejemplo, cirujano, enfermera circulante, etc.).
 Las cuatro clasificaciones de heridas son:
-[[surgical-procedure_wound-class-i]]Clase I/Limpia::: Una herida operatoria no infectada en la que no se encuentra inflamación y no se penetra en el tracto respiratorio, alimentario, genital o urinario no infectado.
+[[data-dictionary-surgical-procedure-wound-class-i]]Clase I/Limpia::: Una herida operatoria no infectada en la que no se encuentra inflamación y no se penetra en el tracto respiratorio, alimentario, genital o urinario no infectado.
 Además, las heridas limpias están principalmente cerradas y, si es necesario, drenadas con drenaje cerrado.
 Las heridas incisionales operatorias que no son consecuencia de un traumatismo penetrante (romo) deben incluirse en esta categoría si cumplen los criterios.
-[[surgical-procedure_wound-class-ii]]Clase II/Limpia-Contaminada::: Herida operatoria en la que se penetra en las vías respiratoria, alimentaria, genital o urinaria en condiciones controladas y sin contaminación inusual.
+[[data-dictionary-surgical-procedure-wound-class-ii]]Clase II/Limpia-Contaminada::: Herida operatoria en la que se penetra en las vías respiratoria, alimentaria, genital o urinaria en condiciones controladas y sin contaminación inusual.
 En concreto, se incluyen en esta categoría las operaciones que afectan a las vías biliares, el apéndice, la vagina y la orofaringe, siempre que no se encuentren indicios de infección o ruptura importante de una técnica estéril.
-[[surgical-procedure_wound-class-iii]]Clase III/Contaminada::: Heridas abiertas, frescas y accidentales.
-Además, se incluyen en esta categoría las intervenciones con rupturas importantes de una técnica estéril (p. ej., masaje cardíaco abierto) o derrame macroscópico del tracto gastrointestinal, y las incisiones en las que se encuentra inflamación aguda o no purulenta.
-[[surgical-procedure_wound-class-iv]]Clase IV/infectada por suciedad::: Heridas traumáticas antiguas con tejido desvitalizado retenido y las que implican infección clínica existente o vísceras perforadas.
+[[data-dictionary-surgical-procedure-wound-class-iii]]Clase III/Contaminada::: Heridas abiertas, frescas y accidentales.
+Además, se incluyen en esta categoría las intervenciones con rupturas importantes de una técnica estéril (p. ej., masaje cardíaco abierto) o derrame macroscópico del tracto gastrointestinal, y las incisiones en las que se encuentra inflamación aguda o no purulenta.
+[[data-dictionary-surgical-procedure-wound-class-iv]]Clase IV/infectada por suciedad::: Heridas traumáticas antiguas con tejido desvitalizado retenido y las que implican infección clínica existente o vísceras perforadas.
 Esta definición sugiere que los organismos causantes de la infección postoperatoria estaban presentes en el campo operatorio antes de la intervención.
 
-[[surgical-procedure_asa-score]]Puntuación ASA:: Sistema de clasificación del estado físico de la Sociedad Americana de Anestesiólogos (ASA) para evaluar y comunicar las comorbilidades médicas preanestésicas de un paciente:
+[[data-dictionary-surgical-procedure-asa-score]]Puntuación ASA:: Sistema de clasificación del estado físico de la Sociedad Americana de Anestesiólogos (ASA) para evaluar y comunicar las comorbilidades médicas preanestésicas de un paciente:
 +
 --
-[[surgical-procedure_asa-score-i]]Puntuación ASA I::: Un paciente sano normal
-[[surgical-procedure_asa-score-ii]]ASA II::: Un paciente con enfermedad sistémica leve
-[[surgical-procedure_asa-score-iii]]ASA III::: Un paciente con enfermedad sistémica grave
-[[surgical-procedure_asa-score-iv]]ASA IV::: Un paciente con enfermedad sistémica grave que es una amenaza constante para la vida
-[[surgical-procedure_asa-score-v]]ASA V::: Un paciente moribundo que no se espera que sobreviva sin la operación
+[[data-dictionary-surgical-procedure-asa-score-i]]Puntuación ASA I::: Un paciente sano normal
+[[data-dictionary-surgical-procedure-asa-score-ii]]ASA II::: Un paciente con enfermedad sistémica leve
+[[data-dictionary-surgical-procedure-asa-score-iii]]ASA III::: Un paciente con enfermedad sistémica grave
+[[data-dictionary-surgical-procedure-asa-score-iv]]ASA IV::: Un paciente con enfermedad sistémica grave que es una amenaza constante para la vida
+[[data-dictionary-surgical-procedure-asa-score-v]]ASA V::: Un paciente moribundo que no se espera que sobreviva sin la operación
 --
 +
 Visite https://www.asahq.org/standards-and-guidelines/statement-on-asa-physical-status-classification-system.
-[[surgical-procedure_endoscopic]]Procedimiento endoscópico::
+[[data-dictionary-surgical-procedure-endoscopic]]Procedimiento endoscópico::
 Sí::: La operación se realizó íntegramente por vía endoscópica,
 No::: La intervención se realizó abierta o asistida por endoscopia, o se cambió a una técnica abierta durante un procedimiento endoscópico.
-[[surgical-procedure_emergency]]Procedimiento de emergencia::
+[[data-dictionary-surgical-procedure-emergency]]Procedimiento de emergencia::
 Sí::: Procedimiento documentado según el protocolo del centro como procedimiento de Urgencia o Emergencia.
 No::: La intervención se inicia y realiza de forma planificada.
 Desconocido::: No hay información disponible.
-[[surgical-procedure_primary-closure]]Cierre primario:: El cierre del nivel de la piel durante la cirugía original, independientemente de la presencia de cables, mechas, drenajes u otros dispositivos u objetos que se extruyan a través de la incisión.
+[[data-dictionary-surgical-procedure-primary-closure]]Cierre primario:: El cierre del nivel de la piel durante la cirugía original, independientemente de la presencia de cables, mechas, drenajes u otros dispositivos u objetos que se extruyan a través de la incisión.
 Esta categoría incluye las cirugías en las que la piel se cierra por algún medio.
 Por lo tanto, si cualquier parte de la incisión se cierra a nivel de la piel, de cualquier manera, se debe asignar a la cirugía una designación de cierre primario.
 +
 NOTE: Si un procedimiento tiene múltiples sitios de incisión/trocar laparoscópico y cualquiera de las incisiones se cierra primariamente, entonces la técnica del procedimiento se registra como cerrada primaria.
 
-[[surgical-procedure_revision-procedure]]Procedimiento de revisión:: Los procedimientos de revisión son procedimientos de seguimiento, sustitución o corrección tras un procedimiento inicial.
+[[data-dictionary-surgical-procedure-revision-procedure]]Procedimiento de revisión:: Los procedimientos de revisión son procedimientos de seguimiento, sustitución o corrección tras un procedimiento inicial.
 Un procedimiento de revisión pone fin al seguimiento del procedimiento primario e inicia un nuevo periodo de seguimiento.
-[[surgical-procedure_implant]]Implante:: Un implante es un cuerpo extraño de origen no humano que se coloca de forma permanente en un paciente durante una operación y que no se manipula de forma rutinaria con fines diagnósticos o terapéuticos (por ejemplo, prótesis vasculares, tornillos, alambres, mallas).
-[[surgical-procedure_signs-of-infetion]]Signos de infección en el momento de la intervención quirúrgica:: Rellene este campo si se identificaron signos de infección durante el procedimiento quirúrgico.
+[[data-dictionary-surgical-procedure-implant]]Implante:: Un implante es un cuerpo extraño de origen no humano que se coloca de forma permanente en un paciente durante una operación y que no se manipula de forma rutinaria con fines diagnósticos o terapéuticos (por ejemplo, prótesis vasculares, tornillos, alambres, mallas).
+[[data-dictionary-surgical-procedure-signs-of-infetion]]Signos de infección en el momento de la intervención quirúrgica:: Rellene este campo si se identificaron signos de infección durante el procedimiento quirúrgico.
 Los signos de infección deben anotarse intraoperatoriamente y documentarse en la parte narrativa de la nota de operación o informe de cirugía.
 Si se produce una infección del lecho quirúrgico, esta información se utilizará para determinar si los signos enumerados en esta sección pueden interpretarse como "Infección presente en el momento de la intervención quirúrgica".
 
@@ -650,18 +657,18 @@ Por ejemplo, una herida de bala reciente en el abdomen puede ser un traumatismo 
 * Las complicaciones del procedimiento, como la perforación intestinal durante la cirugía, no pueden utilizarse como prueba de infección, ya que no había infección en el momento de la cirugía.
 ====
 
+[#data-dictionary-infection-data]
 === Datos sobre infecciones
-
+[#data-dictionary-general-infection-data]
 ==== Datos generales sobre infecciones
-
-[[general-infection-data_infection-date]]Fecha de la infección:: El día en que aparecieron los primeros síntomas de infección.
+[[data-dictionary-general-infection-data-infection-date]]Fecha de la infección:: El día en que aparecieron los primeros síntomas de infección.
 Si no aparecen síntomas, el día del primer cultivo positivo en el lugar de la infección primaria.
 
-[[general-infection-data_common-commensal]]Comensal común:: Tipo de microorganismo (por ejemplo, estafilococos coagulasa-negativos), que suele estar presente en las superficies corporales cubiertas de epitelio (por ejemplo, la piel).
+[[data-dictionary-general-infection-data-common-commensal]]Comensal común:: Tipo de microorganismo (por ejemplo, estafilococos coagulasa-negativos), que suele estar presente en las superficies corporales cubiertas de epitelio (por ejemplo, la piel).
 Cuando una o varias de estas especies crecen en un hemocultivo, es más probable que se trate de una contaminación que cuando crece un patógeno reconocido.
 Véase la lista maestra de organismos en https://neoipc.org/surveillance/resources/
 
-[[general-infection-data_mdros]]Organismos multirresistentes (OMR):: Seleccione el (los) aplicable(s) al organismo aislado;
+[[data-dictionary-general-infection-data-mdros]]Organismos multirresistentes (OMR):: Seleccione el (los) aplicable(s) al organismo aislado;
 * MRSA/VRE/3GCR: Seleccione si se aplica uno de los siguientes:
 ** SARM: Staphylococcus aureus resistente a la meticilina
 ** ERV: Enterococos resistentes a la vancomicina
@@ -675,7 +682,7 @@ Opciones para cada grupo:
 * No: el organismo aislado no es resistente a los grupos de antibióticos especificados.
 * No sometido a prueba: el organismo aislado no ha sido sometido a pruebas de resistencia a los grupos de antibióticos especificados.
 
-[[general-infection-data_secondary-bsi]]Infección secundaria del torrente sanguíneo:: Una ISB que se cree que se ha sembrado a partir de una infección específica de otro lugar del cuerpo (excepto en el caso de las infecciones asociadas a catéteres).
+[[data-dictionary-general-infection-data-secondary-bsi]]Infección secundaria del torrente sanguíneo:: Una ISB que se cree que se ha sembrado a partir de una infección específica de otro lugar del cuerpo (excepto en el caso de las infecciones asociadas a catéteres).
 Una ISB puede atribuirse a una infección específica del lugar (ECN, NP o ISQ) si se produce en un periodo de 17 días que incluye el día de la infección (=primeros síntomas de la infección específica del lugar), 3 días antes y 13 días después.
 
 La recopilación de datos sobre la ISQ secundaria es opcional; por lo tanto, es posible seleccionar "Sin seguimiento" si no está siguiendo a los pacientes por ISQ secundaria.
@@ -685,9 +692,9 @@ Para obtener información detallada, consulte Infección secundaria del torrente
 * No: si está siguiendo a pacientes por BSI secundaria y el paciente no ha desarrollado una sepsis secundaria que cumpla la definición de NeoIPC.
 * Sin seguimiento: si no está siguiendo a pacientes por BSI secundaria.
 
+[#data-dictionary-bsi-specific-data]
 ==== Datos específicos de BSI
-
-[[bsi-specific-data_cvc]]Catéter vascular central (CVC):: Catéter intravascular que termina en o cerca del corazón o en uno de los grandes vasos que se utiliza para infusión, extracción de sangre o monitorización hemodinámica.
+[[data-dictionary-bsi-specific-data-cvc]]Catéter vascular central (CVC):: Catéter intravascular que termina en o cerca del corazón o en uno de los grandes vasos que se utiliza para infusión, extracción de sangre o monitorización hemodinámica.
 +
 --
 * Catéter venoso central (CVC), incluidos los catéteres venosos centrales no tunelizados, tunelizados e implantados.
@@ -711,36 +718,36 @@ Se consideran grandes vasos a efectos de notificación de CVC los siguientes
 * Arteria/vena umbilical
 --
 
-[[bsi-specific-data_cvc-associated-bsi]]ICS asociada a CVC:: Una infección primaria del torrente sanguíneo se considera <<bsi-specific-data_cvc,CVC>>-asociada si el CVC ha estado colocado durante al menos tres días consecutivos el día de la infección (=primeros síntomas o primera prueba diagnóstica positiva; por ejemplo, cultivo) o el día anterior.
+[[data-dictionary-bsi-specific-data-cvc-associated-bsi]]ICS asociada a CVC:: Una infección primaria del torrente sanguíneo se considera <<bsi-specific-data_cvc,CVC>>-asociada si el CVC ha estado colocado durante al menos tres días consecutivos el día de la infección (=primeros síntomas o primera prueba diagnóstica positiva; por ejemplo, cultivo) o el día anterior.
 
-[[bsi-specific-data_cvc-day]]CVC-dia:: Día en el que el paciente tuvo colocado un <<bsi-specific-data_cvc,CVC>> durante al menos 12 horas acumuladas.
+[[data-dictionary-bsi-specific-data-cvc-day]]CVC-dia:: Día en el que el paciente tuvo colocado un <<bsi-specific-data_cvc,CVC>> durante al menos 12 horas acumuladas.
 
-[[bsi-specific-data_pvc]]Catéter vascular periférico (PVC):: Un PVC es un catéter que se coloca en una vena periférica y no llega a uno de los grandes vasos mencionados en CVC.
+[[data-dictionary-bsi-specific-data-pvc]]Catéter vascular periférico (PVC):: Un PVC es un catéter que se coloca en una vena periférica y no llega a uno de los grandes vasos mencionados en CVC.
 
-[[bsi-specific-data_pvc-associated-bsi]]ICS asociada a PVC:: Una infección primaria del torrente sanguíneo se considera <<bsi-specific-data_pvc,PVC>>-asociada si el PVC ha estado presente durante al menos tres días consecutivos el día de la infección (=primeros síntomas o primera prueba diagnóstica positiva; por ejemplo, cultivo) o el día anterior y no cumple los criterios de ICS asociada a CVC.
+[[data-dictionary-bsi-specific-data-pvc-associated-bsi]]ICS asociada a PVC:: Una infección primaria del torrente sanguíneo se considera <<bsi-specific-data_pvc,PVC>>-asociada si el PVC ha estado presente durante al menos tres días consecutivos el día de la infección (=primeros síntomas o primera prueba diagnóstica positiva; por ejemplo, cultivo) o el día anterior y no cumple los criterios de ICS asociada a CVC.
 Es decir, si un paciente que desarrolla una infección del torrente sanguíneo cumple los criterios de asociación tanto con el PVC como con el CVC, se considera que el CVC es el dispositivo con un riesgo de infección relativamente mayor y la ISB debe registrarse como ISB asociada al CVC.
 
-[[bsi-specific-data_pvc-day]]Día de PVC:: Día en el que el paciente tuvo colocado un <<bsi-specific-data_pvc,PVC>> durante al menos 12 horas acumuladas.
+[[data-dictionary-bsi-specific-data-pvc-day]]Día de PVC:: Día en el que el paciente tuvo colocado un <<bsi-specific-data_pvc,PVC>> durante al menos 12 horas acumuladas.
 
-[[bsi-specific-data_iv-ab-therapy-initiated]]Terapia antibiótica intravenosa durante cinco o más días iniciada:: Se inició tratamiento antibiótico durante al menos cinco días.
+[[data-dictionary-bsi-specific-data-iv-ab-therapy-initiated]]Terapia antibiótica intravenosa durante cinco o más días iniciada:: Se inició tratamiento antibiótico durante al menos cinco días.
 Se cuentan el día de la primera dosis y el día de la última dosis.
 Los días en los que no se administró ninguna dosis entre la primera y la última (por ejemplo, dosis omitidas debido a niveles elevados del fármaco en la monitorización terapéutica de fármacos) se cuentan como si se hubiera administrado una dosis.
 Los días posteriores a la última dosis no se cuentan, independientemente del nivel de fármaco medido o supuesto del paciente.
 Si el lactante falleció, fue dado de alta o trasladado antes del final del ciclo de cinco días de antibióticos intravenosos, esta condición se cumple si el tratamiento estaba programado para cinco días o más.
 
-[[bsi-specific-data_increased-oxygen-demand-or-ventilatory-support]]Episodios nuevos/más frecuentes de apnea o aumentos de la demanda de oxígeno o del soporte ventilatorio:: Episodios nuevos o más frecuentes de apnea que duran más de 20 segundos, o un aumento de la cantidad de oxígeno necesaria para mantener una oxigenación adecuada, o una intensificación del soporte ventilatorio, como un aumento del flujo con terapia de alto flujo o intubación para ventilación invasiva.
+[[data-dictionary-bsi-specific-data-increased-oxygen-demand-or-ventilatory-support]]Episodios nuevos/más frecuentes de apnea o aumentos de la demanda de oxígeno o del soporte ventilatorio:: Episodios nuevos o más frecuentes de apnea que duran más de 20 segundos, o un aumento de la cantidad de oxígeno necesaria para mantener una oxigenación adecuada, o una intensificación del soporte ventilatorio, como un aumento del flujo con terapia de alto flujo o intubación para ventilación invasiva.
 
-[[bsi-specific-data_enteral-feeding-intolerance]]Intolerancia a la alimentación enteral, distensión abdominal o íleo:: Intolerancia a la alimentación enteral, distensión abdominal o íleo sin hallazgos de imagen o quirúrgicos que sugieran una entrocolitis necrotizante o una perforación intestinal espontánea.
+[[data-dictionary-bsi-specific-data-enteral-feeding-intolerance]]Intolerancia a la alimentación enteral, distensión abdominal o íleo:: Intolerancia a la alimentación enteral, distensión abdominal o íleo sin hallazgos de imagen o quirúrgicos que sugieran una entrocolitis necrotizante o una perforación intestinal espontánea.
 
-[[bsi-specific-data_unexplained-metabolic-acidosis]]Acidosis metabólica inexplicada:: Acidosis metabólica inexplicada con un déficit de bases superior (más negativo) a 10 mmol/L (10 mEq/L).
+[[data-dictionary-bsi-specific-data-unexplained-metabolic-acidosis]]Acidosis metabólica inexplicada:: Acidosis metabólica inexplicada con un déficit de bases superior (más negativo) a 10 mmol/L (10 mEq/L).
 
+[#data-dictionary-nec-specific-data]
 ==== Datos específicos de la ECN
+[[data-dictionary-nec-specific-data-portal-veinous-gas]]Gas venoso portal:: Acumulación de gas (-burbujas) en la vena porta y sus ramas.
 
-[[bsi-data-specific_portal-veinous-gas]]Gas venoso portal:: Acumulación de gas (-burbujas) en la vena porta y sus ramas.
-
+[#data-dictionary-pneumonia-specific-data]
 ==== Datos específicos de la neumonía
-
-[[pneumonia-specific-data_-increase-in-respiratory-support]]Inicio o incremento del soporte respiratorio::
+[[data-dictionary-pneumonia-specific-data-increase-in-respiratory-support]]Inicio o incremento del soporte respiratorio::
 +
 --
 Nuevo inicio de soporte respiratorio o aumento del nivel de soporte respiratorio existente:::
@@ -760,26 +767,26 @@ O
 NOTE: Para cumplir los criterios de neumonía adquirida en el hospital asociada a un dispositivo, los pacientes deben estar ventilados durante al menos 4 días naturales (el día 1 es el día de inicio de la ventilación invasiva/no invasiva). La fecha más temprana del evento es el día 3 de ventilación.
 --
 
-[[pneumonia-specific-data_inv]]Ventilación mecánica invasiva (INV):: Ventilación mediante tubo endotraqueal o de traqueostomía.
+[[data-dictionary-pneumonia-specific-data-inv]]Ventilación mecánica invasiva (INV):: Ventilación mediante tubo endotraqueal o de traqueostomía.
 
-[[pneumonia-specific-data_inv-associated-pneumonia]]Neumonía asociada a INV:: Una neumonía está asociada a <<neumonia-specific-data_inv,INV>> si el paciente tuvo una cánula endotraqueal o de traqueotomía durante al menos 3 días consecutivos el día de la infección (=primeros síntomas o primer cultivo positivo) o el día anterior.
+[[data-dictionary-pneumonia-specific-data-inv-associated-pneumonia]]Neumonía asociada a INV:: Una neumonía está asociada a <<neumonia-specific-data_inv,INV>> si el paciente tuvo una cánula endotraqueal o de traqueotomía durante al menos 3 días consecutivos el día de la infección (=primeros síntomas o primer cultivo positivo) o el día anterior.
 
-[[pneumonia-specific-data_inv-day]]INV-Día:: Día en el que el paciente recibió ventilación invasiva mediante tubo endotraqueal o de traqueostomía durante al menos 12 horas acumuladas.
+[[data-dictionary-pneumonia-specific-data-inv-day]]INV-Día:: Día en el que el paciente recibió ventilación invasiva mediante tubo endotraqueal o de traqueostomía durante al menos 12 horas acumuladas.
 
-[[pneumonia-specific-data_niv]]Soporte ventilatorio no invasivo (VNI):: Asistencia ventilatoria mediante CPAP o cánula nasal de alto flujo.
+[[data-dictionary-pneumonia-specific-data-niv]]Soporte ventilatorio no invasivo (VNI):: Asistencia ventilatoria mediante CPAP o cánula nasal de alto flujo.
 
-[[pneumonia-specific-data_niv-associated-pneumonia]]Neumonía asociada a la VNI:: Una neumonía está asociada a <<pneumonia-specific-data_niv,NIV>> si el paciente recibió asistencia ventilatoria no invasiva (por ejemplo, CPAP o Cánula Nasal de Alto Flujo) durante al menos 3 días consecutivos el día de la infección (=primeros síntomas o primer cultivo positivo) o el día anterior.
+[[data-dictionary-pneumonia-specific-data-niv-associated-pneumonia]]Neumonía asociada a la VNI:: Una neumonía está asociada a <<pneumonia-specific-data_niv,NIV>> si el paciente recibió asistencia ventilatoria no invasiva (por ejemplo, CPAP o Cánula Nasal de Alto Flujo) durante al menos 3 días consecutivos el día de la infección (=primeros síntomas o primer cultivo positivo) o el día anterior.
 
-[[pneumonia-specific-data_niv-day]]Día de VNI:: Día en el que el paciente recibió asistencia ventilatoria no invasiva mediante CPAP o cánula nasal de alto flujo durante al menos 12 horas acumuladas.
+[[data-dictionary-pneumonia-specific-data-niv-day]]Día de VNI:: Día en el que el paciente recibió asistencia ventilatoria no invasiva mediante CPAP o cánula nasal de alto flujo durante al menos 12 horas acumuladas.
 
-[[pneumonia-specific-data_organisms-rt]]Organismos identificados en las vías respiratorias:: Se ha identificado al menos un organismo del tracto respiratorio mediante un cultivo o un método de prueba microbiológica no basado en cultivos que se realiza con fines de diagnóstico clínico o tratamiento (por ejemplo, cultivo/prueba de vigilancia NO activa (ASC/AST)).
+[[data-dictionary-pneumonia-specific-data-organisms-rt]]Organismos identificados en las vías respiratorias:: Se ha identificado al menos un organismo del tracto respiratorio mediante un cultivo o un método de prueba microbiológica no basado en cultivos que se realiza con fines de diagnóstico clínico o tratamiento (por ejemplo, cultivo/prueba de vigilancia NO activa (ASC/AST)).
 +
-[[pneumonia-specific-data_organisms-lrt]]Recuperado de las vías respiratorias inferiores::: Seleccione si se detectan patógenos fúngicos, bacterianos o víricos (gen vírico, antígeno o anticuerpo mediante, por ejemplo, EIA, FAMA, ensayo en vial de concha, PCR) en las vías respiratorias inferiores.
-[[pneumonia-specific-data_organisms-urt]]Recuperados del tracto respiratorio superior::: Seleccione sólo si se detectan patógenos víricos en el tracto respiratorio superior.
+[[data-dictionary-pneumonia-specific-data-organisms-lrt]]Recuperado de las vías respiratorias inferiores::: Seleccione si se detectan patógenos fúngicos, bacterianos o víricos (gen vírico, antígeno o anticuerpo mediante, por ejemplo, EIA, FAMA, ensayo en vial de concha, PCR) en las vías respiratorias inferiores.
+[[data-dictionary-pneumonia-specific-data-organisms-urt]]Recuperados del tracto respiratorio superior::: Seleccione sólo si se detectan patógenos víricos en el tracto respiratorio superior.
 
+[#data-dictionary-ssi-specific-data]
 ==== Datos específicos de ISQ
-
-[[ssi-specific-data_infection-present]]Infección presente en el momento de la cirugía:: Seleccione SÍ, sólo si el signo de infección identificado durante el procedimiento quirúrgico se aplica a la profundidad de la ISQ que se atribuye al procedimiento.
+[[data-dictionary-ssi-specific-data-infection-present]]Infección presente en el momento de la cirugía:: Seleccione SÍ, sólo si el signo de infección identificado durante el procedimiento quirúrgico se aplica a la profundidad de la ISQ que se atribuye al procedimiento.
 +
 --
 Ejemplo::
@@ -787,7 +794,7 @@ Ejemplo::
 * Si un paciente tiene documentada una infección intraabdominal en el momento de la intervención y más tarde vuelve con una ISQ incisional superficial o profunda = NO.
 --
 
-[[ssi-specific-data_ssi-type]]Tipo de ISQ::
+[[data-dictionary-ssi-specific-data-ssi-type]]Tipo de ISQ::
 +
 --
 * Una ISQ incisional superficial afecta sólo a la piel y el tejido subcutáneo de la incisión y los primeros síntomas aparecen en los 30 días siguientes a la operación.
@@ -802,10 +809,10 @@ Debe notificarla como ISQ órgano/espacio independientemente de la afectación d
 El día de la infección en este caso sería el "Día 17".
 --
 
-[[ssi-specific-data_organism-identified]]Organismo(s) identificado(s) en la zona quirúrgica:: Se ha identificado al menos un organismo en la zona quirúrgica mediante un cultivo o un método de prueba microbiológica no basado en cultivos que se realiza con fines de diagnóstico clínico o tratamiento (por ejemplo, cultivo/prueba de vigilancia NO activa (ASC/AST)).
+[[data-dictionary-ssi-specific-data-organism-identified]]Organismo(s) identificado(s) en la zona quirúrgica:: Se ha identificado al menos un organismo en la zona quirúrgica mediante un cultivo o un método de prueba microbiológica no basado en cultivos que se realiza con fines de diagnóstico clínico o tratamiento (por ejemplo, cultivo/prueba de vigilancia NO activa (ASC/AST)).
 
+[#data-analysis]
 == Análisis de datos
-
 Los siguientes índices se han calculado tanto para los informes de los departamentos como para los informes de referencia y pueden servir como punto de partida para posteriores análisis y debates en su departamento.
 
 Para el módulo básico, las tasas se estratifican generalmente en 4 grupos según el peso al nacer de los lactantes:
@@ -815,10 +822,10 @@ Para el módulo básico, las tasas se estratifican generalmente en 4 grupos seg�
 . 1 000 g - 1 499 g
 . > 1 500 g
 
+[#data-analysis-risk-factors-and-protective-factors]
 === Factores de riesgo y factores de protección
-
+[#data-analysis-risk-factors-and-protective-factors-device-utilization]
 ==== Utilización de dispositivos
-
 El índice de utilización de un dispositivo describe el porcentaje de días-paciente en los que se utilizó un dispositivo específico.
 Se calcula dividiendo el número de días de dispositivo por el número de días de paciente y multiplicando el resultado por 100.
 
@@ -830,6 +837,7 @@ stem:["Índice de utilización de INV" = "Días totales de INV" / "Días totales
 
 stem:["Tasa de utilización de VNI" = "Días totales de VNI" / "Días totales de pacientes" xx 100]
 
+[#data-analysis-risk-factors-and-protective-factors-antibiotic-use]
 ==== Uso de antibióticos
 La tasa de utilización de antibióticos describe el porcentaje de días de paciente en los que se utilizaron antibióticos sistémicos en relación con el total de días de paciente.
 Se calcula dividiendo el número de días de antibiótico por el número de días de paciente y multiplicando el resultado por 100.
@@ -852,8 +860,8 @@ La proporción de pacientes que reciben alguna(s) sustancia(s) específica(s) de
 
 stem:["Proporción de pacientes que reciben una sustancia o grupo AB" = "Días totales de terapia para esa sustancia o grupo" / "Días totales de pacientes" xx 100].
 
+[#data-analysis-risk-factors-and-protective-factors-protective-factor-implementation]
 ==== Utilización del factor de protección
-
 La tasa de utilización de un factor de protección describe el porcentaje de días de paciente en los que un paciente recibió un factor de protección específico, como leche materna, probióticos o cuidados madre canguro.
 Se calcula dividiendo el número de días de factor protector por el número de días de paciente y multiplicando el resultado por 100.
 
@@ -863,10 +871,10 @@ stem:["Tasa de uso de probióticos" = "Días totales de probióticos" / "Días t
 
 stem:["Tasa de utilización de cuidados canguro" = "Días totales de cuidados canguro" / "Días totales de paciente" xx 100]
 
+[#data-analysis-infections]
 === Infecciones
-
+[#data-analysis-infections-incidence-densities]
 ==== Densidades de incidencia
-
 Dado que una proporción sustancial de infecciones no puede vincularse a un factor de riesgo específico, se calculan densidades de incidencia para infecciones del torrente sanguíneo, neumonía, ECN.
 El factor de riesgo representa aquí el número acumulado de días-paciente y se estandariza como 1000 días-paciente.
 
@@ -876,8 +884,8 @@ stem:["Densidad de incidencia de neumonía" = "Casos totales de neumonía" / "D�
 
 stem:["Densidad de incidencia de ECN" = "Casos totales de ECN" / "Días totales de paciente" xx 1000]
 
+[#data-analysis-infections-device-associated-infections]
 ==== Infecciones asociadas a dispositivos
-
 La tasa de infecciones asociadas a dispositivos es una importante métrica de gestión de la calidad y describe cuántas infecciones asociadas a dispositivos se producen por cada 1000 días de dispositivo.
 En este proceso denominado normalización, las infecciones (por ejemplo, ICB) que se producen en presencia de un determinado factor de riesgo (por ejemplo, CVC) se asocian con el número total de días de riesgo (por ejemplo, Días CVC) y el resultado se multiplica por 1000.
 
@@ -889,8 +897,8 @@ stem:["Tasa de neumonía asociada a INV" = "Total de casos de neumonía en pacie
 
 stem:["Tasa de neumonía asociada a VMNI" = "Total de casos de neumonía en pacientes con VMNI" / "Total de días con VMNI" xx 1000]
 
+[#data-analysis-infections-surgical-site-infections]
 ==== Infecciones del sitio quirúrgico
-
 Las tasas de infección del sitio quirúrgico (ISQ) definen el porcentaje de ISQ que se producen durante el periodo de observación tras una intervención quirúrgica.
 Se calcula dividiendo el número de ISQ que se producen tras un procedimiento quirúrgico por el número de procedimientos quirúrgicos y multiplicando el resultado por 100.
 Dado que el riesgo de desarrollar una ISQ depende del tipo de intervención quirúrgica, se calculan múltiples tasas de ISQ para grupos de intervenciones similares.
@@ -900,8 +908,8 @@ stem:["Tasa global de ISQ" = "Total de casos de ISQ" / "Número total de cirugí
 
 stem:["Tasa de ISQ agrupada" = "Total de casos de ISQ observados tras los procedimientos en este grupo" / "Número total de procedimientos en este grupo" xx 100]
 
+[#data-analysis-infections-standardized-infection-rate]
 ==== Tasa de infección estandarizada
-
 Con las tasas de infección descritas anteriormente, es posible observar en detalle los factores de riesgo y las infecciones para las 3 clases de peso al nacer.
 Sin embargo, 500 g de peso al nacer es una estratificación relativamente cruda del riesgo de infección neonatal, y tampoco tiene en cuenta el hecho de que los lactantes pueden ser trasladados a otros departamentos (por ejemplo, para cirugía o a un departamento más cercano al domicilio de los padres) mucho antes de que se les dé el alta normalmente y que los días de alto riesgo de la fase de estabilización se acumularían en algunos departamentos de neonatología mientras que otros acumularían los días de bajo riesgo de los lactantes ya estabilizados.
 Para tener esto en cuenta, NeoIPC calcula una tasa de infección estandarizada (TIE) , que compara las frecuencias de infección entre departamentos en función de la composición de su población de pacientes.
@@ -925,8 +933,8 @@ Cuando la tasa de infección estandarizada es igual a uno, se ha observado el mi
 
 Cuando la tasa de infección estandarizada es inferior a uno, se han observado menos infecciones de las que cabría esperar a partir de la composición de los pacientes en comparación con los datos de referencia.
 
+[#abbreviations]
 == Abreviaturas
-
 [horizontal]
 3GCR:: Patógeno gramnegativo multirresistente a cefalosporinas de 3ª generación
 AB:: Antibiótico
@@ -971,6 +979,7 @@ VPT:: Muy prematuro
 VRE: Enterococo resistente a la vancomicina
 WBC:: glóbulos blancos
 
+[#imprint]
 == Pie de imprenta
 Proyecto NeoIPC
 
@@ -994,11 +1003,11 @@ Para saber más sobre Vigilancia, escriba a
 neoipc-support@charite.de
 
 [appendix]
+[#appendix-list-of-antibiotics]
 == Lista de antibióticos
-
 [stripes=odd]
 |===
 |Nombre |ATC-Código
 
-include::NeoIPC-Antibiotics.adoc[]
+include::NeoIPC-Antibiotics.es.adoc[]
 |===
