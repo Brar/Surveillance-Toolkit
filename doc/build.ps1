@@ -45,6 +45,103 @@ function Test-RebuildRequired {
     return $false
 }
 
+function New-PathogenList {
+    [OutputType([void])]
+    param (
+        [CultureInfo]$TargetCulture,
+        [string]$InputDirectory,
+        [string]$OutputDirectory
+    )
+    $list = [System.Collections.ArrayList]::new()
+    $c = $TargetCulture
+    while ($c.Name.Length -gt 0) {
+        $pcPath = Join-Path -Path $InputDirectory -ChildPath "NeoIPC-Pathogen-Concepts.$($c.Name).csv"
+        $psPath = Join-Path -Path $InputDirectory -ChildPath "NeoIPC-Pathogen-Synonyms.$($c.Name).csv"
+
+        if ((Test-Path -LiteralPath $pcPath -PathType Leaf)) {
+            if (-not (Test-Path -LiteralPath $psPath -PathType Leaf)) {
+                throw "Invalid state: If '$pcPath' exists, '$psPath' must exist too."
+            }
+            $pc = Import-Csv -LiteralPath $pcPath -Encoding utf8NoBOM
+            $pcHash = @{}
+            $lineNo = 0
+            foreach ($p in $pc) {
+                $lineNo++
+                # Validate the input file
+                if ($p.property -cne 'CONCEPT') {
+                    throw "Unknown property name '$($p.property)' in line $lineNo in file '$pcPath'."
+                }
+                if ($p.default.Trim().Length -eq 0) {
+                    throw "Missing default value in line $lineNo in file '$pcPath'."
+                }
+                if ($p.default.Trim() -cne $p.default) {
+                    throw "Default value with superflous whitespace in line $lineNo in file '$pcPath'."
+                }
+                $needs_translation = $p.needs_translation -ceq 't'
+                if (-not ($needs_translation -or $p.needs_translation -ceq 'f')) {
+                    throw "Unexpected boolen value '$($p.needs_translation)' in line $lineNo file '$pcPath'."
+                }
+                if ($needs_translation -and $p.translated.Trim().Length -eq 0) {
+                    throw "Missing translation in line $lineNo file '$pcPath'."
+                }
+                if ($needs_translation -and $p.translated.Trim() -cne $p.translated) {
+                    throw "Translation with superflous whitespace in line $lineNo in file '$pcPath'."
+                }
+                if ((-not $needs_translation) -and $p.translated.Length -ne 0) {
+                    throw "Unexpected translation in line $lineNo file '$pcPath'."
+                }
+                $pcHash.Add($p.id, @{
+                    needs_translation = $needs_translation
+                    default = $p.default
+                    translated = $p.translated
+                })
+            }
+
+            $ps = Import-Csv -LiteralPath $psPath -Encoding utf8NoBOM
+            $psHash = @{}
+            $lineNo = 0
+            foreach ($p in $ps) {
+                $lineNo++
+                # Validate the input file
+                if ($p.property -cne 'SYNONYM') {
+                    throw "Unknown property name '$($p.property)' in line $lineNo in file '$psPath'."
+                }
+                if ($p.default.Trim().Length -eq 0) {
+                    throw "Missing default value in line $lineNo in file '$psPath'."
+                }
+                if ($p.default.Trim() -cne $p.default) {
+                    throw "Default value with superflous whitespace in line $lineNo in file '$psPath'."
+                }
+                $needs_translation = $p.needs_translation -ceq 't'
+                if (-not ($needs_translation -or $p.needs_translation -ceq 'f')) {
+                    throw "Unexpected boolen value '$($p.needs_translation)' in line $lineNo file '$psPath'."
+                }
+                if ($needs_translation -and $p.translated.Trim().Length -eq 0) {
+                    throw "Missing translation in line $lineNo file '$psPath'."
+                }
+                if ($needs_translation -and $p.translated.Trim() -cne $p.translated) {
+                    throw "Translation with superflous whitespace in line $lineNo in file '$psPath'."
+                }
+                if ((-not $needs_translation) -and $p.translated.Length -ne 0) {
+                    throw "Unexpected translation in line $lineNo file '$psPath'."
+                }
+                $psHash.Add($p.id, @{
+                    needs_translation = $needs_translation
+                    default = $p.default
+                    translated = $p.translated
+                })
+            }
+            $list.Add([System.ValueTuple]::Create($pcHash, $psHash)) > $null
+        }
+        elseif ((Test-Path -LiteralPath $psPath -PathType Leaf)) {
+            throw "Invalid state: If '$psPath' exists, '$pcPath' must exist too."
+        }
+        $c = $TargetCulture.Parent
+    }
+    $pc = Import-Csv -LiteralPath (Join-Path -Path $InputDirectory -ChildPath 'NeoIPC-Pathogen-Concepts.csv') -Encoding utf8NoBOM
+    $ps = Import-Csv -LiteralPath (Join-Path -Path $InputDirectory -ChildPath 'NeoIPC-Pathogen-Synonyms.csv') -Encoding utf8NoBOM
+}
+
 if ($null -eq $targetCultures)
 {
     $targetCultures = @(
