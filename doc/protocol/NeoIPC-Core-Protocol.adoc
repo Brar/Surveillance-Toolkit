@@ -1010,3 +1010,13 @@ neoipc-support@charite.de
 
 include::NeoIPC-Antibiotics.adoc[]
 |===
+
+[appendix]
+[#appendix-list-of-list-of-infectious-agents]
+== List of Infectious Agents
+[.small,cols="5,3,3,3",stripes=odd]
+|===
+|Name |Type |Assumed Pathogenicity |Recorded Resistances
+
+include::NeoIPC-Pathogens.adoc[]
+|===

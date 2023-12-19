@@ -1,0 +1,25 @@
+id,needs_translation,translated
+3gcr,f,
+bacterial_genus,t,Género bacteriano
+bacterial_group,t,Grupo bacteriano
+bacterial_serotype,t,Serotipo bacteriano
+bacterial_species,t,Especie bacteriana
+bacterial_species_complex,t,Complejo de especies bacterianas
+bacterial_subspecies,t,Subespecie bacteriana
+carbapenems,t,Carbapenemas
+colistin,t,Colistina
+common_commensal,t,Comensal común
+fungal_genus,t,Género fúngico
+fungal_species,t,Especie fúngica
+fungal_species_complex,t,Complejo de especies de hongos
+fungal_variety,t,Variedad de hongos
+mrsa,t,SARM
+recognised_pathogen,t,Patógeno reconocido
+unknown,t,Desconocido
+viral_clade,t,Clado vírico
+viral_family,t,Familia de virus
+viral_genus,t,Género de virus
+viral_group,t,Grupo vírico
+viral_serotype,t,Serotipo vírico
+viral_species,t,Tipo de virus
+vre,f,

@@ -1,5 +1,5 @@
 ﻿id,property,needs_translation,default,translated
-0,CONCEPT,t,Not listed,Nicht aufgeführt
+0,CONCEPT,t,Not listed,No en la lista
 1436,CONCEPT,f,Abiotrophia,
 108,CONCEPT,f,Abiotrophia defectiva,
 3370,CONCEPT,f,Acaulium acremonium,
@@ -27,7 +27,7 @@
 2809,CONCEPT,f,Acinetobacter beijerinckii,
 2810,CONCEPT,f,Acinetobacter bereziniae,
 1141,CONCEPT,f,Acinetobacter calcoaceticus,
-2704,CONCEPT,t,Acinetobacter calcoaceticus-Acinetobacter baumannii complex,Acinetobacter calcoaceticus-Acinetobacter baumannii-Komplex
+2704,CONCEPT,t,Acinetobacter calcoaceticus-Acinetobacter baumannii complex,Complejo Acinetobacter calcoaceticus-Acinetobacter baumannii
 2811,CONCEPT,f,Acinetobacter guillouiae,
 2812,CONCEPT,f,Acinetobacter gyllenbergii,
 1727,CONCEPT,f,Acinetobacter haemolyticus,
@@ -128,7 +128,7 @@
 3139,CONCEPT,f,Allorhizobium vitis,
 786,CONCEPT,f,Alloscardovia,
 2320,CONCEPT,f,Alloscardovia omnicolens,
-2795,CONCEPT,t,Alpha-hemolytic streptococci,Alpha-hämolysierende Streptokokken
+2795,CONCEPT,t,Alpha-hemolytic streptococci,Estreptococos alfa-hemolíticos
 2654,CONCEPT,f,Alphainfluenzavirus influenzae,
 874,CONCEPT,f,Alternaria,
 1869,CONCEPT,f,Alternaria alternata,
@@ -241,7 +241,7 @@
 2241,CONCEPT,f,Bacillus benzoevorans,
 1403,CONCEPT,f,Bacillus carboniphilus,
 1202,CONCEPT,f,Bacillus cereus,
-2935,CONCEPT,t,Bacillus cereus group,Bacillus cereus-Gruppe
+2935,CONCEPT,t,Bacillus cereus group,Grupo Bacillus cereus
 2912,CONCEPT,f,Bacillus cytotoxicus,
 130,CONCEPT,f,Bacillus decisifrondis,
 1581,CONCEPT,f,Bacillus horti,
@@ -258,7 +258,7 @@
 2560,CONCEPT,f,Bacillus sonorensis,
 3213,CONCEPT,f,Bacillus spizizenii,
 1364,CONCEPT,f,Bacillus subtilis,
-2938,CONCEPT,t,Bacillus subtilis group,Bacillus subtilis-Gruppe
+2938,CONCEPT,t,Bacillus subtilis group,Grupo Bacillus subtilis
 851,CONCEPT,f,Bacillus tequilensis,
 2525,CONCEPT,f,Bacillus thermoamylovorans,
 794,CONCEPT,f,Bacillus thermocloacae,
@@ -272,7 +272,7 @@
 2899,CONCEPT,f,Bacteroides faecis,
 2900,CONCEPT,f,Bacteroides fluxus,
 1296,CONCEPT,f,Bacteroides fragilis,
-2939,CONCEPT,t,Bacteroides fragilis group,Bacteroides fragilis-Gruppe
+2939,CONCEPT,t,Bacteroides fragilis group,Grupo Bacteroides fragilis
 2902,CONCEPT,f,Bacteroides galacturonicus,
 1413,CONCEPT,f,Bacteroides heparinolyticus,
 772,CONCEPT,f,Bacteroides nordii,
@@ -302,7 +302,7 @@
 1012,CONCEPT,f,Beauveria bassiana,
 680,CONCEPT,f,Bergeyella,
 494,CONCEPT,f,Bergeyella zoohelcum,
-2796,CONCEPT,t,Beta-hemolytic streptococci,Beta-hämolysierende Streptokokken
+2796,CONCEPT,t,Beta-hemolytic streptococci,Estreptococos beta-hemolíticos
 2655,CONCEPT,f,Betainfluenzavirus influenzae,
 2642,CONCEPT,f,Betapolyomavirus hominis,
 3335,CONCEPT,f,Betapolyomavirus macacae,
@@ -402,7 +402,7 @@
 1933,CONCEPT,f,Burkholderia arboris,
 411,CONCEPT,f,Burkholderia cenocepacia,
 2117,CONCEPT,f,Burkholderia cepacia,
-2940,CONCEPT,t,Burkholderia cepacia complex,Burkholderia cepacia-Komplex
+2940,CONCEPT,t,Burkholderia cepacia complex,Complejo Burkholderia cepacia
 1444,CONCEPT,f,Burkholderia contaminans,
 1068,CONCEPT,f,Burkholderia diffusa,
 1488,CONCEPT,f,Burkholderia dolosa,
@@ -473,7 +473,7 @@
 1322,CONCEPT,f,Candida nivariensis,
 2427,CONCEPT,f,Candida orthopsilosis,
 1197,CONCEPT,f,Candida parapsilosis,
-2701,CONCEPT,t,Candida parapsilosis complex,Candida parapsilosis-Komplex
+2701,CONCEPT,t,Candida parapsilosis complex,Complejo Candida parapsilosis
 1055,CONCEPT,f,Candida pararugosa,
 3348,CONCEPT,f,Candida pintolopesii var. pintolopesii,
 550,CONCEPT,f,Candida sake,
@@ -589,8 +589,8 @@
 454,CONCEPT,f,Clostridium symbiosum,
 519,CONCEPT,f,Clostridium tertium,
 42,CONCEPT,f,Clostridium tetani,
-2776,CONCEPT,t,Coagulase-negative staphylococcus,Koagulase-negative Staphylokokken
-2777,CONCEPT,t,Coagulase-positive staphylococcus,Koagulase-positive Staphylokokken
+2776,CONCEPT,t,Coagulase-negative staphylococcus,Estafilococos coagulasa negativos
+2777,CONCEPT,t,Coagulase-positive staphylococcus,Estafilococos coagulasa positivos
 248,CONCEPT,f,Cokeromyces,
 17,CONCEPT,f,Cokeromyces recurvatus,
 897,CONCEPT,f,Collinsella,
@@ -785,7 +785,7 @@
 208,CONCEPT,f,Dysgonomonas gadei,
 905,CONCEPT,f,Eastern equine encephalitis virus,
 1684,CONCEPT,f,Ebolavirus,
-2681,CONCEPT,t,Echovirus,Echoviren
+2681,CONCEPT,t,Echovirus,Echovirus
 3214,CONCEPT,f,Ectobacillus funiculus,
 1689,CONCEPT,f,Edwardsiella,
 1350,CONCEPT,f,Edwardsiella hoshinae,
@@ -810,7 +810,7 @@
 2713,CONCEPT,f,Enterobacter bugandensis,
 1417,CONCEPT,f,Enterobacter cancerogenus,
 1212,CONCEPT,f,Enterobacter cloacae,
-2711,CONCEPT,t,Enterobacter cloacae complex,Enterobacter cloacae-Komplex
+2711,CONCEPT,t,Enterobacter cloacae complex,Complejo Enterobacter cloacae
 1130,CONCEPT,f,Enterobacter cloacae dissolvens,
 1495,CONCEPT,f,Enterobacter hormaechei,
 2714,CONCEPT,f,Enterobacter huaxiensis,
@@ -958,7 +958,7 @@
 2989,CONCEPT,f,Fusobacterium vincentii,
 992,CONCEPT,f,Gallicola,
 1435,CONCEPT,f,Gallicola barnesae,
-2797,CONCEPT,t,Gamma-hemolytic streptococci,Gamma-hämolysierende Streptokokken
+2797,CONCEPT,t,Gamma-hemolytic streptococci,Estreptococos gamma hemolíticos
 2658,CONCEPT,f,Gammainfluenzavirus influenzae,
 1181,CONCEPT,f,Gardnerella,
 1226,CONCEPT,f,Gardnerella vaginalis,
@@ -1052,8 +1052,8 @@
 1655,CONCEPT,f,Helicobacter typhlonius,
 2049,CONCEPT,f,Helminthosporium,
 2640,CONCEPT,f,Hepacivirus C,
-1903,CONCEPT,f,Hepatitis B virus,
-2628,CONCEPT,t,Hepatitis D virus,Hepatitis-D-Virus
+1903,CONCEPT,t,Hepatitis B virus,Virus de la Hepatitis B
+2628,CONCEPT,t,Hepatitis D virus,Virus de la Hepatitis D
 3338,CONCEPT,f,Hepatovirus A,
 69,CONCEPT,f,Herbaspirillum,
 473,CONCEPT,f,Herpesviridae,
@@ -1064,38 +1064,38 @@
 1646,CONCEPT,f,Holdemania filiformis,
 300,CONCEPT,f,Hormodendrum,
 1624,CONCEPT,f,Hortaea werneckii,
-2692,CONCEPT,t,Human adenovirus,Humane Adenoviren
+2692,CONCEPT,t,Human adenovirus,Adenovirus humanos
 2616,CONCEPT,f,Human alphaherpesvirus 1,
 2618,CONCEPT,f,Human alphaherpesvirus 2,
 2620,CONCEPT,f,Human alphaherpesvirus 3,
 2604,CONCEPT,f,Human betaherpesvirus 5,
 2670,CONCEPT,f,Human betaherpesvirus 6A,
 2672,CONCEPT,f,Human betaherpesvirus 6B,
-2626,CONCEPT,t,Human bocavirus,Humane Bocaviren
-2609,CONCEPT,t,Human coronavirus,Humane Coronaviren
-2623,CONCEPT,t,Human coxsackievirus,Humane Coxsackieviren
-2624,CONCEPT,t,Human coxsackievirus A,Humanes Coxsackievirus A
-2625,CONCEPT,t,Human coxsackievirus B,Humanes Coxsackievirus B
+2626,CONCEPT,t,Human bocavirus,Bocavirus humanos
+2609,CONCEPT,t,Human coronavirus,Coronavirus humano
+2623,CONCEPT,t,Human coxsackievirus,Coxsackievirus humano
+2624,CONCEPT,t,Human coxsackievirus A,Virus Coxsackie A humano
+2625,CONCEPT,t,Human coxsackievirus B,Virus Coxsackie B humano
 3344,CONCEPT,f,Human gammaherpesvirus 4,
 2629,CONCEPT,f,Human gammaherpesvirus 8,
-2621,CONCEPT,t,Human herpes simplex virus,Humane Herpes-simplex-Viren
-2674,CONCEPT,t,Human herpesvirus 6,Humanes Herpesvirus 6
-2634,CONCEPT,t,Human immunodeficiency virus,Humanes Immundefizienz-Virus
+2621,CONCEPT,t,Human herpes simplex virus,Virus del herpes simple humano
+2674,CONCEPT,t,Human herpesvirus 6,Herpesvirus humano 6
+2634,CONCEPT,t,Human immunodeficiency virus,Virus de la inmunodeficiencia humana
 2632,CONCEPT,f,Human immunodeficiency virus 1,
 2633,CONCEPT,f,Human immunodeficiency virus 2,
 2462,CONCEPT,f,Human metapneumovirus,
 2603,CONCEPT,f,Human orthopneumovirus,
 2663,CONCEPT,f,Human orthorubulavirus 2,
 2667,CONCEPT,f,Human orthorubulavirus 4,
-2611,CONCEPT,t,Human papillomavirus,Humane Papillomaviren
-2660,CONCEPT,t,Human parainfluenza virus,Humane Parainfluenzaviren
+2611,CONCEPT,t,Human papillomavirus,Virus del papiloma humano
+2660,CONCEPT,t,Human parainfluenza virus,Virus de la parainfluenza humana
 2661,CONCEPT,f,Human respirovirus 1,
 2665,CONCEPT,f,Human respirovirus 3,
-2610,CONCEPT,t,Human rhinovirus,Humane Rhinoviren
+2610,CONCEPT,t,Human rhinovirus,Rinovirus humanos
 3306,CONCEPT,f,Hungatella hathewayi,
 1363,CONCEPT,f,Ignavigranum,
 1103,CONCEPT,f,Ignavigranum ruoffiae,
-2659,CONCEPT,t,Influenza virus,Influenzaviren
+2659,CONCEPT,t,Influenza virus,Virus de la gripe
 1553,CONCEPT,f,Inquilinus,
 1107,CONCEPT,f,Inquilinus limosus,
 3045,CONCEPT,f,Intestinibacter bartlettii,
@@ -1415,7 +1415,7 @@
 1696,CONCEPT,f,Mycobacterium aurum,
 415,CONCEPT,f,Mycobacterium austroafricanum,
 2461,CONCEPT,f,Mycobacterium avium,
-2599,CONCEPT,t,Mycobacterium avium complex,Mycobacterium avium-Komplex
+2599,CONCEPT,t,Mycobacterium avium complex,Complejo Mycobacterium avium
 3099,CONCEPT,f,Mycobacterium avium paratuberculosis,
 2856,CONCEPT,f,Mycobacterium bacteremicum,
 2857,CONCEPT,f,Mycobacterium basiliense,
@@ -1447,7 +1447,7 @@
 574,CONCEPT,f,Mycobacterium flavescens,
 2864,CONCEPT,f,Mycobacterium florentinum,
 2457,CONCEPT,f,Mycobacterium fortuitum,
-2951,CONCEPT,t,Mycobacterium fortuitum complex,Mycobacterium fortuitum-Komplex
+2951,CONCEPT,t,Mycobacterium fortuitum complex,Complejo Mycobacterium fortuitum
 2865,CONCEPT,f,Mycobacterium fragae,
 1817,CONCEPT,f,Mycobacterium frederiksbergense,
 911,CONCEPT,f,Mycobacterium gadium,
@@ -1535,7 +1535,7 @@
 291,CONCEPT,f,Mycobacterium sphagni,
 2491,CONCEPT,f,Mycobacterium szulgai,
 361,CONCEPT,f,Mycobacterium terrae,
-2952,CONCEPT,t,Mycobacterium terrae complex,Mycobacterium terrae-Komplex
+2952,CONCEPT,t,Mycobacterium terrae complex,Complejo Mycobacterium terrae
 2477,CONCEPT,f,Mycobacterium thermoresistibile,
 2895,CONCEPT,f,Mycobacterium timonense,
 2050,CONCEPT,f,Mycobacterium tokaiense,
@@ -1543,7 +1543,7 @@
 1449,CONCEPT,f,Mycobacterium triviale,
 1346,CONCEPT,f,Mycobacterium tuberculosis,
 2948,CONCEPT,f,Mycobacterium tuberculosis canetti,
-2953,CONCEPT,t,Mycobacterium tuberculosis complex,Mycobacterium tuberculosis-Komplex
+2953,CONCEPT,t,Mycobacterium tuberculosis complex,Complejo Mycobacterium tuberculosis
 1323,CONCEPT,f,Mycobacterium tusciae,
 2025,CONCEPT,f,Mycobacterium ulcerans,
 975,CONCEPT,f,Mycobacterium vaccae,
@@ -1614,7 +1614,7 @@
 2000,CONCEPT,f,Nocardia arthritidis,
 1697,CONCEPT,f,Nocardia asiatica,
 1260,CONCEPT,f,Nocardia asteroides,
-2954,CONCEPT,t,Nocardia asteroides complex,Nocardia asteroides-Komplex
+2954,CONCEPT,t,Nocardia asteroides complex,Complejo Nocardia asteroides
 656,CONCEPT,f,Nocardia beijingensis,
 1899,CONCEPT,f,Nocardia brasiliensis,
 2022,CONCEPT,f,Nocardia brevicatena,
@@ -1804,7 +1804,7 @@
 630,CONCEPT,f,Pluralibacter,
 58,CONCEPT,f,Pluralibacter gergoviae,
 553,CONCEPT,f,Pluralibacter pyrinus,
-2635,CONCEPT,t,Poliovirus,Polioviren
+2635,CONCEPT,t,Poliovirus,Poliovirus
 2637,CONCEPT,f,Poliovirus 1,
 2638,CONCEPT,f,Poliovirus 2,
 2639,CONCEPT,f,Poliovirus 3,
@@ -1843,7 +1843,7 @@
 2332,CONCEPT,f,Prevotella multisaccharivorax,
 2167,CONCEPT,f,Prevotella nigrescens,
 627,CONCEPT,f,Prevotella oralis,
-2956,CONCEPT,t,Prevotella oralis group,Prevotella oralis-Gruppe
+2956,CONCEPT,t,Prevotella oralis group,Grupo Prevotella oralis
 1005,CONCEPT,f,Prevotella oris,
 582,CONCEPT,f,Prevotella oulorum,
 194,CONCEPT,f,Prevotella pallens,
@@ -2207,9 +2207,9 @@
 2600,CONCEPT,f,Streptococcus agalactiae,
 2255,CONCEPT,f,Streptococcus alactolyticus,
 1711,CONCEPT,f,Streptococcus anginosus,
-2799,CONCEPT,t,Streptococcus anginosus group,Streptococcus anginosus-Gruppe
+2799,CONCEPT,t,Streptococcus anginosus group,Grupo Streptococcus anginosus
 2488,CONCEPT,f,Streptococcus australis,
-2801,CONCEPT,t,Streptococcus bovis group,Streptococcus bovis-Gruppe
+2801,CONCEPT,t,Streptococcus bovis group,Grupo Streptococcus bovis
 2405,CONCEPT,f,Streptococcus canis,
 751,CONCEPT,f,Streptococcus constellatus,
 2203,CONCEPT,f,Streptococcus constellatus constellatus,
@@ -2249,9 +2249,9 @@
 2790,CONCEPT,f,Streptococcus merionis,
 2791,CONCEPT,f,Streptococcus minor,
 668,CONCEPT,f,Streptococcus mitis,
-2802,CONCEPT,t,Streptococcus mitis group,Streptococcus mitis-Gruppe
+2802,CONCEPT,t,Streptococcus mitis group,Grupo Streptococcus mitis
 621,CONCEPT,f,Streptococcus mutans,
-2803,CONCEPT,t,Streptococcus mutans group,Streptococcus mutans-Gruppe
+2803,CONCEPT,t,Streptococcus mutans group,Grupo Streptococcus mutans
 1066,CONCEPT,f,Streptococcus oralis,
 3064,CONCEPT,f,Streptococcus oralis dentisani,
 3179,CONCEPT,f,Streptococcus oralis tigurinus,
@@ -2267,11 +2267,11 @@
 1599,CONCEPT,f,Streptococcus pyogenes,
 1818,CONCEPT,f,Streptococcus ratti,
 1126,CONCEPT,f,Streptococcus salivarius,
-2804,CONCEPT,t,Streptococcus salivarius group,Streptococcus salivarius-Gruppe
+2804,CONCEPT,t,Streptococcus salivarius group,Grupo Streptococcus salivarius
 1882,CONCEPT,f,Streptococcus salivarius salivarius,
 2132,CONCEPT,f,Streptococcus salivarius thermophilus,
 537,CONCEPT,f,Streptococcus sanguinis,
-2805,CONCEPT,t,Streptococcus sanguinis group,Streptococcus sanguinis-Gruppe
+2805,CONCEPT,t,Streptococcus sanguinis group,Grupo Streptococcus sanguinis
 1011,CONCEPT,f,Streptococcus sinensis,
 226,CONCEPT,f,Streptococcus sobrinus,
 1025,CONCEPT,f,Streptococcus suis,
@@ -2389,7 +2389,7 @@
 3000,CONCEPT,f,Virgibacillus halodenitrificans,
 2585,CONCEPT,f,Virgibacillus pantothenticus,
 3096,CONCEPT,f,Virgibacillus salexigens,
-2798,CONCEPT,t,Viridans streptococci,Viridans-Streptokokken
+2798,CONCEPT,t,Viridans streptococci,Estreptococos viridans
 275,CONCEPT,f,Wautersia,
 397,CONCEPT,f,Weeksella,
 661,CONCEPT,f,Weeksella virosa,

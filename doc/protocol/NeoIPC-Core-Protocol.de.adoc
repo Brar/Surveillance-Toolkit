@@ -294,3 +294,15 @@ Wenn bei einem eingeschlossenen Kind während des Surveillance-Zeitraums eine im
 .Erfassungsbogen für primäre Sepsis/BSI
 //image::NeoIPC-Core-Primary-Sepsis-BSI-Reporting-Sheet-Image.svg[Erfassungsbogen für primäre Sepsis/BSI,{full-width},pdfwidth=75%,opts=inline,align="center"]
 image::NeoIPC-Core-Primary-Sepsis-BSI-Reporting-Sheet-Image.png[Erfassungsbogen für primäre Sepsis/BSI,{full-width},pdfwidth=75%,align="center"]
+
+
+
+[appendix]
+[#appendix-list-of-list-of-infectious-agents]
+== Liste der Infektionserreger
+[.small,cols="5,2,3,3",stripes=odd]
+|===
+|Name |Typ |Angenommene Pathogenität |Erfasste Resistenzen
+
+include::NeoIPC-Pathogens.de.adoc[]
+|===

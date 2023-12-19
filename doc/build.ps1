@@ -52,9 +52,22 @@ function New-PathogenList {
         [string]$InputDirectory,
         [string]$OutputDirectory
     )
-    $list = [System.Collections.ArrayList]::new()
+    $listElements = [System.Collections.Generic.Dictionary[string, string]]::new()
+    $neoipcConcepts = [System.Collections.Generic.Dictionary[uint, string]]::new()
+    Import-Csv -LiteralPath (Join-Path -Path $InputDirectory -ChildPath 'NeoIPC-Owned-Pathogen-Concepts.csv') -Encoding utf8NoBOM | ForEach-Object {
+        $neoipcConcepts.Add([uint]::Parse($_.id), ($_.pathogen_type + '_' + ($_.concept_type -creplace '\s', '_')))
+    }
+    $localizedlist = [System.Collections.ArrayList]::new()
     $c = $TargetCulture
     while ($c.Name.Length -gt 0) {
+        $listElementsPath = Join-Path -Path $InputDirectory -ChildPath "ListElements.$($c.Name).csv"
+        if ((Test-Path -LiteralPath $listElementsPath -PathType Leaf)) {
+            Import-Csv -LiteralPath $listElementsPath -Encoding utf8NoBOM | ForEach-Object {
+                if ((-not $listElements.ContainsKey($_.id)) -and $_.needs_translation -ceq 't') {
+                    $listElements.add($_.id, $_.translated)
+                }
+            }
+        }
         $pcPath = Join-Path -Path $InputDirectory -ChildPath "NeoIPC-Pathogen-Concepts.$($c.Name).csv"
         $psPath = Join-Path -Path $InputDirectory -ChildPath "NeoIPC-Pathogen-Synonyms.$($c.Name).csv"
 
@@ -63,8 +76,8 @@ function New-PathogenList {
                 throw "Invalid state: If '$pcPath' exists, '$psPath' must exist too."
             }
             $pc = Import-Csv -LiteralPath $pcPath -Encoding utf8NoBOM
-            $pcHash = @{}
-            $lineNo = 0
+            $pcHash = [System.Collections.Generic.Dictionary[int, System.Collections.Hashtable]]::new()
+            $lineNo = 1
             foreach ($p in $pc) {
                 $lineNo++
                 # Validate the input file
@@ -99,7 +112,7 @@ function New-PathogenList {
 
             $ps = Import-Csv -LiteralPath $psPath -Encoding utf8NoBOM
             $psHash = @{}
-            $lineNo = 0
+            $lineNo = 1
             foreach ($p in $ps) {
                 $lineNo++
                 # Validate the input file
@@ -131,15 +144,193 @@ function New-PathogenList {
                     translated = $p.translated
                 })
             }
-            $list.Add([System.ValueTuple]::Create($pcHash, $psHash)) > $null
+            $localizedlist.Add([System.ValueTuple]::Create($pcHash, $psHash)) > $null
         }
         elseif ((Test-Path -LiteralPath $psPath -PathType Leaf)) {
             throw "Invalid state: If '$psPath' exists, '$pcPath' must exist too."
         }
         $c = $TargetCulture.Parent
     }
-    $pc = Import-Csv -LiteralPath (Join-Path -Path $InputDirectory -ChildPath 'NeoIPC-Pathogen-Concepts.csv') -Encoding utf8NoBOM
-    $ps = Import-Csv -LiteralPath (Join-Path -Path $InputDirectory -ChildPath 'NeoIPC-Pathogen-Synonyms.csv') -Encoding utf8NoBOM
+    if ($TargetCulture.Name.Length -gt 0 -and $localizedlist.Count -eq 0) {
+        Write-Warning "Could not find a pathogen translation file for '$($TargetCulture.Name)'. This will result in an untranslated pathogen list."
+    }
+    Import-Csv -LiteralPath (Join-Path -Path $InputDirectory -ChildPath 'ListElements.csv') -Encoding utf8NoBOM | ForEach-Object {
+        if (-not $listElements.ContainsKey($_.id)) {
+            $listElements.add($_.id, $_.value)
+        }
+    }
+
+    $commonCommensal = ''
+    if (-not $listElements.TryGetValue('common_commensal', [ref]$commonCommensal)) {
+        throw "Lookup of string 'common_commensal' failed."
+    }
+
+    $recognisedPathogen = ''
+    if (-not $listElements.TryGetValue('recognised_pathogen', [ref]$recognisedPathogen)) {
+        throw "Lookup of string 'recognised_pathogen' failed."
+    }
+
+    $MRSA = ''
+    if (-not $listElements.TryGetValue('mrsa', [ref]$MRSA)) {
+        throw "Lookup of string 'mrsa' failed."
+    }
+
+    $VRE = ''
+    if (-not $listElements.TryGetValue('vre', [ref]$VRE)) {
+        throw "Lookup of string 'vre' failed."
+    }
+
+    $3GCR = ''
+    if (-not $listElements.TryGetValue('3gcr', [ref]$3GCR)) {
+        throw "Lookup of string '3gcr' failed."
+    }
+
+    $carbapenems = ''
+    if (-not $listElements.TryGetValue('carbapenems', [ref]$carbapenems)) {
+        throw "Lookup of string 'carbapenems' failed."
+    }
+
+    $colistin = ''
+    if (-not $listElements.TryGetValue('colistin', [ref]$colistin)) {
+        throw "Lookup of string 'colistin' failed."
+    }
+
+
+    $pcPath = Join-Path -Path $InputDirectory -ChildPath 'NeoIPC-Pathogen-Concepts.csv'
+    $pc = Import-Csv -LiteralPath $pcPath -Encoding utf8NoBOM
+    $pathogenList = [System.Collections.ArrayList]::new()
+    $lineNo = 1
+    foreach ($p in $pc) {
+        $lineNo++
+        # Validate the input file
+        if ($p.concept.Trim().Length -eq 0) {
+            throw "Missing concept value in line $lineNo in file '$pcPath'."
+        }
+        if ($p.concept.Trim() -cne $p.concept) {
+            throw "Concept value with superflous whitespace in line $lineNo in file '$pcPath'."
+        }
+        if ($p.concept_type -cnotin 'clade','family','genus','group','serotype','species','species complex','subspecies','unknown','variety') {
+            throw "Unknown concept type in line $lineNo in file '$pcPath'."
+        }
+        if ($p.concept_source -cnotin 'ICTV','LPSN','MycoBank','NeoIPC') {
+            throw "Unknown concept source in line $lineNo in file '$pcPath'."
+        }
+
+        $type = ''
+        switch -casesensitive ($p.concept_source) {
+            'LPSN' {
+                $typeString = 'bacterial_' + $p.concept_type -creplace '\s', '_'
+                if (-not $listElements.TryGetValue($typeString, [ref]$type)) {
+                    throw "Lookup of type string '$typeString' failed in line $lineNo in file '$pcPath'."
+                }
+                $type = "https://lpsn.dsmz.de/$($p.concept_id)[$type,window=_blank]"
+            }
+            'MycoBank' {
+                $typeString = 'fungal_' + $p.concept_type -creplace '\s', '_'
+                if (-not $listElements.TryGetValue($typeString, [ref]$type)) {
+                    throw "Lookup of type string '$typeString' failed in line $lineNo in file '$pcPath'."
+                }
+                $type = "https://www.mycobank.org/page/Name%20details%20page/field/Mycobank%20%23/$($p.concept_id)[$type,window=_blank]"
+            }
+            'ICTV' {
+                $typeString = 'viral_' + $p.concept_type -creplace '\s', '_'
+                if (-not $listElements.TryGetValue($typeString, [ref]$type)) {
+                    throw "Lookup of type string '$typeString' failed in line $lineNo in file '$pcPath'."
+                }
+                $type = "https://ictv.global/taxonomy/taxondetails?taxnode_id=$($p.concept_id)[$type,window=_blank]"
+            }
+            'NeoIPC' {
+                $typeString = ''
+                if ($p.concept_type -ceq 'unknown') {
+                    if (-not $listElements.TryGetValue('unknown', [ref]$type)) {
+                        throw "Lookup of type string 'unknown' failed in line $lineNo in file '$pcPath'."
+                    }
+                }
+                else {
+                    if (-not $neoipcConcepts.TryGetValue([uint]::Parse($p.concept_id), [ref]$typeString)) {
+                        throw "Lookup of NeoIPC pathogen with concept_id $($p.concept_id) failed in line $lineNo in file '$pcPath'."
+                    }
+                    if (-not $listElements.TryGetValue($typeString, [ref]$type)) {
+                        throw "Lookup of type string '$typeString' failed in line $lineNo in file '$pcPath'."
+                    }
+                }
+            }
+            default { throw "Lookup of type string failed in line $lineNo in file '$pcPath'." }
+        }
+
+        $pathogenName = $p.concept
+        foreach ($l in $localizedlist) {
+            $lpc = @{}
+            if ($l.Item1.TryGetValue($p.id, [ref]$lpc)) {
+                if ($p.concept -cne $lpc.default) {
+                    throw "Default value '$($lpc.default)' in translation file differs from concept '$($p.concept)' for pathogen with id '$($p.id)'."
+                }
+                if ($lpc.needs_translation) {
+                    $pathogenName = $lpc.translated
+                }
+                break
+            }
+        }
+
+        if ($p.is_cc -ceq 't') {
+            $pathogenicity = $commonCommensal
+        } elseif ($p.is_cc -ceq 'f') {
+            $pathogenicity = $recognisedPathogen
+        }  else {
+            throw "Unexpected boolen value '$($p.is_cc)' in line $lineNo file '$pcPath'."
+        }
+
+        $resistanceString = [System.Text.StringBuilder]::new()
+        if ($p.show_mrsa -ceq 't') {
+            $resistanceString.Append($MRSA).Append(', ') > $null
+        } elseif (-not($p.show_mrsa -ceq 'f')) {
+            throw "Unexpected boolen value '$($p.show_mrsa)' in line $lineNo file '$pcPath'."
+        }
+        if ($p.show_vre -ceq 't') {
+            $resistanceString.Append($VRE).Append(', ') > $null
+        } elseif (-not($p.show_vre -ceq 'f')) {
+            throw "Unexpected boolen value '$($p.show_vre)' in line $lineNo file '$pcPath'."
+        }
+        if ($p.show_3gcr -ceq 't') {
+            $resistanceString.Append($3GCR).Append(', ') > $null
+        } elseif (-not($p.show_3gcr -ceq 'f')) {
+            throw "Unexpected boolen value '$($p.show_3gcr)' in line $lineNo file '$pcPath'."
+        }
+        if ($p.show_carb_r -ceq 't') {
+            $resistanceString.Append($carbapenems).Append(', ') > $null
+        } elseif (-not($p.show_carb_r -ceq 'f')) {
+            throw "Unexpected boolen value '$($p.show_carb_r)' in line $lineNo file '$pcPath'."
+        }
+        if ($p.show_coli_r -ceq 't') {
+            $resistanceString.Append($colistin).Append(', ') > $null
+        } elseif (-not($p.show_coli_r -ceq 'f')) {
+            throw "Unexpected boolen value '$($p.show_coli_r)' in line $lineNo file '$pcPath'."
+        }
+        if ($resistanceString.Length -gt 0) {
+            $resistanceString.Length -= 2
+        }
+
+        $pathogenList.Add(@(
+            "[[pathogen-concept-$($p.id)]]$pathogenName"
+            $type
+            $pathogenicity
+            $resistanceString.ToString()
+        )) > $null
+    }
+
+    #$ps = Import-Csv -LiteralPath (Join-Path -Path $InputDirectory -ChildPath 'NeoIPC-Pathogen-Synonyms.csv') -Encoding utf8NoBOM
+
+    if ($TargetCulture.Name.Length -gt 0) {
+        $outfile = Join-Path -Path $OutputDirectory -ChildPath "NeoIPC-Pathogens.$TargetCulture.adoc"
+    }
+    else {
+        $outfile = Join-Path -Path $OutputDirectory -ChildPath "NeoIPC-Pathogens.adoc"
+    }
+    $pathogenList |
+    Sort-Object -Property {$_[0] -creplace '^\[\[pathogen-concept-\d+\]\](.+)$','$1'} -Culture $TargetCulture.Name |
+    ForEach-Object { $_ | Join-String -OutputPrefix '|' -Separator ' |' } |
+    Out-File -LiteralPath $outfile -Encoding utf8NoBOM
+
 }
 
 if ($null -eq $targetCultures)
@@ -279,6 +470,9 @@ foreach ($targetCulture in $targetCultures)
                 } |
                 Out-File -LiteralPath $buildDir/NeoIPC-Antibiotics$langSuffix.adoc -Encoding utf8NoBOM -Append
         }
+    }
+    if (Test-RebuildRequired $buildDir/NeoIPC-Pathogens$langSuffix.adoc $pathogensDir/NeoIPC-Pathogen-Concepts.csv $pathogensDir/NeoIPC-Pathogen-Concepts$langSuffix.csv) {
+        New-PathogenList -TargetCulture $targetCulture -InputDirectory $pathogensDir -OutputDirectory $buildDir
     }
     if (Test-RebuildRequired $buildImgDir/NeoIPC-Core-Title-Page$langSuffix.svg $resDir/NeoIPC-Core-Title-Page$langSuffix.resx $transDir/NeoIPC-Core-Title-Page.xslt) {
         Write-Verbose "Generating title page background SVG"
