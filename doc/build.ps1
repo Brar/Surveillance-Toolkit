@@ -91,8 +91,15 @@ function New-PathogenList {
                     throw "Default value with superflous whitespace in line $lineNo in file '$pcPath'."
                 }
                 $needs_translation = $p.needs_translation -ceq 't'
-                if (-not ($needs_translation -or $p.needs_translation -ceq 'f')) {
-                    throw "Unexpected boolen value '$($p.needs_translation)' in line $lineNo file '$pcPath'."
+                if (-not $needs_translation) {
+                    if ($p.needs_translation -ceq 'u') {
+                        Write-Warning "Unverified translation value '$($p.translated)' in line $lineNo file '$pcPath'."
+                        if ($p.translated.Length -gt 0) {
+                            $needs_translation = $true
+                        }
+                    } elseif ($p.needs_translation -cne 'f') {
+                        throw "Unexpected boolen value '$($p.needs_translation)' in line $lineNo file '$pcPath'."
+                    }
                 }
                 if ($needs_translation -and $p.translated.Trim().Length -eq 0) {
                     throw "Missing translation in line $lineNo file '$pcPath'."
@@ -126,8 +133,15 @@ function New-PathogenList {
                     throw "Default value with superflous whitespace in line $lineNo in file '$psPath'."
                 }
                 $needs_translation = $p.needs_translation -ceq 't'
-                if (-not ($needs_translation -or $p.needs_translation -ceq 'f')) {
-                    throw "Unexpected boolen value '$($p.needs_translation)' in line $lineNo file '$psPath'."
+                if (-not $needs_translation) {
+                    if ($p.needs_translation -ceq 'u') {
+                        Write-Warning "Unverified translation value '$($p.translated)' in line $lineNo file '$psPath'."
+                        if ($p.translated.Length -gt 0) {
+                            $needs_translation = $true
+                        }
+                    } elseif ($p.needs_translation -cne 'f') {
+                        throw "Unexpected boolen value '$($p.needs_translation)' in line $lineNo file '$psPath'."
+                    }
                 }
                 if ($needs_translation -and $p.translated.Trim().Length -eq 0) {
                     throw "Missing translation in line $lineNo file '$psPath'."
@@ -336,8 +350,8 @@ function New-PathogenList {
 if ($null -eq $targetCultures)
 {
     $targetCultures = @(
-        (new-object CultureInfo("")),
-        (new-object CultureInfo("de")),
+        (new-object CultureInfo(""))
+        (new-object CultureInfo("de"))
         (new-object CultureInfo("es"))
          )
 }
@@ -446,10 +460,18 @@ foreach ($targetCulture in $targetCultures)
                         $loc['translated'] = $null
                     } elseif ($_.needs_translation -ceq 't') {
                         $loc['translated'] = $_.translated
+                    } elseif ($_.needs_translation -ceq 'u') {
+                        Write-Warning "Unverified translation value '$($_.translated)' in file '$antibioticsDir/NeoIPC-Antibiotics$langSuffix.csv'"
+                        if ($_.translated.Length -gt 0) {
+                            $loc['translated'] = $_.translated
+                        } else {
+                            $loc['translated'] = $null
+                        }
+                        $loc['translated'] = $_.translated
                     } else {
                         throw "Unexpected needs_translation value '$($_.needs_translation)' in file '$antibioticsDir/NeoIPC-Antibiotics$langSuffix.csv'"
                     }
-                    $hash[$_.code] = $loc
+                    $hash[$_.id] = $loc
                 }
 
             Import-Csv -LiteralPath $antibioticsDir/NeoIPC-Antibiotics.csv -Encoding utf8 |
