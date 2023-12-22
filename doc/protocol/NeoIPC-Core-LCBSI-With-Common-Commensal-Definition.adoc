@@ -1,8 +1,7 @@
 .Laboratory-Confirmed Bloodstream Infection with Common Commensal Detected Twice
 [%unbreakable]
 ****
-. **The same common commensal is recovered from at least TWO blood culture and/or CSF 
-culture specimen collected on separate occasions**
+. **The same common commensal is recovered from at least TWO blood culture and/or CSF culture specimen collected on separate occasions**
 +
 **AND**
 . **Patient has at least TWO of the following clinical or laboratory features of generalized infection:**
@@ -58,8 +57,7 @@ culture specimen collected on separate occasions**
 . **Treatment with five or more days of intravenous antibiotics was initiated$$*$$** 
 +
 **AND**
-. **Patient has at least TWO of the following clinical or laboratory features of generalized 
-infection:**
+. **Patient has at least TWO of the following clinical or laboratory features of generalized infection:**
 * Temperature instability, fever (> 38 °C) or hypothermia (< 36.5 °C)
 * New/more frequent bradycardia episodes (<80/min) or unexplained tachycardia (>200/min)
 * Impaired peripheral perfusion (Capillary refill time of > 3s or skin mottling or core/peripheral temperature gap > 2 °C)

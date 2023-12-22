@@ -28,5 +28,3 @@ The following do not qualify as criteria for meeting the definition of superfici
 * A stitch abscess alone (minimal inflammation and discharge confined to the points of suture penetration). 
 * A localized stab wound or pin site infection. Note: A laparoscopic trocar site is considered a surgical incision and not a stab wound.
 If a surgeon uses a laparoscopic trocar site to place a drain at the end of a procedure this is considered a surgical incision.
-
-

@@ -167,7 +167,7 @@ Cualquier lactante nacido vivo,
 ingresados en una sala de su unidad neonatal **dentro de los 120 días siguientes al nacimiento** son elegibles para su inclusión en el módulo básico del Programa de Vigilancia NeoIPC.
 
 Flujo de decisión para identificar a los lactantes elegibles para el módulo básico
-image::NeoIPC-Core-Decision-Flow.svg[Flujo de decisiones para identificar a los lactantes aptos para el módulo básico,{full-width},opts=inline]
+image::NeoIPC-Core-Decision-Flow.es.svg[Flujo de decisiones para identificar a los lactantes aptos para el módulo básico,{full-width},opts=inline]
 
 Ejemplos de lactantes aptos/no aptos para el módulo básico una vez ingresados en la planta
 [cols=">2,>3,>4,>4",stripes=odd]
@@ -227,7 +227,7 @@ Puede utilizar la hoja maestra de recogida de datos para guardar localmente la i
 Sin embargo, si envía datos a NeoIPC, la información que recoja en la hoja maestra de recogida de datos deberá introducirse en última instancia en el sistema de introducción de datos en línea.
 
 .Hoja maestra de recogida de datos del paciente
-//image::NeoIPC-Core-Master-Data-Collection-Sheet-Image.svg[Hoja maestra de recogida de datos para la recogida de datos de pacientes,{full-width},pdfwidth=75%,opts=inline,align="center"]
+//image::NeoIPC-Core-Master-Data-Collection-Sheet-Image.es.svg[Hoja maestra de recogida de datos para la recogida de datos de pacientes,{full-width},pdfwidth=75%,opts=inline,align="center"]
 image::NeoIPC-Core-Master-Data-Collection-Sheet-Image.png[Hoja maestra de recogida de datos para la recogida de datos de pacientes,{full-width},pdfwidth=75%,align="center"]
 
 <<<
@@ -250,7 +250,7 @@ Si transcurren más de 48 horas entre el traslado y el reingreso, debe finalizar
 En este caso, cualquier reingreso debe registrarse como un nuevo ingreso, y el tipo de ingreso debe seleccionarse como "trasladada a su centro ≥ 24h postnatal".
 
 .Gráfico de evolución del paciente para la recogida de datos
-//image::NeoIPC-Core-Patient-Progress-Chart-Image.svg[Gráfico de evolución del paciente para la recogida de datos del paciente,{full-width},pdfwidth=100%,opts=inline,align="center"]
+//image::NeoIPC-Core-Patient-Progress-Chart-Image.es.svg[Gráfico de evolución del paciente para la recogida de datos del paciente,{full-width},pdfwidth=100%,opts=inline,align="center"]
 image::NeoIPC-Core-Patient-Progress-Chart-Image.png[Gráfico de evolución del paciente para la recogida de datos del paciente,{full-width},pdfwidth=100%,align="center"]
 
 <<<
@@ -262,7 +262,7 @@ Puede utilizar la hoja de papel de procedimientos quirúrgicos para la documenta
 Además de registrar el procedimiento, debe iniciar el seguimiento del lactante afectado por infecciones del sitio quirúrgico durante 30 o 90 días, dependiendo de si se ha dejado un implante durante el procedimiento.
 
 Hoja de recogida de datos del procedimiento quirúrgico
-//image::NeoIPC-Core-Surgical-Procedure-Data-Collection-Sheet-Image.svg[Hoja de recogida de datos de la intervención quirúrgica,{full-width},pdfwidth=75%,opts=inline,align="center"]
+//image::NeoIPC-Core-Surgical-Procedure-Data-Collection-Sheet-Image.es.svg[Hoja de recogida de datos de la intervención quirúrgica,{full-width},pdfwidth=75%,opts=inline,align="center"]
 image::NeoIPC-Core-Surgical-Procedure-Data-Collection-Sheet-Image.png[Ficha de recogida de datos de procedimientos quirúrgicos,{full-width},pdfwidth=75%,align="center"]
 
 [#data-collection-infection-data-collection]
@@ -292,7 +292,7 @@ Se requiere un mínimo de 14 días y un periodo sin síntomas relevantes de infe
 Si un lactante elegible desarrolla una sepsis primaria/infección del torrente sanguíneo adquirida en el hospital de acuerdo con los criterios de vigilancia de NeoIPC (ver Definiciones de infección: sepsis primaria/infección del torrente sanguíneo) durante el periodo de vigilancia, debe registrar y enviar los datos requeridos utilizando la hoja de recogida de datos que aparece a continuación y/o a través de la plataforma de notificación en línea.
 
 Hoja de recogida de datos de sepsis primaria/infección del torrente sanguíneo
-//image::NeoIPC-Core-Primary-Sepsis-BSI-Reporting-Sheet-Image.svg[Hoja de notificación de sepsis primaria/ISB,{full-width},pdfwidth=75%,opts=inline,align="center"]
+//image::NeoIPC-Core-Primary-Sepsis-BSI-Reporting-Sheet-Image.es.svg[Hoja de notificación de sepsis primaria/ISB,{full-width},pdfwidth=75%,opts=inline,align="center"]
 image::NeoIPC-Core-Primary-Sepsis-BSI-Reporting-Sheet-Image.png[Hoja de información sobre sepsis/BSI primaria,{full-width},pdfwidth=75%,align="center"]
 
 <<<
@@ -301,7 +301,7 @@ image::NeoIPC-Core-Primary-Sepsis-BSI-Reporting-Sheet-Image.png[Hoja de informac
 Si un lactante elegible desarrolla una enterocolitis necrotizante según los criterios de vigilancia del NeoIPC (ver Definiciones de infección: Enterocolitis necrotizante (ECN)) durante el periodo de vigilancia, deberá registrar y enviar los datos requeridos utilizando la hoja de recogida de datos que figura a continuación y/o a través de la plataforma de notificación en línea.
 
 Hoja de notificación de ECN
-//image::NeoIPC-Core-NEC-Reporting-Sheet-Image.svg[Hoja de notificación de ECN,{full-width},pdfwidth=75%,opts=inline,align="center"]
+//image::NeoIPC-Core-NEC-Reporting-Sheet-Image.es.svg[Hoja de notificación de ECN,{full-width},pdfwidth=75%,opts=inline,align="center"]
 image::NeoIPC-Core-NEC-Reporting-Sheet-Image.png[Hoja de informe del NEC,{full-width},pdfwidth=75%,align="center"]
 
 <<<
@@ -310,7 +310,7 @@ image::NeoIPC-Core-NEC-Reporting-Sheet-Image.png[Hoja de informe del NEC,{full-w
 Si un lactante elegible desarrolla una neumonía adquirida en el hospital de acuerdo con los criterios de vigilancia de NeoIPC (ver Definiciones de infección: neumonía) durante el periodo de vigilancia, debe registrar y enviar los datos requeridos utilizando la hoja de recogida de datos que aparece a continuación y/o a través de la plataforma de notificación online.
 
 Hoja de notificación de neumonía
-//image::NeoIPC-Core-Pneumonia-Reporting-Sheet-Image.svg[Hoja de notificación de neumonía,{full-width},pdfwidth=75%,opts=inline,align="center"]
+//image::NeoIPC-Core-Pneumonia-Reporting-Sheet-Image.es.svg[Hoja de notificación de neumonía,{full-width},pdfwidth=75%,opts=inline,align="center"]
 image::NeoIPC-Core-Pneumonia-Reporting-Sheet-Image.png[Hoja de informe de neumonía,{full-width},pdfwidth=75%,align="center"]
 
 <<<
@@ -319,7 +319,7 @@ image::NeoIPC-Core-Pneumonia-Reporting-Sheet-Image.png[Hoja de informe de neumon
 Si un lactante elegible desarrolla una infección del sitio quirúrgico según los criterios de vigilancia de NeoIPC (ver Definiciones: Infección del sitio quirúrgico (ISQ)) durante el periodo de vigilancia, debe registrar y enviar los datos requeridos utilizando la hoja de recopilación de datos que aparece a continuación y/o a través de la plataforma de notificación en línea.
 
 .hoja de notificación de ISQ
-//image::NeoIPC-Core-SSI-Reporting-Sheet-Image.svg[hoja de notificación de ISQ,{full-width},pdfwidth=75%,opts=inline,align="center"]
+//image::NeoIPC-Core-SSI-Reporting-Sheet-Image.es.svg[hoja de notificación de ISQ,{full-width},pdfwidth=75%,opts=inline,align="center"]
 image::NeoIPC-Core-SSI-Reporting-Sheet-Image.png[Hoja de informe SSI,{full-width},pdfwidth=75%,align="center"]
 
 <<<
@@ -370,7 +370,7 @@ Para asignar una infección secundaria del torrente sanguíneo a una neumonía, 
 . Al menos un microorganismo de la muestra de sangre coincide con un microorganismo identificado en el foco de infección primaria.
 
 Recogida de datos de ICB secundaria
-//image::NeoIPC-Core-Secondary-BSI-Image.svg[Recopilación de datos de BSI secundaria,{full-width},pdfwidth=100%,opts=inline,align="center"]
+//image::NeoIPC-Core-Secondary-BSI-Image.es.svg[Recopilación de datos de BSI secundaria,{full-width},pdfwidth=100%,opts=inline,align="center"]
 image::NeoIPC-Core-Secondary-BSI-Image.png[Recopilación de datos de ICB secundaria,{full-width},pdfwidth=100%,align="center"]
 
 [#infection-definitions]
@@ -393,12 +393,12 @@ Para obtener información detallada, consulte xref:secondary_bsi[Infección secu
 <<<
 [#infection-definitions-clinical-sepsis]
 ==== Sepsis clínica
-include::NeoIPC-Core-Clinical-Sepsis-Definition.adoc[]
+include::NeoIPC-Core-Clinical-Sepsis-Definition.es.adoc[]
 
 <<<
 [#infection-definitions-lcbsi-caused-by-a-recognised-pathogen]
 ==== LCBSI causada por un patógeno reconocido
-include::NeoIPC-Core-LCBSI-With-Recognised-Pathogen-Definition.adoc[]
+include::NeoIPC-Core-LCBSI-With-Recognised-Pathogen-Definition.es.adoc[]
 
 [#infection-definitions-lcbsi-caused-by-common-commensals]
 ==== LCBSI causadas por comensales comunes
@@ -411,7 +411,7 @@ Dado que las herramientas recogen los datos brutos que conducen al diagnóstico 
 
 En cualquier caso, debido a este hecho, se debe tener mucho cuidado al comparar las tasas de LCBSI causadas por comensales comunes en diferentes entornos.
 
-include::NeoIPC-Core-LCBSI-With-Common-Commensal-Definition.adoc[]
+include::NeoIPC-Core-LCBSI-With-Common-Commensal-Definition.es.adoc[]
 
 [#infection-definitions-necrotising-enterocolitis]
 === Enterocolitis necrotizante
@@ -420,13 +420,13 @@ El conjunto de datos de ECN incluye información sobre si el paciente presenta u
 Sin embargo, éste no es uno de los criterios de definición de la vigilancia.
 Esto significa que no se deben notificar como ECN los casos en los que se tenga evidencia quirúrgica de perforación intestinal sin evidencia de necrosis primaria o neumatosis intestinal (por ejemplo, perforación intestinal espontánea).
 
-include::NeoIPC-Core-Necrotising-Enterocolitis-Definition.adoc[]
+include::NeoIPC-Core-Necrotising-Enterocolitis-Definition.es.adoc[]
 
 [#infection-definitions-pneumonia]
 === Neumonía
 La neumonía en neonatos es una entidad muy difícil de definir con fines de vigilancia, como puede deducirse del hecho de que muchos sistemas de vigilancia se abstienen de registrarla en absoluto, mientras que otros registran los eventos asociados a la ventilación, en los que la vigilancia se limita a los pacientes ventilados y la neumonía es sólo una de las entidades captadas por la definición.
 
-include::NeoIPC-Core-Pneumonia-Definition.adoc[]
+include::NeoIPC-Core-Pneumonia-Definition.es.adoc[]
 
 NOTE: Para cumplir los criterios de neumonía hospitalaria asociada a dispositivos, los pacientes deben estar ventilados durante al menos 4 días naturales (el día 1 es el día de inicio de la ventilación invasiva/no invasiva).
 La fecha más temprana del evento es el día 3 de ventilación.
@@ -496,19 +496,19 @@ El día de la infección en este caso sería el "Día 17".
 ==== ISQ incisional superficial
 Pertenecen a esta categoría las infecciones del sitio quirúrgico que sólo afectan a la piel y al tejido subcutáneo.
 
-include::NeoIPC-Core-Superficial-Incisional-SSI-Definition.adoc[]
+include::NeoIPC-Core-Superficial-Incisional-SSI-Definition.es.adoc[]
 
 [#infection-definitions-surgical-site-infection-deep-incisional-ssi]
 ==== ISQ incisional profunda
 Pertenecen a esta categoría las infecciones del sitio quirúrgico que afectan a los tejidos blandos profundos de la incisión (por ejemplo, las capas fasciales y musculares).
 
-include::NeoIPC-Core-Deep-Incisional-SSI-Definition.adoc[]
+include::NeoIPC-Core-Deep-Incisional-SSI-Definition.es.adoc[]
 
 [#infection-definitions-surgical-site-infection-organ-space-ssi]
 ==== ISQ de órgano/espacio
 Pertenecen a esta categoría las infecciones del sitio quirúrgico que afectan a cualquier parte del cuerpo más profunda que las capas fascial/muscular que se abre o manipula durante el procedimiento quirúrgico.
 
-include::NeoIPC-Core-Organ-Space-SSI-Definition.adoc[]
+include::NeoIPC-Core-Organ-Space-SSI-Definition.es.adoc[]
 
 [#data-dictionary]
 == Diccionario de datos
@@ -1019,5 +1019,5 @@ include::NeoIPC-Antibiotics.es.adoc[]
 |===
 |Nombre |Tipo |Patogenicidad supuesta |Existencias registradas
 
-include::NeoIPC-Pathogens.adoc[]
+include::NeoIPC-Pathogens.es.adoc[]
 |===

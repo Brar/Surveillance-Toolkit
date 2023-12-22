@@ -227,7 +227,7 @@ Sie können das Stammblatt zur Datenerfassung verwenden, um die Daten zur Erfass
 Wenn Sie jedoch Daten an NeoIPC übermitteln, müssen die Informationen, die Sie auf dem Stammblatt zur Datenerfassung erfassen, letztendlich ins Online-Erfassungssystem eingegeben werden.
 
 .Stammblatt zur Datenerfassung für Patientendaten
-//image::NeoIPC-Core-Master-Data-Collection-Sheet-Image.svg[Stammblatt für die Erfassung von Patientendaten,{full-width},pdfwidth=75%,opts=inline,align="center"]
+//image::NeoIPC-Core-Master-Data-Collection-Sheet-Image.de.svg[Stammblatt für die Erfassung von Patientendaten,{full-width},pdfwidth=75%,opts=inline,align="center"]
 image::NeoIPC-Core-Master-Data-Collection-Sheet-Image.png[Stammblatt für die Erfassung von Patientendaten,{full-width},pdfwidth=75%,align="center"]
 
 <<<
@@ -250,7 +250,7 @@ Wenn zwischen Verlegung und Wiederaufnahme mehr als 48 Stunden liegen, müssen S
 In diesem Fall ist jede Wiederaufnahme als Neuaufnahme zu erfassen, und als Art der Aufnahme ist "Verlegung in Ihr Zentrum ≥ 24 Stunden nach der Geburt" zu wählen.
 
 .Verlaufsbogen für die Erfassung von Patientendaten
-//image::NeoIPC-Core-Patient-Progress-Chart-Image.svg[Verlaufsbogen für die Erfassung von Patientendaten,{full-width},pdfwidth=100%,opts=inline,align="center"]
+//image::NeoIPC-Core-Patient-Progress-Chart-Image.de.svg[Verlaufsbogen für die Erfassung von Patientendaten,{full-width},pdfwidth=100%,opts=inline,align="center"]
 image::NeoIPC-Core-Patient-Progress-Chart-Image.png[Verlaufsbogen für die Erfassung von Patientendaten,{full-width},pdfwidth=100%,align="center"]
 
 <<<
@@ -262,7 +262,7 @@ Für die Dokumentation vor Ort können Sie den Erhebungsbogen für chirurgische 
 Zusätzlich zur Erfassung des Eingriffs müssen Sie das betreffende Kind 30 oder 90 Tage lang auf Wundinfektionen überwachen, je nachdem, ob während des Eingriffs ein Implantat belassen wurde.
 
 .Erhebungsbogen für chirurgische Eingriffe
-//image::NeoIPC-Core-Surgical-Procedure-Data-Collection-Sheet-Image.svg[Erhebungsbogen für chirurgische Eingriffe,{full-width},pdfwidth=75%,opts=inline,align="center"]
+//image::NeoIPC-Core-Surgical-Procedure-Data-Collection-Sheet-Image.de.svg[Erhebungsbogen für chirurgische Eingriffe,{full-width},pdfwidth=75%,opts=inline,align="center"]
 image::NeoIPC-Core-Surgical-Procedure-Data-Collection-Sheet-Image.png[Erhebungsbogen für chirurgische Eingriffe,{full-width},pdfwidth=75%,align="center"]
 
 [#data-collection-infection-data-collection]
@@ -292,7 +292,7 @@ Es sind mindestens 14 Tage und ein Zeitraum ohne relevante Infektionssymptome er
 Wenn bei einem eingeschlossenen Kind während des Surveillance-Zeitraums eine im Krankenhaus erworbene primäre Sepsis/Blutstrominfektion gemäß den NeoIPC-Surveillance-Kriterien (siehe Infektionsdefinitionen: Primäre Sepsis/Blutstrominfektion) auftritt, sollten Sie die erforderlichen Daten mit dem nachstehenden Datenerfassungsbogen erfassen und/oder über die Online-Erfassungsplattform übermitteln.
 
 .Erfassungsbogen für primäre Sepsis/BSI
-//image::NeoIPC-Core-Primary-Sepsis-BSI-Reporting-Sheet-Image.svg[Erfassungsbogen für primäre Sepsis/BSI,{full-width},pdfwidth=75%,opts=inline,align="center"]
+//image::NeoIPC-Core-Primary-Sepsis-BSI-Reporting-Sheet-Image.de.svg[Erfassungsbogen für primäre Sepsis/BSI,{full-width},pdfwidth=75%,opts=inline,align="center"]
 image::NeoIPC-Core-Primary-Sepsis-BSI-Reporting-Sheet-Image.png[Erfassungsbogen für primäre Sepsis/BSI,{full-width},pdfwidth=75%,align="center"]
 
 
