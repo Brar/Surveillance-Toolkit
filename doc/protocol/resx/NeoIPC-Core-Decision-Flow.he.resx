@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <data name="yes" xml:space="preserve">
+        <value>כן</value>
+    </data>
+    <data name="no" xml:space="preserve">
+        <value>לא</value>
+    </data>
+    <data name="admitted" xml:space="preserve">
+        <value>אושפזת במחלקה שלך תוך 120 יום לאחר הלידה?</value>
+    </data>
+    <data name="not_admitted" xml:space="preserve">
+        <value>כלומר, תינוקות שנולדו מת, מוות בחדר לידה, יום חיים &gt; 120</value>
+    </data>
+    <data name="gestational_age" xml:space="preserve">
+        <value>גיל הריון &lt; 32 שבועות?</value>
+    </data>
+    <data name="birthweight" xml:space="preserve">
+        <value>משקל לידה &lt; 1500 גרם?</value>
+    </data>
+    <data name="eligible" xml:space="preserve">
+        <value>זכאי</value>
+    </data>
+    <data name="ineligible" xml:space="preserve">
+        <value>לא זכאי ל</value>
+    </data>
+</root>

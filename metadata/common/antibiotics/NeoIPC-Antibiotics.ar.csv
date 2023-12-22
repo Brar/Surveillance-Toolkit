@@ -1,0 +1,264 @@
+id,property,needs_translation,default,translated
+J01AA01,NAME,u,Demeclocycline,ديميكلوسكلين
+J01AA02,NAME,u,Doxycycline,الدوكسيسيكلين
+J01AA03,NAME,u,Chlortetracycline,كلورتتراسيكلين
+J01AA04,NAME,u,Lymecycline,ليميسيكلين
+J01AA05,NAME,u,Metacycline,ميتاسيكلين
+J01AA06,NAME,u,Oxytetracycline,أوكسي تتراسيكلين
+J01AA07,NAME,u,Tetracycline,التتراسيكلين
+J01AA08,NAME,u,Minocycline,المينوسكلين
+J01AA09,NAME,u,Rolitetracycline,روليتتراسيكلين
+J01AA10,NAME,u,Penimepicycline,البنيمبيسكلين
+J01AA11,NAME,u,Clomocycline,كلوموسيكلين
+J01AA12,NAME,u,Tigecycline,تيجيسيكلين
+J01AA13,NAME,u,Eravacycline,ايرافاسيكلين
+J01AA14,NAME,u,Sarecycline,الساريسيكلين
+J01AA15,NAME,u,Omadacycline,أوماداسيكلين
+J01BA01,NAME,u,Chloramphenicol,الكلورامفينيكول
+J01BA02,NAME,u,Thiamphenicol,ثيامفينيكول
+J01CA01,NAME,u,Ampicillin,الأمبيسلين
+J01CA02,NAME,u,Pivampicillin,بيفامبيسيلين
+J01CA03,NAME,u,Carbenicillin,كاربنيسيلين
+J01CA04,NAME,u,Amoxicillin,أموكسيسيلين
+J01CA05,NAME,u,Carindacillin,كارينداسيلين
+J01CA06,NAME,u,Bacampicillin,باكامبيسيلين
+J01CA07,NAME,u,Epicillin,إبيسيلين
+J01CA08,NAME,u,Pivmecillinam,بيفميسيلينام
+J01CA09,NAME,u,Azlocillin,أزلوسيلين
+J01CA10,NAME,u,Mezlocillin,ميزلوسيلين
+J01CA11,NAME,u,Mecillinam,ميسيلينام
+J01CA12,NAME,u,Piperacillin,بيبيراسيلين
+J01CA13,NAME,u,Ticarcillin,تيكارسيلين
+J01CA14,NAME,u,Metampicillin,ميتامبيسلين
+J01CA15,NAME,u,Talampicillin,تالامبيسلين
+J01CA16,NAME,u,Sulbenicillin,سولبنيسيلين
+J01CA17,NAME,u,Temocillin,تيموسيلين
+J01CA18,NAME,u,Hetacillin,هيتاسيللين
+J01CA19,NAME,u,Aspoxicillin,الأسبوكسيسيلين
+J01CE01,NAME,u,Benzylpenicillin,البنزيل بنسلين
+J01CE02,NAME,u,Phenoxymethylpenicillin,فينوكسي ميثيل بنسلين
+J01CE03,NAME,u,Propicillin,البروبيسلين
+J01CE04,NAME,u,Azidocillin,أزيدوسيلين
+J01CE05,NAME,u,Pheneticillin,الفينيتيسيلين
+J01CE06,NAME,u,Penamecillin,البناميسيلين
+J01CE07,NAME,u,Clometocillin,كلوميتوسيلين
+J01CE08,NAME,u,Benzathine benzylpenicillin,بنزاثين بنزيل بنسلين
+J01CE09,NAME,u,Procaine benzylpenicillin,بروكايين بنزيل بنسلين
+J01CE10,NAME,u,Benzathine phenoxymethylpenicillin,بنزاثين فينوكسي ميثيل بنسلين
+J01CF01,NAME,u,Dicloxacillin,ديكلوكساسيللين
+J01CF02,NAME,u,Cloxacillin,كلوكساسيلين
+J01CF03,NAME,u,Meticillin,الميتيسيلين
+J01CF04,NAME,u,Oxacillin,أوكساسيلين
+J01CF05,NAME,u,Flucloxacillin,فلوكلوكساسيلين
+J01CF06,NAME,u,Nafcillin,نافسيلين
+J01CG01,NAME,u,Sulbactam,سولباكتام
+J01CG02,NAME,u,Tazobactam,تازوباكتام
+J01CR01,NAME,u,Ampicillin and beta-lactamase inhibitor,الأمبيسلين ومثبطات بيتا لاكتاماز
+J01CR02,NAME,u,Amoxicillin and beta-lactamase inhibitor,أموكسيسيلين ومثبط بيتا لاكتاماز
+J01CR03,NAME,u,Ticarcillin and beta-lactamase inhibitor,تيكارسيلين ومثبط بيتا لاكتاماز
+J01CR04,NAME,u,Sultamicillin,السولتاميسيلين
+J01CR05,NAME,u,Piperacillin and beta-lactamase inhibitor,بيبيراسيلين ومثبط بيتا لاكتاماز
+J01DB01,NAME,u,Cefalexin,سيفالكسين
+J01DB02,NAME,u,Cefaloridine,سيفالوريدين
+J01DB03,NAME,u,Cefalotin,سيفالوتين
+J01DB04,NAME,u,Cefazolin,سيفازولين
+J01DB05,NAME,u,Cefadroxil,سيفادروكسيل
+J01DB06,NAME,u,Cefazedone,سيفازدون
+J01DB07,NAME,u,Cefatrizine,سيفاتريزين
+J01DB08,NAME,u,Cefapirin,سيفابيرين
+J01DB09,NAME,u,Cefradine,سيفرادين
+J01DB10,NAME,u,Cefacetrile,سيفاسيتريل
+J01DB11,NAME,u,Cefroxadine,سيفروكسادين
+J01DB12,NAME,u,Ceftezole,سيفتيزول
+J01DC01,NAME,u,Cefoxitin,سيفوكسيتين
+J01DC02,NAME,u,Cefuroxime,سيفوروكسيم
+J01DC03,NAME,u,Cefamandole,سيفاماندول
+J01DC04,NAME,u,Cefaclor,سيفاكلور
+J01DC05,NAME,u,Cefotetan,سيفوتيتان
+J01DC06,NAME,u,Cefonicid,سيفونيسيد
+J01DC07,NAME,u,Cefotiam,سيفوتيام
+J01DC08,NAME,u,Loracarbef,لوراكاربيف
+J01DC09,NAME,u,Cefmetazole,سيفميتازول
+J01DC10,NAME,u,Cefprozil,سيفبروزيل
+J01DC11,NAME,u,Ceforanide,سيفورانيد
+J01DC12,NAME,u,Cefminox,سيفمينوكس
+J01DC13,NAME,u,Cefbuperazone,سيفبوبيرازون
+J01DC14,NAME,u,Flomoxef,فلوموكسيف
+J01DD01,NAME,u,Cefotaxime,سيفوتاكسيم
+J01DD02,NAME,u,Ceftazidime,سيفتازيديم
+J01DD03,NAME,u,Cefsulodin,سيفسولودين
+J01DD04,NAME,u,Ceftriaxone,سيفترياكسون
+J01DD05,NAME,u,Cefmenoxime,سيفمينوكسيم
+J01DD06,NAME,u,Latamoxef,لاتاموكسيف
+J01DD07,NAME,u,Ceftizoxime,سيفتيزوكسيم
+J01DD08,NAME,u,Cefixime,سيفيكسيم
+J01DD09,NAME,u,Cefodizime,سيفوديزيم
+J01DD10,NAME,u,Cefetamet,سيفيتاميت
+J01DD11,NAME,u,Cefpiramide,سيفبيراميد
+J01DD12,NAME,u,Cefoperazone,سيفوبيرازون
+J01DD13,NAME,u,Cefpodoxime,سيفبودوكسيم
+J01DD14,NAME,u,Ceftibuten,سيفتيبوتين
+J01DD15,NAME,u,Cefdinir,سيفدينير
+J01DD16,NAME,u,Cefditoren,سيفديتورين
+J01DD17,NAME,u,Cefcapene,سيفكابين
+J01DD18,NAME,u,Cefteram,سيفترام
+J01DD51,NAME,u,Cefotaxime and beta-lactamase inhibitor,سيفوتاكسيم ومثبط بيتا لاكتاماز
+J01DD52,NAME,u,Ceftazidime and beta-lactamase inhibitor,سيفتازيديم ومثبط بيتا لاكتاماز
+J01DD62,NAME,u,Cefoperazone and beta-lactamase inhibitor,سيفوبيرازون ومثبط بيتا لاكتاماز
+J01DD63,NAME,u,Ceftriaxone and beta-lactamase inhibitor,سيفترياكسون ومثبطات بيتا لاكتاماز
+J01DD64,NAME,u,Cefpodoxime and beta-lactamase inhibitor,سيفبودوكسيم ومثبط بيتا لاكتاماز
+J01DE01,NAME,u,Cefepime,سيفيبيم
+J01DE02,NAME,u,Cefpirome,سيفبيروم
+J01DE03,NAME,u,Cefozopran,سيفوزوبران
+J01DF01,NAME,u,Aztreonam,أزتريونام
+J01DF02,NAME,u,Carumonam,كارومونام
+J01DH02,NAME,u,Meropenem,ميروبينيم
+J01DH03,NAME,u,Ertapenem,إرتابينيم
+J01DH04,NAME,u,Doripenem,دوريبينيم
+J01DH05,NAME,u,Biapenem,بيابينيم
+J01DH06,NAME,u,Tebipenem pivoxil,تيبيبينيم بيفوكسيل
+J01DH51,NAME,u,Imipenem and cilastatin,إيميبينيم وسيلاستاتين
+J01DH52,NAME,u,Meropenem and vaborbactam,الميروبينيم والفابورباكتام
+J01DH55,NAME,u,Panipenem and betamipron,البانيبينيم والبيتاميبرون
+J01DH56,NAME,u,"Imipenem, cilastatin and relebactam","إيميبينيم وسيلاستاتين وريليباكتام"
+J01DI01,NAME,u,Ceftobiprole medocaril,سيفتوبيبرول ميدوكاريل
+J01DI02,NAME,u,Ceftaroline fosamil,سيفتارولين فوساميل
+J01DI03,NAME,u,Faropenem,فاروبينم
+J01DI04,NAME,u,Cefiderocol,سيفيديروكول
+J01DI54,NAME,u,Ceftolozane and beta-lactamase inhibitor,سيفتولوزان ومثبط بيتا لاكتاماز
+J01EA01,NAME,u,Trimethoprim,تريميثوبريم
+J01EA02,NAME,u,Brodimoprim,بروديموبريم
+J01EA03,NAME,u,Iclaprim,إيكلابريم
+J01EB01,NAME,u,Sulfaisodimidine,سلفايسوديميدين
+J01EB02,NAME,u,Sulfamethizole,سلفاميثيزول
+J01EB03,NAME,u,Sulfadimidine,سلفاديميدين
+J01EB04,NAME,u,Sulfapyridine,سلفابيريدين
+J01EB05,NAME,u,Sulfafurazole,سلفافورازول
+J01EB06,NAME,u,Sulfanilamide,سلفانيلاميد
+J01EB07,NAME,u,Sulfathiazole,سلفاثيازول
+J01EB08,NAME,u,Sulfathiourea,سلفاثيوريا
+J01EC01,NAME,u,Sulfamethoxazole,سلفاميثوكسازول
+J01EC02,NAME,u,Sulfadiazine,سلفاديازين
+J01EC03,NAME,u,Sulfamoxole,سلفاموكسول
+J01ED01,NAME,u,Sulfadimethoxine,سلفاديميثوكسين
+J01ED02,NAME,u,Sulfalene,السلفالين
+J01ED03,NAME,u,Sulfametomidine,سلفاميتوميدين
+J01ED04,NAME,u,Sulfametoxydiazine,سلفاميتوكسيديازين
+J01ED05,NAME,u,Sulfamethoxypyridazine,سلفاميثوكسيبيريدازين
+J01ED06,NAME,u,Sulfaperin,سلفابيرين
+J01ED07,NAME,u,Sulfamerazine,سلفاميرازين
+J01ED08,NAME,u,Sulfaphenazole,سلفافينازول
+J01ED09,NAME,u,Sulfamazone,سلفامازون
+J01EE01,NAME,u,Sulfamethoxazole and trimethoprim,سلفاميثوكسازول وتريميثوبريم
+J01EE02,NAME,u,Sulfadiazine and trimethoprim,السلفاديازين والتريميثوبريم
+J01EE03,NAME,u,Sulfametrole and trimethoprim,السلفاميترول والتريميثوبريم
+J01EE04,NAME,u,Sulfamoxole and trimethoprim,سلفاموكسول وتريميثوبريم
+J01EE05,NAME,u,Sulfadimidine and trimethoprim,السلفاديميدين والتريميثوبريم
+J01EE06,NAME,u,Sulfadiazine and tetroxoprim,سلفاديازين وتيتروكسوبريم
+J01EE07,NAME,u,Sulfamerazine and trimethoprim,سلفاميرازين وتريميثوبريم
+J01FA01,NAME,u,Erythromycin,الاريثروميسين
+J01FA02,NAME,u,Spiramycin,سبيراميسين
+J01FA03,NAME,u,Midecamycin,ميديكاميسين
+J01FA05,NAME,u,Oleandomycin,أوليندومايسين
+J01FA06,NAME,u,Roxithromycin,روكسيثروميسين
+J01FA07,NAME,u,Josamycin,جوساميسين
+J01FA08,NAME,u,Troleandomycin,ترولياندومايسين
+J01FA09,NAME,u,Clarithromycin,كلاريثروميسين
+J01FA10,NAME,u,Azithromycin,أزيثروميسين
+J01FA11,NAME,u,Miocamycin,ميوساميسين
+J01FA12,NAME,u,Rokitamycin,روكيتاميسين
+J01FA13,NAME,u,Dirithromycin,ديريثرومايسين
+J01FA14,NAME,u,Flurithromycin,فلوريثرومايسين
+J01FA15,NAME,u,Telithromycin,تيليثرومايسين
+J01FA16,NAME,u,Solithromycin,سوليثرومايسين
+J01FF01,NAME,u,Clindamycin,الكليندامايسين
+J01FF02,NAME,u,Lincomycin,لينكومايسين
+J01FG01,NAME,u,Pristinamycin,بريستيناميسين
+J01FG02,NAME,u,Quinupristin/dalfopristin,كوينوبريستين/دالفوبريستين
+J01GA01,NAME,u,Streptomycin,الستربتوميسين
+J01GA02,NAME,u,Streptoduocin,الستربتودوسين
+J01GB01,NAME,u,Tobramycin,توبراميسين
+J01GB03,NAME,u,Gentamicin,الجنتاميسين
+J01GB04,NAME,u,Kanamycin,كاناميسين
+J01GB05,NAME,u,Neomycin,نيومايسين
+J01GB06,NAME,u,Amikacin,أميكاسين
+J01GB07,NAME,u,Netilmicin,نيتيلميسين
+J01GB08,NAME,u,Sisomicin,سيسومين
+J01GB09,NAME,u,Dibekacin,ديبيكاسين
+J01GB10,NAME,u,Ribostamycin,الريبوستاميسين
+J01GB11,NAME,u,Isepamicin,إيسيباميسين
+J01GB12,NAME,u,Arbekacin,أربيكاسين
+J01GB13,NAME,u,Bekanamycin,بيكاناميسين
+J01GB14,NAME,u,Plazomicin,بلازوميسين
+J01MA01,NAME,u,Ofloxacin,أوفلوكساسين
+J01MA02,NAME,u,Ciprofloxacin,سيبروفلوكساسين
+J01MA03,NAME,u,Pefloxacin,بيفلوكساسين
+J01MA04,NAME,u,Enoxacin,إنوكساسين
+J01MA05,NAME,u,Temafloxacin,تيمافلوكساسين
+J01MA06,NAME,u,Norfloxacin,النورفلوكساسين
+J01MA07,NAME,u,Lomefloxacin,لوميفلوكساسين
+J01MA08,NAME,u,Fleroxacin,الفليروكساسين
+J01MA09,NAME,u,Sparfloxacin,سبارفلوكساسين
+J01MA10,NAME,u,Rufloxacin,روفلوكساسين
+J01MA11,NAME,u,Grepafloxacin,جريبافلوكساسين
+J01MA12,NAME,u,Levofloxacin,ليفوفلوكساسين
+J01MA13,NAME,u,Trovafloxacin,تروفافلوكساسين
+J01MA14,NAME,u,Moxifloxacin,موكسيفلوكساسين
+J01MA15,NAME,u,Gemifloxacin,جيميفلوكساسين
+J01MA16,NAME,u,Gatifloxacin,جاتيفلوكساسين
+J01MA17,NAME,u,Prulifloxacin,بروليفلوكساسين
+J01MA18,NAME,u,Pazufloxacin,بازوفلوكساسين
+J01MA19,NAME,u,Garenoxacin,جارينوكساسين
+J01MA21,NAME,u,Sitafloxacin,سيتافلوكساسين
+J01MA22,NAME,u,Tosufloxacin,توسوفلوكساسين
+J01MA23,NAME,u,Delafloxacin,ديلافلوكساسين
+J01MA24,NAME,u,Levonadifloxacin,ليفوناديفلوكساسين
+J01MA25,NAME,u,Lascufloxacin,لاسكوفلوكساسين
+J01MB01,NAME,u,Rosoxacin,روزوكساسين
+J01MB02,NAME,u,Nalidixic acid,حمض الناليديكسيك
+J01MB03,NAME,u,Piromidic acid,حمض البيروميديك
+J01MB04,NAME,u,Pipemidic acid,حمض بيبيميديك
+J01MB05,NAME,u,Oxolinic acid,حمض الأوكسولينيك
+J01MB06,NAME,u,Cinoxacin,سينوكساسين
+J01MB07,NAME,u,Flumequine,فلومكين
+J01MB08,NAME,u,Nemonoxacin,نيمونوكساسين
+J01RA03,NAME,u,Cefuroxime and metronidazole,سيفوروكسيم وميترونيدازول
+J01RA04,NAME,u,Spiramycin and metronidazole,سبيراميسين وميترونيدازول
+J01RA05,NAME,u,Levofloxacin and ornidazole,ليفوفلوكساسين وأورنيدازول
+J01RA06,NAME,u,Cefepime and amikacin,سيفيبيم وأميكاسين
+J01RA07,NAME,u,"Azithromycin, fluconazole and secnidazole","أزيثروميسين وفلوكونازول وسيكنيدازول"
+J01RA08,NAME,u,Tetracycline and oleandomycin,التتراسيكلين وأولياندومايسين
+J01RA09,NAME,u,Ofloxacin and ornidazole,أوفلوكساسين وأورنيدازول
+J01RA10,NAME,u,Ciprofloxacin and metronidazole,سيبروفلوكساسين وميترونيدازول
+J01RA11,NAME,u,Ciprofloxacin and tinidazole,سيبروفلوكساسين وتينيدازول
+J01RA12,NAME,u,Ciprofloxacin and ornidazole,سيبروفلوكساسين وأورنيدازول
+J01RA13,NAME,u,Norfloxacin and tinidazole,النورفلوكساسين والتينيدازول
+J01RA14,NAME,u,Norfloxacin and metronidazole,النورفلوكساسين والميترونيدازول
+J01RA15,NAME,u,Cefixime and ornidazole,سيفيكسيم وأورنيدازول
+J01RA16 ,NAME,u,Cefixime and azithromycin,سيفيكسيم وأزيثروميسين
+J01XA01,NAME,u,Vancomycin,فانكومايسين
+J01XA02,NAME,u,Teicoplanin,تيكوبلانين
+J01XA03,NAME,u,Telavancin,تيلافانسين
+J01XA04,NAME,u,Dalbavancin,دالبافانسين
+J01XA05,NAME,u,Oritavancin,أوريتافانسين
+J01XB01,NAME,u,Colistin,كوليستين
+J01XB02,NAME,u,Polymyxin B,بوليميكسين ب
+J01XC01,NAME,u,Fusidic acid,حمض الفوسيديك
+J01XD01,NAME,u,Metronidazole,ميترونيدازول
+J01XD02,NAME,u,Tinidazole,تينيدازول
+J01XD03,NAME,u,Ornidazole,أورنيدازول
+J01XE01,NAME,u,Nitrofurantoin,نتروفورانتوين
+J01XE02,NAME,u,Nifurtoinol,نيفورتوينول
+J01XE03,NAME,u,Furazidin,فورازيدين
+J01XX01,NAME,u,Fosfomycin,فوسفوميسين
+J01XX02,NAME,u,Xibornol,شيبورنول
+J01XX03,NAME,u,Clofoctol,كلوفوكتول
+J01XX04,NAME,u,Spectinomycin,سبكتينوميسين
+J01XX05,NAME,u,Methenamine,ميثينامين
+J01XX06,NAME,u,Mandelic acid,حمض المندليك
+J01XX07,NAME,u,Nitroxoline,نيتروكسولين
+J01XX08,NAME,u,Linezolid,لينزوليد
+J01XX09,NAME,u,Daptomycin,دابتوميسين
+J01XX10,NAME,u,Bacitracin,باسيتراسين
+J01XX11,NAME,u,Tedizolid,تيديزوليد
+J01XX12,NAME,u,Lefamulin,ليفامولين

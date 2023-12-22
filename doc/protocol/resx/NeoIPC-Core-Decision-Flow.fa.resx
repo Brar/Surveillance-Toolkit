@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <data name="yes" xml:space="preserve">
+        <value>آره</value>
+    </data>
+    <data name="no" xml:space="preserve">
+        <value>خیر</value>
+    </data>
+    <data name="admitted" xml:space="preserve">
+        <value>آیا ظرف 120 روز پس از تولد در بخش خود پذیرفته شده اید؟</value>
+    </data>
+    <data name="not_admitted" xml:space="preserve">
+        <value>به عنوان مثال، نوزادان مرده، مرگ اتاق زایمان، روز زندگی &gt; 120</value>
+    </data>
+    <data name="gestational_age" xml:space="preserve">
+        <value>سن حاملگی &lt; 32 هفته؟</value>
+    </data>
+    <data name="birthweight" xml:space="preserve">
+        <value>وزن تولد کمتر از 1500 گرم؟</value>
+    </data>
+    <data name="eligible" xml:space="preserve">
+        <value>واجد شرایط</value>
+    </data>
+    <data name="ineligible" xml:space="preserve">
+        <value>واجد شرایط نیست</value>
+    </data>
+</root>

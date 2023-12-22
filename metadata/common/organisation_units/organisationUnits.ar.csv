@@ -1,0 +1,79 @@
+id,property,needs_translation,default,translated
+NEOIPC,NAME,u,The NeoIPC Project,مشروع نيو آي بي سي
+NEOIPC,SHORT_NAME,u,NeoIPC,NeoIPC
+AL,NAME,u,Shqipëria,ألبانيا
+AL,SHORT_NAME,u,Shqipëria,ألبانيا
+AT,NAME,u,Österreich,النمسا
+AT,SHORT_NAME,u,Österreich,النمسا
+BE,NAME,u,Belgique/België,بلجيكا
+BE,SHORT_NAME,u,Belgique/België,بلجيكا
+BG,NAME,u,България [Bulgaria],بلغاريا
+BG,SHORT_NAME,u,България,بلغاريا
+CH,NAME,u,Schweiz/Suisse/Svizzera,سويسرا
+CH,SHORT_NAME,u,Schweiz/Suisse/Svizzera,سويسرا
+CY,NAME,u,Κύπρος [Kýpros],قبرص
+CY,SHORT_NAME,u,Κύπρος,قبرص
+CZ,NAME,u,Česko,الجمهورية التشيكية
+CZ,SHORT_NAME,u,Česko,الجمهورية التشيكية
+DE,NAME,u,Deutschland,ألمانيا
+DE,SHORT_NAME,u,Deutschland,ألمانيا
+DK,NAME,u,Danmark,الدنمارك
+DK,SHORT_NAME,u,Danmark,الدنمارك
+EE,NAME,u,Eesti,إستونيا
+EE,SHORT_NAME,u,Eesti,إستونيا
+EL,NAME,u,Ελλάδα [Elláda],اليونان
+EL,SHORT_NAME,u,Ελλάδα,اليونان
+ES,NAME,u,España,إسبانيا
+ES,SHORT_NAME,u,España,إسبانيا
+FI,NAME,u,Suomi/Finland,فنلندا
+FI,SHORT_NAME,u,Suomi/Finland,فنلندا
+FR,NAME,u,France,فرنسا
+FR,SHORT_NAME,u,France,فرنسا
+HR,NAME,u,Hrvatska,كرواتيا
+HR,SHORT_NAME,u,Hrvatska,كرواتيا
+HU,NAME,u,Magyarország,هنغاريا
+HU,SHORT_NAME,u,Magyarország,هنغاريا
+IE,NAME,u,Éire/Ireland,أيرلندا
+IE,SHORT_NAME,u,Éire/Ireland,أيرلندا
+IS,NAME,u,Ísland,أيسلندا
+IS,SHORT_NAME,u,Ísland,أيسلندا
+IT,NAME,u,Italia,إيطاليا
+IT,SHORT_NAME,u,Italia,إيطاليا
+LI,NAME,u,Liechtenstein,ليختنشتاين
+LI,SHORT_NAME,u,Liechtenstein,ليختنشتاين
+LT,NAME,u,Lietuva,ليتوانيا
+LT,SHORT_NAME,u,Lietuva,ليتوانيا
+LU,NAME,u,Luxembourg,لوكسمبورغ
+LU,SHORT_NAME,u,Luxembourg,لوكسمبورغ
+LV,NAME,u,Latvija,لاتفيا
+LV,SHORT_NAME,u,Latvija,لاتفيا
+ME,NAME,u,Црна Гора [Crna Gora],الجبل الأسود
+ME,SHORT_NAME,u,Црна Гора,الجبل الأسود
+MK,NAME,u,Северна Македонија [Severna Makedonija],مقدونيا الشمالية
+MK,SHORT_NAME,u,Северна Македонија,مقدونيا الشمالية
+MT,NAME,u,Malta,مالطا
+MT,SHORT_NAME,u,Malta,مالطا
+NL,NAME,u,Nederland,هولندا
+NL,SHORT_NAME,u,Nederland,هولندا
+NO,NAME,u,Norge,النرويج
+NO,SHORT_NAME,u,Norge,النرويج
+PL,NAME,u,Polska,بولندا
+PL,SHORT_NAME,u,Polska,بولندا
+PT,NAME,u,Portugal,البرتغال
+PT,SHORT_NAME,u,Portugal,البرتغال
+RO,NAME,u,România,رومانيا
+RO,SHORT_NAME,u,România,رومانيا
+RS,NAME,u,Srbija/Сpбија [Serbia],صربيا
+RS,SHORT_NAME,u,Srbija/Сpбија,صربيا
+SE,NAME,u,Sverige,السويد
+SE,SHORT_NAME,u,Sverige,السويد
+SI,NAME,u,Slovenija,سلوفينيا
+SI,SHORT_NAME,u,Slovenija,سلوفينيا
+SK,NAME,u,Slovensko,سلوفاكيا
+SK,SHORT_NAME,u,Slovensko,سلوفاكيا
+TR,NAME,u,Türkiye,ديك رومى
+TR,SHORT_NAME,u,Türkiye,ديك رومى
+UK,NAME,u,United Kingdom,المملكة المتحدة
+UK,SHORT_NAME,u,United Kingdom,المملكة المتحدة
+ZA,NAME,u,Aforika Borwa/Afrika Borwa/Afrika-Dzonga/Afurika Tshipembe/iNingizimu Afrika/iSewula Afrika/South Africa/Suid-Afrika/uMzantsi Afrika,جنوب أفريقيا
+ZA,SHORT_NAME,u,South Africa,جنوب أفريقيا

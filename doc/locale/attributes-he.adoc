@@ -1,0 +1,23 @@
+// Modern Hebrew translation, strings translated via Google translate
+:appendix-caption: נִספָּח
+:appendix-refsig: {appendix-caption}
+:caution-caption: זְהִירוּת
+:chapter-signifier: פֶּרֶק
+:chapter-refsig: {chapter-signifier}
+:example-caption: דוגמא
+:figure-caption: דמות
+:important-caption: חָשׁוּב
+:last-update-label: עודכן לאחרונה
+ifdef::listing-caption[:listing-caption: רישום]
+ifdef::manname-title[:manname-title: שֵׁם]
+:note-caption: הערה
+:part-signifier: חֵלֶק
+:part-refsig: {part-signifier}
+ifdef::preface-title[:preface-title: הַקדָמָה]
+:section-refsig: סָעִיף
+:table-caption: שולחן
+:tip-caption: עֵצָה
+:toc-title: תוכן העניינים
+:untitled-label: ללא כותרת
+:version-label: גִרְסָה
+:warning-caption: אַזהָרָה

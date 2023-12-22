@@ -1,0 +1,264 @@
+id,property,needs_translation,default,translated
+J01AA01,NAME,u,Demeclocycline,دمکلوسایکلین
+J01AA02,NAME,u,Doxycycline,داکسی سایکلین
+J01AA03,NAME,u,Chlortetracycline,کلرتتراسایکلین
+J01AA04,NAME,u,Lymecycline,لایمسایکلین
+J01AA05,NAME,u,Metacycline,متاسیکلین
+J01AA06,NAME,u,Oxytetracycline,اکسی تتراسایکلین
+J01AA07,NAME,u,Tetracycline,تتراسایکلین
+J01AA08,NAME,u,Minocycline,مینوسیکلین
+J01AA09,NAME,u,Rolitetracycline,رولی تتراسایکلین
+J01AA10,NAME,u,Penimepicycline,پنیمپی سیکلین
+J01AA11,NAME,u,Clomocycline,کلوموسیکلین
+J01AA12,NAME,u,Tigecycline,
+J01AA13,NAME,u,Eravacycline,ارواسایکلین
+J01AA14,NAME,u,Sarecycline,ساریسایکلین
+J01AA15,NAME,u,Omadacycline,اوماداسایکلین
+J01BA01,NAME,u,Chloramphenicol,کلرامفنیکل
+J01BA02,NAME,u,Thiamphenicol,تیامفنیکل
+J01CA01,NAME,u,Ampicillin,آمپی سیلین
+J01CA02,NAME,u,Pivampicillin,پیوامپی سیلین
+J01CA03,NAME,u,Carbenicillin,کاربنی سیلین
+J01CA04,NAME,u,Amoxicillin,آموکسی سیلین
+J01CA05,NAME,u,Carindacillin,کارینداسیلین
+J01CA06,NAME,u,Bacampicillin,باکامپی سیلین
+J01CA07,NAME,u,Epicillin,اپی سیلین
+J01CA08,NAME,u,Pivmecillinam,پیومسیلینام
+J01CA09,NAME,u,Azlocillin,آزلوسیلین
+J01CA10,NAME,u,Mezlocillin,مزلوسیلین
+J01CA11,NAME,u,Mecillinam,
+J01CA12,NAME,u,Piperacillin,پیپراسیلین
+J01CA13,NAME,u,Ticarcillin,تیکارسیلین
+J01CA14,NAME,u,Metampicillin,متامپی سیلین
+J01CA15,NAME,u,Talampicillin,تالامپی سیلین
+J01CA16,NAME,u,Sulbenicillin,سولبنی سیلین
+J01CA17,NAME,u,Temocillin,تموسیلین
+J01CA18,NAME,u,Hetacillin,هتاسیلین
+J01CA19,NAME,u,Aspoxicillin,آسپوکسی سیلین
+J01CE01,NAME,u,Benzylpenicillin,بنزیل پنی سیلین
+J01CE02,NAME,u,Phenoxymethylpenicillin,فنوکسی متیل پنی سیلین
+J01CE03,NAME,u,Propicillin,پروپی سیلین
+J01CE04,NAME,u,Azidocillin,آزیدوسیلین
+J01CE05,NAME,u,Pheneticillin,فنتی سیلین
+J01CE06,NAME,u,Penamecillin,پنامسیلین
+J01CE07,NAME,u,Clometocillin,کلومتوسیلین
+J01CE08,NAME,u,Benzathine benzylpenicillin,بنزاتین بنزیل پنی سیلین
+J01CE09,NAME,u,Procaine benzylpenicillin,پروکائین بنزیل پنی سیلین
+J01CE10,NAME,u,Benzathine phenoxymethylpenicillin,بنزاتین فنوکسی متیل پنی سیلین
+J01CF01,NAME,u,Dicloxacillin,دیکلوکساسیلین
+J01CF02,NAME,u,Cloxacillin,کلوکساسیلین
+J01CF03,NAME,u,Meticillin,متی سیلین
+J01CF04,NAME,u,Oxacillin,اگزاسیلین
+J01CF05,NAME,u,Flucloxacillin,فلوکلوکساسیلین
+J01CF06,NAME,u,Nafcillin,نافسیلین
+J01CG01,NAME,u,Sulbactam,سولباکتام
+J01CG02,NAME,u,Tazobactam,تازوباکتام
+J01CR01,NAME,u,Ampicillin and beta-lactamase inhibitor,آمپی سیلین و مهارکننده بتالاکتاماز
+J01CR02,NAME,u,Amoxicillin and beta-lactamase inhibitor,آموکسی سیلین و مهارکننده بتالاکتاماز
+J01CR03,NAME,u,Ticarcillin and beta-lactamase inhibitor,تیکارسیلین و مهارکننده بتالاکتاماز
+J01CR04,NAME,u,Sultamicillin,سولتامی سیلین
+J01CR05,NAME,u,Piperacillin and beta-lactamase inhibitor,پیپراسیلین و مهارکننده بتالاکتاماز
+J01DB01,NAME,u,Cefalexin,سفالکسین
+J01DB02,NAME,u,Cefaloridine,سفالوریدین
+J01DB03,NAME,u,Cefalotin,سفالوتین
+J01DB04,NAME,u,Cefazolin,سفازولین
+J01DB05,NAME,u,Cefadroxil,سفادروکسیل
+J01DB06,NAME,u,Cefazedone,سفازدون
+J01DB07,NAME,u,Cefatrizine,سفاتریزین
+J01DB08,NAME,u,Cefapirin,سفاپیرین
+J01DB09,NAME,u,Cefradine,سفرادین
+J01DB10,NAME,u,Cefacetrile,سفاستریل
+J01DB11,NAME,u,Cefroxadine,سفروکسادین
+J01DB12,NAME,u,Ceftezole,سفتزول
+J01DC01,NAME,u,Cefoxitin,سفوکسیتین
+J01DC02,NAME,u,Cefuroxime,سفوروکسیم
+J01DC03,NAME,u,Cefamandole,سفاماندول
+J01DC04,NAME,u,Cefaclor,سفاکلر
+J01DC05,NAME,u,Cefotetan,سفوتتان
+J01DC06,NAME,u,Cefonicid,سفونیکید
+J01DC07,NAME,u,Cefotiam,سفوتیام
+J01DC08,NAME,u,Loracarbef,لوراکاربف
+J01DC09,NAME,u,Cefmetazole,سفمتازول
+J01DC10,NAME,u,Cefprozil,سفپروزیل
+J01DC11,NAME,u,Ceforanide,سفورانید
+J01DC12,NAME,u,Cefminox,سفمینوکس
+J01DC13,NAME,u,Cefbuperazone,سفبوپرازون
+J01DC14,NAME,u,Flomoxef,فلوماکسف
+J01DD01,NAME,u,Cefotaxime,سفوتاکسیم
+J01DD02,NAME,u,Ceftazidime,سفتازیدیم
+J01DD03,NAME,u,Cefsulodin,سفسولودین
+J01DD04,NAME,u,Ceftriaxone,سفتریاکسون
+J01DD05,NAME,u,Cefmenoxime,سفمنوکسیم
+J01DD06,NAME,u,Latamoxef,لاتاموکسف
+J01DD07,NAME,u,Ceftizoxime,سفتیزوکسیم
+J01DD08,NAME,u,Cefixime,سفیکسیم
+J01DD09,NAME,u,Cefodizime,سفودازیم
+J01DD10,NAME,u,Cefetamet,سفتامت
+J01DD11,NAME,u,Cefpiramide,سفپیرامید
+J01DD12,NAME,u,Cefoperazone,سفوپرازون
+J01DD13,NAME,u,Cefpodoxime,سفپودوکسیم
+J01DD14,NAME,u,Ceftibuten,سفتی بوتن
+J01DD15,NAME,u,Cefdinir,سفدینیر
+J01DD16,NAME,u,Cefditoren,Cefditoren
+J01DD17,NAME,u,Cefcapene,سفکاپن
+J01DD18,NAME,u,Cefteram,سفترام
+J01DD51,NAME,u,Cefotaxime and beta-lactamase inhibitor,سفوتاکسیم و مهارکننده بتالاکتاماز
+J01DD52,NAME,u,Ceftazidime and beta-lactamase inhibitor,سفتازیدیم و مهارکننده بتالاکتاماز
+J01DD62,NAME,u,Cefoperazone and beta-lactamase inhibitor,سفوپرازون و مهارکننده بتالاکتاماز
+J01DD63,NAME,u,Ceftriaxone and beta-lactamase inhibitor,سفتریاکسون و مهارکننده بتالاکتاماز
+J01DD64,NAME,u,Cefpodoxime and beta-lactamase inhibitor,سفپودوکسیم و مهارکننده بتالاکتاماز
+J01DE01,NAME,u,Cefepime,سفپیم
+J01DE02,NAME,u,Cefpirome,سفپیروم
+J01DE03,NAME,u,Cefozopran,سفوزوپران
+J01DF01,NAME,u,Aztreonam,آزترونام
+J01DF02,NAME,u,Carumonam,کارومونام
+J01DH02,NAME,u,Meropenem,مروپنم
+J01DH03,NAME,u,Ertapenem,ارتاپنم
+J01DH04,NAME,u,Doripenem,دوریپنم
+J01DH05,NAME,u,Biapenem,بیاپنم
+J01DH06,NAME,u,Tebipenem pivoxil,تبی پنم پیوکسیل
+J01DH51,NAME,u,Imipenem and cilastatin,ایمی پنم و سیستاتین
+J01DH52,NAME,u,Meropenem and vaborbactam,مروپنم و وابورباکتام
+J01DH55,NAME,u,Panipenem and betamipron,پانی پنم و بتامیپرون
+J01DH56,NAME,u,"Imipenem, cilastatin and relebactam",ایمی پنم، سیستاتین و رلباکتام
+J01DI01,NAME,u,Ceftobiprole medocaril,سفتوبیپرول مدوکاریل
+J01DI02,NAME,u,Ceftaroline fosamil,سفتارولین فوزامیل
+J01DI03,NAME,u,Faropenem,فاروپنم
+J01DI04,NAME,u,Cefiderocol,سفیدروکل
+J01DI54,NAME,u,Ceftolozane and beta-lactamase inhibitor,سفتولوزان و مهارکننده بتالاکتاماز
+J01EA01,NAME,u,Trimethoprim,تری متوپریم
+J01EA02,NAME,u,Brodimoprim,برودیموپریم
+J01EA03,NAME,u,Iclaprim,ایکلاپریم
+J01EB01,NAME,u,Sulfaisodimidine,سولفایزودیمیدین
+J01EB02,NAME,u,Sulfamethizole,سولفامتیزول
+J01EB03,NAME,u,Sulfadimidine,سولفادیمیدین
+J01EB04,NAME,u,Sulfapyridine,سولفاپیریدین
+J01EB05,NAME,u,Sulfafurazole,سولفافورازول
+J01EB06,NAME,u,Sulfanilamide,سولفانیل آمید
+J01EB07,NAME,u,Sulfathiazole,سولفاتیازول
+J01EB08,NAME,u,Sulfathiourea,سولفاتی اوره
+J01EC01,NAME,u,Sulfamethoxazole,سولفامتوکسازول
+J01EC02,NAME,u,Sulfadiazine,سولفادیازین
+J01EC03,NAME,u,Sulfamoxole,سولفاموکسل
+J01ED01,NAME,u,Sulfadimethoxine,سولفادیمتوکسین
+J01ED02,NAME,u,Sulfalene,سولفالن
+J01ED03,NAME,u,Sulfametomidine,سولفامتومیدین
+J01ED04,NAME,u,Sulfametoxydiazine,سولفامتوکسی دیازین
+J01ED05,NAME,u,Sulfamethoxypyridazine,سولفامتوکسی پیریدازین
+J01ED06,NAME,u,Sulfaperin,سولفاپرین
+J01ED07,NAME,u,Sulfamerazine,سولفامرازین
+J01ED08,NAME,u,Sulfaphenazole,سولفافنازول
+J01ED09,NAME,u,Sulfamazone,سولفامازون
+J01EE01,NAME,u,Sulfamethoxazole and trimethoprim,سولفامتوکسازول و تری متوپریم
+J01EE02,NAME,u,Sulfadiazine and trimethoprim,سولفادیازین و تری متوپریم
+J01EE03,NAME,u,Sulfametrole and trimethoprim,سولفامترول و تری متوپریم
+J01EE04,NAME,u,Sulfamoxole and trimethoprim,سولفاموکسل و تری متوپریم
+J01EE05,NAME,u,Sulfadimidine and trimethoprim,سولفادیمیدین و تری متوپریم
+J01EE06,NAME,u,Sulfadiazine and tetroxoprim,سولفادیازین و تتروکسوپریم
+J01EE07,NAME,u,Sulfamerazine and trimethoprim,سولفامرازین و تری متوپریم
+J01FA01,NAME,u,Erythromycin,اریترومایسین
+J01FA02,NAME,u,Spiramycin,اسپیرامایسین
+J01FA03,NAME,u,Midecamycin,میدکامایسین
+J01FA05,NAME,u,Oleandomycin,اولاندومایسین
+J01FA06,NAME,u,Roxithromycin,روکسی ترومایسین
+J01FA07,NAME,u,Josamycin,جوزامایسین
+J01FA08,NAME,u,Troleandomycin,ترولئاندومایسین
+J01FA09,NAME,u,Clarithromycin,کلاریترومایسین
+J01FA10,NAME,u,Azithromycin,آزیترومایسین
+J01FA11,NAME,u,Miocamycin,میوکامایسین
+J01FA12,NAME,u,Rokitamycin,روکیتامایسین
+J01FA13,NAME,u,Dirithromycin,دیریترومایسین
+J01FA14,NAME,u,Flurithromycin,فلوریترومایسین
+J01FA15,NAME,u,Telithromycin,تلیترومایسین
+J01FA16,NAME,u,Solithromycin,سولیترومایسین
+J01FF01,NAME,u,Clindamycin,کلیندامایسین
+J01FF02,NAME,u,Lincomycin,لینکومایسین
+J01FG01,NAME,u,Pristinamycin,پریشتینامایسین
+J01FG02,NAME,u,Quinupristin/dalfopristin,کوینوپریستین/دالفوپریستین
+J01GA01,NAME,u,Streptomycin,استرپتومایسین
+J01GA02,NAME,u,Streptoduocin,استرپتودووسین
+J01GB01,NAME,u,Tobramycin,توبرامایسین
+J01GB03,NAME,u,Gentamicin,جنتامایسین
+J01GB04,NAME,u,Kanamycin,کانامایسین
+J01GB05,NAME,u,Neomycin,نئومایسین
+J01GB06,NAME,u,Amikacin,آمیکاسین
+J01GB07,NAME,u,Netilmicin,نتیلماسین
+J01GB08,NAME,u,Sisomicin,سیزوماسین
+J01GB09,NAME,u,Dibekacin,دیبکاسین
+J01GB10,NAME,u,Ribostamycin,ریبوستامایسین
+J01GB11,NAME,u,Isepamicin,ایسپامایسین
+J01GB12,NAME,u,Arbekacin,آربکاسین
+J01GB13,NAME,u,Bekanamycin,بکانامایسین
+J01GB14,NAME,u,Plazomicin,پلاسومایسین
+J01MA01,NAME,u,Ofloxacin,افلوکساسین
+J01MA02,NAME,u,Ciprofloxacin,سیپروفلوکساسین
+J01MA03,NAME,u,Pefloxacin,پفلوکساسین
+J01MA04,NAME,u,Enoxacin,انوکساسین
+J01MA05,NAME,u,Temafloxacin,تمافلوکساسین
+J01MA06,NAME,u,Norfloxacin,نورفلوکساسین
+J01MA07,NAME,u,Lomefloxacin,لومفلوکساسین
+J01MA08,NAME,u,Fleroxacin,فلروکساسین
+J01MA09,NAME,u,Sparfloxacin,اسپارفلوکساسین
+J01MA10,NAME,u,Rufloxacin,روفلوکساسین
+J01MA11,NAME,u,Grepafloxacin,گرپافلوکساسین
+J01MA12,NAME,u,Levofloxacin,لووفلوکساسین
+J01MA13,NAME,u,Trovafloxacin,تروافلوکساسین
+J01MA14,NAME,u,Moxifloxacin,موکسی فلوکساسین
+J01MA15,NAME,u,Gemifloxacin,ژمیفلوکساسین
+J01MA16,NAME,u,Gatifloxacin,گاتیفلوکساسین
+J01MA17,NAME,u,Prulifloxacin,پرولیفلوکساسین
+J01MA18,NAME,u,Pazufloxacin,پازوفلوکساسین
+J01MA19,NAME,u,Garenoxacin,گارنوکساسین
+J01MA21,NAME,u,Sitafloxacin,سیتافلوکساسین
+J01MA22,NAME,u,Tosufloxacin,توسوفلوکساسین
+J01MA23,NAME,u,Delafloxacin,دلافلوکساسین
+J01MA24,NAME,u,Levonadifloxacin,لوونادیفلوکساسین
+J01MA25,NAME,u,Lascufloxacin,لاسکوفلوکساسین
+J01MB01,NAME,u,Rosoxacin,روزوکاسین
+J01MB02,NAME,u,Nalidixic acid,نالیدیکسیک اسید
+J01MB03,NAME,u,Piromidic acid,اسید پیرومیدیک
+J01MB04,NAME,u,Pipemidic acid,پیپمیدیک اسید
+J01MB05,NAME,u,Oxolinic acid,اسید اکسولینیک
+J01MB06,NAME,u,Cinoxacin,سینوکساسین
+J01MB07,NAME,u,Flumequine,فلومکین
+J01MB08,NAME,u,Nemonoxacin,نمونوکساسین
+J01RA03,NAME,u,Cefuroxime and metronidazole,سفوروکسیم و مترونیدازول
+J01RA04,NAME,u,Spiramycin and metronidazole,اسپیرامایسین و مترونیدازول
+J01RA05,NAME,u,Levofloxacin and ornidazole,لووفلوکساسین و اورنیدازول
+J01RA06,NAME,u,Cefepime and amikacin,سفپیم و آمیکاسین
+J01RA07,NAME,u,"Azithromycin, fluconazole and secnidazole",آزیترومایسین، فلوکونازول و سکنیدازول
+J01RA08,NAME,u,Tetracycline and oleandomycin,تتراسایکلین و اولاندومایسین
+J01RA09,NAME,u,Ofloxacin and ornidazole,افلوکساسین و اورنیدازول
+J01RA10,NAME,u,Ciprofloxacin and metronidazole,سیپروفلوکساسین و مترونیدازول
+J01RA11,NAME,u,Ciprofloxacin and tinidazole,سیپروفلوکساسین و تینیدازول
+J01RA12,NAME,u,Ciprofloxacin and ornidazole,سیپروفلوکساسین و اورنیدازول
+J01RA13,NAME,u,Norfloxacin and tinidazole,نورفلوکساسین و تینیدازول
+J01RA14,NAME,u,Norfloxacin and metronidazole,نورفلوکساسین و مترونیدازول
+J01RA15,NAME,u,Cefixime and ornidazole,سفیکسیم و اورنیدازول
+J01RA16 ,NAME,u,Cefixime and azithromycin,سفیکسیم و آزیترومایسین
+J01XA01,NAME,u,Vancomycin,وانکومایسین
+J01XA02,NAME,u,Teicoplanin,تیکوپلانین
+J01XA03,NAME,u,Telavancin,تلاوانسین
+J01XA04,NAME,u,Dalbavancin,دالباوانسین
+J01XA05,NAME,u,Oritavancin,اوریتاوانسین
+J01XB01,NAME,u,Colistin,کولیستین
+J01XB02,NAME,u,Polymyxin B,پلی میکسین B
+J01XC01,NAME,u,Fusidic acid,اسید فوزیدیک
+J01XD01,NAME,u,Metronidazole,مترونیدازول
+J01XD02,NAME,u,Tinidazole,تینیدازول
+J01XD03,NAME,u,Ornidazole,اورنیدازول
+J01XE01,NAME,u,Nitrofurantoin,نیتروفورانتوئین
+J01XE02,NAME,u,Nifurtoinol,نیفورتوئینول
+J01XE03,NAME,u,Furazidin,فورازیدین
+J01XX01,NAME,u,Fosfomycin,فسفومایسین
+J01XX02,NAME,u,Xibornol,
+J01XX03,NAME,u,Clofoctol,کلوفوکتول
+J01XX04,NAME,u,Spectinomycin,اسپکتینومایسین
+J01XX05,NAME,u,Methenamine,متنامین
+J01XX06,NAME,u,Mandelic acid,اسید ماندلیک
+J01XX07,NAME,u,Nitroxoline,نیتروکسولین
+J01XX08,NAME,u,Linezolid,لینزولید
+J01XX09,NAME,u,Daptomycin,داپتومایسین
+J01XX10,NAME,u,Bacitracin,باسیتراسین
+J01XX11,NAME,u,Tedizolid,تدیزولید
+J01XX12,NAME,u,Lefamulin,لفامولین

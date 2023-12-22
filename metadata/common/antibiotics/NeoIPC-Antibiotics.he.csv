@@ -1,0 +1,264 @@
+id,property,needs_translation,default,translated
+J01AA01,NAME,u,Demeclocycline,דמקלוציקלין
+J01AA02,NAME,u,Doxycycline,דוקסיציקלין
+J01AA03,NAME,u,Chlortetracycline,כלורטטרציקלין
+J01AA04,NAME,u,Lymecycline,לימציקלין
+J01AA05,NAME,u,Metacycline,מטאציקלין
+J01AA06,NAME,u,Oxytetracycline,אוקסיטטרציקלין
+J01AA07,NAME,u,Tetracycline,טטרציקלין
+J01AA08,NAME,u,Minocycline,מינוציקלין
+J01AA09,NAME,u,Rolitetracycline,רוליטטרציקלין
+J01AA10,NAME,u,Penimepicycline,פנימפיציקלין
+J01AA11,NAME,u,Clomocycline,
+J01AA12,NAME,u,Tigecycline,
+J01AA13,NAME,u,Eravacycline,ארוואציקלין
+J01AA14,NAME,u,Sarecycline,סרציקלין
+J01AA15,NAME,u,Omadacycline,אומאדציקלין
+J01BA01,NAME,u,Chloramphenicol,כלורמפניקול
+J01BA02,NAME,u,Thiamphenicol,תיאמפניקול
+J01CA01,NAME,u,Ampicillin,אמפיצילין
+J01CA02,NAME,u,Pivampicillin,
+J01CA03,NAME,u,Carbenicillin,קרבניצילין
+J01CA04,NAME,u,Amoxicillin,אמוקסיצילין
+J01CA05,NAME,u,Carindacillin,קרינדצילין
+J01CA06,NAME,u,Bacampicillin,בקמפיצילין
+J01CA07,NAME,u,Epicillin,אפיצילין
+J01CA08,NAME,u,Pivmecillinam,
+J01CA09,NAME,u,Azlocillin,אזלוצילין
+J01CA10,NAME,u,Mezlocillin,מזלוסילין
+J01CA11,NAME,u,Mecillinam,מצילינאם
+J01CA12,NAME,u,Piperacillin,פיפרצילין
+J01CA13,NAME,u,Ticarcillin,טיקרצילין
+J01CA14,NAME,u,Metampicillin,מטמפיצילין
+J01CA15,NAME,u,Talampicillin,טלמפיצילין
+J01CA16,NAME,u,Sulbenicillin,סולבניצילין
+J01CA17,NAME,u,Temocillin,טמוצילין
+J01CA18,NAME,u,Hetacillin,הטצילין
+J01CA19,NAME,u,Aspoxicillin,אספוקסיצילין
+J01CE01,NAME,u,Benzylpenicillin,בנזילפניצילין
+J01CE02,NAME,u,Phenoxymethylpenicillin,פנוקסימתילפניצילין
+J01CE03,NAME,u,Propicillin,פרופיצילין
+J01CE04,NAME,u,Azidocillin,אזידוצילין
+J01CE05,NAME,u,Pheneticillin,פנטיצילין
+J01CE06,NAME,u,Penamecillin,פנאמצילין
+J01CE07,NAME,u,Clometocillin,קלומטוצילין
+J01CE08,NAME,u,Benzathine benzylpenicillin,בנזאתין בנזילפניצילין
+J01CE09,NAME,u,Procaine benzylpenicillin,פרוקאין בנזילפניצילין
+J01CE10,NAME,u,Benzathine phenoxymethylpenicillin,בנזאתין פנוקסימתילפניצילין
+J01CF01,NAME,u,Dicloxacillin,דיקלוקסצילין
+J01CF02,NAME,u,Cloxacillin,קלוקסצילין
+J01CF03,NAME,u,Meticillin,מטיצילין
+J01CF04,NAME,u,Oxacillin,אוקסצילין
+J01CF05,NAME,u,Flucloxacillin,פלוקלוקסצילין
+J01CF06,NAME,u,Nafcillin,נפצילין
+J01CG01,NAME,u,Sulbactam,סולבקטם
+J01CG02,NAME,u,Tazobactam,טזובקטם
+J01CR01,NAME,u,Ampicillin and beta-lactamase inhibitor,מעכבי אמפיצילין ובטא-לקטמאז
+J01CR02,NAME,u,Amoxicillin and beta-lactamase inhibitor,מעכבי אמוקסיצילין ובטא-לקטמאז
+J01CR03,NAME,u,Ticarcillin and beta-lactamase inhibitor,מעכבי טיקרצילין ובטא-לקטמאז
+J01CR04,NAME,u,Sultamicillin,סולטמיצילין
+J01CR05,NAME,u,Piperacillin and beta-lactamase inhibitor,מעכבי פיפרצילין ובטא-לקטמאז
+J01DB01,NAME,u,Cefalexin,צפלקסין
+J01DB02,NAME,u,Cefaloridine,צפלורידין
+J01DB03,NAME,u,Cefalotin,צפלוטין
+J01DB04,NAME,u,Cefazolin,צפזולין
+J01DB05,NAME,u,Cefadroxil,
+J01DB06,NAME,u,Cefazedone,קפאזדון
+J01DB07,NAME,u,Cefatrizine,
+J01DB08,NAME,u,Cefapirin,צפפירין
+J01DB09,NAME,u,Cefradine,צפרדין
+J01DB10,NAME,u,Cefacetrile,
+J01DB11,NAME,u,Cefroxadine,צפרוקסדין
+J01DB12,NAME,u,Ceftezole,צפטזול
+J01DC01,NAME,u,Cefoxitin,
+J01DC02,NAME,u,Cefuroxime,צפורוקסים
+J01DC03,NAME,u,Cefamandole,צפמנדול
+J01DC04,NAME,u,Cefaclor,צ'פקור
+J01DC05,NAME,u,Cefotetan,
+J01DC06,NAME,u,Cefonicid,
+J01DC07,NAME,u,Cefotiam,
+J01DC08,NAME,u,Loracarbef,לורקרבף
+J01DC09,NAME,u,Cefmetazole,
+J01DC10,NAME,u,Cefprozil,
+J01DC11,NAME,u,Ceforanide,צפוראניד
+J01DC12,NAME,u,Cefminox,
+J01DC13,NAME,u,Cefbuperazone,
+J01DC14,NAME,u,Flomoxef,פלומוקסף
+J01DD01,NAME,u,Cefotaxime,
+J01DD02,NAME,u,Ceftazidime,צפטאזידיים
+J01DD03,NAME,u,Cefsulodin,
+J01DD04,NAME,u,Ceftriaxone,
+J01DD05,NAME,u,Cefmenoxime,
+J01DD06,NAME,u,Latamoxef,
+J01DD07,NAME,u,Ceftizoxime,
+J01DD08,NAME,u,Cefixime,ספיקסים
+J01DD09,NAME,u,Cefodizime,
+J01DD10,NAME,u,Cefetamet,
+J01DD11,NAME,u,Cefpiramide,
+J01DD12,NAME,u,Cefoperazone,
+J01DD13,NAME,u,Cefpodoxime,
+J01DD14,NAME,u,Ceftibuten,
+J01DD15,NAME,u,Cefdinir,צפדיניר
+J01DD16,NAME,u,Cefditoren,
+J01DD17,NAME,u,Cefcapene,
+J01DD18,NAME,u,Cefteram,צפטראם
+J01DD51,NAME,u,Cefotaxime and beta-lactamase inhibitor,Cefotaxime ומעכבי בטא-לקטמאז
+J01DD52,NAME,u,Ceftazidime and beta-lactamase inhibitor,מעכבי Ceftazidime ו-Beta-lactamase
+J01DD62,NAME,u,Cefoperazone and beta-lactamase inhibitor,Cefoperazone ומעכבי בטא לקטמאז
+J01DD63,NAME,u,Ceftriaxone and beta-lactamase inhibitor,מעכבי Ceftriaxone ומעכבי בטא לקטמאז
+J01DD64,NAME,u,Cefpodoxime and beta-lactamase inhibitor,Cefpodoxime ומעכבי בטא-לקטמאז
+J01DE01,NAME,u,Cefepime,
+J01DE02,NAME,u,Cefpirome,
+J01DE03,NAME,u,Cefozopran,
+J01DF01,NAME,u,Aztreonam,אזטריונם
+J01DF02,NAME,u,Carumonam,
+J01DH02,NAME,u,Meropenem,מירופנם
+J01DH03,NAME,u,Ertapenem,
+J01DH04,NAME,u,Doripenem,דוריפנם
+J01DH05,NAME,u,Biapenem,ביאפנם
+J01DH06,NAME,u,Tebipenem pivoxil,
+J01DH51,NAME,u,Imipenem and cilastatin,אימיפנם וצילאסטין
+J01DH52,NAME,u,Meropenem and vaborbactam,Meropenem ו-vaborbactam
+J01DH55,NAME,u,Panipenem and betamipron,פניפנם ובטמיפרון
+J01DH56,NAME,u,"Imipenem, cilastatin and relebactam",
+J01DI01,NAME,u,Ceftobiprole medocaril,
+J01DI02,NAME,u,Ceftaroline fosamil,
+J01DI03,NAME,u,Faropenem,פארופנם
+J01DI04,NAME,u,Cefiderocol,
+J01DI54,NAME,u,Ceftolozane and beta-lactamase inhibitor,מעכבי Ceftolozane ו-Beta-lactamase
+J01EA01,NAME,u,Trimethoprim,
+J01EA02,NAME,u,Brodimoprim,ברודימופרים
+J01EA03,NAME,u,Iclaprim,איקלפרים
+J01EB01,NAME,u,Sulfaisodimidine,סולפאאיזודימידין
+J01EB02,NAME,u,Sulfamethizole,סולפאמתיזול
+J01EB03,NAME,u,Sulfadimidine,סולפאדימידין
+J01EB04,NAME,u,Sulfapyridine,סולפאפירידין
+J01EB05,NAME,u,Sulfafurazole,סולפאפוראזול
+J01EB06,NAME,u,Sulfanilamide,סולפנילמיד
+J01EB07,NAME,u,Sulfathiazole,
+J01EB08,NAME,u,Sulfathiourea,סולפטיוריאה
+J01EC01,NAME,u,Sulfamethoxazole,
+J01EC02,NAME,u,Sulfadiazine,סולפדיאזין
+J01EC03,NAME,u,Sulfamoxole,סולפמוקסול
+J01ED01,NAME,u,Sulfadimethoxine,סולפאדימתוקסין
+J01ED02,NAME,u,Sulfalene,סולפאלן
+J01ED03,NAME,u,Sulfametomidine,סולפאמטומידין
+J01ED04,NAME,u,Sulfametoxydiazine,סולפאמטוקסידיאזין
+J01ED05,NAME,u,Sulfamethoxypyridazine,
+J01ED06,NAME,u,Sulfaperin,סולפאפרין
+J01ED07,NAME,u,Sulfamerazine,סולפמרזין
+J01ED08,NAME,u,Sulfaphenazole,
+J01ED09,NAME,u,Sulfamazone,סולפמזון
+J01EE01,NAME,u,Sulfamethoxazole and trimethoprim,Sulfamethoxazole ו-trimethoprim
+J01EE02,NAME,u,Sulfadiazine and trimethoprim,סולפדיאזין וטרימתופרים
+J01EE03,NAME,u,Sulfametrole and trimethoprim,סולפאמטרול וטרימתופרים
+J01EE04,NAME,u,Sulfamoxole and trimethoprim,סולפמוקסול וטרימתופרים
+J01EE05,NAME,u,Sulfadimidine and trimethoprim,סולפאדימידין וטרימתופרים
+J01EE06,NAME,u,Sulfadiazine and tetroxoprim,סולפדיאזין וטטרוקסופרים
+J01EE07,NAME,u,Sulfamerazine and trimethoprim,סולפמרזין וטרימתופרים
+J01FA01,NAME,u,Erythromycin,אריתרומיצין
+J01FA02,NAME,u,Spiramycin,ספירמיצין
+J01FA03,NAME,u,Midecamycin,מידקמיצין
+J01FA05,NAME,u,Oleandomycin,אולינדומיצין
+J01FA06,NAME,u,Roxithromycin,רוקסיתרומיצין
+J01FA07,NAME,u,Josamycin,יוסמיצין
+J01FA08,NAME,u,Troleandomycin,
+J01FA09,NAME,u,Clarithromycin,קלריתרמיצין
+J01FA10,NAME,u,Azithromycin,אזיתרומיצין
+J01FA11,NAME,u,Miocamycin,מיוקמיצין
+J01FA12,NAME,u,Rokitamycin,רוקיטמיצין
+J01FA13,NAME,u,Dirithromycin,
+J01FA14,NAME,u,Flurithromycin,פלוריתרומיצין
+J01FA15,NAME,u,Telithromycin,טליתרומיצין
+J01FA16,NAME,u,Solithromycin,סוליתרומיצין
+J01FF01,NAME,u,Clindamycin,קלינדמיצין
+J01FF02,NAME,u,Lincomycin,לינקומיצין
+J01FG01,NAME,u,Pristinamycin,
+J01FG02,NAME,u,Quinupristin/dalfopristin,קווינופריסטין/דלפופריסטין
+J01GA01,NAME,u,Streptomycin,סטרפטומיצין
+J01GA02,NAME,u,Streptoduocin,סטרפטודואוצין
+J01GB01,NAME,u,Tobramycin,טוברמיצין
+J01GB03,NAME,u,Gentamicin,גנטמיצין
+J01GB04,NAME,u,Kanamycin,קנאמיצין
+J01GB05,NAME,u,Neomycin,ניאומיצין
+J01GB06,NAME,u,Amikacin,
+J01GB07,NAME,u,Netilmicin,
+J01GB08,NAME,u,Sisomicin,סיזומיצין
+J01GB09,NAME,u,Dibekacin,דיבקצין
+J01GB10,NAME,u,Ribostamycin,ריבוסטמיצין
+J01GB11,NAME,u,Isepamicin,איספמיצין
+J01GB12,NAME,u,Arbekacin,ארבקאצין
+J01GB13,NAME,u,Bekanamycin,בקנאמיצין
+J01GB14,NAME,u,Plazomicin,פלזומיצין
+J01MA01,NAME,u,Ofloxacin,אופלוקסצין
+J01MA02,NAME,u,Ciprofloxacin,ציפרלקס
+J01MA03,NAME,u,Pefloxacin,פפלוקסצין
+J01MA04,NAME,u,Enoxacin,אנוקסצין
+J01MA05,NAME,u,Temafloxacin,טמפלוקסצין
+J01MA06,NAME,u,Norfloxacin,נורפלוקסצין
+J01MA07,NAME,u,Lomefloxacin,לומפלוקסצין
+J01MA08,NAME,u,Fleroxacin,פלרוקסצין
+J01MA09,NAME,u,Sparfloxacin,ספרפלוקסצין
+J01MA10,NAME,u,Rufloxacin,רופלוקסצין
+J01MA11,NAME,u,Grepafloxacin,גרפפלוקסצין
+J01MA12,NAME,u,Levofloxacin,
+J01MA13,NAME,u,Trovafloxacin,
+J01MA14,NAME,u,Moxifloxacin,מוקסיפלוקסצין
+J01MA15,NAME,u,Gemifloxacin,
+J01MA16,NAME,u,Gatifloxacin,
+J01MA17,NAME,u,Prulifloxacin,פרוליפלוקסצין
+J01MA18,NAME,u,Pazufloxacin,פזופלוקסצין
+J01MA19,NAME,u,Garenoxacin,גרנוקסצין
+J01MA21,NAME,u,Sitafloxacin,
+J01MA22,NAME,u,Tosufloxacin,טוסופלוקסצין
+J01MA23,NAME,u,Delafloxacin,דלפלוקסצין
+J01MA24,NAME,u,Levonadifloxacin,לבונדיפלוקסצין
+J01MA25,NAME,u,Lascufloxacin,לסקופלוקסצין
+J01MB01,NAME,u,Rosoxacin,רוסוקסצין
+J01MB02,NAME,u,Nalidixic acid,חומצה נלידיקסית
+J01MB03,NAME,u,Piromidic acid,חומצה פירומידית
+J01MB04,NAME,u,Pipemidic acid,חומצה פיפמידית
+J01MB05,NAME,u,Oxolinic acid,חומצה אוקסולינית
+J01MB06,NAME,u,Cinoxacin,סינוקסצין
+J01MB07,NAME,u,Flumequine,פלומקווין
+J01MB08,NAME,u,Nemonoxacin,נמונוקסצין
+J01RA03,NAME,u,Cefuroxime and metronidazole,Cefuroxime ומטרונידזול
+J01RA04,NAME,u,Spiramycin and metronidazole,ספירמיצין ומטרונידזול
+J01RA05,NAME,u,Levofloxacin and ornidazole,Levofloxacin ו- Ornidazole
+J01RA06,NAME,u,Cefepime and amikacin,Cefepime ואמיקצין
+J01RA07,NAME,u,"Azithromycin, fluconazole and secnidazole","אזיתרמיצין, פלוקונאזול וסקנידזול"
+J01RA08,NAME,u,Tetracycline and oleandomycin,טטרציקלין ואולנדומיצין
+J01RA09,NAME,u,Ofloxacin and ornidazole,אופלוקסצין ואורנידזול
+J01RA10,NAME,u,Ciprofloxacin and metronidazole,ציפרלקס ומטרונידזול
+J01RA11,NAME,u,Ciprofloxacin and tinidazole,ציפרלקס וטינידזול
+J01RA12,NAME,u,Ciprofloxacin and ornidazole,ציפרלקס ואורנידזול
+J01RA13,NAME,u,Norfloxacin and tinidazole,נורפלוקסצין וטינידזול
+J01RA14,NAME,u,Norfloxacin and metronidazole,נורפלוקסצין ומטרונידזול
+J01RA15,NAME,u,Cefixime and ornidazole,Cefixime ואורנידזול
+J01RA16 ,NAME,u,Cefixime and azithromycin,Cefixime ו-azithromycin
+J01XA01,NAME,u,Vancomycin,ונקומיצין
+J01XA02,NAME,u,Teicoplanin,טייקופלנין
+J01XA03,NAME,u,Telavancin,
+J01XA04,NAME,u,Dalbavancin,
+J01XA05,NAME,u,Oritavancin,
+J01XB01,NAME,u,Colistin,קוליסטין
+J01XB02,NAME,u,Polymyxin B,פולימיקסין B
+J01XC01,NAME,u,Fusidic acid,חומצה פוסידית
+J01XD01,NAME,u,Metronidazole,מטרונידזול
+J01XD02,NAME,u,Tinidazole,
+J01XD03,NAME,u,Ornidazole,אורנידזול
+J01XE01,NAME,u,Nitrofurantoin,ניטרופורנטואין
+J01XE02,NAME,u,Nifurtoinol,ניפורטואינול
+J01XE03,NAME,u,Furazidin,פוראזידין
+J01XX01,NAME,u,Fosfomycin,פוספומיצין
+J01XX02,NAME,u,Xibornol,שיבורנול
+J01XX03,NAME,u,Clofoctol,קלופקטול
+J01XX04,NAME,u,Spectinomycin,ספקטינומיצין
+J01XX05,NAME,u,Methenamine,מתנמין
+J01XX06,NAME,u,Mandelic acid,חומצה מנדלית
+J01XX07,NAME,u,Nitroxoline,ניטרוקסולין
+J01XX08,NAME,u,Linezolid,לינזוליד
+J01XX09,NAME,u,Daptomycin,דפטומיצין
+J01XX10,NAME,u,Bacitracin,
+J01XX11,NAME,u,Tedizolid,טדיזוליד
+J01XX12,NAME,u,Lefamulin,לפמולין

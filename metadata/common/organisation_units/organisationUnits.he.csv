@@ -1,0 +1,79 @@
+id,property,needs_translation,default,translated
+NEOIPC,NAME,u,The NeoIPC Project,פרויקט NeoIPC
+NEOIPC,SHORT_NAME,u,NeoIPC,NeoIPC
+AL,NAME,u,Shqipëria,אלבניה
+AL,SHORT_NAME,u,Shqipëria,אלבניה
+AT,NAME,u,Österreich,אוֹסְטְרֵיָה
+AT,SHORT_NAME,u,Österreich,אוֹסְטְרֵיָה
+BE,NAME,u,Belgique/België,בלגיה
+BE,SHORT_NAME,u,Belgique/België,בלגיה
+BG,NAME,u,България [Bulgaria],בולגריה
+BG,SHORT_NAME,u,България,בולגריה
+CH,NAME,u,Schweiz/Suisse/Svizzera,שוויץ
+CH,SHORT_NAME,u,Schweiz/Suisse/Svizzera,שוויץ
+CY,NAME,u,Κύπρος [Kýpros],קַפרִיסִין
+CY,SHORT_NAME,u,Κύπρος,קַפרִיסִין
+CZ,NAME,u,Česko,הרפובליקה הצ'כית
+CZ,SHORT_NAME,u,Česko,הרפובליקה הצ'כית
+DE,NAME,u,Deutschland,גֶרמָנִיָה
+DE,SHORT_NAME,u,Deutschland,גֶרמָנִיָה
+DK,NAME,u,Danmark,דנמרק
+DK,SHORT_NAME,u,Danmark,דנמרק
+EE,NAME,u,Eesti,אסטוניה
+EE,SHORT_NAME,u,Eesti,אסטוניה
+EL,NAME,u,Ελλάδα [Elláda],יָוָן
+EL,SHORT_NAME,u,Ελλάδα,יָוָן
+ES,NAME,u,España,סְפָרַד
+ES,SHORT_NAME,u,España,סְפָרַד
+FI,NAME,u,Suomi/Finland,פינלנד
+FI,SHORT_NAME,u,Suomi/Finland,פינלנד
+FR,NAME,u,France,צָרְפַת
+FR,SHORT_NAME,u,France,צָרְפַת
+HR,NAME,u,Hrvatska,קרואטיה
+HR,SHORT_NAME,u,Hrvatska,קרואטיה
+HU,NAME,u,Magyarország,הונגריה
+HU,SHORT_NAME,u,Magyarország,הונגריה
+IE,NAME,u,Éire/Ireland,אירלנד
+IE,SHORT_NAME,u,Éire/Ireland,אירלנד
+IS,NAME,u,Ísland,אִיסלַנד
+IS,SHORT_NAME,u,Ísland,אִיסלַנד
+IT,NAME,u,Italia,אִיטַלִיָה
+IT,SHORT_NAME,u,Italia,אִיטַלִיָה
+LI,NAME,u,Liechtenstein,ליכטנשטיין
+LI,SHORT_NAME,u,Liechtenstein,ליכטנשטיין
+LT,NAME,u,Lietuva,ליטא
+LT,SHORT_NAME,u,Lietuva,ליטא
+LU,NAME,u,Luxembourg,לוקסמבורג
+LU,SHORT_NAME,u,Luxembourg,לוקסמבורג
+LV,NAME,u,Latvija,לטביה
+LV,SHORT_NAME,u,Latvija,לטביה
+ME,NAME,u,Црна Гора [Crna Gora],מונטנגרו
+ME,SHORT_NAME,u,Црна Гора,מונטנגרו
+MK,NAME,u,Северна Македонија [Severna Makedonija],צפון מקדוניה
+MK,SHORT_NAME,u,Северна Македонија,צפון מקדוניה
+MT,NAME,u,Malta,מלטה
+MT,SHORT_NAME,u,Malta,מלטה
+NL,NAME,u,Nederland,הולנד
+NL,SHORT_NAME,u,Nederland,הולנד
+NO,NAME,u,Norge,נורווגיה
+NO,SHORT_NAME,u,Norge,נורווגיה
+PL,NAME,u,Polska,פּוֹלִין
+PL,SHORT_NAME,u,Polska,פּוֹלִין
+PT,NAME,u,Portugal,פּוֹרטוּגָל
+PT,SHORT_NAME,u,Portugal,פּוֹרטוּגָל
+RO,NAME,u,România,רומניה
+RO,SHORT_NAME,u,România,רומניה
+RS,NAME,u,Srbija/Сpбија [Serbia],סרביה
+RS,SHORT_NAME,u,Srbija/Сpбија,סרביה
+SE,NAME,u,Sverige,שבדיה
+SE,SHORT_NAME,u,Sverige,שבדיה
+SI,NAME,u,Slovenija,סלובניה
+SI,SHORT_NAME,u,Slovenija,סלובניה
+SK,NAME,u,Slovensko,סלובקיה
+SK,SHORT_NAME,u,Slovensko,סלובקיה
+TR,NAME,u,Türkiye,טורקיה
+TR,SHORT_NAME,u,Türkiye,טורקיה
+UK,NAME,u,United Kingdom,הממלכה המאוחדת
+UK,SHORT_NAME,u,United Kingdom,הממלכה המאוחדת
+ZA,NAME,u,Aforika Borwa/Afrika Borwa/Afrika-Dzonga/Afurika Tshipembe/iNingizimu Afrika/iSewula Afrika/South Africa/Suid-Afrika/uMzantsi Afrika,דרום אפריקה
+ZA,SHORT_NAME,u,South Africa,דרום אפריקה
