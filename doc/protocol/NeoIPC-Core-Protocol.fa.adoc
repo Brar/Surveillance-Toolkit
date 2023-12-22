@@ -227,7 +227,7 @@ You can use the master data collection sheet to save enrolment, admission inform
 However, if you submit data to NeoIPC, the information you collect on the master data collection sheet must ultimately be entered into the online data entry system.
 
 .Master data collection sheet for patient data collection
-//image::NeoIPC-Core-Master-Data-Collection-Sheet-Image.svg[Master data collection sheet for patient data collection,{full-width},pdfwidth=75%,opts=inline,align="center"]
+//image::NeoIPC-Core-Master-Data-Collection-Sheet-Image.fa.svg[Master data collection sheet for patient data collection,{full-width},pdfwidth=75%,opts=inline,align="center"]
 image::NeoIPC-Core-Master-Data-Collection-Sheet-Image.png[Master data collection sheet for patient data collection,{full-width},pdfwidth=75%,align="center"]
 
 <<<
@@ -250,7 +250,7 @@ If there are more than 48 hours between transfer and re-admission, you must end 
 In this case, any readmission should be recorded as a new admission, and the admission type must be selected as “transferred to your centre ≥ 24h postnatal”.
 
 .Patient progress chart for patient data collection
-//image::NeoIPC-Core-Patient-Progress-Chart-Image.svg[Patient progress chart for patient data collection,{full-width},pdfwidth=100%,opts=inline,align="center"]
+//image::NeoIPC-Core-Patient-Progress-Chart-Image.fa.svg[Patient progress chart for patient data collection,{full-width},pdfwidth=100%,opts=inline,align="center"]
 image::NeoIPC-Core-Patient-Progress-Chart-Image.png[Patient progress chart for patient data collection,{full-width},pdfwidth=100%,align="center"]
 
 <<<
@@ -262,7 +262,7 @@ You can use the surgical procedure paper sheet for local documentation or enter 
 In addition to the recording of the procedure, you need to start following up the concerned infant for surgical site infections for 30 or 90 days depending on whether an implant has been left in place during the procedure.
 
 .Surgical procedure data collection sheet
-//image::NeoIPC-Core-Surgical-Procedure-Data-Collection-Sheet-Image.svg[Surgical procedure data collection sheet,{full-width},pdfwidth=75%,opts=inline,align="center"]
+//image::NeoIPC-Core-Surgical-Procedure-Data-Collection-Sheet-Image.fa.svg[Surgical procedure data collection sheet,{full-width},pdfwidth=75%,opts=inline,align="center"]
 image::NeoIPC-Core-Surgical-Procedure-Data-Collection-Sheet-Image.png[Surgical procedure data collection sheet,{full-width},pdfwidth=75%,align="center"]
 
 [#data-collection-infection-data-collection]
@@ -292,7 +292,7 @@ A minimum of 14 days and a period without any relevant symptoms of infection are
 If an eligible infant develops a hospital-acquired primary sepsis/bloodstream infection according to the NeoIPC surveillance criteria (see Infection Definitions: Primary sepsis/bloodstream infection) during the surveillance period, you should record and submit the required data using the data collection sheet below and/or via the online reporting platform.
 
 .Primary sepsis/BSI reporting sheet
-//image::NeoIPC-Core-Primary-Sepsis-BSI-Reporting-Sheet-Image.svg[Primary sepsis/BSI reporting sheet,{full-width},pdfwidth=75%,opts=inline,align="center"]
+//image::NeoIPC-Core-Primary-Sepsis-BSI-Reporting-Sheet-Image.fa.svg[Primary sepsis/BSI reporting sheet,{full-width},pdfwidth=75%,opts=inline,align="center"]
 image::NeoIPC-Core-Primary-Sepsis-BSI-Reporting-Sheet-Image.png[Primary sepsis/BSI reporting sheet,{full-width},pdfwidth=75%,align="center"]
 
 <<<
@@ -301,7 +301,7 @@ image::NeoIPC-Core-Primary-Sepsis-BSI-Reporting-Sheet-Image.png[Primary sepsis/B
 If an eligible infant develops a necrotizing enterocolitis according to the NeoIPC surveillance criteria (see Infection Definitions: Necrotising Enterocolitis (NEC)) during the surveillance period, you should record and submit the required data using the data collection sheet below and/or via the online reporting platform.
 
 .NEC reporting sheet
-//image::NeoIPC-Core-NEC-Reporting-Sheet-Image.svg[NEC reporting sheet,{full-width},pdfwidth=75%,opts=inline,align="center"]
+//image::NeoIPC-Core-NEC-Reporting-Sheet-Image.fa.svg[NEC reporting sheet,{full-width},pdfwidth=75%,opts=inline,align="center"]
 image::NeoIPC-Core-NEC-Reporting-Sheet-Image.png[NEC reporting sheet,{full-width},pdfwidth=75%,align="center"]
 
 <<<
@@ -310,7 +310,7 @@ image::NeoIPC-Core-NEC-Reporting-Sheet-Image.png[NEC reporting sheet,{full-width
 If an eligible infant develops a hospital-acquired pneumonia according to the NeoIPC surveillance criteria (see Infection Definitions: Pneumonia) during the surveillance period, you should record and submit the required data using the data collection sheet below and/or via the online reporting platform.
 
 .Pneumonia reporting sheet
-//image::NeoIPC-Core-Pneumonia-Reporting-Sheet-Image.svg[Pneumonia reporting sheet,{full-width},pdfwidth=75%,opts=inline,align="center"]
+//image::NeoIPC-Core-Pneumonia-Reporting-Sheet-Image.fa.svg[Pneumonia reporting sheet,{full-width},pdfwidth=75%,opts=inline,align="center"]
 image::NeoIPC-Core-Pneumonia-Reporting-Sheet-Image.png[Pneumonia reporting sheet,{full-width},pdfwidth=75%,align="center"]
 
 <<<
@@ -319,7 +319,7 @@ image::NeoIPC-Core-Pneumonia-Reporting-Sheet-Image.png[Pneumonia reporting sheet
 If an eligible infant develops a surgical site infection according to the NeoIPC surveillance criteria (see Definitions: Surgical Site Infection (SSI)) during the surveillance period, you should record and submit the required data using the data collection sheet below and/or via the online reporting platform.
 
 .SSI reporting sheet
-//image::NeoIPC-Core-SSI-Reporting-Sheet-Image.svg[SSI reporting sheet,{full-width},pdfwidth=75%,opts=inline,align="center"]
+//image::NeoIPC-Core-SSI-Reporting-Sheet-Image.fa.svg[SSI reporting sheet,{full-width},pdfwidth=75%,opts=inline,align="center"]
 image::NeoIPC-Core-SSI-Reporting-Sheet-Image.png[SSI reporting sheet,{full-width},pdfwidth=75%,align="center"]
 
 <<<
@@ -370,7 +370,7 @@ To assign a secondary bloodstream infection to a pneumonia, NEC, or an SSI, the 
 . At least one organism from the blood specimen matches an organism identified from the primary infection site.
 
 .Secondary BSI data collection
-//image::NeoIPC-Core-Secondary-BSI-Image.svg[Secondary BSI data collection,{full-width},pdfwidth=100%,opts=inline,align="center"]
+//image::NeoIPC-Core-Secondary-BSI-Image.fa.svg[Secondary BSI data collection,{full-width},pdfwidth=100%,opts=inline,align="center"]
 image::NeoIPC-Core-Secondary-BSI-Image.png[Secondary BSI data collection,{full-width},pdfwidth=100%,align="center"]
 
 [#infection-definitions]
@@ -393,12 +393,12 @@ For detailed information, please see xref:secondary_bsi[Secondary Bloodstream In
 <<<
 [#infection-definitions-clinical-sepsis]
 ==== Clinical Sepsis
-include::NeoIPC-Core-Clinical-Sepsis-Definition.adoc[]
+include::NeoIPC-Core-Clinical-Sepsis-Definition.fa.adoc[]
 
 <<<
 [#infection-definitions-lcbsi-caused-by-a-recognised-pathogen]
 ==== LCBSI caused by a Recognised Pathogen
-include::NeoIPC-Core-LCBSI-With-Recognised-Pathogen-Definition.adoc[]
+include::NeoIPC-Core-LCBSI-With-Recognised-Pathogen-Definition.fa.adoc[]
 
 [#infection-definitions-lcbsi-caused-by-common-commensals]
 ==== LCBSI caused by Common Commensals
@@ -411,7 +411,7 @@ As the tools collect the raw data leading to the diagnosis of an infection it is
 
 In any case, because of this fact, you should be very careful when comparing rates of LCBSI caused by common commensals across different settings.
 
-include::NeoIPC-Core-LCBSI-With-Common-Commensal-Definition.adoc[]
+include::NeoIPC-Core-LCBSI-With-Common-Commensal-Definition.fa.adoc[]
 
 [#infection-definitions-necrotising-enterocolitis]
 === Necrotising Enterocolitis
@@ -420,13 +420,13 @@ The NEC dataset includes information on whether the patient has an intestinal pe
 However, this is not one of the surveillance definition criteria.
 This means that you should not report cases where you have surgical evidence of intestinal perforation without evidence of primary necrosis or pneumatosis intestinalis (e.g. spontaneous bowel perforation) as NEC.
 
-include::NeoIPC-Core-Necrotising-Enterocolitis-Definition.adoc[]
+include::NeoIPC-Core-Necrotising-Enterocolitis-Definition.fa.adoc[]
 
 [#infection-definitions-pneumonia]
 === Pneumonia
 Pneumonia in neonates is an entity that is very difficult to define for surveillance purposes as one can infer from the fact that many surveillance systems abstain from recording it at all, while others record ventilator-associated events where surveillance is limited to ventilated patients and pneumonia is only one of the entities captured by the definition.
 
-include::NeoIPC-Core-Pneumonia-Definition.adoc[]
+include::NeoIPC-Core-Pneumonia-Definition.fa.adoc[]
 
 NOTE: To meet the criteria of device associated hospital-acquired pneumonia, patients must be ventilated for at least 4 calendar days (day 1 is the day invasive/non-invasive ventilation starts).
 The earliest date of the event is day 3 of ventilation.
@@ -496,19 +496,19 @@ The day of infection in this case would be “Day 17”.
 ==== Superficial Incisional SSI
 Surgical site infections involving only the skin and subcutaneous tissue belong to this category.
 
-include::NeoIPC-Core-Superficial-Incisional-SSI-Definition.adoc[]
+include::NeoIPC-Core-Superficial-Incisional-SSI-Definition.fa.adoc[]
 
 [#infection-definitions-surgical-site-infection-deep-incisional-ssi]
 ==== Deep Incisional SSI
 Surgical site infections involving deep soft tissues of the incision (for example, fascial and muscle layers) belong to this category.
 
-include::NeoIPC-Core-Deep-Incisional-SSI-Definition.adoc[]
+include::NeoIPC-Core-Deep-Incisional-SSI-Definition.fa.adoc[]
 
 [#infection-definitions-surgical-site-infection-organ-space-ssi]
 ==== Organ/Space SSI
 Surgical site infections involving any part of the body deeper than the fascial/muscle layers that is opened or manipulated during the operative procedure belong to this category.
 
-include::NeoIPC-Core-Organ-Space-SSI-Definition.adoc[]
+include::NeoIPC-Core-Organ-Space-SSI-Definition.fa.adoc[]
 
 [#data-dictionary]
 == Data Dictionary
@@ -1008,7 +1008,7 @@ neoipc-support@charite.de
 |===
 |Name |ATC-Code
 
-include::NeoIPC-Antibiotics.adoc[]
+include::NeoIPC-Antibiotics.fa.adoc[]
 |===
 
 [appendix]
@@ -1018,5 +1018,5 @@ include::NeoIPC-Antibiotics.adoc[]
 |===
 |Name |Type |Assumed Pathogenicity |Recorded Resistances
 
-include::NeoIPC-Pathogens.adoc[]
+include::NeoIPC-Pathogens.fa.adoc[]
 |===
