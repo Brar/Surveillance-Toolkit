@@ -1,25 +1,25 @@
-id,needs_translation,translated
-3gcr,f,
-bacterial_genus,t,Género bacteriano
-bacterial_group,t,Grupo bacteriano
-bacterial_serotype,t,Serotipo bacteriano
-bacterial_species,t,Especie bacteriana
-bacterial_species_complex,t,Complejo de especies bacterianas
-bacterial_subspecies,t,Subespecie bacteriana
-carbapenems,t,Carbapenemas
-colistin,t,Colistina
-common_commensal,t,Comensal común
-fungal_genus,t,Género fúngico
-fungal_species,t,Especie fúngica
-fungal_species_complex,t,Complejo de especies de hongos
-fungal_variety,t,Variedad de hongos
-mrsa,t,SARM
-recognised_pathogen,t,Patógeno reconocido
-unknown,t,Desconocido
-viral_clade,t,Clado vírico
-viral_family,t,Familia de virus
-viral_genus,t,Género de virus
-viral_group,t,Grupo vírico
-viral_serotype,t,Serotipo vírico
-viral_species,t,Tipo de virus
-vre,f,
+id,property,needs_translation,translated
+3gcr,VALUE,f,
+bacterial_genus,VALUE,t,Género bacteriano
+bacterial_group,VALUE,t,Grupo bacteriano
+bacterial_serotype,VALUE,t,Serotipo bacteriano
+bacterial_species,VALUE,t,Especie bacteriana
+bacterial_species_complex,VALUE,t,Complejo de especies bacterianas
+bacterial_subspecies,VALUE,t,Subespecie bacteriana
+carbapenems,VALUE,t,Carbapenemas
+colistin,VALUE,t,Colistina
+common_commensal,VALUE,t,Comensal común
+fungal_genus,VALUE,t,Género fúngico
+fungal_species,VALUE,t,Especie fúngica
+fungal_species_complex,VALUE,t,Complejo de especies de hongos
+fungal_variety,VALUE,t,Variedad de hongos
+mrsa,VALUE,t,SARM
+recognised_pathogen,VALUE,t,Patógeno reconocido
+unknown,VALUE,t,Desconocido
+viral_clade,VALUE,t,Clado vírico
+viral_family,VALUE,t,Familia de virus
+viral_genus,VALUE,t,Género de virus
+viral_group,VALUE,t,Grupo vírico
+viral_serotype,VALUE,t,Serotipo vírico
+viral_species,VALUE,t,Tipo de virus
+vre,VALUE,f,

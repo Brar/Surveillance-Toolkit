@@ -62,8 +62,26 @@ function New-PathogenList {
     while ($c.Name.Length -gt 0) {
         $listElementsPath = Join-Path -Path $InputDirectory -ChildPath "ListElements.$($c.Name).csv"
         if ((Test-Path -LiteralPath $listElementsPath -PathType Leaf)) {
+            $lineNo = 1
             Import-Csv -LiteralPath $listElementsPath -Encoding utf8NoBOM | ForEach-Object {
-                if ((-not $listElements.ContainsKey($_.id)) -and $_.needs_translation -ceq 't') {
+                $le = $_
+                $lineNo++
+                if ($le.property -cne 'VALUE') {
+                    throw "Unknown property name '$($le.property)' in line $lineNo in file '$listElementsPath'."
+                }
+                $needs_translation = $le.needs_translation -ceq 't'
+                if (-not $needs_translation) {
+                    if ($le.needs_translation -ceq 'u') {
+                        Write-Warning "Unverified translation value '$($le.translated)' in line $lineNo file '$listElementsPath'."
+                        if ($le.translated.Length -gt 0) {
+                            $needs_translation = $true
+                        }
+                    } elseif ($le.needs_translation -cne 'f') {
+                        throw "Unexpected boolen value '$($le.needs_translation)' in line $lineNo file '$listElementsPath'."
+                    }
+                }
+
+                if ($needs_translation -and (-not $listElements.ContainsKey($_.id))) {
                     $listElements.add($_.id, $_.translated)
                 }
             }

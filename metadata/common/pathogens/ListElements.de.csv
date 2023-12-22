@@ -1,25 +1,25 @@
-id,needs_translation,translated
-3gcr,f,
-bacterial_genus,t,Bakteriengattung
-bacterial_group,t,Bakteriengruppe
-bacterial_serotype,t,Bakterieller Serotyp
-bacterial_species,t,Bakterienart
-bacterial_species_complex,t,Bakterieller Artenkomplex
-bacterial_subspecies,t,Bakterielle Unterart
-carbapenems,t,Carbapeneme
-colistin,f,
-common_commensal,t,Gewöhnlicher Kommensale
-fungal_genus,t,Pilzgattung
-fungal_species,t,Pilzart
-fungal_species_complex,t,Artenkomplex von Pilzen
-fungal_variety,t,Pilzvarietät
-mrsa,f,
-recognised_pathogen,t,Anerkannter Krankheitserreger
-unknown,t,Unbekannt
-viral_clade,t,Virale Klade
-viral_family,t,Virenfamilie
-viral_genus,t,Virengattung
-viral_group,t,Virengruppe
-viral_serotype,t,Viraler Serotyp
-viral_species,t,Virenart
-vre,f,
+id,property,needs_translation,translated
+3gcr,VALUE,f,
+bacterial_genus,VALUE,t,Bakteriengattung
+bacterial_group,VALUE,t,Bakteriengruppe
+bacterial_serotype,VALUE,t,Bakterieller Serotyp
+bacterial_species,VALUE,t,Bakterienart
+bacterial_species_complex,VALUE,t,Bakterieller Artenkomplex
+bacterial_subspecies,VALUE,t,Bakterielle Unterart
+carbapenems,VALUE,t,Carbapeneme
+colistin,VALUE,f,
+common_commensal,VALUE,t,Gewöhnlicher Kommensale
+fungal_genus,VALUE,t,Pilzgattung
+fungal_species,VALUE,t,Pilzart
+fungal_species_complex,VALUE,t,Artenkomplex von Pilzen
+fungal_variety,VALUE,t,Pilzvarietät
+mrsa,VALUE,f,
+recognised_pathogen,VALUE,t,Anerkannter Krankheitserreger
+unknown,VALUE,t,Unbekannt
+viral_clade,VALUE,t,Virale Klade
+viral_family,VALUE,t,Virenfamilie
+viral_genus,VALUE,t,Virengattung
+viral_group,VALUE,t,Virengruppe
+viral_serotype,VALUE,t,Viraler Serotyp
+viral_species,VALUE,t,Virenart
+vre,VALUE,f,
