@@ -1,7 +1,7 @@
 .Laboratory-Confirmed Bloodstream Infection with Common Commensal Detected Twice
 [%unbreakable]
 ****
-. **The same common commensal is recovered from at least TWO blood culture and/or CSF culture specimen collected on separate occasions**
+. **The same common commensal is recovered from at least TWO blood and/or CSF culture specimen collected on separate occasions**
 +
 **AND**
 . **Patient has at least TWO of the following clinical or laboratory features of generalized infection:**
@@ -29,11 +29,11 @@
 +
 **AND**
 . **At least one of the following laboratory findings:**
-- WBC < 4 × 10^9^/L or > 20 × 10^9^/L (< 4 × 10^3^/μL or > 20 × 10^3^/μL)
-- CRP > 10 mg/L (> 1 mg/dL)
-- Procalcitonin ≥ 2μg/L (2 ng/mL; 200 ng/dL)
-- I/T-Ratio > 0.2 (ratio of immature granulocytes to total granulocytes)
-- Increased levels of interleukin (IL) 6 or 8
+* WBC < 4 × 10^9^/L or > 20 × 10^9^/L (< 4 × 10^3^/μL or > 20 × 10^3^/μL)
+* CRP > 10 mg/L (> 1 mg/dL)
+* Procalcitonin ≥ 2μg/L (2 ng/mL; 200 ng/dL)
+* I/T-Ratio > 0.2 (ratio of immature granulocytes to total granulocytes)
+* Increased levels of interleukin (IL) 6 or 8
 +
 **AND**
 . **Patient has at least TWO of the following clinical or laboratory features of generalized infection:**
@@ -75,4 +75,7 @@
 ** Increased levels of interleukin (IL) 6 or 8
 ****
 
-*If the infant died, was discharged, or transferred prior to the completion of five days of intravenous antibiotics, this condition would still be met if the intention were to treat for five or more days.
+*The day of the first dose and the day of the last dose are counted.
+Days where no dose was administered between the first and the last dose (e.g., skipped doses because of high drug levels in therapeutic drug monitoring) are counted as if a dose had been administered.
+Days after the last dose are not counted regardless of the patient's measured or assumed drug level.
+If the infant died, was discharged, or transferred before the end of the five-day course of intravenous antibiotics, this condition is met if treatment was scheduled for five days or more.

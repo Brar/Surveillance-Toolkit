@@ -23,7 +23,6 @@
 [%unbreakable]
 ****
 **Al menos UNO de los siguientes hallazgos quirúrgicos o patológicos:**
-
 * Necrosis intestinal extensa (> 2 cm de intestino afectado)
 * Neumatosis intestinal
 ****

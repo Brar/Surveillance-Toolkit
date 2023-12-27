@@ -20,7 +20,7 @@ Patient has at least one of the following signs or symptoms: localized pain or t
 .. Diagnosis of a superficial incisional SSI by a physician* or physician designee.
 ****
 
-*The term physician for the purpose of application of the NHSN SSI criteria may be interpreted to mean a surgeon, infectious disease physician, emergency physician, another physician on the case, or physician’s designee (nurse practitioner or physician’s assistant).
+*The term physician for the purpose of application of the NeoIPC SSI criteria may be interpreted to mean a surgeon, infectious disease physician, emergency physician, another physician on the case, or physician’s designee (nurse practitioner or physician’s assistant).
 
 The following do not qualify as criteria for meeting the definition of superficial incisional SSI
 

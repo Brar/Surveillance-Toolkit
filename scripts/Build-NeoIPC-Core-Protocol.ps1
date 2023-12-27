@@ -389,35 +389,35 @@ else {
     $revRemark = 'revremark=Preview'
 }
 
-$metadataDir = (Resolve-Path -Path "$PSScriptRoot/../metadata").Path
-$antibioticsDir = "$metadataDir/common/antibiotics"
-$pathogensDir = "$metadataDir/common/pathogens"
-$buildDir = "$PSScriptRoot/../build"
-$outDir = "$PSScriptRoot/../out"
-$protocolDir = "$PSScriptRoot/../doc/protocol"
-$imgDir = "$protocolDir/img"
-$buildImgDir = "$buildDir/img"
-$resDir = "$protocolDir/resx"
-$transDir = "$protocolDir/xslt"
-
-if (-not (Test-Path -LiteralPath $buildDir -PathType Container)) {
-    Write-Debug -Message "Build directory does not exist."
-    $p = (New-Item -Path $PSScriptRoot -Name build -ItemType Directory).FullName
-    Write-Verbose -Message "Created build directory at '$p'."
+$workspaceFolder = Join-Path -Resolve -Path $PSScriptRoot -ChildPath '..'
+$metadataDir =  Join-Path -Resolve -Path $workspaceFolder -ChildPath 'metadata'
+$buildDir = Join-Path -Resolve -Path $workspaceFolder -ChildPath 'build' -ErrorAction SilentlyContinue
+if ($buildDir) {
+    $buildImgDir = Join-Path -Resolve -Path $buildDir -ChildPath 'img' -ErrorAction SilentlyContinue
+} else {
+    Write-Debug -Message "Creating build directory"
+    $buildDir = (New-Item -Path $workspaceFolder -Name 'build' -ItemType Directory).FullName
+    Write-Debug -Message "Creating build image directory"
+    $buildImgDir = (New-Item -Path $buildDir -Name 'img' -ItemType Directory).FullName
+}
+if (-not $buildImgDir) {
+    Write-Debug -Message "Creating build image directory"
+    $buildImgDir = (New-Item -Path $buildDir -Name 'img' -ItemType Directory).FullName
+}
+$outDir = Join-Path -Resolve -Path $workspaceFolder -ChildPath 'artifacts' -ErrorAction SilentlyContinue
+if (-not $outDir) {
+    Write-Debug -Message "Creating build directory"
+    $outDir = (New-Item -Path $workspaceFolder -Name 'artifacts' -ItemType Directory).FullName
 }
 
-if (-not (Test-Path -LiteralPath $buildImgDir -PathType Container)) {
-    Write-Debug -Message "Build image directory does not exist."
-    $p = (New-Item -Path $buildDir -Name img -ItemType Directory).FullName
-    Write-Verbose -Message "Created build image directory at '$p'."
-}
+$antibioticsDir = Join-Path -Resolve -Path $metadataDir -ChildPath 'common' -AdditionalChildPath 'antibiotics'
+$pathogensDir = Join-Path -Resolve -Path $metadataDir -ChildPath 'common' -AdditionalChildPath 'pathogens'
+$protocolDir = Join-Path -Resolve -Path $workspaceFolder -ChildPath 'doc' -AdditionalChildPath 'protocol'
+$imgDir = Join-Path -Resolve -Path $protocolDir -ChildPath 'img'
+$resDir = Join-Path -Resolve -Path $protocolDir -ChildPath 'resx'
+$transDir = Join-Path -Resolve -Path $protocolDir -ChildPath 'xslt'
 
-if (-not (Test-Path -LiteralPath $outDir -PathType Container)) {
-    Write-Debug -Message "Output directory does not exist."
-    $p = (New-Item -Path $PSScriptRoot -Name out -ItemType Directory).FullName
-    Write-Verbose -Message "Created output directory at '$p'."
-}
-
+# ToDo: Copy smarter
 Copy-Item $imgDir/* $buildImgDir/ -Force
 Copy-Item $imgDir $buildImgDir/ -Force -Recurse
 Copy-Item $imgDir $outDir -Force -Recurse

@@ -338,7 +338,6 @@ En NeoIPC se registran las siguientes asociaciones a dispositivos:
 Dado que el establecimiento de una relación causal entre un dispositivo y una infección hospitalaria es difícil e inviable en muchos entornos de neonatología, NeoIPC se centra únicamente en una asociación basada en el tiempo.
 Para crear una asociación entre un dispositivo y la infección, el dispositivo debe haber estado en uso durante un periodo definido antes de la infección.
 
-
 Ejemplo que muestra la relación entre infección y dispositivo para las infecciones asociadas a dispositivos
 [cols="1,^1,^2,5"]
 |===
@@ -360,7 +359,7 @@ Si se utilizó ventilación invasiva y no invasiva de forma intermitente, la neu
 [#data-collection-infection-data-collection-secondary-bloodstream-infection]
 ==== Infección secundaria del torrente sanguíneo
 Dentro de la vigilancia de NeoIPC, es posible registrar las infecciones del torrente sanguíneo secundarias a neumonía, ECN e ISQ.
-La recopilación de datos sobre infecciones secundarias del torrente sanguíneo es opcional; por lo tanto, es posible seleccionar **"Desconocida "** si no está realizando un seguimiento de los pacientes por infecciones secundarias del torrente sanguíneo.
+La recopilación de datos sobre infecciones secundarias del torrente sanguíneo es opcional; por lo tanto, es posible seleccionar **"Sin seguimiento"** si no está realizando un seguimiento de los pacientes por infecciones secundarias del torrente sanguíneo.
 
 Para asignar una infección secundaria del torrente sanguíneo a una neumonía, una ECN o una ISQ, deben cumplirse los siguientes criterios:
 
@@ -381,14 +380,14 @@ La sepsis se clasifica como cultivo negativo o cultivo comprobado en el sistema 
 Asimismo, la sepsis probada por cultivo (LCBSI = "Laboratory-confirmed bloodstream infection") se clasifica en dos categorías en función del resultado del cultivo.
 
 Las infecciones causadas por microorganismos que entran en el torrente sanguíneo desde un lugar de infección primario (excepto las infecciones asociadas a catéteres) no se contabilizan en esta sección.
-Para obtener información detallada, consulte xref:secondary_bsi[Infección secundaria del torrente sanguíneo].
+Para obtener información detallada, consulte xref:data-collection-infection-data-collection-secondary-bloodstream-infection[Infección secundaria del torrente sanguíneo].
 
 . Sepsis clínica (infección sin organismo detectado)
 . Infección del torrente sanguíneo confirmada por laboratorio
 .. LCBSI causada por un patógeno reconocido*.
 .. LCBSI causada por un comensal común*.
 
-*Ver lista maestra de organismos en https://neoipc.org/surveillance/resources/
+*Ver xref:appendix-list-of-list-of-infectious-agents[Lista de agentes infecciosos]
 
 <<<
 [#infection-definitions-clinical-sepsis]
@@ -415,7 +414,7 @@ include::NeoIPC-Core-LCBSI-With-Common-Commensal-Definition.es.adoc[]
 
 [#infection-definitions-necrotising-enterocolitis]
 === Enterocolitis necrotizante
-Los criterios de vigilancia de la enterocolitis necrotizante (ECN) consisten en una combinación de hallazgos radiológicos y signos clínicos o en un diagnóstico basado en pruebas quirúrgicas.
+Los criterios de vigilancia de la enterocolitis necrotizante (ECN) consisten en una combinación de hallazgos radiológicos y signos clínicos o en un diagnóstico basado en pruebas quirúrgicos y/o patológicos.
 El conjunto de datos de ECN incluye información sobre si el paciente presenta una perforación intestinal.
 Sin embargo, éste no es uno de los criterios de definición de la vigilancia.
 Esto significa que no se deben notificar como ECN los casos en los que se tenga evidencia quirúrgica de perforación intestinal sin evidencia de necrosis primaria o neumatosis intestinal (por ejemplo, perforación intestinal espontánea).
@@ -513,7 +512,7 @@ include::NeoIPC-Core-Organ-Space-SSI-Definition.es.adoc[]
 [#data-dictionary]
 == Diccionario de datos
 Los siguientes elementos de datos aparecen en las hojas de documentación de NeoIPC o en la plataforma de informes.
-Algunos de ellos (por ejemplo, id de paciente y nombre de paciente) se utilizan sólo para su documentación local y no se utilizan en las herramientas de software NeoIPC.
+Algunos de ellos (por ejemplo, id de paciente y nombre de paciente) se utilizan sólo para su documentación local y no se utilizan en las herramientas centrales del software NeoIPC.
 
 [#data-dictionary-patient-master-data]
 === Datos maestros del paciente

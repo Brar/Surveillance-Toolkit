@@ -29,11 +29,11 @@
 +
 **Y**
 . **Al menos uno de los siguientes resultados de laboratorio:**.
-- CMB < 4 × 10^9^/L o > 20 × 10^9^/L (< 4 × 10^3^/μL o > 20 × 10^3^/μL)
-- PCR > 10 mg/L (> 1 mg/dL)
-- Procalcitonina ≥ 2μg/L (2 ng/mL; 200 ng/dL)
-- Relación I/T > 0,2 (relación entre granulocitos inmaduros y granulocitos totales)
-- Aumento de los niveles de interleucina (IL) 6 u 8
+* CMB < 4 × 10^9^/L o > 20 × 10^9^/L (< 4 × 10^3^/μL o > 20 × 10^3^/μL)
+* PCR > 10 mg/L (> 1 mg/dL)
+* Procalcitonina ≥ 2μg/L (2 ng/mL; 200 ng/dL)
+* Relación I/T > 0,2 (relación entre granulocitos inmaduros y granulocitos totales)
+* Aumento de los niveles de interleucina (IL) 6 u 8
 +
 **Y**
 . **El paciente presenta al menos DOS de las siguientes características clínicas o de laboratorio de infección generalizada:**.
@@ -75,4 +75,7 @@
 ** Aumento de los niveles de interleucina (IL) 6 u 8
 ****
 
-*Si el lactante falleciera, fuera dado de alta o trasladado antes de completar cinco días de antibióticos intravenosos, esta condición seguiría cumpliéndose si la intención fuera tratarlo durante cinco o más días.
+*Se cuentan el día de la primera dosis y el día de la última dosis.
+Los días en los que no se administró ninguna dosis entre la primera y la última (por ejemplo, dosis omitidas debido a niveles elevados del fármaco en la monitorización terapéutica de fármacos) se cuentan como si se hubiera administrado una dosis.
+Los días posteriores a la última dosis no se cuentan, independientemente del nivel de fármaco medido o supuesto del paciente.
+Si el lactante falleció, fue dado de alta o trasladado antes de finalizar el tratamiento de cinco días con antibióticos intravenosos, esta condición se cumple si el tratamiento estaba programado para cinco días o más.

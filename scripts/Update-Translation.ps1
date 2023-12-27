@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory=$true)]
-    [CultureInfo]$CultureInfo = "fa"
+    [CultureInfo]$CultureInfo
     )
 
 if ($CultureInfo.Name.Length -eq 0) {

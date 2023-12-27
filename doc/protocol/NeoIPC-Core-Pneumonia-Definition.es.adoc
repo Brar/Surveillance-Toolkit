@@ -29,9 +29,9 @@ O
 O
 * inicio de ventilación mecánica invasiva (incluido el cambio de soporte ventilatorio no invasivo)
 
-....that no mejora en menos de 2 días: Que no mejore en menos de 2 días.
+…that no mejora en menos de 2 días: Que no mejore en menos de 2 días.
 
-...después de al menos 2 días de estabilidad o mejoría: Se requiere un periodo basal de estabilidad o mejoría de al menos dos días antes de que se produzca la condición anterior.
+…después de al menos 2 días de estabilidad o mejoría: Se requiere un periodo basal de estabilidad o mejoría de al menos dos días antes de que se produzca la condición anterior.
 
 
 

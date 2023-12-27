@@ -26,7 +26,7 @@ jobs:
 
             - name: Build
               shell: pwsh
-              run: ./doc/build.ps1 -InformationAction Continue
+              run: ./doc/build.ps1 -InformationAction Continue -WarningAction:Stop
 
             - name: Upload artifacts
               uses: actions/upload-artifact@v3

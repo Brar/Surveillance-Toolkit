@@ -20,7 +20,7 @@ El paciente presenta al menos uno de los siguientes signos o síntomas: dolor o 
 .. Diagnóstico de una ISQ incisional superficial por un médico* o una persona designada por éste.
 ****
 
-*El término médico, a efectos de la aplicación de los criterios de ISQ de la NHSN, puede interpretarse como un cirujano, un médico de enfermedades infecciosas, un médico de urgencias, otro médico del caso o la persona designada por el médico (enfermero o asistente médico).
+*El término médico, a efectos de la aplicación de los criterios de ISQ de la NeoIPC, puede interpretarse como un cirujano, un médico de enfermedades infecciosas, un médico de urgencias, otro médico del caso o la persona designada por el médico (enfermero o asistente médico).
 
 No se consideran criterios para cumplir la definición de ISQ incisional superficial los siguientes
 

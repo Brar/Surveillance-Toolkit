@@ -338,7 +338,6 @@ In NeoIPC the following device associations are recorded:
 Since the establishment of a causative relationship between a device and a hospital-acquired infection is difficult and infeasible in many neonatology settings, NeoIPC focuses on a time-based association only.
 To create an association between a device and infection, the device must have been in use for a defined period prior to infection.
 
-
 .Example showing the relationship between infection and device for device associated infections
 [cols="1,^1,^2,5"]
 |===
@@ -360,7 +359,7 @@ If both invasive and non-invasive ventilation were used intermittently, pneumoni
 [#data-collection-infection-data-collection-secondary-bloodstream-infection]
 ==== Secondary Bloodstream Infection
 Within NeoIPC surveillance, it is possible to record bloodstream infections secondary to pneumonia, NEC, and SSIs.
-Collecting data on secondary BSI is optional; therefore, it is possible to select **“Unknown”** if you are not following patients for secondary BSI.
+Collecting data on secondary BSI is optional; therefore, it is possible to select **“No follow-up”** if you are not following patients for secondary BSI.
 
 To assign a secondary bloodstream infection to a pneumonia, NEC, or an SSI, the following criteria must be met:
 
@@ -381,14 +380,14 @@ Sepsis is classified as either culture negative or culture proven in the NeoIPC 
 As well, culture proven sepsis (LCBSI = "Laboratory-confirmed bloodstream infection") is classified into two categories based on the culture result.
 
 Infections caused by microorganisms that enter the bloodstream from a primary infection site (except for catheter-associated infections) are not counted in this section.
-For detailed information, please see xref:secondary_bsi[Secondary Bloodstream Infection].
+For detailed information, please see xref:data-collection-infection-data-collection-secondary-bloodstream-infection[Secondary Bloodstream Infection].
 
 . Clinical sepsis (infection without a detected organism)
 . Laboratory-confirmed bloodstream infection
 .. LCBSI caused by a recognised pathogen*
 .. LCBSI caused by a common commensal*
 
-*See Master Organism List on https://neoipc.org/surveillance/resources/
+*See xref:appendix-list-of-list-of-infectious-agents[List of Infectious Agents]
 
 <<<
 [#infection-definitions-clinical-sepsis]
@@ -415,7 +414,7 @@ include::NeoIPC-Core-LCBSI-With-Common-Commensal-Definition.adoc[]
 
 [#infection-definitions-necrotising-enterocolitis]
 === Necrotising Enterocolitis
-Necrotising Enterocolitis (NEC) surveillance criteria consist of either a combination of radiological findings and clinical signs or a diagnosis based on surgical evidence.
+Necrotising Enterocolitis (NEC) surveillance criteria consist of either a combination of radiological findings and clinical signs or a diagnosis based on surgical and/or pathological evidence.
 The NEC dataset includes information on whether the patient has an intestinal perforation.
 However, this is not one of the surveillance definition criteria.
 This means that you should not report cases where you have surgical evidence of intestinal perforation without evidence of primary necrosis or pneumatosis intestinalis (e.g. spontaneous bowel perforation) as NEC.
@@ -513,7 +512,7 @@ include::NeoIPC-Core-Organ-Space-SSI-Definition.adoc[]
 [#data-dictionary]
 == Data Dictionary
 The following data items appear in the NeoIPC documentation sheets or in the reporting platform.
-Some of them (e.g., patient id and patient name) are used for your local documentation only and not used in the NeoIPC software tools.
+Some of them (e.g., patient id and patient name) are used for your local documentation only and not used in the central NeoIPC software tools.
 
 [#data-dictionary-patient-master-data]
 === Patient Master Data
@@ -527,6 +526,7 @@ NOTE: Use this identifier to uniquely identify a patient in the system.
 Ideally use a unique random string of characters.
 If you have a requirement to identify a patient you have entered here, you can use this identifier as the NeoIPC key for pseudonymisation.
 NEVER use an identifier that is used anywhere else and that you do not fully control (e.g. do NOT use the patient id from your hospital information system).
+
 [[data-dictionary-patient-master-data-enrolment-patient-id]]Patient-ID:: The unique id of the patient in the hospital, which most of the time comes from the hospital information system (HIS) or the patient data management system (PDMS).
 [[data-dictionary-patient-master-data-enrolment-patient-name]]Patient name:: The patient's name (e.g., given name followed by family name).
 

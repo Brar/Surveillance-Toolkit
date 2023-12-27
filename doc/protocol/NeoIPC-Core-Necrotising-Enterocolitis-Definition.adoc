@@ -23,7 +23,6 @@
 [%unbreakable]
 ****
 **At least of ONE the following surgical or pathological findings:**
-
 * Extensive bowel necrosis (> 2 cm of bowel affected)
 * Pneumatosis intestinalis
 ****
