@@ -1,6 +1,6 @@
 = Vigilancia de infecciones en neonatología: Core Module for Very Low Birth Weight (VLBW) and Very Preterm (VPT) Infants (Módulo básico para recién nacidos de muy bajo peso y muy prematuros)
 :lang: es
-include::NeoIPC-Core-Protocol.header.adoc[]
+include::NeoIPC-Core-Protocol-Header.adoc[]
 :revnumber: 2.0
 
 [#introduction]

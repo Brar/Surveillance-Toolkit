@@ -6,53 +6,7 @@ param(
     [switch]$Release
     )
 
-function Test-RebuildRequired {
-    [OutputType([bool])]
-    param (
-        [parameter(Mandatory,Position=0)]
-        [string]
-        $OutputPath,
-        [parameter(Mandatory,Position=1)]
-        [string]
-        $FirstInputPath,
-        [parameter(Position=2)]
-        [string[]]
-        $AdditionalInputPaths
-    )
-
-    if (-not (Test-Path $OutputPath -PathType Leaf)) {
-        Write-Debug ("'$OutputPath' does not exist." -replace "/", [IO.Path]::DirectorySeparatorChar)
-        return $true
-    }
-
-    if (-not (Test-Path $FirstInputPath -PathType Leaf)) {
-        Write-Error ("'$FirstInputPath' does not exist." -replace "/", [IO.Path]::DirectorySeparatorChar)
-        return $false
-    }
-
-    $outputStamp = (Get-ChildItem $OutputPath).LastWriteTimeUtc
-    $inputStamp = (Get-ChildItem $FirstInputPath).LastWriteTimeUtc
-
-    if ($outputStamp -lt $inputStamp) {
-        return $true
-    }
-
-    foreach ($inputPath in $AdditionalInputPaths) {
-        if (-not (Test-Path $inputPath -PathType Leaf)) {
-            Write-Error ("'$inputPath' does not exist." -replace "/", [IO.Path]::DirectorySeparatorChar)
-            return $false
-        }
-        $inputStamp = (Get-ChildItem $inputPath).LastWriteTimeUtc
-        if ($outputStamp -lt $inputStamp) {
-            Write-Debug ("'$OutputPath' is older than '$inputPath'." -replace "/", [IO.Path]::DirectorySeparatorChar)
-            return $true
-        }
-        Write-Debug ("'$OutputPath' is newer than or equal to '$inputPath'." -replace "/", [IO.Path]::DirectorySeparatorChar)
-    }
-
-    return $false
-}
-
+Import-Module -Name (Join-Path -Resolve -Path $PSScriptRoot -ChildPath 'modules' -AdditionalChildPath 'NeoIPC-Tools') -Force
 function New-PathogenList {
     [OutputType([void])]
     param (
@@ -373,54 +327,27 @@ function New-PathogenList {
 
 }
 
-if ($null -eq $targetCultures)
-{
-    $targetCultures = @(
-        (new-object CultureInfo(""))
-        (new-object CultureInfo("de"))
-        (new-object CultureInfo("es"))
-         )
-}
-if ($Release)
-{
-    $revRemark = 'revremark!'
-}
-else {
-    $revRemark = 'revremark=Preview'
-}
-
 $workspaceFolder = Join-Path -Resolve -Path $PSScriptRoot -ChildPath '..'
-$metadataDir =  Join-Path -Resolve -Path $workspaceFolder -ChildPath 'metadata'
-$buildDir = Join-Path -Resolve -Path $workspaceFolder -ChildPath 'build' -ErrorAction SilentlyContinue
-if ($buildDir) {
-    $buildImgDir = Join-Path -Resolve -Path $buildDir -ChildPath 'img' -ErrorAction SilentlyContinue
-} else {
-    Write-Debug -Message "Creating build directory"
-    $buildDir = (New-Item -Path $workspaceFolder -Name 'build' -ItemType Directory).FullName
-    Write-Debug -Message "Creating build image directory"
-    $buildImgDir = (New-Item -Path $buildDir -Name 'img' -ItemType Directory).FullName
+$metadataFolder =  Join-Path -Resolve -Path $workspaceFolder -ChildPath 'metadata'
+$artifactsFolder = Join-Path -Resolve -Path $workspaceFolder -ChildPath 'artifacts' -ErrorAction SilentlyContinue
+if (-not $artifactsFolder) {
+    Write-Debug -Message "Creating build artifacts directory"
+    $artifactsFolder = (New-Item -Path $workspaceFolder -Name 'artifacts' -ItemType Directory).FullName
 }
-if (-not $buildImgDir) {
-    Write-Debug -Message "Creating build image directory"
-    $buildImgDir = (New-Item -Path $buildDir -Name 'img' -ItemType Directory).FullName
-}
-$outDir = Join-Path -Resolve -Path $workspaceFolder -ChildPath 'artifacts' -ErrorAction SilentlyContinue
-if (-not $outDir) {
-    Write-Debug -Message "Creating build directory"
-    $outDir = (New-Item -Path $workspaceFolder -Name 'artifacts' -ItemType Directory).FullName
-}
-
-$antibioticsDir = Join-Path -Resolve -Path $metadataDir -ChildPath 'common' -AdditionalChildPath 'antibiotics'
-$pathogensDir = Join-Path -Resolve -Path $metadataDir -ChildPath 'common' -AdditionalChildPath 'pathogens'
+$antibioticsDir = Join-Path -Resolve -Path $metadataFolder -ChildPath 'common' -AdditionalChildPath 'antibiotics'
+$pathogensDir = Join-Path -Resolve -Path $metadataFolder -ChildPath 'common' -AdditionalChildPath 'pathogens'
 $protocolDir = Join-Path -Resolve -Path $workspaceFolder -ChildPath 'doc' -AdditionalChildPath 'protocol'
 $imgDir = Join-Path -Resolve -Path $protocolDir -ChildPath 'img'
 $resDir = Join-Path -Resolve -Path $protocolDir -ChildPath 'resx'
 $transDir = Join-Path -Resolve -Path $protocolDir -ChildPath 'xslt'
 
-# ToDo: Copy smarter
-Copy-Item $imgDir/* $buildImgDir/ -Force
-Copy-Item $imgDir $buildImgDir/ -Force -Recurse
-Copy-Item $imgDir $outDir -Force -Recurse
+if ($null -eq $TargetCultures) {
+    $TargetCultures = Get-Item .\doc\protocol\NeoIPC-Core-Protocol.*adoc |
+    ForEach-Object { [CultureInfo]($_.Name -replace 'NeoIPC-Core-Protocol\.?([^.]*)\.adoc','$1') }
+}
+
+if ($Release) { $revRemark = 'revremark!' }
+else { $revRemark = 'revremark=Preview' }
 
 [AppContext]::SetSwitch("Switch.System.Xml.AllowDefaultResolver", $true);
 $resolver = New-Object System.Xml.XmlUrlResolver
@@ -440,11 +367,6 @@ $masterDataSheet.Load((Get-ChildItem $transDir/NeoIPC-Core-Master-Data-Collectio
 $masterDataSheetImage = New-Object System.Xml.Xsl.XslCompiledTransform
 $masterDataSheetImage.Load((Get-ChildItem $transDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image.xslt).FullName, [System.Xml.Xsl.XsltSettings]::TrustedXslt, $resolver)
 
-if (Test-RebuildRequired $buildDir/NeoIPC-Core-Protocol.header.adoc $protocolDir/NeoIPC-Core-Protocol.header.adoc) {
-    Write-Debug "Copying Asciidoc header file to build dir"
-    Copy-Item $protocolDir/NeoIPC-Core-Protocol.header.adoc $buildDir/NeoIPC-Core-Protocol.header.adoc -Force
-}
-
 foreach ($targetCulture in $targetCultures)
 {
     if ("iv" -eq $targetCulture.TwoLetterISOLanguageName)
@@ -453,7 +375,6 @@ foreach ($targetCulture in $targetCultures)
         $lang = ""
         $langSuffix = ""
         Write-Information "Generating NeoIPC documentation (english)"
-
         if (Test-RebuildRequired $buildDir/NeoIPC-Antibiotics.adoc $antibioticsDir/NeoIPC-Antibiotics.csv) {
             Write-Verbose "Generating appendix table for antibiotics"
 
@@ -546,16 +467,16 @@ foreach ($targetCulture in $targetCultures)
         Write-Debug "Copying Asciidoc files to build dir"
         Copy-Item $protocolDir/*$langSuffix.adoc $buildDir/ -Force
     }
-    if (($Format -eq 'all' -or $Format -eq 'html') -and (Test-RebuildRequired $outDir/index$langSuffix.html $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc @(
+    if (($Format -eq 'all' -or $Format -eq 'html') -and (Test-RebuildRequired $artifactsFolder/index$langSuffix.html $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc @(
         "$buildDir/NeoIPC-Core-Protocol.header.adoc",
         "$buildImgDir/NeoIPC-Core-Decision-Flow$langSuffix.svg",
         "$buildImgDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image$langSuffix.svg"
         ))) {
         Write-Information "Generating HTML"
-        asciidoctor -a $revRemark -a $revDate --backend html5 --warnings --trace --failure-level WARN --destination-dir $outDir --out-file index$langSuffix.html $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc
+        asciidoctor -a $revRemark -a $revDate --backend html5 --warnings --trace --failure-level WARN --destination-dir $artifactsFolder --out-file index$langSuffix.html $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc
         if (-not $?) { exit 1 }
         Write-Verbose "Linting HTML"
-        $allOutput = & linthtml --config (((Resolve-Path -Relative "$PSScriptRoot/.linthtmlrc.yaml") -replace "\\","/") -replace "\./","") (((Resolve-Path -Relative "$outDir/index$langSuffix.html") -replace "\\","/") -replace "\./","") 2>&1
+        $allOutput = & linthtml --config (((Resolve-Path -Relative "$PSScriptRoot/.linthtmlrc.yaml") -replace "\\","/") -replace "\./","") (((Resolve-Path -Relative "$artifactsFolder/index$langSuffix.html") -replace "\\","/") -replace "\./","") 2>&1
         $success = $?
         $stderr = $allOutput | Where-Object { $_ -is [System.Management.Automation.ErrorRecord] }
         $stdout = $allOutput | Where-Object { $_ -isnot [System.Management.Automation.ErrorRecord] }
@@ -574,7 +495,7 @@ foreach ($targetCulture in $targetCultures)
             exit 1
         }
     }
-    if (($Format -eq 'all' -or $Format -eq 'pdf') -and (Test-RebuildRequired $outDir/NeoIPC-Core-Protocol$langSuffix.pdf $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc @(
+    if (($Format -eq 'all' -or $Format -eq 'pdf') -and (Test-RebuildRequired $artifactsFolder/NeoIPC-Core-Protocol$langSuffix.pdf $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc @(
         "$buildDir/NeoIPC-Core-Protocol.header.adoc",
         "$PSScriptRoot/NeoIPC.theme.yml",
         "$buildImgDir/NeoIPC-Core-Title-Page$langSuffix.svg",
@@ -584,14 +505,14 @@ foreach ($targetCulture in $targetCultures)
         Write-Information "Generating PDF"
         if ($IsWindows) {
             Write-Warning "Asciidoctor Mathematical is not supported on Windows. The STEM expressions will not be converted."
-            asciidoctor-pdf -a $revRemark -a $revDate --warnings --trace --failure-level WARN --destination-dir $outDir --out-file NeoIPC-Core-Protocol$langSuffix.pdf $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc
+            asciidoctor-pdf -a $revRemark -a $revDate --warnings --trace --failure-level WARN --destination-dir $artifactsFolder --out-file NeoIPC-Core-Protocol$langSuffix.pdf $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc
             if (-not $?) { exit 1 }
         } else {
-            asciidoctor-pdf -a $revRemark -a $revDate -a mathematical-format=svg -r asciidoctor-mathematical --warnings --trace --failure-level WARN --destination-dir $outDir --out-file NeoIPC-Core-Protocol$langSuffix.pdf $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc
+            asciidoctor-pdf -a $revRemark -a $revDate -a mathematical-format=svg -r asciidoctor-mathematical --warnings --trace --failure-level WARN --destination-dir $artifactsFolder --out-file NeoIPC-Core-Protocol$langSuffix.pdf $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc
             if (-not $?) { exit 1 }
         }
     }
-    if (($Format -eq 'all' -or $Format -eq 'docx') -and (Test-RebuildRequired $outDir/NeoIPC-Core-Protocol$langSuffix.docx $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc @(
+    if (($Format -eq 'all' -or $Format -eq 'docx') -and (Test-RebuildRequired $artifactsFolder/NeoIPC-Core-Protocol$langSuffix.docx $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc @(
         "$buildDir/NeoIPC-Core-Protocol.header.adoc",
         "$buildDir/NeoIPC-Core-Protocol$langSuffix.xml",
         "$buildImgDir/NeoIPC-Core-Decision-Flow$langSuffix.svg",
@@ -609,7 +530,7 @@ foreach ($targetCulture in $targetCultures)
                 if (-not $?) { exit 1 }
             }
         }
-        if (Test-RebuildRequired $outDir/img/NeoIPC-Core-Decision-Flow$langSuffix.docx $buildDir/NeoIPC-Core-Decision-Flow$langSuffix.xml @(
+        if (Test-RebuildRequired $artifactsFolder/img/NeoIPC-Core-Decision-Flow$langSuffix.docx $buildDir/NeoIPC-Core-Decision-Flow$langSuffix.xml @(
             "$buildImgDir/NeoIPC-Core-Decision-Flow$langSuffix.svg",
             "$buildImgDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image$langSuffix.svg"
             )) {
@@ -617,7 +538,7 @@ foreach ($targetCulture in $targetCultures)
             $locationBackup = Get-Location
             Set-Location $buildDir
             try {
-                pandoc --from=docbook --to=docx --toc --output=$outDir/NeoIPC-Core-Protocol$langSuffix.docx NeoIPC-Core-Protocol$langSuffix.xml
+                pandoc --from=docbook --to=docx --toc --output=$artifactsFolder/NeoIPC-Core-Protocol$langSuffix.docx NeoIPC-Core-Protocol$langSuffix.xml
                 if (-not $?) { exit 1 }
             }
             finally {

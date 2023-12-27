@@ -1,6 +1,6 @@
 = Infektionssurveillance für die Neonatologie: Kernmodul für Hochrisiko-Neugeborene mit < 1500 g Geburtsgewicht oder < 32 Wochen Gestationsalter
 :lang: de
-include::NeoIPC-Core-Protocol.header.adoc[]
+include::NeoIPC-Core-Protocol-Header.adoc[]
 :revnumber: 2.0
 
 [#introduction]
