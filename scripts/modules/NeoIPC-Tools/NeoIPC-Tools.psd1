@@ -67,6 +67,7 @@ PowerShellVersion = '7.4'
 FunctionsToExport = @(
     'Build-Target'
     'Export-AsciiDocIds'
+    'Export-AsciiDocReferences'
     'Get-LocalisedPath'
     'Import-Translations'
     'New-AntibioticsList'

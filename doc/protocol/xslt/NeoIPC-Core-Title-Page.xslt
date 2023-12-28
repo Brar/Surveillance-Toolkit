@@ -74,8 +74,8 @@
                 </tspan>
                 <tspan dx="190">(</tspan>
             </text>
-            <image xlink:href="img/cc.xlarge.png" x="17500" y="28250" width="800" height="800" />
-            <image xlink:href="img/by.xlarge.png" x="18500" y="28250" width="800" height="800" />
+            <image xlink:href="cc.xlarge.png" x="17500" y="28250" width="800" height="800" />
+            <image xlink:href="by.xlarge.png" x="18500" y="28250" width="800" height="800" />
         </svg>
     </xsl:template>
 </xsl:stylesheet>

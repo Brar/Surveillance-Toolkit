@@ -3,7 +3,6 @@
 $AtcUrlTemplate = 'https://www.whocc.no/atc_ddd_index/?code={0}&showdescription=yes'
 
 function Export-AsciiDocIds {
-    [CmdletBinding()]
     param(
         [Parameter(Mandatory=$true)]
         [string]$LiteralPath,
@@ -38,6 +37,112 @@ function Export-AsciiDocIds {
             '\[#(\S+)\]' {
                 if ($LineNumbers) { "$($lineNumber):$($matches[1])" }
                 else { $matches[1] }
+            }
+        }
+    }
+}
+
+function Export-AsciiDocReferences {
+    param(
+        [Parameter(Mandatory, Position = 0)]
+        [string]$LiteralPath,
+        [Parameter(Position = 2)]
+        [hashtable]$Attributes
+    )
+
+    $file = Get-Item -LiteralPath $LiteralPath
+    $skip = $false;
+    Get-Content -LiteralPath $file.FullName |
+    ForEach-Object {
+        $line = $_
+        switch -regex ($Line) {
+            # Singleline ifdef
+            '^ifdef::([A-Za-z0-9_\-]+)\[.+\]' {
+                if ($skip) { return }
+                if (-not ($Attributes -and $Attributes.ContainsKey($matches[1]))) {
+                    Write-Debug "Skipping '$_' because the attribute '$($matches[1])' is not defined."
+                    return
+                }
+            }
+            # Singleline ifndef
+            '^ifndef::([A-Za-z0-9_\-]+)\[.+\]' {
+                if ($skip) { return }
+                if ($Attributes -and $Attributes.ContainsKey($matches[1])) {
+                    Write-Debug "Skipping '$_' because the attribute '$($matches[1])' is defined."
+                    return
+                }
+            }
+            # Multiline ifdef
+            '^ifdef::([A-Za-z0-9_\-]+)\[\]' {
+                if (-not ($Attributes -and $Attributes.ContainsKey($matches[1]))) {
+                    Write-Debug "Starting to skip lines within '$_' because the attribute '$($matches[1])' is not defined."
+                    $skip = $true
+                    return
+                }
+            }
+            # Multiline ifndef
+            '^ifndef::([A-Za-z0-9_\-]+)\[\]' {
+                if ($Attributes -and $Attributes.ContainsKey($matches[1])) {
+                    Write-Debug "Starting to skip lines within '$_' because the attribute '$($matches[1])' is not defined."
+                    $skip = $true
+                    return
+                }
+            }
+            # endif
+            '^endif::[A-Za-z0-9_\-]*\[\]' {
+                Write-Debug "Stopping to skip lines."
+                $skip = $false
+            }
+            '^//' {
+                # Skip commented lines
+                return
+            }
+            'include::([^[]+)\[.*\]' {
+                if ($skip) { return }
+                $expanded = $matches[1]
+                $expanded = $expanded -replace '\{([A-Za-z0-9_\-]+)\}',{
+                    $attribute = $_.Groups[1].Value
+                    if ($Attributes -and $Attributes.ContainsKey($attribute)) {
+                        $Attributes[$attribute]
+                    } else {
+                        Write-Error "Cannot resolve attribute reference '{$attribute}' in include '$expanded'."
+                        break
+                    }
+                }
+                $childFile = Join-Path -Path $file.DirectoryName -ChildPath $expanded -Resolve -ErrorAction SilentlyContinue -ErrorVariable includeFileError
+                if ($childFile) {
+                    $childFile
+                    Export-AsciiDocReferences -LiteralPath $childFile -Attributes $Attributes
+                }
+                else {
+                    foreach ($w in $includeFileError) {
+                        Write-Warning $w
+                    }
+                }
+                return
+            }
+            'image::?([^[ ]+)\[.*\]' {
+                if ($skip) { return }
+                $expanded = $matches[1]
+                $expanded = $expanded -replace '\{([A-Za-z0-9_\-]+)\}',{
+                    $attribute = $_.Groups[1].Value
+                    if ($Attributes -and $Attributes.ContainsKey($attribute)) {
+                        $Attributes[$attribute]
+                    } else {
+                        Write-Error "Cannot resolve attribute reference '{$attribute}' in image '$expanded'."
+                        break
+                    }
+                }
+                $imageFile = Join-Path -Path $file.DirectoryName -ChildPath 'img' -AdditionalChildPath $expanded -Resolve -ErrorAction SilentlyContinue -ErrorVariable includeFileError
+                if ($imageFile) {
+                    $imageFile
+                }
+                else {
+                    foreach ($w in $includeFileError) {
+                        Write-Warning $w
+                    }
+                }
+                return
             }
         }
     }
