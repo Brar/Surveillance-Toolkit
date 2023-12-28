@@ -28,7 +28,7 @@ Copyright = '2023 NeoIPC Project.'
 Description = 'A set of PowerShell tools for the NeoIPC Surveillance Toolkit'
 
 # Minimum version of the PowerShell engine required by this module
-PowerShellVersion = '7.4'
+PowerShellVersion = '7.2'
 
 # Name of the PowerShell host required by this module
 # PowerShellHostName = ''
