@@ -480,7 +480,7 @@ foreach ($targetCulture in $targetCultures)
         $outputFile = Get-LocalisedPath $artifactsFolder 'NeoIPC-Core-Protocol.docx' $targetCulture
         Build-Target $outputFile $docbookFile {
             Write-Information "Generating Open XML for Microsoft Word (docx)"
-            pandoc --from=docbook --to=docx --toc --number-sections --reference-doc=$(Resolve-Path "$docDir/reference.docx" -Relative) --resource-path=$(Resolve-Path $protocolDir -Relative) --fail-if-warnings=true --output=$outputFile $(Resolve-Path $docbookFile -Relative)
+            pandoc --from=docbook --to=docx --toc --number-sections --reference-doc=$(Resolve-Path "$docDir/reference.docx" -Relative) --resource-path=$(Resolve-Path $protocolDir -Relative) --fail-if-warnings --output=$outputFile $(Resolve-Path $docbookFile -Relative)
             if (-not $?) { exit 1 }
         }
     }
