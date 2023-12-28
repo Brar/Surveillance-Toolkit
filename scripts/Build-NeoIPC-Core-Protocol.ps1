@@ -372,111 +372,55 @@ foreach ($targetCulture in $targetCultures)
     if ("iv" -eq $targetCulture.TwoLetterISOLanguageName)
     {
         $revDate = "revdate=$([datetime]::UtcNow.ToString('yyyy-MM-dd'))"
-        $lang = ""
-        $langSuffix = ""
+        $localeSuffix = ""
         Write-Information "Generating NeoIPC documentation (english)"
-        if (Test-RebuildRequired $buildDir/NeoIPC-Antibiotics.adoc $antibioticsDir/NeoIPC-Antibiotics.csv) {
-            Write-Verbose "Generating appendix table for antibiotics"
-
-            Import-Csv -LiteralPath $antibioticsDir/NeoIPC-Antibiotics.csv -Encoding utf8 |
-                Sort-Object name |
-                ForEach-Object { "|$($_.name) |$($_.atc_code)" } |
-                Out-File -LiteralPath $buildDir/NeoIPC-Antibiotics.adoc -Encoding utf8NoBOM -Append
-        }
     }
     else
     {
         $revDate = "revdate=$([datetime]::UtcNow.ToString('d', $targetCulture))"
-        $lang = $targetCulture.TwoLetterISOLanguageName
-        $langSuffix = ".$lang"
+        $localeSuffix = ".$($targetCulture.Name)"
         Write-Information "Generating NeoIPC documentation for language '$($targetCulture.DisplayName)'"
-
-        if (Test-RebuildRequired $buildDir/NeoIPC-Antibiotics$langSuffix.adoc $antibioticsDir/NeoIPC-Antibiotics.csv $antibioticsDir/NeoIPC-Antibiotics$langSuffix.csv) {
-            Write-Verbose "Generating appendix table for antibiotics"
-
-            $hash = @{}
-            Import-Csv -LiteralPath $antibioticsDir/NeoIPC-Antibiotics$langSuffix.csv -Encoding utf8 |
-                ForEach-Object {
-                    if ($_.property -cne 'NAME') {
-                        throw "Unexpected property value '$($_.property)' in file '$antibioticsDir/NeoIPC-Antibiotics$langSuffix.csv'"
-                    }
-                    $loc = @{}
-                    $loc['default'] = $_.default
-
-                    if ($_.needs_translation -ceq 'f') {
-                        $loc['translated'] = $null
-                    } elseif ($_.needs_translation -ceq 't') {
-                        $loc['translated'] = $_.translated
-                    } elseif ($_.needs_translation -ceq 'u') {
-                        Write-Warning "Unverified translation value '$($_.translated)' in file '$antibioticsDir/NeoIPC-Antibiotics$langSuffix.csv'"
-                        if ($_.translated.Length -gt 0) {
-                            $loc['translated'] = $_.translated
-                        } else {
-                            $loc['translated'] = $null
-                        }
-                        $loc['translated'] = $_.translated
-                    } else {
-                        throw "Unexpected needs_translation value '$($_.needs_translation)' in file '$antibioticsDir/NeoIPC-Antibiotics$langSuffix.csv'"
-                    }
-                    $hash[$_.id] = $loc
-                }
-
-            Import-Csv -LiteralPath $antibioticsDir/NeoIPC-Antibiotics.csv -Encoding utf8 |
-                Sort-Object name |
-                ForEach-Object {
-                    $loc = $hash[$_.atc_code]
-                    if ($loc['default'] -cne $_.name) {
-                        throw "Values for name ($($_.name)) and default ($($loc['default']) for ATC code '$($_.atc_code)' don't match between '$antibioticsDir/NeoIPC-Antibiotics.csv' and '$antibioticsDir/NeoIPC-Antibiotics$langSuffix.csv'"
-                    }
-                    if ($loc['translated']) {
-                        $name = $loc['translated']
-                    }
-                    else {
-                        $name = $_.name
-                    }
-
-                    "|$name |$($_.atc_code)"
-                } |
-                Out-File -LiteralPath $buildDir/NeoIPC-Antibiotics$langSuffix.adoc -Encoding utf8NoBOM -Append
-        }
     }
-    if (Test-RebuildRequired $buildDir/NeoIPC-Pathogens$langSuffix.adoc $pathogensDir/NeoIPC-Pathogen-Concepts.csv $pathogensDir/NeoIPC-Pathogen-Concepts$langSuffix.csv) {
+    Build-Target (Get-LocalisedPath $protocolDir 'NeoIPC-Antibiotics.adoc' $targetCulture) (Get-LocalisedPath $antibioticsDir NeoIPC-Antibiotics.csv $targetCulture -All -Existing) {
+        Write-Verbose "Generating list of antibiotics"
+        New-AntibioticsList -TargetCulture $targetCulture -MetadataPath $metadataFolder -AsciiDoc > "$protocolDir/NeoIPC-Antibiotics$localeSuffix.adoc"
+    }
+    Build-Target (Get-LocalisedPath $protocolDir 'NeoIPC-Pathogens.adoc' $targetCulture) (Get-LocalisedPath $pathogensDir 'NeoIPC-Pathogen-Concepts.csv' $targetCulture -All -Existing),(Get-LocalisedPath $pathogensDir 'NeoIPC-Pathogen-Synonyms.csv' $targetCulture -All -Existing) {
+        Write-Verbose "Generating list of infectious agents"
         New-PathogenList -TargetCulture $targetCulture -InputDirectory $pathogensDir -OutputDirectory $buildDir
     }
-    if (Test-RebuildRequired $buildImgDir/NeoIPC-Core-Title-Page$langSuffix.svg $resDir/NeoIPC-Core-Title-Page$langSuffix.resx $transDir/NeoIPC-Core-Title-Page.xslt) {
+    Build-Target (Get-LocalisedPath $imgDir 'NeoIPC-Core-Title-Page.svg' $targetCulture) (Get-LocalisedPath $resDir 'NeoIPC-Core-Title-Page.resx' $targetCulture -All -Existing),(Join-Path $transDir 'NeoIPC-Core-Title-Page.xslt') {
         Write-Verbose "Generating title page background SVG"
-        $titlePage.Transform("$resDir/NeoIPC-Core-Title-Page$langSuffix.resx", "$buildImgDir/NeoIPC-Core-Title-Page$langSuffix.svg")
+        $titlePage.Transform("$resDir/NeoIPC-Core-Title-Page$localeSuffix.resx", "$imgDir/NeoIPC-Core-Title-Page$localeSuffix.svg")
     }
-    if (($revRemark -ne 'revremark!') -and (Test-RebuildRequired $buildImgDir/Preview-Watermark$langSuffix.svg $resDir/Preview-Watermark$langSuffix.resx $transDir/Preview-Watermark.xslt)) {
-        Write-Verbose "Generating preview watermark SVG"
-        $previewWatermark.Transform("$resDir/Preview-Watermark$langSuffix.resx", "$buildImgDir/Preview-Watermark$langSuffix.svg")
+    if (-not $Release) {
+        Build-Target (Get-LocalisedPath $imgDir 'Preview-Watermark.svg' $targetCulture) (Get-LocalisedPath $resDir 'Preview-Watermark.resx' $targetCulture -All -Existing),(Join-Path $transDir 'Preview-Watermark.xslt') {
+            Write-Verbose "Generating preview watermark SVG"
+            $previewWatermark.Transform("$resDir/Preview-Watermark$localeSuffix.resx", "$imgDir/Preview-Watermark$localeSuffix.svg")
+        }
     }
-    if (Test-RebuildRequired $buildImgDir/NeoIPC-Core-Decision-Flow$langSuffix.svg $resDir/NeoIPC-Core-Decision-Flow$langSuffix.resx $transDir/NeoIPC-Core-Decision-Flow.xslt) {
+    Build-Target (Get-LocalisedPath $imgDir 'NeoIPC-Core-Decision-Flow.svg' $targetCulture) (Get-LocalisedPath $resDir 'NeoIPC-Core-Decision-Flow.resx' $targetCulture -All -Existing),(Join-Path $transDir 'NeoIPC-Core-Decision-Flow.xslt') {
         Write-Verbose "Generating decision flow SVG"
-        $decisionFlow.Transform("$resDir/NeoIPC-Core-Decision-Flow$langSuffix.resx", "$buildImgDir/NeoIPC-Core-Decision-Flow$langSuffix.svg")
+        $decisionFlow.Transform("$resDir/NeoIPC-Core-Decision-Flow$localeSuffix.resx", "$imgDir/NeoIPC-Core-Decision-Flow$localeSuffix.svg")
     }
-    if (Test-RebuildRequired $buildImgDir/NeoIPC-Core-Master-Data-Collection-Sheet$langSuffix.svg $resDir/NeoIPC-Core-Master-Data-Collection-Sheet$langSuffix.resx $transDir/NeoIPC-Core-Master-Data-Collection-Sheet.xslt) {
+    Build-Target (Get-LocalisedPath $imgDir 'NeoIPC-Core-Master-Data-Collection-Sheet.svg' $targetCulture) (Get-LocalisedPath $resDir 'NeoIPC-Core-Master-Data-Collection-Sheet.resx' $targetCulture -All -Existing),(Join-Path $transDir 'NeoIPC-Core-Master-Data-Collection-Sheet.xslt') {
         Write-Verbose "Generating master data collection sheet SVG"
-        $masterDataSheet.Transform("$resDir/NeoIPC-Core-Master-Data-Collection-Sheet$langSuffix.resx", "$buildImgDir/NeoIPC-Core-Master-Data-Collection-Sheet$langSuffix.svg")
+        $masterDataSheet.Transform("$resDir/NeoIPC-Core-Master-Data-Collection-Sheet$localeSuffix.resx", "$imgDir/NeoIPC-Core-Master-Data-Collection-Sheet$localeSuffix.svg")
     }
-    if (Test-RebuildRequired $buildImgDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image$langSuffix.svg $resDir/NeoIPC-Core-Master-Data-Collection-Sheet$langSuffix.resx $transDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image.xslt) {
+    Build-Target (Get-LocalisedPath $imgDir 'NeoIPC-Core-Master-Data-Collection-Sheet-Image.svg' $targetCulture) (Get-LocalisedPath $resDir 'NeoIPC-Core-Master-Data-Collection-Sheet.resx' $targetCulture -All -Existing),(Join-Path $transDir 'NeoIPC-Core-Master-Data-Collection-Sheet-Image.xslt') {
         Write-Verbose "Generating master data collection sheet image SVG"
-        $masterDataSheetImage.Transform("$resDir/NeoIPC-Core-Master-Data-Collection-Sheet$langSuffix.resx", "$buildImgDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image$langSuffix.svg")
+        $masterDataSheetImage.Transform("$resDir/NeoIPC-Core-Master-Data-Collection-Sheet$localeSuffix.resx", "$imgDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image$localeSuffix.svg")
     }
-    if (Test-RebuildRequired $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc $protocolDir/NeoIPC-Core-Protocol$langSuffix.adoc) {
-        Write-Debug "Copying Asciidoc files to build dir"
-        Copy-Item $protocolDir/*$langSuffix.adoc $buildDir/ -Force
-    }
-    if (($Format -eq 'all' -or $Format -eq 'html') -and (Test-RebuildRequired $artifactsFolder/index$langSuffix.html $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc @(
+    if (($Format -eq 'all' -or $Format -eq 'html') -and (Test-RebuildRequired $artifactsFolder/index$localeSuffix.html $buildDir/NeoIPC-Core-Protocol$localeSuffix.adoc @(
         "$buildDir/NeoIPC-Core-Protocol.header.adoc",
-        "$buildImgDir/NeoIPC-Core-Decision-Flow$langSuffix.svg",
-        "$buildImgDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image$langSuffix.svg"
+        "$imgDir/NeoIPC-Core-Decision-Flow$localeSuffix.svg",
+        "$imgDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image$localeSuffix.svg"
         ))) {
         Write-Information "Generating HTML"
-        asciidoctor -a $revRemark -a $revDate --backend html5 --warnings --trace --failure-level WARN --destination-dir $artifactsFolder --out-file index$langSuffix.html $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc
+        asciidoctor -a $revRemark -a $revDate --backend html5 --warnings --trace --failure-level WARN --destination-dir $artifactsFolder --out-file index$localeSuffix.html $buildDir/NeoIPC-Core-Protocol$localeSuffix.adoc
         if (-not $?) { exit 1 }
         Write-Verbose "Linting HTML"
-        $allOutput = & linthtml --config (((Resolve-Path -Relative "$PSScriptRoot/.linthtmlrc.yaml") -replace "\\","/") -replace "\./","") (((Resolve-Path -Relative "$artifactsFolder/index$langSuffix.html") -replace "\\","/") -replace "\./","") 2>&1
+        $allOutput = & linthtml --config (((Resolve-Path -Relative "$PSScriptRoot/.linthtmlrc.yaml") -replace "\\","/") -replace "\./","") (((Resolve-Path -Relative "$artifactsFolder/index$localeSuffix.html") -replace "\\","/") -replace "\./","") 2>&1
         $success = $?
         $stderr = $allOutput | Where-Object { $_ -is [System.Management.Automation.ErrorRecord] }
         $stdout = $allOutput | Where-Object { $_ -isnot [System.Management.Automation.ErrorRecord] }
@@ -495,50 +439,50 @@ foreach ($targetCulture in $targetCultures)
             exit 1
         }
     }
-    if (($Format -eq 'all' -or $Format -eq 'pdf') -and (Test-RebuildRequired $artifactsFolder/NeoIPC-Core-Protocol$langSuffix.pdf $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc @(
+    if (($Format -eq 'all' -or $Format -eq 'pdf') -and (Test-RebuildRequired $artifactsFolder/NeoIPC-Core-Protocol$localeSuffix.pdf $buildDir/NeoIPC-Core-Protocol$localeSuffix.adoc @(
         "$buildDir/NeoIPC-Core-Protocol.header.adoc",
         "$PSScriptRoot/NeoIPC.theme.yml",
-        "$buildImgDir/NeoIPC-Core-Title-Page$langSuffix.svg",
-        "$buildImgDir/NeoIPC-Core-Decision-Flow$langSuffix.svg",
-        "$buildImgDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image$langSuffix.svg"
+        "$imgDir/NeoIPC-Core-Title-Page$localeSuffix.svg",
+        "$imgDir/NeoIPC-Core-Decision-Flow$localeSuffix.svg",
+        "$imgDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image$localeSuffix.svg"
         ))) {
         Write-Information "Generating PDF"
         if ($IsWindows) {
             Write-Warning "Asciidoctor Mathematical is not supported on Windows. The STEM expressions will not be converted."
-            asciidoctor-pdf -a $revRemark -a $revDate --warnings --trace --failure-level WARN --destination-dir $artifactsFolder --out-file NeoIPC-Core-Protocol$langSuffix.pdf $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc
+            asciidoctor-pdf -a $revRemark -a $revDate --warnings --trace --failure-level WARN --destination-dir $artifactsFolder --out-file NeoIPC-Core-Protocol$localeSuffix.pdf $buildDir/NeoIPC-Core-Protocol$localeSuffix.adoc
             if (-not $?) { exit 1 }
         } else {
-            asciidoctor-pdf -a $revRemark -a $revDate -a mathematical-format=svg -r asciidoctor-mathematical --warnings --trace --failure-level WARN --destination-dir $artifactsFolder --out-file NeoIPC-Core-Protocol$langSuffix.pdf $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc
+            asciidoctor-pdf -a $revRemark -a $revDate -a mathematical-format=svg -r asciidoctor-mathematical --warnings --trace --failure-level WARN --destination-dir $artifactsFolder --out-file NeoIPC-Core-Protocol$localeSuffix.pdf $buildDir/NeoIPC-Core-Protocol$localeSuffix.adoc
             if (-not $?) { exit 1 }
         }
     }
-    if (($Format -eq 'all' -or $Format -eq 'docx') -and (Test-RebuildRequired $artifactsFolder/NeoIPC-Core-Protocol$langSuffix.docx $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc @(
+    if (($Format -eq 'all' -or $Format -eq 'docx') -and (Test-RebuildRequired $artifactsFolder/NeoIPC-Core-Protocol$localeSuffix.docx $buildDir/NeoIPC-Core-Protocol$localeSuffix.adoc @(
         "$buildDir/NeoIPC-Core-Protocol.header.adoc",
-        "$buildDir/NeoIPC-Core-Protocol$langSuffix.xml",
-        "$buildImgDir/NeoIPC-Core-Decision-Flow$langSuffix.svg",
-        "$buildImgDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image$langSuffix.svg"
+        "$buildDir/NeoIPC-Core-Protocol$localeSuffix.xml",
+        "$imgDir/NeoIPC-Core-Decision-Flow$localeSuffix.svg",
+        "$imgDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image$localeSuffix.svg"
         ))) {
         Write-Information "Generating Open XML (docx)"
-        if (Test-RebuildRequired $buildDir/NeoIPC-Core-Protocol$langSuffix.xml $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc) {
+        if (Test-RebuildRequired $buildDir/NeoIPC-Core-Protocol$localeSuffix.xml $buildDir/NeoIPC-Core-Protocol$localeSuffix.adoc) {
             Write-Verbose "Generating DocBook xml"
             if ($IsWindows) {
                 Write-Warning "Asciidoctor Mathematical is not supported on Windows. The STEM expressions will not be converted."
-                asciidoctor -a $revRemark -a $revDate --backend docbook --warnings --trace --failure-level WARN --destination-dir $buildDir --out-file NeoIPC-Core-Protocol$langSuffix.xml $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc
+                asciidoctor -a $revRemark -a $revDate --backend docbook --warnings --trace --failure-level WARN --destination-dir $buildDir --out-file NeoIPC-Core-Protocol$localeSuffix.xml $buildDir/NeoIPC-Core-Protocol$localeSuffix.adoc
                 if (-not $?) { exit 1 }
             } else {
-                asciidoctor -a $revRemark -a $revDate -a mathematical-format=svg -r asciidoctor-mathematical --backend docbook --warnings --trace --failure-level WARN --destination-dir $buildDir --out-file NeoIPC-Core-Protocol$langSuffix.xml $buildDir/NeoIPC-Core-Protocol$langSuffix.adoc
+                asciidoctor -a $revRemark -a $revDate -a mathematical-format=svg -r asciidoctor-mathematical --backend docbook --warnings --trace --failure-level WARN --destination-dir $buildDir --out-file NeoIPC-Core-Protocol$localeSuffix.xml $buildDir/NeoIPC-Core-Protocol$localeSuffix.adoc
                 if (-not $?) { exit 1 }
             }
         }
-        if (Test-RebuildRequired $artifactsFolder/img/NeoIPC-Core-Decision-Flow$langSuffix.docx $buildDir/NeoIPC-Core-Decision-Flow$langSuffix.xml @(
-            "$buildImgDir/NeoIPC-Core-Decision-Flow$langSuffix.svg",
-            "$buildImgDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image$langSuffix.svg"
+        if (Test-RebuildRequired $artifactsFolder/img/NeoIPC-Core-Decision-Flow$localeSuffix.docx $buildDir/NeoIPC-Core-Decision-Flow$localeSuffix.xml @(
+            "$imgDir/NeoIPC-Core-Decision-Flow$localeSuffix.svg",
+            "$imgDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image$localeSuffix.svg"
             )) {
             Write-Verbose "Generating DOCX"
             $locationBackup = Get-Location
             Set-Location $buildDir
             try {
-                pandoc --from=docbook --to=docx --toc --output=$artifactsFolder/NeoIPC-Core-Protocol$langSuffix.docx NeoIPC-Core-Protocol$langSuffix.xml
+                pandoc --from=docbook --to=docx --toc --output=$artifactsFolder/NeoIPC-Core-Protocol$localeSuffix.docx NeoIPC-Core-Protocol$localeSuffix.xml
                 if (-not $?) { exit 1 }
             }
             finally {
