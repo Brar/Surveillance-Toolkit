@@ -440,7 +440,7 @@ Nosokomiale Pneumonie - keine Device-Assoziation
 |1 |Kein Device, stabil |
 |2 |Kein Device, stabil |Basistag 1
 |3 |Kein Device, stabil |Basistag 2
-|4 |Verschlechterung ==> CPAP |[.grün]#☑# (Infektionstag)
+|4 |Verschlechterung ==> CPAP |[.green]#☑# (Infektionstag)
 |5 Keine Verbesserung, CPAP wird fortgesetzt |
 |===
 
@@ -453,7 +453,7 @@ Nosokomiale Pneumonie - Device-assoziiert
 |2 |1.00 |
 |3 |0,70 (Verbesserung) |Basiswert Tag 1
 |4 |0,60 (Verbesserung) |Basislinie Tag 2
-|5 |0,90 |[.grün]#☑# (Infektionstag)
+|5 |0,90 |[.green]#☑# (Infektionstag)
 |6 |0,90 |Keine Verbesserung
 |===
 

@@ -368,8 +368,13 @@ $masterDataSheet.Load((Get-ChildItem $transDir/NeoIPC-Core-Master-Data-Collectio
 $masterDataSheetImage = New-Object System.Xml.Xsl.XslCompiledTransform
 $masterDataSheetImage.Load((Get-ChildItem $transDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image.xslt).FullName, [System.Xml.Xsl.XsltSettings]::TrustedXslt, $resolver)
 
+$attributes = @{}
+if (-not $Release) { $attributes.revremark = $revRemark }
+
 foreach ($targetCulture in $targetCultures)
 {
+    if ($targetCulture.Name) { $attributes.lang = $targetCulture.TwoLetterISOLanguageName } else { $attributes.Remove('lang') }
+
     if ("iv" -eq $targetCulture.TwoLetterISOLanguageName)
     {
         $revDate = "revdate=$([datetime]::UtcNow.ToString('yyyy-MM-dd'))"
@@ -414,13 +419,12 @@ foreach ($targetCulture in $targetCultures)
     }
     $protocolFile = Get-LocalisedPath $protocolDir 'NeoIPC-Core-Protocol.adoc' $targetCulture -Resolve
     if ($Format -eq 'all' -or $Format -eq 'html') {
-        $attributes = @{'backend-html5' = $true}
-        if ($targetCulture.Name) { $attributes.lang = $targetCulture.TwoLetterISOLanguageName }
-        if (-not $Release) { $attributes.revremark = $revRemark }
+        $att = $attributes.Clone()
+        $att['backend-html5'] = $true
         $outputFile = Get-LocalisedPath $artifactsFolder 'index.html' $targetCulture
-        Build-Target $outputFile (Export-AsciiDocReferences $protocolFile $attributes) {
+        Build-Target $outputFile (@($protocolFile)+@(Export-AsciiDocReferences $protocolFile $att)) {
             Write-Information "Generating HTML"
-            asciidoctor -a $revRemark -a $revDate --backend html5 --warnings --trace --failure-level WARN --destination-dir $artifactsFolder --out-file (Get-LocalisedPath -LiteralPath 'index.html' $targetCulture) $protocolFile
+            asciidoctor -a $revRemark -a $revDate -b html5 -w --failure-level=WARN -D $(Resolve-Path $artifactsFolder -Relative) -o $([System.IO.Path]::GetFileName($outputFile)) $(Resolve-Path $protocolFile -Relative)
             if (-not $?) { exit 1 }
             Write-Verbose "Linting HTML"
             $allOutput = & linthtml --config (((Resolve-Path -Relative "$docDir/.linthtmlrc.yaml") -replace "\\","/") -replace "\./","") (((Resolve-Path -Relative $outputFile) -replace "\\","/") -replace "\./","") 2>&1
@@ -443,55 +447,41 @@ foreach ($targetCulture in $targetCultures)
             }
         }
     }
+    if ($Format -eq 'all' -or $Format -eq 'docx' -or ($Format -eq 'pdf' -and $targetCulture.TextInfo.IsRightToLeft)) {
+        $att = $attributes.Clone()
+        $att['backend-docbook5'] = $true
+        $docbookFile = Get-LocalisedPath $protocolDir 'NeoIPC-Core-Protocol.xml' $targetCulture
+        Build-Target $docbookFile (@($protocolFile)+@(Export-AsciiDocReferences $protocolFile $att)) {
+            Write-Verbose "Generating DocBook xml"
+            asciidoctor -a $revRemark -a $revDate -b docbook -w --failure-level=WARN -D $(Resolve-Path $protocolDir -Relative) -o $([System.IO.Path]::GetFileName($docbookFile)) $(Resolve-Path $protocolFile -Relative)
+            if (-not $?) { exit 1 }
+        }
+    }
     if ($Format -eq 'all' -or $Format -eq 'pdf') {
-        $attributes = @{'backend-pdf' = $true}
-        if ($targetCulture.Name) { $attributes.lang = $targetCulture.TwoLetterISOLanguageName }
-        if (-not $Release) { $attributes.revremark = $revRemark }
-        $outputFile = Get-LocalisedPath $artifactsFolder 'NeoIPC-Core-Protocol.pdf' $targetCulture
-        Build-Target $outputFile (Export-AsciiDocReferences $protocolFile $attributes) {
-            Write-Information "Generating PDF"
-            if ($IsWindows) {
-                Write-Warning "Asciidoctor Mathematical is not supported on Windows. The STEM expressions will not be converted."
-                asciidoctor-pdf -a $revRemark -a $revDate --warnings --trace --failure-level WARN --destination-dir $artifactsFolder --out-file (Get-LocalisedPath -LiteralPath 'NeoIPC-Core-Protocol.pdf' $targetCulture) $protocolFile
-                if (-not $?) { exit 1 }
-            } else {
-                asciidoctor-pdf -a $revRemark -a $revDate -a mathematical-format=svg -r asciidoctor-mathematical --warnings --trace --failure-level WARN --destination-dir $artifactsFolder --out-file (Get-LocalisedPath -LiteralPath 'NeoIPC-Core-Protocol.pdf' $targetCulture) $protocolFile
+        if ($targetCulture.TextInfo.IsRightToLeft) {
+            # ToDo: Build pdf via the DocBook toolchain
+        } else {
+            $att = $attributes.Clone()
+            $att['backend-pdf'] = $true
+            $outputFile = Get-LocalisedPath $artifactsFolder 'NeoIPC-Core-Protocol.pdf' $targetCulture
+            Build-Target $outputFile (@($protocolFile)+@(Export-AsciiDocReferences $protocolFile $att)) {
+                Write-Information "Generating PDF"
+                if ($IsWindows) {
+                    Write-Warning "Asciidoctor Mathematical is not supported on Windows. The STEM expressions will not be converted."
+                    asciidoctor-pdf -a $revRemark -a $revDate -w --failure-level=WARN -D $(Resolve-Path $artifactsFolder -Relative) -o $([System.IO.Path]::GetFileName($outputFile)) $(Resolve-Path $protocolFile -Relative)
+                } else {
+                    asciidoctor-pdf -a $revRemark -a $revDate -a mathematical-format=svg -r asciidoctor-mathematical -w --failure-level=WARN -D $(Resolve-Path $artifactsFolder -Relative) -o $([System.IO.Path]::GetFileName($outputFile)) $(Resolve-Path $protocolFile -Relative)
+                }
                 if (-not $?) { exit 1 }
             }
         }
     }
-    if (($Format -eq 'all' -or $Format -eq 'docx') -and (Test-RebuildRequired $artifactsFolder/NeoIPC-Core-Protocol$localeSuffix.docx $buildDir/NeoIPC-Core-Protocol$localeSuffix.adoc @(
-        "$buildDir/NeoIPC-Core-Protocol.header.adoc",
-        "$buildDir/NeoIPC-Core-Protocol$localeSuffix.xml",
-        "$imgDir/NeoIPC-Core-Decision-Flow$localeSuffix.svg",
-        "$imgDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image$localeSuffix.svg"
-        ))) {
-        Write-Information "Generating Open XML (docx)"
-        if (Test-RebuildRequired $buildDir/NeoIPC-Core-Protocol$localeSuffix.xml $buildDir/NeoIPC-Core-Protocol$localeSuffix.adoc) {
-            Write-Verbose "Generating DocBook xml"
-            if ($IsWindows) {
-                Write-Warning "Asciidoctor Mathematical is not supported on Windows. The STEM expressions will not be converted."
-                asciidoctor -a $revRemark -a $revDate --backend docbook --warnings --trace --failure-level WARN --destination-dir $buildDir --out-file NeoIPC-Core-Protocol$localeSuffix.xml $buildDir/NeoIPC-Core-Protocol$localeSuffix.adoc
-                if (-not $?) { exit 1 }
-            } else {
-                asciidoctor -a $revRemark -a $revDate -a mathematical-format=svg -r asciidoctor-mathematical --backend docbook --warnings --trace --failure-level WARN --destination-dir $buildDir --out-file NeoIPC-Core-Protocol$localeSuffix.xml $buildDir/NeoIPC-Core-Protocol$localeSuffix.adoc
-                if (-not $?) { exit 1 }
-            }
-        }
-        if (Test-RebuildRequired $artifactsFolder/img/NeoIPC-Core-Decision-Flow$localeSuffix.docx $buildDir/NeoIPC-Core-Decision-Flow$localeSuffix.xml @(
-            "$imgDir/NeoIPC-Core-Decision-Flow$localeSuffix.svg",
-            "$imgDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image$localeSuffix.svg"
-            )) {
-            Write-Verbose "Generating DOCX"
-            $locationBackup = Get-Location
-            Set-Location $buildDir
-            try {
-                pandoc --from=docbook --to=docx --toc --output=$artifactsFolder/NeoIPC-Core-Protocol$localeSuffix.docx NeoIPC-Core-Protocol$localeSuffix.xml
-                if (-not $?) { exit 1 }
-            }
-            finally {
-                Set-Location $locationBackup
-            }
+    if ($Format -eq 'all' -or $Format -eq 'docx') {
+        $outputFile = Get-LocalisedPath $artifactsFolder 'NeoIPC-Core-Protocol.docx' $targetCulture
+        Build-Target $outputFile $docbookFile {
+            Write-Information "Generating Open XML for Microsoft Word (docx)"
+            pandoc --from=docbook --to=docx --toc --number-sections --reference-doc=$(Resolve-Path "$docDir/reference.docx" -Relative) --resource-path=$(Resolve-Path $protocolDir -Relative) --fail-if-warnings=true --output=$outputFile $(Resolve-Path $docbookFile -Relative)
+            if (-not $?) { exit 1 }
         }
     }
 }

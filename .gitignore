@@ -1,5 +1,10 @@
 build
 artifacts
-doc/build
-doc/out
-dhis2/metadata.json
+doc/protocol/NeoIPC-Antibiotics*.adoc
+doc/protocol/NeoIPC-Pathogens*.adoc
+doc/protocol/NeoIPC-Core-Protocol*.xml
+doc/protocol/img/NeoIPC-Core-Decision-Flow.*.svg
+doc/protocol/img/NeoIPC-Core-Master-Data-Collection-Sheet-Image*.svg
+doc/protocol/img/NeoIPC-Core-Master-Data-Collection-Sheet.*.svg
+doc/protocol/img/NeoIPC-Core-Title-Page.*.svg
+doc/protocol/img/Preview-Watermark.*.svg
