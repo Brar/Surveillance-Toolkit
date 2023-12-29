@@ -26,7 +26,7 @@ jobs:
 
             - name: Build
               shell: pwsh
-              run: ./scripts/Build-NeoIPC-Core-Protocol.ps1 -InformationAction Continue -WarningAction:Stop
+              run: ./scripts/Make-NeoIPC-Core-Protocol.ps1 -InformationAction Continue -WarningAction:Stop
 
             - name: Upload artifacts
               uses: actions/upload-artifact@v3

@@ -1,12 +1,22 @@
-[CmdletBinding()]
+[CmdletBinding(DefaultParameterSetName = 'Build')]
 param(
-    [ValidateSet('all', 'html', 'pdf', 'docx')]
-    [string]$Format = 'all',
+    [Parameter(ParameterSetName = 'Build', Position = 0)]
     [CultureInfo[]]$TargetCultures,
-    [switch]$Release
+    [Parameter(ParameterSetName = 'Build')]
+    [switch]$Release,
+    [Parameter(ParameterSetName = 'Build')]
+    [switch]$Html,
+    [Parameter(ParameterSetName = 'Build')]
+    [switch]$Pdf,
+    [Parameter(ParameterSetName = 'Build')]
+    [switch]$Docx,
+    [Parameter(Mandatory, ParameterSetName = 'Clean')]
+    [switch]$Clean
     )
 
 Import-Module -Name (Join-Path -Resolve -Path $PSScriptRoot -ChildPath 'modules' -AdditionalChildPath 'NeoIPC-Tools') -Force
+
+if ($Clean -or $Html -or $Pdf -or $Docx) { $All = $false } else { $All = $true }
 
 $workspaceFolder = Join-Path -Resolve -Path $PSScriptRoot -ChildPath '..'
 $metadataFolder =  Join-Path -Resolve -Path $workspaceFolder -ChildPath 'metadata'
@@ -24,8 +34,13 @@ $resDir = Join-Path -Resolve -Path $protocolDir -ChildPath 'resx'
 $transDir = Join-Path -Resolve -Path $protocolDir -ChildPath 'xslt'
 
 if ($null -eq $TargetCultures) {
-    $TargetCultures = Get-Item .\doc\protocol\NeoIPC-Core-Protocol.*adoc |
+    $TargetCultures = Get-Item "$protocolDir/NeoIPC-Core-Protocol.*adoc" |
     ForEach-Object { [CultureInfo]($_.Name -replace 'NeoIPC-Core-Protocol\.?([^.]*)\.adoc','$1') }
+}
+
+if ($Clean) {
+    Remove-Item -LiteralPath $artifactsFolder -Recurse -Force
+    # ToDo: Clean up generated files in other directories.
 }
 
 if ($Release) { $revRemark = 'revremark!' }
@@ -99,7 +114,7 @@ foreach ($targetCulture in $targetCultures)
         $masterDataSheetImage.Transform("$resDir/NeoIPC-Core-Master-Data-Collection-Sheet$localeSuffix.resx", "$imgDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image$localeSuffix.svg")
     }
     $protocolFile = Get-LocalisedPath $protocolDir 'NeoIPC-Core-Protocol.adoc' $targetCulture -Resolve
-    if ($Format -eq 'all' -or $Format -eq 'html') {
+    if ($All -or $Html) {
         $att = $attributes.Clone()
         $att['backend-html5'] = $true
         $outputFile = Get-LocalisedPath $artifactsFolder 'index.html' $targetCulture
@@ -108,27 +123,38 @@ foreach ($targetCulture in $targetCultures)
             asciidoctor -a $revRemark -a $revDate -b html5 -w --failure-level=WARN -D $(Resolve-Path $artifactsFolder -Relative) -o $([System.IO.Path]::GetFileName($outputFile)) $(Resolve-Path $protocolFile -Relative)
             if (-not $?) { exit 1 }
             Write-Verbose "Linting HTML"
-            $allOutput = & linthtml --config (((Resolve-Path -Relative "$docDir/.linthtmlrc.yaml") -replace "\\","/") -replace "\./","") (((Resolve-Path -Relative $outputFile) -replace "\\","/") -replace "\./","") 2>&1
-            $success = $?
-            $stderr = $allOutput | Where-Object { $_ -is [System.Management.Automation.ErrorRecord] }
-            $stdout = $allOutput | Where-Object { $_ -isnot [System.Management.Automation.ErrorRecord] }
-            # For some reason linthtml writes standard output to STDERR and error messages to STDOUT
-            foreach ($msg in $stderr) {
-                if ($msg.Exception.Message.Trim().Length -gt 0) {
-                    Write-Verbose $msg.Exception.Message
-                }
-            }
-            if (-not $success) {
-                foreach ($msg in $stdout) {
-                    if ($msg.Trim().Length -gt 0) {
-                        Write-Error $msg
+
+            # linthtml is pretty picky about the paths it gets so we
+            # temporarily move our working directory to the workspace
+            # directory to make sure it is happy
+            $locationBackup = Get-Location
+            try {
+                Set-Location $workspaceFolder
+                $allOutput = & linthtml --config (((Resolve-Path -Relative "$docDir/.linthtmlrc.yaml") -replace "\\","/") -replace "^\./","") (((Resolve-Path -Relative $outputFile) -replace "\\","/") -replace "^\./","") 2>&1
+                $success = $?
+                $stderr = $allOutput | Where-Object { $_ -is [System.Management.Automation.ErrorRecord] }
+                $stdout = $allOutput | Where-Object { $_ -isnot [System.Management.Automation.ErrorRecord] }
+                # For some reason linthtml writes standard output to STDERR and error messages to STDOUT
+                foreach ($msg in $stderr) {
+                    if ($msg.Exception.Message.Trim().Length -gt 0) {
+                        Write-Verbose $msg.Exception.Message
                     }
                 }
-                exit 1
+                if (-not $success) {
+                    foreach ($msg in $stdout) {
+                        if ($msg.Trim().Length -gt 0) {
+                            Write-Error $msg
+                        }
+                    }
+                    exit 1
+                }
+            }
+            finally {
+                Set-Location $locationBackup
             }
         }
     }
-    if ($Format -eq 'all' -or $Format -eq 'docx' -or ($Format -eq 'pdf' -and $targetCulture.TextInfo.IsRightToLeft)) {
+    if ($All -or $Docx -or ($Pdf -and $targetCulture.TextInfo.IsRightToLeft)) {
         $att = $attributes.Clone()
         $att['backend-docbook5'] = $true
         $docbookFile = Get-LocalisedPath $protocolDir 'NeoIPC-Core-Protocol.xml' $targetCulture
@@ -138,7 +164,7 @@ foreach ($targetCulture in $targetCultures)
             if (-not $?) { exit 1 }
         }
     }
-    if ($Format -eq 'all' -or $Format -eq 'pdf') {
+    if ($All -or $Pdf) {
         if ($targetCulture.TextInfo.IsRightToLeft) {
             # ToDo: Build pdf via the DocBook toolchain
         } else {
@@ -157,7 +183,7 @@ foreach ($targetCulture in $targetCultures)
             }
         }
     }
-    if ($Format -eq 'all' -or $Format -eq 'docx') {
+    if ($All -or $Docx) {
         $outputFile = Get-LocalisedPath $artifactsFolder 'NeoIPC-Core-Protocol.docx' $targetCulture
         Build-Target $outputFile $docbookFile {
             Write-Information "Generating Open XML for Microsoft Word (docx)"

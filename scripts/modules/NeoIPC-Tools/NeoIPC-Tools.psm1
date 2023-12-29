@@ -4,7 +4,7 @@ $AtcUrlTemplate = 'https://www.whocc.no/atc_ddd_index/?code={0}&showdescription=
 
 function Export-AsciiDocIds {
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory)]
         [string]$LiteralPath,
         [switch]$LineNumbers,
         [switch]$FileNames
@@ -230,11 +230,11 @@ function Get-LocalisedPath {
 
 function Import-Translations {
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory)]
         [string]$LiteralPath,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory)]
         [CultureInfo]$TargetCulture,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory)]
         [string[]]$ExpectedProperties
     )
 
@@ -311,9 +311,9 @@ function Import-Translations {
 
 function New-AntibioticsList {
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory)]
         [CultureInfo]$TargetCulture,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory)]
         [string]$MetadataPath,
         [switch]$AsciiDoc
     )
