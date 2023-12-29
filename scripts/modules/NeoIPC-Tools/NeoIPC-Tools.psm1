@@ -342,17 +342,32 @@ function New-AntibioticsList {
                 if ($translationInfo.NeedsTranslation) {
                     $name = $translationInfo.TranslatedValue
                 }
-                return [PSCustomObject][ordered]@{ 'ATC-Code' = $_.atc_code; Name = $name; Url = $url }
+                return [PSCustomObject][ordered]@{ Name = $name; 'ATC-Code' = $_.atc_code; Url = $url }
             }
         }
         if ($TargetCulture.Name -and $translations.Count -gt 0) {
             Write-Warning "Cannot find a translation for ATC-Code '$($_.atc_code)' in any of the translation files for locale '$($TargetCulture.Name)' or any of its parent locales in directory '$antibioticsFolderPath'. The antibiotic will have its untranslated default name '$($_.name)'."
         }
-        return [PSCustomObject][ordered]@{ 'ATC-Code' = $_.atc_code; Name = $name; Url = $url }
+        return [PSCustomObject][ordered]@{ Name = $name; 'ATC-Code' = $_.atc_code; Url = $url }
     } |
     Sort-Object -Culture $TargetCulture -Property 'Name' |
-    ForEach-Object {
-        if ($AsciiDoc) { "|$($_.Name) |$($_.Url)[$($_.'ATC-Code'),window=_blank]" } else { $_ } }
+    ForEach-Object -Begin {
+        if ($AsciiDoc) {
+            Write-Output '|==='
+            Write-Output '|Name |ATC-Code'
+            Write-Output ''
+        }
+    } -Process {
+        if ($AsciiDoc) {
+            Write-Output "|$($_.Name) |$($_.Url)[$($_.'ATC-Code'),window=_blank]"
+        } else {
+            $_
+        }
+    } -End {
+        if ($AsciiDoc) {
+            Write-Output '|==='
+        }
+    }
 }
 
 function New-PathogenList {
