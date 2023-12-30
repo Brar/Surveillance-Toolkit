@@ -1,7 +1,7 @@
 build
 artifacts
 doc/protocol/NeoIPC-Antibiotics*.adoc
-doc/protocol/NeoIPC-Pathogens*.adoc
+doc/protocol/NeoIPC-Infectious-Agents*.adoc
 doc/protocol/NeoIPC-Core-Protocol*.xml
 doc/protocol/img/NeoIPC-Core-Decision-Flow.*.svg
 doc/protocol/img/NeoIPC-Core-Master-Data-Collection-Sheet-Image*.svg

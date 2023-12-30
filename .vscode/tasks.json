@@ -6,20 +6,13 @@
         {
             "label": "NeoIPC build documentation",
             "type": "shell",
-            "command": "${workspaceFolder}/doc/build.ps1",
+            "command": "${workspaceFolder}/scripts/Make-NeoIPC-Core-Protocol.ps1",
             "args": [
                 "-InformationAction",
-                "Continue"
+                "Continue",
+                "-Verbose"
             ],
             "problemMatcher": [
-                // {
-                //     "owner": "build.ps1",
-                //     "pattern": {
-                //         "regexp": "^(WARNING|ERROR|INFO):\\s+(.+)$",
-                //         "severity": 1,
-                //         "message": 2
-                //     }
-                // },
                 {
                     "owner": "build.ps1",
                     "fileLocation": [

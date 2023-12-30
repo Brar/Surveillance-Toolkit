@@ -2,7 +2,7 @@ id,synonym,concept_source,concept_id,synonym_for
 1230,Abiotrophia adiacens,LPSN,species/abiotrophia-adiacens,201
 1195,Abiotrophia elegans,LPSN,species/abiotrophia-elegans,99
 1482,Achromobacter xylosoxidans xylosoxidans,LPSN,subspecies/achromobacter-xylosoxidans-xylosoxidans,1374
-2179,Acladium castellanii,MycoBank,120097,657
+2179,Acladium castellanii,MycoBank,120097,145
 2699,Acremonium alabamensis,NeoIPC,29,2698
 96,Acremonium kiliense,MycoBank,252874,3382
 1064,Acremonium recifei,MycoBank,308188,3401
@@ -27,8 +27,9 @@ id,synonym,concept_source,concept_id,synonym_for
 652,Aeromonas trota,LPSN,species/aeromonas-trota,2578
 2274,Alcaligenes piechaudii,LPSN,species/alcaligenes-piechaudii,752
 1584,Alcaligenes xylosoxidans,LPSN,species/alcaligenes-xylosoxidans,1374
+351,Alcaligenes xylosoxidans xylosoxidans,LPSN,subspecies/alcaligenes-xylosoxidans-xylosoxidans,1374
 1718,Aleurisma apiospermum,MycoBank,250730,1795
-683,Allescheria boydii,MycoBank,258760,657
+683,Allescheria boydii,MycoBank,258760,145
 1659,Anaerorhabdus furcosus,LPSN,species/anaerorhabdus-furcosus,3051
 2239,Arcanobacterium bernardiae,LPSN,species/arcanobacterium-bernardiae,295
 112,Arcanobacterium pyogenes,LPSN,species/arcanobacterium-pyogenes,2122
@@ -305,6 +306,7 @@ id,synonym,concept_source,concept_id,synonym_for
 2822,Clostridium citroniae,LPSN,species/clostridium-citroniae,2821
 790,Clostridium clostridioforme,LPSN,species/clostridium-clostridioforme,3136
 219,Clostridium difficile,LPSN,species/clostridium-difficile,594
+1440,Clostridium ghoni,LPSN,species/clostridium-ghoni,3138
 824,Clostridium ghonii,LPSN,species/clostridium-ghonii,3138
 1092,Clostridium glycolicum,LPSN,species/clostridium-glycolicum,3323
 1167,Clostridium hastiforme,LPSN,species/clostridium-hastiforme,1021
@@ -312,8 +314,8 @@ id,synonym,concept_source,concept_id,synonym_for
 679,Clostridium histolyticum,LPSN,species/clostridium-histolyticum,3263
 2291,Clostridium indolis,LPSN,species/clostridium-indolis,3310
 2319,Clostridium irregulare,LPSN,species/clostridium-irregulare,3116
+277,Clostridium irregularis,LPSN,species/clostridium-irregularis,3116
 2826,Clostridium lavalense,LPSN,species/clostridium-lavalense,2825
-1440,Clostridium ghoni,LPSN,species/clostridium-ghoni,3138
 1857,Clostridium lentoputrescens,LPSN,species/clostridium-lentoputrescens,1490
 1930,Clostridium limosum,LPSN,species/clostridium-limosum,3021
 1220,Clostridium orbiscindens,LPSN,species/clostridium-orbiscindens,257
@@ -612,7 +614,7 @@ id,synonym,concept_source,concept_id,synonym_for
 2533,Peptostreptococcus productus,LPSN,species/peptostreptococcus-productus,631
 774,Peptostreptococcus tetradius,LPSN,species/peptostreptococcus-tetradius,1388
 826,Peptostreptococcus vaginalis,LPSN,species/peptostreptococcus-vaginalis,2031
-1602,Petriellidium boydii,MycoBank,319444,657
+1602,Petriellidium boydii,MycoBank,319444,145
 1503,Phaeoannellomyces werneckii,MycoBank,105002,1624
 2373,Phaeococcomyces exophialae,MycoBank,319527,3374
 1648,Phialemonium curvatum,MycoBank,108341,3373
@@ -657,6 +659,7 @@ id,synonym,concept_source,concept_id,synonym_for
 747,Proteus rettgeri,LPSN,species/proteus-rettgeri,516
 2209,Prototheca filamenta,MycoBank,321038,3413
 2112,Providencia friedericiana,LPSN,species/providencia-friedericiana,2120
+657,Pseudallescheria boydii,MycoBank,110950,145
 1604,Pseudomonas acidovorans,LPSN,species/pseudomonas-acidovorans,2356
 1387,Pseudomonas antimicrobica,LPSN,species/pseudomonas-antimicrobica,1427
 1002,Pseudomonas betle,LPSN,species/pseudomonas-betle,2448
@@ -837,5 +840,4 @@ id,synonym,concept_source,concept_id,synonym_for
 2087,Wolinella curva,LPSN,species/wolinella-curva,1458
 276,Wolinella recta,LPSN,species/wolinella-recta,95
 360,Xenorhabdus luminescens,LPSN,species/xenorhabdus-luminescens,781
-351,Alcaligenes xylosoxidans xylosoxidans,LPSN,subspecies/alcaligenes-xylosoxidans-xylosoxidans,1374
-277,Clostridium irregularis,LPSN,species/clostridium-irregularis,3116
+1140,Zika virus,ICTV,202103123,3415

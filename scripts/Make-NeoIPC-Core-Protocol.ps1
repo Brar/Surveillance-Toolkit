@@ -14,17 +14,13 @@ param(
     [switch]$Clean
     )
 
-Import-Module -Name (Join-Path -Resolve -Path $PSScriptRoot -ChildPath 'modules' -AdditionalChildPath 'NeoIPC-Tools') -Force
+Import-Module -Name (Join-Path -Resolve -Path $PSScriptRoot -ChildPath 'modules' -AdditionalChildPath 'NeoIPC-Tools') -Force -Verbose:$false
 
 if ($Clean -or $Html -or $Pdf -or $Docx) { $All = $false } else { $All = $true }
 
 $workspaceFolder = Join-Path -Resolve -Path $PSScriptRoot -ChildPath '..'
 $metadataFolder =  Join-Path -Resolve -Path $workspaceFolder -ChildPath 'metadata'
 $artifactsFolder = Join-Path -Resolve -Path $workspaceFolder -ChildPath 'artifacts' -ErrorAction SilentlyContinue
-if (-not $artifactsFolder) {
-    Write-Debug -Message "Creating build artifacts directory"
-    $artifactsFolder = (New-Item -Path $workspaceFolder -Name 'artifacts' -ItemType Directory).FullName
-}
 $antibioticsDir = Join-Path -Resolve -Path $metadataFolder -ChildPath 'common' -AdditionalChildPath 'antibiotics'
 $pathogensDir = Join-Path -Resolve -Path $metadataFolder -ChildPath 'common' -AdditionalChildPath 'pathogens'
 $docDir = Join-Path -Resolve -Path $workspaceFolder -ChildPath 'doc'
@@ -33,14 +29,27 @@ $imgDir = Join-Path -Resolve -Path $protocolDir -ChildPath 'img'
 $resDir = Join-Path -Resolve -Path $protocolDir -ChildPath 'resx'
 $transDir = Join-Path -Resolve -Path $protocolDir -ChildPath 'xslt'
 
+$infectiousAgentsFileName = 'NeoIPC-Infectious-Agents.adoc'
+$antibioticsFileName = 'NeoIPC-Antibiotics.adoc'
+
 if ($null -eq $TargetCultures) {
     $TargetCultures = Get-Item "$protocolDir/NeoIPC-Core-Protocol.*adoc" |
     ForEach-Object { [CultureInfo]($_.Name -replace 'NeoIPC-Core-Protocol\.?([^.]*)\.adoc','$1') }
 }
 
 if ($Clean) {
-    Remove-Item -LiteralPath $artifactsFolder -Recurse -Force
-    # ToDo: Clean up generated files in other directories.
+    $artifactsFolder | Where-Object { Test-Path -LiteralPath $_ -PathType Container } | Remove-Item -Recurse -Force -Verbose:($VerbosePreference -eq 'Continue')
+    $TargetCultures | ForEach-Object {
+        Get-LocalisedPath $protocolDir $antibioticsFileName $_ | Where-Object { Test-Path -LiteralPath $_ -PathType Leaf } | Remove-Item -Verbose:($VerbosePreference -eq 'Continue')
+        Get-LocalisedPath $protocolDir $infectiousAgentsFileName $_ | Where-Object { Test-Path -LiteralPath $_ -PathType Leaf } | Remove-Item -Verbose:($VerbosePreference -eq 'Continue')
+        # ToDo: Remove generated SVG files
+    }
+    return
+}
+
+if (-not $artifactsFolder) {
+    Write-Debug -Message "Creating build artifacts directory"
+    $artifactsFolder = (New-Item -Path $workspaceFolder -Name 'artifacts' -ItemType Directory).FullName
 }
 
 if ($Release) { $revRemark = 'revremark!' }
@@ -71,25 +80,28 @@ foreach ($targetCulture in $targetCultures)
 {
     if ($targetCulture.Name) { $attributes.lang = $targetCulture.TwoLetterISOLanguageName } else { $attributes.Remove('lang') }
 
-    if ("iv" -eq $targetCulture.TwoLetterISOLanguageName)
-    {
-        $revDate = "revdate=$([datetime]::UtcNow.ToString('yyyy-MM-dd'))"
-        $localeSuffix = ""
-        Write-Information "Generating NeoIPC documentation (english)"
-    }
-    else
+    if ($targetCulture.Name)
     {
         $revDate = "revdate=$([datetime]::UtcNow.ToString('d', $targetCulture))"
         $localeSuffix = ".$($targetCulture.Name)"
-        Write-Information "Generating NeoIPC documentation for language '$($targetCulture.DisplayName)'"
+        Write-Information "Generating NeoIPC documentation for locale '$($targetCulture.Name)'"
     }
-    Build-Target (Get-LocalisedPath $protocolDir 'NeoIPC-Antibiotics.adoc' $targetCulture) (Get-LocalisedPath $antibioticsDir NeoIPC-Antibiotics.csv $targetCulture -All -Existing) {
+    else
+    {
+        $revDate = "revdate=$([datetime]::UtcNow.ToString('yyyy-MM-dd'))"
+        $localeSuffix = ""
+        Write-Information "Generating NeoIPC Core Protocol for the default locale (en-GB)"
+    }
+
+    $antibioticsListFile = Get-LocalisedPath $protocolDir $antibioticsFileName $targetCulture
+    Build-Target $antibioticsListFile (Get-LocalisedPath $antibioticsDir 'NeoIPC-Antibiotics.csv' $targetCulture -All -Existing) {
         Write-Verbose "Generating list of antibiotics"
-        New-AntibioticsList -TargetCulture $targetCulture -MetadataPath $metadataFolder -AsciiDoc > "$protocolDir/NeoIPC-Antibiotics$localeSuffix.adoc"
+        New-AntibioticsList -TargetCulture $targetCulture -MetadataPath $metadataFolder -AsciiDoc | Out-File $antibioticsListFile -Encoding utf8NoBOM
     }
-    Build-Target (Get-LocalisedPath $protocolDir 'NeoIPC-Pathogens.adoc' $targetCulture) (Get-LocalisedPath $pathogensDir 'NeoIPC-Pathogen-Concepts.csv' $targetCulture -All -Existing),(Get-LocalisedPath $pathogensDir 'NeoIPC-Pathogen-Synonyms.csv' $targetCulture -All -Existing) {
+    $infectiousAgentsListFile = Get-LocalisedPath $protocolDir $infectiousAgentsFileName $targetCulture
+    Build-Target $infectiousAgentsListFile (Get-LocalisedPath $pathogensDir 'NeoIPC-Pathogen-Concepts.csv' $targetCulture -All -Existing),(Get-LocalisedPath $pathogensDir 'NeoIPC-Pathogen-Synonyms.csv' $targetCulture -All -Existing) {
         Write-Verbose "Generating list of infectious agents"
-        New-PathogenList -TargetCulture $targetCulture -InputDirectory $pathogensDir -OutputDirectory $protocolDir
+        New-PathogenList -TargetCulture $targetCulture -MetadataPath $metadataFolder -AsciiDoc | Out-File $infectiousAgentsListFile -Encoding utf8NoBOM
     }
     Build-Target (Get-LocalisedPath $imgDir 'NeoIPC-Core-Title-Page.svg' $targetCulture) (Get-LocalisedPath $resDir 'NeoIPC-Core-Title-Page.resx' $targetCulture -All -Existing),(Join-Path $transDir 'NeoIPC-Core-Title-Page.xslt') {
         Write-Verbose "Generating title page background SVG"

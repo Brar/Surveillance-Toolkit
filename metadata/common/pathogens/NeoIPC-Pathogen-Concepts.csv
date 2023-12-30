@@ -1661,6 +1661,7 @@ id,concept,concept_type,concept_source,concept_id,is_cc,show_mrsa,show_vre,show_
 1510,Orf virus,species,ICTV,202104780,f,f,f,f,f,f
 1946,Orientia,genus,LPSN,genus/orientia,f,f,f,f,f,f
 2166,Orientia tsutsugamushi,species,LPSN,species/orientia-tsutsugamushi,f,f,f,f,f,f
+3415,Orthoflavivirus zikaense,species,ICTV,202203123,f,f,f,f,f,f
 793,Orthoreovirus,genus,ICTV,202104969,f,f,f,f,f,f
 1225,Paecilomyces,genus,MycoBank,9196,f,f,f,f,f,f
 1343,Paecilomyces variotii,species,MycoBank,248517,f,f,f,f,f,f
@@ -1884,7 +1885,6 @@ id,concept,concept_type,concept_source,concept_id,is_cc,show_mrsa,show_vre,show_
 3183,Pseudalkalibacillus decolorationis,species,LPSN,species/pseudalkalibacillus-decolorationis,t,f,f,f,f,f
 3008,Pseudalkalibacillus hwajinpoensis,species,LPSN,species/pseudalkalibacillus-hwajinpoensis,t,f,f,f,f,f
 1533,Pseudallescheria,genus,MycoBank,4403,f,f,f,f,f,f
-657,Pseudallescheria boydii,species,MycoBank,110950,f,f,f,f,f,f
 3191,Pseudarthrobacter chlorophenolicus,species,LPSN,species/pseudarthrobacter-chlorophenolicus,t,f,f,f,f,f
 2976,Pseudarthrobacter oxydans,species,LPSN,species/pseudarthrobacter-oxydans,t,f,f,f,f,f
 3225,Pseudarthrobacter polychromogenes,species,LPSN,species/pseudarthrobacter-polychromogenes,t,f,f,f,f,f
@@ -2426,4 +2426,3 @@ id,concept,concept_type,concept_source,concept_id,is_cc,show_mrsa,show_vre,show_
 564,Yokenella,genus,LPSN,genus/yokenella,f,f,f,t,t,t
 2227,Yokenella regensburgei,species,LPSN,species/yokenella-regensburgei,f,f,f,t,t,t
 3393,Zasmidium cerophilum,species,MycoBank,822808,f,f,f,f,f,f
-1140,Zika virus,species,ICTV,202103123,f,f,f,f,f,f

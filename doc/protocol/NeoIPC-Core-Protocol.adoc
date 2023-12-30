@@ -170,7 +170,7 @@ admitted to a ward in your neonatal unit **within 120 days of birth** is eligibl
 image::NeoIPC-Core-Decision-Flow.svg[Decision flow to identify eligible infants for the core module,{full-width},opts=inline]
 
 .Examples of infants eligible/not eligible for core module once admitted to the ward
-[cols=">2,>3,>4,>4",stripes=odd]
+[cols=">2,>3,>4,>4"]
 |===
 |Day of Life |Birth Weight (grams) |Gestational Age (weeks+days) |Eligible for VLBW/VPT Module
 
@@ -206,7 +206,7 @@ For the generation of reference reports, NeoIPC does not need to track individua
 NOTE: To create a pseudonymisation list you can use the templates (excel spreadsheet and paper datasheet) available in the https://neoipc.org/surveillance/resources/[resources section] of our website.
 
 .Example pseudonymisation list
-[cols=">1,^2,^2,^3,^2,^4",stripes=odd]
+[cols=">1,^2,^2,^3,^2,^4"]
 |===
 |№ |NeoIPC-ID |Patient-ID |Patient Name |Date of Birth |Comments
 
@@ -1004,19 +1004,11 @@ neoipc-support@charite.de
 [appendix]
 [#appendix-list-of-antibiotics]
 == List of Antibiotics
-[stripes=odd]
-|===
-|Name |ATC-Code
 
 include::NeoIPC-Antibiotics.adoc[]
-|===
 
 [appendix]
 [#appendix-list-of-list-of-infectious-agents]
 == List of Infectious Agents
-[.small,cols="5,3,3,3",stripes=odd]
-|===
-|Name |Type |Assumed Pathogenicity |Recorded Resistances
 
-include::NeoIPC-Pathogens.adoc[]
-|===
+include::NeoIPC-Infectious-Agents.adoc[]

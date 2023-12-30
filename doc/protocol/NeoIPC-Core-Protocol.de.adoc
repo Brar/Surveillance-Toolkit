@@ -1003,20 +1003,12 @@ neoipc-support@charite.de
 
 [appendix]
 [#appendix-list-of-antibiotics]
-== List of Antibiotics
-[stripes=odd]
-|===
-|Name |ATC-Code
+== Antibiotikaliste
 
 include::NeoIPC-Antibiotics.de.adoc[]
-|===
 
 [appendix]
 [#appendix-list-of-list-of-infectious-agents]
 == Liste der Infektionserreger
-[.small,cols="5,2,3,3",stripes=odd]
-|===
-|Name |Typ |Angenommene Pathogenität |Erfasste Resistenzen
 
-include::NeoIPC-Pathogens.de.adoc[]
-|===
+include::NeoIPC-Infectious-Agents.de.adoc[]

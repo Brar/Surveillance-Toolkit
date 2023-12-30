@@ -1004,19 +1004,11 @@ neoipc-support@charite.de
 [appendix]
 [#appendix-list-of-antibiotics]
 == Lista de antibióticos
-[stripes=odd]
-|===
-|Nombre |ATC-Código
 
 include::NeoIPC-Antibiotics.es.adoc[]
-|===
 
 [appendix]
 [#appendix-list-of-list-of-infectious-agents]
 == Lista de agentes infecciosos
-[.small,cols="5,3,3,3",stripes=odd]
-|===
-|Nombre |Tipo |Patogenicidad supuesta |Existencias registradas
 
-include::NeoIPC-Pathogens.es.adoc[]
-|===
+include::NeoIPC-Infectious-Agents.es.adoc[]
