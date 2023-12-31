@@ -85,7 +85,8 @@ J01XD03,NAME,t,Ornidazole,Ornidazol
 J01XE01,NAME,f,Nitrofurantoin,
 J01XE02,NAME,f,Nifurtoinol,
 J01XE03,NAME,f,Furazidin,
-J01XX01,NAME,f,Fosfomycin,
+J01XX01_O,NAME,f,Fosfomycin (oral),
+J01XX01_P,NAME,f,Fosfomycin (parenteral),
 J01XX02,NAME,f,Xibornol,
 J01XX03,NAME,f,Clofoctol,
 J01XX04,NAME,f,Spectinomycin,
@@ -171,7 +172,8 @@ J01AA04,NAME,t,Lymecycline,Lymecyclin
 J01AA05,NAME,t,Metacycline,Metacyclin
 J01AA06,NAME,t,Oxytetracycline,Oxytetracyclin
 J01AA07,NAME,t,Tetracycline,Tetracyclin
-J01AA08,NAME,t,Minocycline,Minocyclin
+J01AA08_O,NAME,t,Minocycline (oral),Minocyclin (oral)
+J01AA08_P,NAME,t,Minocycline (parenteral),Minocyclin (parenteral)
 J01AA09,NAME,t,Rolitetracycline,Rolitetracyclin
 J01AA10,NAME,t,Penimepicycline,Penimepicyclin
 J01AA11,NAME,t,Clomocycline,Clomocyclin

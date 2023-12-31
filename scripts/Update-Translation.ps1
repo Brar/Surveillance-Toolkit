@@ -32,15 +32,16 @@ $inputFileInfos = @(
         type = 'resx'
     }
     @{
-        paths = Join-Path -Path $workspaceFolder -ChildPath 'doc' -AdditionalChildPath 'protocol','*.adoc' -Resolve | ForEach-Object {
+        paths = @(Join-Path -Path $workspaceFolder -ChildPath 'doc' -AdditionalChildPath 'protocol','*.adoc' -Resolve) +
+        @(Join-Path -Path $workspaceFolder -ChildPath 'doc' -AdditionalChildPath 'protocol','definitions','*.adoc' -Resolve) | ForEach-Object {
             $fileBaseName = [System.IO.Path]::GetFileNameWithoutExtension($_)
             $swallow = $false
-            if ($fileBaseName.EndsWith('header')) {
+            if ($fileBaseName.EndsWith('Header')) {
                 $swallow = $true
             }
             else {
                 foreach ($c in $cultureNames) {
-                    if ($fileBaseName.EndsWith($c)) {
+                    if ($fileBaseName.EndsWith(".$c")) {
                         $swallow = $true
                         break
                     }
@@ -50,6 +51,12 @@ $inputFileInfos = @(
             if (-not $swallow) { $_ }
         }
         type = 'adoc'
+    }
+    @{
+        path = Join-Path -Path $workspaceFolder -ChildPath 'metadata' -AdditionalChildPath 'common','antibiotics','ListElements.csv' -Resolve
+        type = 'csv'
+        key = 'id'
+        translatedProperties = @('value')
     }
     @{
         path = Join-Path -Path $workspaceFolder -ChildPath 'metadata' -AdditionalChildPath 'common','antibiotics','NeoIPC-Antibiotics.csv' -Resolve

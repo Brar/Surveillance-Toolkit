@@ -392,12 +392,12 @@ For detailed information, please see xref:data-collection-infection-data-collect
 <<<
 [#infection-definitions-clinical-sepsis]
 ==== Clinical Sepsis
-include::NeoIPC-Core-Clinical-Sepsis-Definition.adoc[]
+include::definitions/NeoIPC-Core-Clinical-Sepsis-Definition.adoc[]
 
 <<<
 [#infection-definitions-lcbsi-caused-by-a-recognised-pathogen]
 ==== LCBSI caused by a Recognised Pathogen
-include::NeoIPC-Core-LCBSI-With-Recognised-Pathogen-Definition.adoc[]
+include::definitions/NeoIPC-Core-LCBSI-With-Recognised-Pathogen-Definition.adoc[]
 
 [#infection-definitions-lcbsi-caused-by-common-commensals]
 ==== LCBSI caused by Common Commensals
@@ -410,7 +410,7 @@ As the tools collect the raw data leading to the diagnosis of an infection it is
 
 In any case, because of this fact, you should be very careful when comparing rates of LCBSI caused by common commensals across different settings.
 
-include::NeoIPC-Core-LCBSI-With-Common-Commensal-Definition.adoc[]
+include::definitions/NeoIPC-Core-LCBSI-With-Common-Commensal-Definition.adoc[]
 
 [#infection-definitions-necrotising-enterocolitis]
 === Necrotising Enterocolitis
@@ -419,13 +419,13 @@ The NEC dataset includes information on whether the patient has an intestinal pe
 However, this is not one of the surveillance definition criteria.
 This means that you should not report cases where you have surgical evidence of intestinal perforation without evidence of primary necrosis or pneumatosis intestinalis (e.g. spontaneous bowel perforation) as NEC.
 
-include::NeoIPC-Core-Necrotising-Enterocolitis-Definition.adoc[]
+include::definitions/NeoIPC-Core-Necrotising-Enterocolitis-Definition.adoc[]
 
 [#infection-definitions-pneumonia]
 === Pneumonia
 Pneumonia in neonates is an entity that is very difficult to define for surveillance purposes as one can infer from the fact that many surveillance systems abstain from recording it at all, while others record ventilator-associated events where surveillance is limited to ventilated patients and pneumonia is only one of the entities captured by the definition.
 
-include::NeoIPC-Core-Pneumonia-Definition.adoc[]
+include::definitions/NeoIPC-Core-Pneumonia-Definition.adoc[]
 
 NOTE: To meet the criteria of device associated hospital-acquired pneumonia, patients must be ventilated for at least 4 calendar days (day 1 is the day invasive/non-invasive ventilation starts).
 The earliest date of the event is day 3 of ventilation.
@@ -495,19 +495,19 @@ The day of infection in this case would be “Day 17”.
 ==== Superficial Incisional SSI
 Surgical site infections involving only the skin and subcutaneous tissue belong to this category.
 
-include::NeoIPC-Core-Superficial-Incisional-SSI-Definition.adoc[]
+include::definitions/NeoIPC-Core-Superficial-Incisional-SSI-Definition.adoc[]
 
 [#infection-definitions-surgical-site-infection-deep-incisional-ssi]
 ==== Deep Incisional SSI
 Surgical site infections involving deep soft tissues of the incision (for example, fascial and muscle layers) belong to this category.
 
-include::NeoIPC-Core-Deep-Incisional-SSI-Definition.adoc[]
+include::definitions/NeoIPC-Core-Deep-Incisional-SSI-Definition.adoc[]
 
 [#infection-definitions-surgical-site-infection-organ-space-ssi]
 ==== Organ/Space SSI
 Surgical site infections involving any part of the body deeper than the fascial/muscle layers that is opened or manipulated during the operative procedure belong to this category.
 
-include::NeoIPC-Core-Organ-Space-SSI-Definition.adoc[]
+include::definitions/NeoIPC-Core-Organ-Space-SSI-Definition.adoc[]
 
 [#data-dictionary]
 == Data Dictionary

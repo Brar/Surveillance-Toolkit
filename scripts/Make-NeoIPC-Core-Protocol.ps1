@@ -31,6 +31,8 @@ $transDir = Join-Path -Resolve -Path $protocolDir -ChildPath 'xslt'
 
 $infectiousAgentsFileName = 'NeoIPC-Infectious-Agents.adoc'
 $antibioticsFileName = 'NeoIPC-Antibiotics.adoc'
+$protocolFileName = 'NeoIPC-Core-Protocol.adoc'
+$docBookFileName = [System.IO.Path]::ChangeExtension($protocolFileName, 'xml')
 
 if ($null -eq $TargetCultures) {
     $TargetCultures = Get-Item "$protocolDir/NeoIPC-Core-Protocol.*adoc" |
@@ -42,6 +44,7 @@ if ($Clean) {
     $TargetCultures | ForEach-Object {
         Get-LocalisedPath $protocolDir $antibioticsFileName $_ | Where-Object { Test-Path -LiteralPath $_ -PathType Leaf } | Remove-Item -Verbose:($VerbosePreference -eq 'Continue')
         Get-LocalisedPath $protocolDir $infectiousAgentsFileName $_ | Where-Object { Test-Path -LiteralPath $_ -PathType Leaf } | Remove-Item -Verbose:($VerbosePreference -eq 'Continue')
+        Get-LocalisedPath $protocolDir $docBookFileName $_ | Where-Object { Test-Path -LiteralPath $_ -PathType Leaf } | Remove-Item -Verbose:($VerbosePreference -eq 'Continue')
         # ToDo: Remove generated SVG files
     }
     return
@@ -50,6 +53,11 @@ if ($Clean) {
 if (-not $artifactsFolder) {
     Write-Debug -Message "Creating build artifacts directory"
     $artifactsFolder = (New-Item -Path $workspaceFolder -Name 'artifacts' -ItemType Directory).FullName
+}
+$artifactsImgFolder = Join-Path -Resolve -Path $artifactsFolder -ChildPath 'img' -ErrorAction SilentlyContinue
+if (-not $artifactsImgFolder) {
+    Write-Debug -Message "Creating build artifacts image directory"
+    $artifactsImgFolder = (New-Item -Path $artifactsFolder -Name 'img' -ItemType Directory).FullName
 }
 
 if ($Release) { $revRemark = 'revremark!' }
@@ -73,9 +81,24 @@ $masterDataSheet.Load((Get-ChildItem $transDir/NeoIPC-Core-Master-Data-Collectio
 $masterDataSheetImage = New-Object System.Xml.Xsl.XslCompiledTransform
 $masterDataSheetImage.Load((Get-ChildItem $transDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image.xslt).FullName, [System.Xml.Xsl.XsltSettings]::TrustedXslt, $resolver)
 
+$AWaReASrc = (Join-Path -Resolve -Path $imgDir -ChildPath 'AWaRe-A.svg')
+$AWaReADest = (Join-Path -Path $artifactsFolder -ChildPath 'img' -AdditionalChildPath 'AWaRe-A.svg')
+Build-Target $AWaReADest $AWaReASrc {
+    Copy-Item -LiteralPath $AWaReASrc -Destination $AWaReADest
+}
+$AWaReWSrc = (Join-Path -Resolve -Path $imgDir -ChildPath 'AWaRe-W.svg')
+$AWaReWDest = (Join-Path -Path $artifactsFolder -ChildPath 'img' -AdditionalChildPath 'AWaRe-W.svg')
+Build-Target $AWaReWDest $AWaReWSrc {
+    Copy-Item -LiteralPath $AWaReWSrc -Destination $AWaReWDest
+}
+$AWaReRSrc = (Join-Path -Resolve -Path $imgDir -ChildPath 'AWaRe-R.svg')
+$AWaReRDest = (Join-Path -Path $artifactsFolder -ChildPath 'img' -AdditionalChildPath 'AWaRe-R.svg')
+Build-Target $AWaReRDest $AWaReRSrc {
+    Copy-Item -LiteralPath $AWaReRSrc -Destination $AWaReRDest
+}
+
 $attributes = @{}
 if (-not $Release) { $attributes.revremark = $revRemark }
-
 foreach ($targetCulture in $targetCultures)
 {
     if ($targetCulture.Name) { $attributes.lang = $targetCulture.TwoLetterISOLanguageName } else { $attributes.Remove('lang') }
@@ -125,7 +148,7 @@ foreach ($targetCulture in $targetCultures)
         Write-Verbose "Generating master data collection sheet image SVG"
         $masterDataSheetImage.Transform("$resDir/NeoIPC-Core-Master-Data-Collection-Sheet$localeSuffix.resx", "$imgDir/NeoIPC-Core-Master-Data-Collection-Sheet-Image$localeSuffix.svg")
     }
-    $protocolFile = Get-LocalisedPath $protocolDir 'NeoIPC-Core-Protocol.adoc' $targetCulture -Resolve
+    $protocolFile = Get-LocalisedPath $protocolDir $protocolFileName $targetCulture -Resolve
     if ($All -or $Html) {
         $att = $attributes.Clone()
         $att['backend-html5'] = $true
@@ -169,7 +192,7 @@ foreach ($targetCulture in $targetCultures)
     if ($All -or $Docx -or ($Pdf -and $targetCulture.TextInfo.IsRightToLeft)) {
         $att = $attributes.Clone()
         $att['backend-docbook5'] = $true
-        $docbookFile = Get-LocalisedPath $protocolDir 'NeoIPC-Core-Protocol.xml' $targetCulture
+        $docbookFile = Get-LocalisedPath $protocolDir $docBookFileName $targetCulture
         Build-Target $docbookFile (@($protocolFile)+@(Export-AsciiDocReferences $protocolFile $att)) {
             Write-Verbose "Generating DocBook xml"
             asciidoctor -a $revRemark -a $revDate -b docbook -w --failure-level=WARN -D $(Resolve-Path $protocolDir -Relative) -o $([System.IO.Path]::GetFileName($docbookFile)) $(Resolve-Path $protocolFile -Relative)

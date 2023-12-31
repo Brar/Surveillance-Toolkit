@@ -392,12 +392,12 @@ Para obtener información detallada, consulte xref:data-collection-infection-dat
 <<<
 [#infection-definitions-clinical-sepsis]
 ==== Sepsis clínica
-include::NeoIPC-Core-Clinical-Sepsis-Definition.es.adoc[]
+include::definitions/NeoIPC-Core-Clinical-Sepsis-Definition.es.adoc[]
 
 <<<
 [#infection-definitions-lcbsi-caused-by-a-recognised-pathogen]
 ==== LCBSI causada por un patógeno reconocido
-include::NeoIPC-Core-LCBSI-With-Recognised-Pathogen-Definition.es.adoc[]
+include::definitions/NeoIPC-Core-LCBSI-With-Recognised-Pathogen-Definition.es.adoc[]
 
 [#infection-definitions-lcbsi-caused-by-common-commensals]
 ==== LCBSI causadas por comensales comunes
@@ -410,7 +410,7 @@ Dado que las herramientas recogen los datos brutos que conducen al diagnóstico 
 
 En cualquier caso, debido a este hecho, se debe tener mucho cuidado al comparar las tasas de LCBSI causadas por comensales comunes en diferentes entornos.
 
-include::NeoIPC-Core-LCBSI-With-Common-Commensal-Definition.es.adoc[]
+include::definitions/NeoIPC-Core-LCBSI-With-Common-Commensal-Definition.es.adoc[]
 
 [#infection-definitions-necrotising-enterocolitis]
 === Enterocolitis necrotizante
@@ -419,13 +419,13 @@ El conjunto de datos de ECN incluye información sobre si el paciente presenta u
 Sin embargo, éste no es uno de los criterios de definición de la vigilancia.
 Esto significa que no se deben notificar como ECN los casos en los que se tenga evidencia quirúrgica de perforación intestinal sin evidencia de necrosis primaria o neumatosis intestinal (por ejemplo, perforación intestinal espontánea).
 
-include::NeoIPC-Core-Necrotising-Enterocolitis-Definition.es.adoc[]
+include::definitions/NeoIPC-Core-Necrotising-Enterocolitis-Definition.es.adoc[]
 
 [#infection-definitions-pneumonia]
 === Neumonía
 La neumonía en neonatos es una entidad muy difícil de definir con fines de vigilancia, como puede deducirse del hecho de que muchos sistemas de vigilancia se abstienen de registrarla en absoluto, mientras que otros registran los eventos asociados a la ventilación, en los que la vigilancia se limita a los pacientes ventilados y la neumonía es sólo una de las entidades captadas por la definición.
 
-include::NeoIPC-Core-Pneumonia-Definition.es.adoc[]
+include::definitions/NeoIPC-Core-Pneumonia-Definition.es.adoc[]
 
 NOTE: Para cumplir los criterios de neumonía hospitalaria asociada a dispositivos, los pacientes deben estar ventilados durante al menos 4 días naturales (el día 1 es el día de inicio de la ventilación invasiva/no invasiva).
 La fecha más temprana del evento es el día 3 de ventilación.
@@ -495,19 +495,19 @@ El día de la infección en este caso sería el "Día 17".
 ==== ISQ incisional superficial
 Pertenecen a esta categoría las infecciones del sitio quirúrgico que sólo afectan a la piel y al tejido subcutáneo.
 
-include::NeoIPC-Core-Superficial-Incisional-SSI-Definition.es.adoc[]
+include::definitions/NeoIPC-Core-Superficial-Incisional-SSI-Definition.es.adoc[]
 
 [#infection-definitions-surgical-site-infection-deep-incisional-ssi]
 ==== ISQ incisional profunda
 Pertenecen a esta categoría las infecciones del sitio quirúrgico que afectan a los tejidos blandos profundos de la incisión (por ejemplo, las capas fasciales y musculares).
 
-include::NeoIPC-Core-Deep-Incisional-SSI-Definition.es.adoc[]
+include::definitions/NeoIPC-Core-Deep-Incisional-SSI-Definition.es.adoc[]
 
 [#infection-definitions-surgical-site-infection-organ-space-ssi]
 ==== ISQ de órgano/espacio
 Pertenecen a esta categoría las infecciones del sitio quirúrgico que afectan a cualquier parte del cuerpo más profunda que las capas fascial/muscular que se abre o manipula durante el procedimiento quirúrgico.
 
-include::NeoIPC-Core-Organ-Space-SSI-Definition.es.adoc[]
+include::definitions/NeoIPC-Core-Organ-Space-SSI-Definition.es.adoc[]
 
 [#data-dictionary]
 == Diccionario de datos

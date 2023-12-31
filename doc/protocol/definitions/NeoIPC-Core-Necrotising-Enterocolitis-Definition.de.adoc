@@ -2,17 +2,15 @@
 [%unbreakable]
 ****
 . **Mindestens EINES der folgenden radiologischen Zeichen (bildgebende Verfahren: Röntgen, CT, MRT, Ultraschall):**
-
++
+--
 * Pneumoperitoneum
 * Pneumatosis intestinalis
 * Portalvenöses Gas (hepatobiliäres Gas)
 * Stehende Darmschlingen (≥ 24h) 
-
+--
 **UND**
-
-[start=2]
 . **Mindestens EINES der folgenden klinischen Anzeichen:**
-
 * Aufgeblähtes Abdomen
 * Verfärbung des Abdomens oder glänzende/rötliche Hautfarbe
 * Wiederholtes okkultes (Guajak-Test) oder sichtbares Blut im Stuhl (keine Analfissur)

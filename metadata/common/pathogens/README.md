@@ -1,4 +1,4 @@
-# List of Pathogen Concepts
+# Pathogen Lists
 
 The list of pathogen concepts in `NeoIPC-Pathogen-Concepts.csv`, synonyms `NeoIPC-Pathogen-Synonyms.csv` and the associated translation files (`NeoIPC-Pathogens.`*`LOCALE`*`.csv`) are used to generate the list of options for selecting causative pathogens in NeoIPC.
 

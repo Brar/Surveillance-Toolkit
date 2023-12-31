@@ -392,12 +392,12 @@ Ausführliche Informationen finden Sie unter xref:data-collection-infection-data
 <<<
 [#infection-definitions-clinical-sepsis]
 ==== Klinische Sepsis
-include::NeoIPC-Core-Clinical-Sepsis-Definition.de.adoc[]
+include::definitions/NeoIPC-Core-Clinical-Sepsis-Definition.de.adoc[]
 
 <<<
 [#infection-definitions-lcbsi-caused-by-a-recognised-pathogen]
 ==== LCBSI verursacht durch einen anerkannten Erreger
-include::NeoIPC-Core-LCBSI-With-Recognised-Pathogen-Definition.de.adoc[]
+include::definitions/NeoIPC-Core-LCBSI-With-Recognised-Pathogen-Definition.de.adoc[]
 
 [#infection-definitions-lcbsi-caused-by-common-commensals]
 ==== LCBSI verursacht durch gewöhnliche Kommensalen
@@ -410,7 +410,7 @@ Da die Instrumente die Rohdaten sammeln, die zur Diagnose einer Infektion führe
 
 In jedem Fall sollten Sie aufgrund dieser Tatsache sehr vorsichtig sein, wenn Sie die Raten von LCBSI, die durch gewöhnliche Kommensalen verursacht werden, in verschiedenen Einrichtungen vergleichen.
 
-include::NeoIPC-Core-LCBSI-With-Common-Commensal-Definition.de.adoc[]
+include::definitions/NeoIPC-Core-LCBSI-With-Common-Commensal-Definition.de.adoc[]
 
 [#infection-definitions-necrotising-enterocolitis]
 === Nekrotisierende Enterokolitis
@@ -419,13 +419,13 @@ Der NEC-Datensatz enthält Informationen darüber, ob der Patient eine Darmperfo
 Dies gehört jedoch nicht zu den Kriterien der Surveillance-Definition.
 Das bedeutet, dass Sie Fälle, bei denen Sie einen chirurgischen Nachweis einer Darmperforation ohne Nachweis einer primären Nekrose oder Pneumatosis intestinalis (z. B. spontane Darmperforation) haben, nicht als NEC melden sollten.
 
-include::NeoIPC-Core-Necrotising-Enterocolitis-Definition.de.adoc[]
+include::definitions/NeoIPC-Core-Necrotising-Enterocolitis-Definition.de.adoc[]
 
 [#infection-definitions-pneumonia]
 === Pneumonie
 Pneumonie bei Neugeborenen ist eine Entität, die für Surveillancezwecke sehr schwer zu definieren ist, wie man aus der Tatsache schließen kann, dass viele Surveillance-Systeme sie überhaupt nicht erfassen, während andere beatmungsassoziierte Ereignisse erfassen, bei denen die Surveillance auf beatmete Patienten beschränkt ist und Pneumonie nur eine der Entitäten ist, die von der Definition erfasst werden.
 
-include::NeoIPC-Core-Pneumonia-Definition.de.adoc[]
+include::definitions/NeoIPC-Core-Pneumonia-Definition.de.adoc[]
 
 NOTE: Um die Kriterien einer Device-assoziierten, im Krankenhaus erworbenen Pneumonie zu erfüllen, müssen die Patienten mindestens 4 Kalendertage lang beatmet werden (Tag 1 ist der Tag, an dem die invasive/nicht-invasive Beatmung beginnt).
 Das früheste Datum des Ereignisses ist Tag 3 der Beatmung.
@@ -495,19 +495,19 @@ Der Tag der Infektion wäre in diesem Fall der "Tag 17".
 ==== Oberflächliche postoperative Wundinfektion
 Zu dieser Kategorie gehören Infektionen an der Operationsstelle, die nur die Haut und das subkutane Gewebe betreffen.
 
-include::NeoIPC-Core-Superficial-Incisional-SSI-Definition.de.adoc[]
+include::definitions/NeoIPC-Core-Superficial-Incisional-SSI-Definition.de.adoc[]
 
 [#infection-definitions-surgical-site-infection-deep-incisional-ssi]
 ==== Tiefe postoperative Wundinfektion
 Zu dieser Kategorie gehören Infektionen an der Operationsstelle, die tiefe Weichteile der Inzision (z. B. Faszien- und Muskelschichten) betreffen.
 
-include::NeoIPC-Core-Deep-Incisional-SSI-Definition.de.adoc[]
+include::definitions/NeoIPC-Core-Deep-Incisional-SSI-Definition.de.adoc[]
 
 [#infection-definitions-surgical-site-infection-organ-space-ssi]
 ==== Postoperative Wundinfektion an Organen oder in Körperhöhlen
 Zu dieser Kategorie gehören Infektionen an der Operationsstelle, die einen Teil des Körpers betreffen, der tiefer als die Faszien-/Muskelschichten liegt und während des operativen Eingriffs geöffnet oder manipuliert wurde.
 
-include::NeoIPC-Core-Organ-Space-SSI-Definition.de.adoc[]
+include::definitions/NeoIPC-Core-Organ-Space-SSI-Definition.de.adoc[]
 
 [#data-dictionary]
 == Datenverzeichnis

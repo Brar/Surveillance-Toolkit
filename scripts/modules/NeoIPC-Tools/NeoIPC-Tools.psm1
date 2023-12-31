@@ -1,6 +1,7 @@
 [AppContext]::SetSwitch("Switch.System.Xml.AllowDefaultResolver", $true);
 
 $AtcUrlTemplate = 'https://www.whocc.no/atc_ddd_index/?code={0}&showdescription=yes'
+$AWaReUrlTemplate = 'https://aware.essentialmeds.org/list?query=%22{0}%22'
 $LspnUrlTemplate = 'https://lpsn.dsmz.de/{0}'
 $MycoBankUrlTemplate = 'https://www.mycobank.org/page/Name%20details%20page/field/Mycobank%20%23/{0}'
 $IctvUrlTemplate = 'https://ictv.global/taxonomy/taxondetails?taxnode_id={0}'
@@ -322,44 +323,103 @@ function New-AntibioticsList {
     )
     $antibioticsFolderPath = Join-Path -Resolve -Path $MetadataPath -ChildPath 'common' -AdditionalChildPath 'antibiotics'
     $antibioticsFile = Join-Path -Resolve -Path $antibioticsFolderPath -ChildPath 'NeoIPC-Antibiotics.csv'
+    $awareFile = Join-Path -Resolve -Path $antibioticsFolderPath -ChildPath 'WHO-AWaRe-Classification-2021.csv'
+    $listElementsFile = Join-Path -Resolve -Path $antibioticsFolderPath -ChildPath 'ListElements.csv'
+
+    $awareClasses = [System.Collections.Generic.Dictionary[string, PSCustomObject]]::new()
+    $lineNo = 1
+    Import-Csv -LiteralPath $awareFile -Encoding utf8NoBOM | ForEach-Object {
+        $lineNo++
+        $category = $_.category
+        switch ($category) {
+            'Access' { $c = 'A' }
+            'Watch' { $c = 'W' }
+            'Reserve' { $c = 'R' }
+            Default {
+                Write-Warning "Unexpected AWaRe category '$($category)' in '$awareFile' line $lineNo."
+                return
+            }
+        }
+        if ($_.atc_code -eq 'to be assigned') { return }
+        $awareClasses.Add($_.id,[PSCustomObject]@{
+            Category = $c
+            Url = $AWaReUrlTemplate -f [System.Web.HttpUtility]::UrlEncode($_.antibiotic)
+        })
+    }
+
     if ($TargetCulture.Name) {
+        $listElementsTranslations = Import-Translations -LiteralPath $listElementsFile -TargetCulture $TargetCulture -ExpectedProperties 'VALUE'
         $translations = Import-Translations -LiteralPath $antibioticsFile -TargetCulture $TargetCulture -ExpectedProperties 'NAME'
     } else {
+        $listElementsTranslations = @()
         $translations = @()
     }
+
+    $listElements = [System.Collections.Generic.Dictionary[string, string]]::new()
+    Import-Csv -LiteralPath $listElementsFile -Encoding utf8NoBOM | ForEach-Object {
+        foreach ($translation in $listElementsTranslations) {
+            $translationInfo = $null
+            if ($translation.VALUE.TryGetValue($_.id, [ref]$translationInfo)) {
+                if ($_.value -cne $translationInfo.DefaultValue) {
+                    Write-Warning "The default value '$($translationInfo.DefaultValue)' for id '$($_.id)' in translation file '$($translation.TranslationFile)' does not match the value '$($_.value)' in '$listElementsFile'."
+                }
+                if ($translationInfo.NeedsTranslation) {
+                    $listElements.add($_.id, $translationInfo.TranslatedValue)
+                }
+                break
+            }
+        }
+        if (-not $listElements.ContainsKey($_.id)) {
+            $listElements.add($_.id, $_.value)
+        }
+    }
+
+    $atcCodeString = $listElements['atc_code']
+    $awareCategoryString = $listElements['aware_category']
+    $substanceString = $listElements['substance']
 
     # Iterate the list of antibiotics and try to find and return the translated row in the requested format.
     Import-Csv -LiteralPath $antibioticsFile -Encoding utf8NoBOM |
     Foreach-Object {
-        $name = $_.name
-        $url = $AtcUrlTemplate -f $_.atc_code
+        $substance = $_.name
+        $atcUrl = $AtcUrlTemplate -f $_.atc_code
+        $awareInfo = $null
+        if ($awareClasses.TryGetValue($_.id, [ref]$awareInfo)) {
+            $awareCategory = $awareInfo.Category
+            $awareUrl = $awareInfo.Url
+        } else {
+            $awareCategory = $null
+            $awareUrl = $null
+        }
         foreach ($translation in $translations) {
             $translationInfo = $null
-            if ($translation.NAME.TryGetValue($_.atc_code, [ref]$translationInfo)) {
+            if ($translation.NAME.TryGetValue($_.id, [ref]$translationInfo)) {
                 if ($_.name -cne $translationInfo.DefaultValue) {
-                    Write-Warning "The default value '$($translationInfo.DefaultValue)' for code '$($_.atc_code)' in translation file '$($translation.TranslationFile)' does not match the value '$($_.name)' in '$antibioticsFile'."
+                    Write-Warning "The default value '$($translationInfo.DefaultValue)' for id '$($_.id)' in translation file '$($translation.TranslationFile)' does not match the value '$($_.name)' in '$antibioticsFile'."
                 }
                 if ($translationInfo.NeedsTranslation) {
-                    $name = $translationInfo.TranslatedValue
+                    $substance = $translationInfo.TranslatedValue
                 }
-                return [PSCustomObject][ordered]@{ Name = $name; 'ATC-Code' = $_.atc_code; Url = $url }
+                return [PSCustomObject][ordered]@{ Id = $_.id; Substance = $substance; AtcCode = $_.atc_code; AtcUrl = $atcUrl; AWaReCategory = $awareCategory; AWaReUrl = $awareUrl }
             }
         }
         if ($TargetCulture.Name -and $translations.Count -gt 0) {
-            Write-Warning "Cannot find a translation for ATC-Code '$($_.atc_code)' in any of the translation files for locale '$($TargetCulture.Name)' or any of its parent locales in directory '$antibioticsFolderPath'. The antibiotic will have its untranslated default name '$($_.name)'."
+            Write-Warning "Cannot find a translation for id '$($_.id)' in any of the translation files for locale '$($TargetCulture.Name)' or any of its parent locales in directory '$antibioticsFolderPath'. The antibiotic will have its untranslated default name '$($_.name)'."
         }
-        return [PSCustomObject][ordered]@{ Name = $name; 'ATC-Code' = $_.atc_code; Url = $url }
+        return [PSCustomObject][ordered]@{ Id = $_.id; Substance = $substance; AtcCode = $_.atc_code; AtcUrl = $atcUrl; AWaReCategory = $awareCategory; AWaReUrl = $awareUrl }
     } |
-    Sort-Object -Culture $TargetCulture -Property 'Name' |
+    Sort-Object -Culture $TargetCulture -Property 'Substance' |
     ForEach-Object -Begin {
         if ($AsciiDoc) {
+            Write-Output '[cols="4,3,^2"]'
             Write-Output '|==='
-            Write-Output '|Name |ATC-Code'
+            Write-Output "|$substanceString |$atcCodeString |$awareCategoryString"
             Write-Output ''
         }
     } -Process {
         if ($AsciiDoc) {
-            Write-Output "|$($_.Name) |$($_.Url)[$($_.'ATC-Code'),window=_blank]"
+            $a = if ($_.AWaReCategory) { "$($_.AWaReUrl)[image:AWaRe-$($_.AWaReCategory).svg[$($_.AWaReCategory),20],window=_blank]" } else { '' }
+            Write-Output "|$($_.Substance) |$($_.AtcUrl)[$($_.AtcCode),window=_blank] |$a"
         } else {
             $_
         }

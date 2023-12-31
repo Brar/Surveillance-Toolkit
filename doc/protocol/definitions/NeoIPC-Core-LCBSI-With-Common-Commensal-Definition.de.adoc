@@ -1,4 +1,4 @@
-.Zweifach im Labor bestätigte Blutstrominfektion mit gewöhnlichen Kommensalen nachgewiesen
+.Zweifach im Labor bestätigte Blutstrominfektion mit gewöhnlichen Kommensalen
 [%unbreakable]
 ****
 . **Derselbe gewöhnliche Kommensale wird in mindestens ZWEI Blut- und/oder Liquorkulturproben nachgewiesen, die bei verschiedenen Gelegenheiten entnommen wurden**
@@ -48,7 +48,7 @@
 * Thrombozytenzahl von < 100 × 10^9^/L (<100 × 10^3^/μL)
 ****
 
-.Im Labor bestätigte Blutstrominfektion mit gewöhnlichen Kommensalen und fünftägige Behandlung
+.Im Labor bestätigte Blutstrominfektion mit gewöhnlichen Kommensalen und fünftägiger Behandlung
 [%unbreakable]
 ****
 . **Ein gewöhnlicher Kommensale wird aus EINER Blutkultur und/oder Liquorkulturprobe gewonnen**
