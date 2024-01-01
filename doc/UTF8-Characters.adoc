@@ -27,6 +27,19 @@ this is equivalent to the digit width of fonts with fixed-width digits
 |' '|HAIR SPACE |&#x200A; |E2808A |thinner than a thin space +
 in traditional typography, the thinnest space available
 |' '|MEDIUM MATHEMATICAL SPACE |&#x205F; |E2819F |four-eighteenths of an em
+|‘ |LEFT SINGLE QUOTATION MARK |&#x2018; |E28098 |single turned comma quotation mark
+|’ |RIGHT SINGLE QUOTATION MARK |&#x2019; |E28099 |single comma quotation mark
+|‚ |SINGLE LOW-9 QUOTATION MARK |&#x201A; |E2809A |low single comma quotation mark
+|‛ |SINGLE HIGH-REVERSED-9 QUOTATION MARK |&#x201B; |E2809B |single reversed comma quotation mark
+|“ |LEFT DOUBLE QUOTATION MARK |&#x201C; |E2809C |double turned comma quotation mark
+|” |RIGHT DOUBLE QUOTATION MARK |&#x201D; |E2809D |double comma quotation mark
+|„ |DOUBLE LOW-9 QUOTATION MARK |&#x201E; |E2809E |low double comma quotation mark
+|‟ |DOUBLE HIGH-REVERSED-9 QUOTATION MARK |&#x201F; |E2809F |double reversed comma quotation mark
+|« |LEFT-POINTING DOUBLE ANGLE QUOTATION MARK |&#x00AB; |C2AB |left guillemet +
+chevrons (in typography)
+|» |RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK |&#x00BB; |C2BB |right guillemet
+|‹ |SINGLE LEFT-POINTING ANGLE QUOTATION MARK |&#x2039; |E280B9 |left pointing single guillemet
+|› |SINGLE RIGHT-POINTING ANGLE QUOTATION MARK |&#x203A; |E280BA |right pointing single guillemet
 |¹ |SUPERSCRIPT ONE |&#x00B9; |C2B9 |
 |² |SUPERSCRIPT TWO |&#x00B2; |C2B2 |
 |³ |SUPERSCRIPT THREE |&#x00B3; |C2B3 |
@@ -48,5 +61,14 @@ in traditional typography, the thinnest space available
 |₉ |SUBSCRIPT NINE |&#x2089; |E28289 |
 |… |HORIZONTAL ELLIPSIS |&#x2026; |E280A6 |
 |⋮ |VERTICAL ELLIPSIS |&#x22EE; |E28BAE |
+|✓ |CHECK MARK |&#x2713; |E29C93 |
+|✔ |HEAVY CHECK MARK |&#x2714; |E29C94 |
+|🗸 |LIGHT CHECK MARK |&#x1F5F8; |F09F97B8 |
+|✗ |BALLOT X |&#x2717; |E29C97 |
+|✘ |HEAVY BALLOT X |&#x2718; |E29C98 |
+|❌ |CROSS MARK |&#x274C; |E29D8C |
+|⭕ |HEAVY LARGE CIRCLE |&#x2B55; |E2AD95 |
+|👍 |THUMBS UP SIGN |&#x1F44D; |F09F918D |
+|👎 |THUMBS DOWN SIGN |&#x1F44E; |F09F918E |
 |ğ |LATIN SMALL LETTER G WITH BREVE |&#x011F; |C49F |This one is for Gizem
 |===
