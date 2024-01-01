@@ -8,20 +8,20 @@
 +
 **UND**
 . **Der Patient weist mindestens ZWEI der folgenden klinischen oder Labormerkmale einer generalisierten Infektion auf:**
-* Temperaturinstabilität, Fieber (> 38 °C) oder Hypothermie (< 36,5 °C)
-* Neue/häufigere Bradykardie-Episoden (<80/min) oder ungeklärte Tachykardie (>200/min)
-* Beeinträchtigte periphere Durchblutung (Rekapillarisierungszeit von > 3s oder marmorierte Haut oder Kern-/Peripherietemperaturunterschied > 2 °C)
-* Neue/häufigere Episoden von Apnoe (>20s) oder Anstieg des Sauerstoffbedarfs oder der Beatmungsunterstützung
+* Temperaturinstabilität, Fieber (> 38 °C) oder Hypothermie (< 36,5 °C)
+* Neue/häufigere Bradykardie-Episoden (< 80/min) oder ungeklärte Tachykardie (> 200/min)
+* Beeinträchtigte periphere Durchblutung (Rekapillarisierungszeit von > 3 s oder marmorierte Haut oder Kern-/Peripherietemperaturunterschied > 2 °C)
+* Neue/häufigere Episoden von Apnoe (> 20 s) oder Anstieg des Sauerstoffbedarfs oder der Beatmungsunterstützung
 * Intoleranz gegenüber enteraler Ernährung, aufgeblähtes Abdomen oder Ileus
 * Irritabilität, Lethargie, Apathie oder instabiler Allgemenzustand
-* Ungeklärte metabolische Azidose (Basenüberschuss < -10 mmol/L; <-10 mEq/L)
-* Neue und ungeklärte Hyperglykämie (> 140 mg/dl; > 7,8 mmol/L) oder Hypoglykämie (< 40 mg/dl; <2,2 mmol/L)
+* Ungeklärte metabolische Azidose (Basenüberschuss < -10 mmol/l; (< -10 mEq/l)
+* Neue und ungeklärte Hyperglykämie (> 140 mg/dl; > 7,8 mmol/l) oder Hypoglykämie (< 40 mg/dl; < 2,2 mmol/l)
 * Mindestens einer der folgenden Laborbefunde:
-** Thrombozytenzahl von < 100 × 10^9^/L (<100 × 10^3^/μL)
-** Leukozyten < 4 × 10^9^/L oder > 20 × 10^9^/L (< 4 × 10^3^/μL oder > 20 × 10^3^/μL)
-** CRP > 10 mg/L (> 1 mg/dL)
-** Procalcitonin ≥ 2μg/L (2 ng/mL; 200 ng/dL)
-** I/T-Ratio > 0,2 (Verhältnis von unreifen Granulozyten zu den gesamten Granulozyten)
+** Thrombozytenzahl von < 100 × 10⁹/l (< 100 × 10³/μl)
+** Leukozyten < 4 × 10⁹/l oder > 20 × 10⁹/l (< 4 × 10³/μl oder > 20 × 10³/μl)
+** CRP > 10 mg/l (> 1 mg/dl)
+** Procalcitonin ≥ 2 μg/l (≥ 2 ng/ml oder ≥ 200 ng/dl)
+** I/T-Ratio > 0,2 (Verhältnis von unreifen Granulozyten zu den gesamten Granulozyten)
 ** Erhöhte Werte von Interleukin (IL) 6 oder 8
 ****
 

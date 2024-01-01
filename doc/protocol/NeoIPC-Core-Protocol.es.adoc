@@ -213,7 +213,7 @@ Ejemplo de lista de seudonimización
 |1 | | | | |
 |2 | | | | |
 |3 | | | | |
-|... | | | | |
+|⋮ | | | | |
 |===
 
 <<<
@@ -585,7 +585,7 @@ La leche materna enriquecida se considera leche materna.
 Los días en los que no se aplicó ninguna dosis entre la primera y la última dosis (por ejemplo, dosis omitidas debido a niveles altos del fármaco en la monitorización terapéutica de fármacos) se cuentan como si se hubiera aplicado una dosis.
 Los días posteriores a la última dosis no se cuentan independientemente del nivel de fármaco medido o supuesto en el paciente.] cuando el lactante recibió (cualquier) antibiótico sistémico.
 Sólo se puede registrar un día de antibiótico por día, lo que significa que un día en el que el paciente recibió varios antibióticos se sigue contando como un día de antibiótico.
-[[data-dictionary-patient-master-data-surveillance-end-antibiotic-substance-days]]Días de antibiótico, por sustancia 1,2,3,...:: El número acumulado de díasfootnote:ab-days-comment[] en los que el lactante recibió una sustancia antibiótica sistémica especificada.
+[[data-dictionary-patient-master-data-surveillance-end-antibiotic-substance-days]]Días de antibiótico, por sustancia 1, 2, 3, …:: El número acumulado de díasfootnote:ab-days-comment[] en los que el lactante recibió una sustancia antibiótica sistémica especificada.
 Ej: Días gentamicina
 
 [#data-dictionary-surgical-procedure]
@@ -759,9 +759,9 @@ O
 O
 * inicio de ventilación mecánica invasiva (incluido el cambio de soporte ventilatorio no invasivo)
 
-...que no mejora en menos de 2 días::: ...que no mejore en un plazo inferior a 2 días.
+… que no mejora en menos de 2 días::: El estado mencionado no debe mejorar en dos días.
 
-...después de al menos 2 días de estabilidad o mejoría::: Se requiere un periodo de referencia estable o de mejoría de al menos dos días antes de que se produzca la condición mencionada.
+… después de al menos 2 días de estabilidad o mejoría::: Se requiere un periodo de referencia estable o de mejoría de al menos dos días antes de que se produzca la condición mencionada.
 
 NOTE: Para cumplir los criterios de neumonía adquirida en el hospital asociada a un dispositivo, los pacientes deben estar ventilados durante al menos 4 días naturales (el día 1 es el día de inicio de la ventilación invasiva/no invasiva). La fecha más temprana del evento es el día 3 de ventilación.
 --

@@ -213,7 +213,7 @@ NOTE: To create a pseudonymisation list you can use the templates (excel spreads
 |1 | | | | |
 |2 | | | | |
 |3 | | | | |
-|... | | | | |
+|⋮ | | | | |
 |===
 
 <<<
@@ -586,7 +586,7 @@ Fortified breast milk is considered as breast milk.
 Days where no doses were applied between the first and the last dose (e.g., skipped doses because of high drug levels in therapeutic drug monitoring) are counted as if a dose was applied.
 Days after the last dose are not counted irrespective of the measured or assumed drug level in the patient.] when the infant received (any) systemic antibiotics.
 Only one antibiotic day can be recorded per day, which means that a day when the patient received multiple antibiotics is still counted as one antibiotic day.
-[[data-dictionary-patient-master-data-surveillance-end-antibiotic-substance-days]]Antibiotic days, per substance 1,2,3,...:: The cumulative number of daysfootnote:ab-days-comment[] when the infant received a specified systemic antibiotic substance.
+[[data-dictionary-patient-master-data-surveillance-end-antibiotic-substance-days]]Antibiotic days, per substance 1, 2, 3, …:: The cumulative number of daysfootnote:ab-days-comment[] when the infant received a specified systemic antibiotic substance.
 Exp.: Gentamicin days
 
 [#data-dictionary-surgical-procedure]
@@ -750,7 +750,7 @@ If the infant died, was discharged, or transferred before the end of the five-da
 [[data-dictionary-pneumonia-specific-data-increase-in-respiratory-support]]Beginning or Increase in Respiratory Support::
 +
 --
-New initiation of respiratory support or escalation of existing level of respiratory support...:::
+New initiation of respiratory support or escalation of existing level of respiratory support …:::
 +
 * Increase in need for FiO2 ≥ 0.25 (25 points) within 24 hours (daily minimum FiO2 values must be taken into account here)
 +
@@ -760,9 +760,9 @@ OR
 OR
 * begin of invasive mechanical ventilation (including switch from non-invasive ventilatory support)
 
-...that does not improve within less than 2 days::: The above-mentioned condition should not improve within two days.
+… that does not improve within less than 2 days::: The above-mentioned condition should not improve within two days.
 
-...after at least 2 days of stability or improvement::: A stable or improving baseline period of at least two days is required before the above condition occurs.
+… after at least 2 days of stability or improvement::: A stable or improving baseline period of at least two days is required before the above condition occurs.
 
 NOTE: To meet the criteria of device associated hospital-acquired pneumonia, patients must be ventilated for at least 4 calendar days (day 1 is the day invasive/non-invasive ventilation starts). The earliest date of the event is day 3 of ventilation.
 --
