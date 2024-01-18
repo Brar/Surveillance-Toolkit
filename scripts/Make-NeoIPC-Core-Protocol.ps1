@@ -1,6 +1,10 @@
 [CmdletBinding(DefaultParameterSetName = 'Build')]
 param(
     [Parameter(ParameterSetName = 'Build', Position = 0)]
+    [ArgumentCompleter({
+        param($commandName, $parameterName, $wordToComplete, $commandAst,$fakeBoundParameters)
+        [CultureInfo]::GetCultures([System.Globalization.CultureTypes]::AllCultures) | Where-Object { $_.Name -like "$wordToComplete*" } | ForEach-Object { $_.Name }
+    })]
     [CultureInfo[]]$TargetCultures,
     [Parameter(ParameterSetName = 'Build')]
     [switch]$Release,
@@ -37,6 +41,15 @@ $docBookFileName = [System.IO.Path]::ChangeExtension($protocolFileName, 'xml')
 if ($null -eq $TargetCultures) {
     $TargetCultures = Get-Item "$protocolDir/NeoIPC-Core-Protocol.*adoc" |
     ForEach-Object { [CultureInfo]($_.Name -replace 'NeoIPC-Core-Protocol\.?([^.]*)\.adoc','$1') }
+}
+else {
+    foreach ($c in $TargetCultures) {
+        $p = Join-Path -Path $protocolDir -ChildPath "NeoIPC-Core-Protocol.$c.adoc"
+        if (-not (Test-Path -LiteralPath $p -PathType Leaf)) {
+            Write-Error "File '$p' does not exist."
+            exit 1
+        }
+    }
 }
 
 if ($Clean) {

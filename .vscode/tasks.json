@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "NeoIPC build documentation",
+            "label": "Build NeoIPC documentation",
             "type": "shell",
             "command": "${workspaceFolder}/scripts/Make-NeoIPC-Core-Protocol.ps1",
             "args": [
@@ -74,6 +74,20 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "Cleanup NeoIPC documentation build",
+            "type": "shell",
+            "command": "${workspaceFolder}/scripts/Make-NeoIPC-Core-Protocol.ps1",
+            "args": [
+                "-Clean",
+                "-Verbose"
+            ],
+            "group": {
+                "kind": "none",
+                "isDefault": false
+            },
+            "problemMatcher": []
         }
     ]
 }
