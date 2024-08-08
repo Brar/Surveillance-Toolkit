@@ -441,7 +441,7 @@ La fecha más temprana del evento es el día 3 de ventilación.
 |2 Sin dispositivo, estable Día base 1
 |3 Sin dispositivo, estable Día de referencia 2
 |4 |Deterioro ==> CPAP |[.green]#☑# (día infección)
-|5 Sin mejoría, CPAP continúa |
+|5 |Sin mejoría, CPAP continúa |
 |===
 
 .neumonía adquirida en el hospital - asociada a dispositivo

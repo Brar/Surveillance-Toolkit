@@ -441,7 +441,7 @@ The earliest date of the event is day 3 of ventilation.
 |2 |No device, stable |Baseline day 1
 |3 |No device, stable |Baseline day 2
 |4 |Deteriorating ==> CPAP |[.green]#☑# (infection day)
-|5 No improvement, CPAP continues |
+|5 |No improvement, CPAP continues |
 |===
 
 .Hospital-acquired pneumonia - device associated
