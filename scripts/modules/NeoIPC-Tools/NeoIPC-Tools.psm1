@@ -683,3 +683,219 @@ function New-PathogenList {
         }
     }
 }
+
+function Test-ChildObject {
+    param (
+        [Parameter(Position=0, Mandatory)]
+        [System.Management.Automation.OrderedHashtable]$Metadata,
+        [Parameter(Position=1, Mandatory, ValueFromPipeline)]
+        [string[]]$ChildObjectNames,
+        [switch]$Throw
+    )
+    foreach ($childObjectName in $ChildObjectNames) {
+        if (-not $Metadata.ContainsKey($childObjectName)) {
+            if ($Throw) {
+                throw "The metadata do not contain the required child object '$childObjectName'"
+            }
+            return $false
+        }
+    }
+    return $true
+}
+
+function Get-ChildObject {
+    [CmdletBinding()]
+    param (
+        [Parameter(Position=0, Mandatory, ValueFromPipeline)]
+        [System.Management.Automation.OrderedHashtable]$Metadata,
+        [Parameter(Position=1, ParameterSetName='Extract single object')]
+        [string[]]$ChildObjectNames,
+        [Parameter(ParameterSetName='Extract single object')]
+        [switch]$ThrowIfMissing,
+        $VerbosePreference = $PSCmdlet.GetVariableValue('VerbosePreference')
+    )
+    if ($ChildObjectNames) {
+        foreach ($n in $ChildObjectNames) {
+            if (-not (Test-ChildObject -Metadata $Metadata -ChildObjectName $n -Throw:$ThrowIfMissing.IsPresent)) {
+                return
+            }
+            Write-Output [PSCustomObject]@{ Name = $n; Value = $Metadata[$n]}
+        }
+    }
+    else {
+        foreach ($key in ($Metadata.Keys | Sort-Object)) {
+            Write-Output ([PSCustomObject]@{ Name = $key; Value = $Metadata[$key]})
+        }
+    }
+}
+
+function Get-ObjectProperties {
+    param (
+        [Parameter(Position=0, Mandatory)]
+        [string]$ObjectName,
+        [switch]$AddIdProperty,
+        [switch]$AddSharingProperties
+    )
+    $props = [System.Collections.ArrayList]::new()
+    if ($AddIdProperty ) {
+        $props.Add(@{name='id';expression={$_['id']}}) > $null
+    }
+    switch -exact -casesensitive ($ObjectName) {
+        'attributes' {
+            $properties = @(
+                'code'
+                'name'
+                'shortName'
+                'description'
+                'categoryAttribute'
+                'categoryOptionAttribute'
+                'categoryOptionComboAttribute'
+                'categoryOptionGroupAttribute'
+                'categoryOptionGroupSetAttribute'
+                'constantAttribute'
+                'dataElementAttribute'
+                'dataElementGroupAttribute'
+                'dataElementGroupSetAttribute'
+                'dataSetAttribute'
+                'documentAttribute'
+                'eventChartAttribute'
+                'eventReportAttribute'
+                'indicatorAttribute'
+                'indicatorGroupAttribute'
+                'legendSetAttribute'
+                'mandatory'
+                'mapAttribute'
+                'optionAttribute'
+                'optionSetAttribute'
+                'organisationUnitAttribute'
+                'organisationUnitGroupAttribute'
+                'organisationUnitGroupSetAttribute'
+                'programAttribute'
+                'programIndicatorAttribute'
+                'programStageAttribute'
+                'relationshipTypeAttribute'
+                'sectionAttribute'
+                'sqlViewAttribute'
+                'trackedEntityAttributeAttribute'
+                'trackedEntityTypeAttribute'
+                'unique'
+                'userAttribute'
+                'userGroupAttribute'
+                'validationRuleAttribute'
+                'validationRuleGroupAttribute'
+                'valueType'
+                'visualizationAttribute')
+        }
+        'dataElements' {
+            $properties = @(
+                'code'
+                'name'
+                'shortName'
+                'description'
+                'aggregationType'
+                @{name='categoryCombo_code';expression={
+                    if ($categoryComboMap -and $categoryComboMap.Contains($_.categoryCombo.id)) {
+                        Write-Debug "Mapping category combo id '$($_.categoryCombo.id)' to code '$($categoryComboMap[$_.categoryCombo.id])'"
+                        $categoryComboMap[$_.categoryCombo.id]
+                    } else {
+                        Write-Warning "Failed to map a code for the category combo with the id '$($_.categoryCombo.id)'."
+                        $_.categoryCombo.id
+                    }
+                }}
+                'domainType'
+                'valueType'
+                'zeroIsSignificant')
+        }
+        'optionSets' {
+            $properties = @(
+                'code'
+                'name'
+                'valueType')
+        }
+        Default { $properties = @()}
+    }
+    foreach ($prop in $properties) {
+        if ($prop -is [string]) {
+            $props.Add(@{name=$prop;expression=$prop}) > $null
+        } else {
+            $props.Add($prop) > $null
+        }
+    }
+    if ($AddSharingProperties ) {
+        $props.Add(@{name='sharing_external';expression={$_.sharing.external}}) > $null
+        $props.Add(@{name='sharing_public';expression={$_.sharing.public}}) > $null
+        $props.Add(@{name='sharing_owner';expression={
+            if ($userMap -and $userMap.Contains($_.sharing.owner)) {
+                Write-Debug "Mapping user id '$($_.sharing.owner)' to code '$($userMap[$_.sharing.owner])'"
+                $userMap[$_.sharing.owner]
+            } else {
+                Write-Warning "Failed to map a code for the user with the id '$($_.sharing.owner)'."
+                $_.sharing.owner
+            }
+        }}) > $null
+    }
+    return $props.ToArray()
+}
+
+function Initialize-ObjectDirectory {
+    [CmdletBinding(SupportsShouldProcess)]
+    param (
+        [Parameter(Position=0, Mandatory)]
+        [string]$BasePath,
+        [Parameter(Position=1, Mandatory)]
+        [string[]]$ObjectNames,
+        $ConfirmPreference = $PSCmdlet.GetVariableValue('ConfirmPreference'),
+        $WhatIfPreference = $PSCmdlet.GetVariableValue('WhatIfPreference'),
+        $VerbosePreference = $PSCmdlet.GetVariableValue('VerbosePreference')
+    )
+    foreach ($objectName in $ObjectNames) {
+        $dir = Join-Path $BasePath -ChildPath $objectName
+
+        if (-not (Test-Path -LiteralPath $dir -PathType Container)) {
+            Write-Verbose "Creating directory $dir"
+            New-Item -Path $dir -ItemType Directory > $null
+        }
+        return $dir
+    }
+}
+
+function Get-CodeMap {
+    [CmdletBinding()]
+    param (
+        [Parameter(Position=0, Mandatory, ValueFromPipeline)]
+        [Hashtable]$InputObject,
+        [switch]$Reverse,
+        $DebugPreference = $PSCmdlet.GetVariableValue('DebugPreference')
+    )
+    begin {
+        $map = @{}
+    }
+    process {
+        if (-not $InputObject.Contains('id')) {
+            Write-Debug "The input object does not contain an id key. Skipping."
+            return
+        }
+        $id = $InputObject['id']
+        if (-not $id) {
+            Write-Debug "The input object does not contain a valid id. Skipping."
+            return
+        }
+        if (-not $InputObject.Contains('code')) {
+            Write-Debug "The input object does not contain a code key. Skipping."
+            return
+        }
+        $code = $InputObject['code']
+        if (-not $code) {
+            Write-Debug "The input object does not contain a valid code. Skipping."
+            return
+        }
+        if ($Reverse) {
+            $map[$code] = $id
+        } else {
+            $map[$id] = $code
+        }
+    }
+    end {
+        return $map
+    }
+}

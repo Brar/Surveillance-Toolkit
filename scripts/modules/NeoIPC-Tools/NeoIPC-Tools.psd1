@@ -22,7 +22,7 @@ Author = 'Brar Piening'
 CompanyName = 'NeoIPC Project'
 
 # Copyright statement for this module
-Copyright = '2023 NeoIPC Project.'
+Copyright = '2024 NeoIPC Project.'
 
 # Description of the functionality provided by this module
 Description = 'A set of PowerShell tools for the NeoIPC Surveillance Toolkit'
@@ -72,6 +72,12 @@ FunctionsToExport = @(
     'Import-Translations'
     'New-AntibioticsList'
     'New-PathogenList'
+    'Test-ChildObject'
+    'Get-ChildObject'
+    'Get-Properties'
+    'Initialize-ObjectDirectory'
+    'Get-CodeMap'
+    'Get-ObjectProperties'
 )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
