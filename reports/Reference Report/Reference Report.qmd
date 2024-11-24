@@ -1,0 +1,29 @@
+---
+title: "NeoIPC Reference Report"
+format: html
+editor: visual
+echo: false
+params:
+  reportingPeriodFrom: NULL
+  reportingPeriodTo: NULL
+  birthWeightFrom: NULL
+  birthWeightTo: NULL
+  gestationalAgeFrom: NULL
+  gestationalAgeTo: NULL
+  countryFilter: NULL
+  hospitalFilter: NULL
+  testUnitFilter: true
+  defaultPatientFilter: true
+  token: NULL
+---
+
+```{r Pre-Setup}
+locale = "en"
+invisible(Sys.setlocale(category = "LC_ALL", locale = "en_GB.utf8"))
+```
+
+{{< include _setup.qmd >}}
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.

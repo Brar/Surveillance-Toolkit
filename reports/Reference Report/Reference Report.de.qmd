@@ -1,0 +1,68 @@
+---
+title: "NeoIPC Surveillance Referenzauswertung"
+format: html
+editor: visual
+echo: false
+params:
+  reportingPeriodFrom: NULL
+  reportingPeriodTo: NULL
+  birthWeightFrom: NULL
+  birthWeightTo: NULL
+  gestationalAgeFrom: NULL
+  gestationalAgeTo: NULL
+  countryFilter: NULL
+  hospitalFilter: NULL
+  testUnitFilter: true
+  defaultPatientFilter: true
+  token: NULL
+---
+
+```{r Pre-Setup}
+locale = "de"
+invisible(Sys.setlocale(category = "LC_ALL", locale = "de_DE.utf8"))
+```
+
+{{< include _setup.qmd >}}
+
+*Erstellt: `{r} format(Sys.time(), format = "%x %X", tz = "UTC", usetz = TRUE)`*
+
+```{r Filtering}
+countries <- data$metadata$countries |>
+  dplyr::filter(rlang::is_null(countryFilter) | code %in% countryFilter)
+
+hospitals <- data$metadata$hospitals |>
+  dplyr::filter(rlang::is_null(hospitalFilter) | code %in% hospitalFilter) |>
+  dplyr::semi_join(countries, dplyr::join_by(country_code == code))
+
+departments <- data$metadata$departments |>
+  dplyr::semi_join(hospitals, dplyr::join_by(hospital == key))
+
+enrollments <- data$enrollments |>
+  dplyr::semi_join(departments, dplyr::join_by(enrollment_department == key))
+
+
+```
+
+Dies ist die Referenzauswertung der [NeoIPC Surveillance](https://neoipc.org/surveillance/ "Link zum Surveillance-Bereich der NeoIPC Website"), die wir erstellt haben, um Sie dabei zu unterstützen, die Infektionsprävention in Ihrer neonatologischen Abteilung anhand von Vergleichswerten zu beurteilen und gegebenenfalls Auffälligkeiten und Verbesserungspotenziale zu identifizieren, sofern Sie über eigene Vergleichsdaten verfügen, die mit der selben oder einer vergleichbaren Methode erhoben wurden.
+
+Um auch Einrichtungen mit geringen Ressourcen eine kontinuierliche Surveillance zu ermöglichen und um ein Benchmarking anhand einer vergleichbaren Patientengruppe durchführen zu können, beschränkt sich die NeoIPC Surveillance auf neonatologische Hochrisikopatienten sowie auf ausgewählte Risikofaktoren und Infektionen. Details dazu finden Sie bei Bedarf im [NeoIPC Surveillanceprotokoll](https://neoipc.org/wp-content/uploads/2023/08/NeoIPC-Surveillance_Core-Module-Protocol.pdf "Link zum NeoIPC Surveillanceprotokoll (pdf, englisch)").
+
+## Risikofaktoren und Schutzfaktoren
+
+Wenn wir aus Sicht der Infektionsprävention von Hochrisikopatienten sprechen, meinen wir, dass es bei diesen Patienten Merkmale gibt, die das Infektionsrisiko erhöhen. Dabei kann es sich sowohl um unveränderliche patienteneigene Merkmale handeln als auch um mehr oder weniger beeinflussbare Merkmale, die sich aus der oft komplexen Behandlung dieser Patienten ergeben.
+
+Wenn wir diese Merkmale epidemiologisch beobachten, nennen wir sie oft Risikofaktoren und manchmal auch Schutzfaktoren (protektive Faktoren), was dann als Umkehrung eines Risikofaktors angesehen wird. Dies ist jedoch überflüssig, da der Begriff Risikofaktor eigentlich nur aussagt, dass dieses Merkmal das Risiko beeinflusst (erhöht oder verringert).
+
+Bei neonatologischen Patienten sind z. B. die Dauer der Schwangerschaft bis zur Geburt (Gestationsalter), das Körpergewicht bei der Geburt (Geburtsgewicht), aber auch das Alter nach der Geburt (postnatales Alter) prominente patienteneigene Merkmale, die das Risiko, eine Infektion zu entwickeln, beeinflussen (dispositionelle Risikofaktoren).
+
+Beispiele für in gewissen Grenzen beeinflussbare Merkmale, die sich ebenfalls auf das Infektionsrisiko auswirken können (expositionelle Risikofaktoren), sind dagegen Gefäßzugänge, Beatmung und Ernährung mit Muttermilch sowie die Dauer, während der diese Merkmale vorhanden sind.
+
+Im Folgenden werden die im Rahmen der NeoIPC Surveillance beobachteten Risikofaktoren und ihre Verteilung in den am System beteiligten Partnerabteilungen dargestellt, wobei die dispositionellen Risikofaktoren eher geeignet sind, die Vergleichbarkeit der eigenen Patientenpopulation mit der Population in der NeoIPC Referenzdatenbank zu beurteilen, während die expositionellen Risikofaktoren möglicherweise helfen können, die Prozesse in der eigenen Abteilung (z.B. Indikationsstellung für Therapien) zu beurteilen.
+
+```{r}
+data$patients |>
+  ggplot(aes(y = NEOIPC_TEA_BIRTH_WEIGHT)) +
+  geom_boxplot() +
+  xlab("Site") +
+  ylab("Birth weight")
+```
