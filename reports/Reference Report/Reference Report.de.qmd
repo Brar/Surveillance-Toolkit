@@ -27,18 +27,41 @@ invisible(Sys.setlocale(category = "LC_ALL", locale = "de_DE.utf8"))
 *Erstellt: `{r} format(Sys.time(), format = "%x %X", tz = "UTC", usetz = TRUE)`*
 
 ```{r Filtering}
-countries <- data$metadata$countries |>
-  dplyr::filter(rlang::is_null(countryFilter) | code %in% countryFilter)
+countries <- data$metadata$countries
+
+if(!rlang::is_null(countryFilter))
+  countries <- countries |>
+    dplyr::filter(code %in% countryFilter)
 
 hospitals <- data$metadata$hospitals |>
-  dplyr::filter(rlang::is_null(hospitalFilter) | code %in% hospitalFilter) |>
   dplyr::semi_join(countries, dplyr::join_by(country_code == code))
 
+if(!rlang::is_null(hospitalFilter))
+  hospitals <- hospitals |>
+    dplyr::filter(code %in% hospitalFilter)
+
 departments <- data$metadata$departments |>
-  dplyr::semi_join(hospitals, dplyr::join_by(hospital == key))
+    dplyr::filter(is.na(hospital) | hospital %in% hospitals$key)
+
+if(testUnitFilter)
+  departments <- departments |>
+      dplyr::filter(isTestUnit == FALSE)
 
 enrollments <- data$enrollments |>
   dplyr::semi_join(departments, dplyr::join_by(enrollment_department == key))
+
+# don't include patients that aren't enrolled in one of the selected sites
+patients <- data$patients |>
+  dplyr::semi_join(enrollments, dplyr::join_by(key == patient)) |>
+  dplyr::mutate(decimal_gestational_age = NeoIPC_TEA_TOTAL_GESTATION_DAYS / 7)
+
+if(defaultPatientFilter)
+  patients <- patients |>
+      dplyr::filter(NEOIPC_TEA_BIRTH_WEIGHT < 1500 | NeoIPC_TEA_TOTAL_GESTATION_DAYS < 224)
+
+# don't include enrolments of patients that don't meet the inclusion criteria
+enrollments <- enrollments |>
+  dplyr::semi_join(patients, dplyr::join_by(patient == key))
 
 
 ```
@@ -60,9 +83,41 @@ Beispiele für in gewissen Grenzen beeinflussbare Merkmale, die sich ebenfalls a
 Im Folgenden werden die im Rahmen der NeoIPC Surveillance beobachteten Risikofaktoren und ihre Verteilung in den am System beteiligten Partnerabteilungen dargestellt, wobei die dispositionellen Risikofaktoren eher geeignet sind, die Vergleichbarkeit der eigenen Patientenpopulation mit der Population in der NeoIPC Referenzdatenbank zu beurteilen, während die expositionellen Risikofaktoren möglicherweise helfen können, die Prozesse in der eigenen Abteilung (z.B. Indikationsstellung für Therapien) zu beurteilen.
 
 ```{r}
-data$patients |>
+
+bwBoxPlot <- patients |>
   ggplot(aes(y = NEOIPC_TEA_BIRTH_WEIGHT)) +
   geom_boxplot() +
-  xlab("Site") +
-  ylab("Birth weight")
+  ggtitle(data$metadata$trackedEntityAttributes |> filter(code == "NEOIPC_TEA_BIRTH_WEIGHT") |> pull(displayName),
+          "(Gramm)") + 
+  theme(axis.title=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        panel.grid.major.x=element_blank(),
+        panel.grid.minor.x=element_blank())
+
+gaBoxPlot <- patients |>
+  ggplot(aes(y = decimal_gestational_age)) +
+  geom_boxplot() +
+  ggtitle(data$metadata$trackedEntityAttributes |> filter(code == "NEOIPC_TEA_GEST_AGE") |> pull(displayName),
+          "(Wochen)") + 
+  theme(axis.title=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        panel.grid.major.x=element_blank(),
+        panel.grid.minor.x=element_blank())
+
+bmBarChart <- patients |>
+  dplyr::group_by(NEOIPC_TEA_DELIVERY_MODE) |>
+  dplyr::summarise(percent = n() / nrow(patients)) |>
+  left_join(data$metadata$deliveryModes, join_by("NEOIPC_TEA_DELIVERY_MODE" == "code")) |>
+  select(displayName, percent) |>
+  ggplot(aes(y = percent, x = displayName)) +
+  geom_col() +
+  ggtitle(data$metadata$trackedEntityAttributes |> filter(code == "NEOIPC_TEA_DELIVERY_MODE") |> pull(displayName)) +
+  scale_y_continuous(labels = label_percent()) +
+  coord_flip() + 
+  theme(axis.title = element_blank())
+
+
+(gaBoxPlot + bwBoxPlot) / bmBarChart
 ```
