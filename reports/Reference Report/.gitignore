@@ -58,5 +58,6 @@ rsconnect/
 Reference\ Report*.pdf
 Reference\ Report*.html
 Reference\ Report*_files/**
+Reference-Report*_files/**
 
 /.quarto/
