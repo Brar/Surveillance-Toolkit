@@ -80,7 +80,7 @@ Bei neonatologischen Patienten sind z. B. die Dauer der Schwangerschaft bis zur 
 
 Beispiele für in gewissen Grenzen beeinflussbare Merkmale, die sich ebenfalls auf das Infektionsrisiko auswirken können (expositionelle Risikofaktoren), sind dagegen Gefäßzugänge, Beatmung und Ernährung mit Muttermilch sowie die Dauer, während der diese Merkmale vorhanden sind.
 
-Im Folgenden werden die im Rahmen der NeoIPC Surveillance beobachteten Risikofaktoren und ihre Verteilung in den am System beteiligten Partnerabteilungen dargestellt, wobei die expositionellen Risikofaktoren möglicherweise helfen können, die Prozesse in der eigenen Abteilung (z.B. Indikationsstellung für Therapien) zu beurteilen, während die dispositionellen Risikofaktoren eher geeignet sind, die Vergleichbarkeit der eigenen Patientenpopulation mit der Population in der NeoIPC Referenzdatenbank zu beurteilen. Sollte sich die Zusammensetzung der Patientenpopulation die Sie mit den in der NeoIPC Surveillance Referenzauswertung dargestellten Raten vergleichen möchten, sich im Hinblick auf die gezeigten Merkmale deutlich unterscheiden, ist ein Benchmarking nur eingeschränkt möglich und die Unterschiede und ihre möglichen Auswirkungen müssen bei der Interpretation sorgfältig berücksichtgt werden.
+Im Folgenden werden die im Rahmen der NeoIPC Surveillance beobachteten Risikofaktoren und ihre Verteilung in den am System beteiligten Partnerabteilungen dargestellt, wobei die expositionellen Risikofaktoren möglicherweise helfen können, die Prozesse in der eigenen Abteilung (z.B. Indikationsstellung für Therapien) zu beurteilen, während die dispositionellen Risikofaktoren eher geeignet sind, die Vergleichbarkeit der eigenen Patientenpopulation mit der Population in der NeoIPC Referenzdatenbank zu beurteilen. Je mehr die Zusammensetzung der Patientenpopulation die Sie mit den in der NeoIPC Surveillance Referenzauswertung dargestellten Raten vergleichen möchten, sich im Hinblick auf die gezeigten Merkmale unterscheidt, desto eingeschränkter ist ein Benchmarking möglich. Unterschiede und ihre möglichen Auswirkungen müssen bei der Interpretation stets sorgfältig berücksichtgt werden.
 
 ```{r}
 label_week <- function(x)
@@ -102,8 +102,9 @@ gaDensityPlot <- patients |>
         panel.grid.minor.x=element_blank())
 
 gaBoxPlot <- patients |>
-  ggplot(aes(y = decimal_gestational_age)) +
+  ggplot(aes(x=factor(0), y = decimal_gestational_age)) +
   geom_boxplot() +
+  stat_summary(fun = "mean", geom = "point", shape = 23, size = 3, fill = "white") +
   scale_y_continuous(labels = label_week) +
   coord_flip() +
   theme(axis.title=element_blank(),
@@ -125,8 +126,9 @@ bwDensityPlot <- patients |>
         panel.grid.minor.x=element_blank())
 
 bwBoxPlot <- patients |>
-  ggplot(aes(y = NEOIPC_TEA_BIRTH_WEIGHT)) +
+  ggplot(aes(x=factor(0), y = NEOIPC_TEA_BIRTH_WEIGHT)) +
   geom_boxplot() +
+  stat_summary(fun = "mean", geom = "point", shape = 23, size = 3, fill = "white") +
   scale_y_continuous(labels = label_gram) +
   coord_flip() +
   theme(axis.title=element_blank(),
