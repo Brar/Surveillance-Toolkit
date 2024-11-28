@@ -53,7 +53,13 @@ enrollments <- data$enrollments |>
 # don't include patients that aren't enrolled in one of the selected sites
 patients <- data$patients |>
   dplyr::semi_join(enrollments, dplyr::join_by(key == patient)) |>
-  dplyr::mutate(decimal_gestational_age = NeoIPC_TEA_TOTAL_GESTATION_DAYS / 7)
+  dplyr::mutate(
+    decimal_gestational_age = NeoIPC_TEA_TOTAL_GESTATION_DAYS / 7,
+    multiple_birth_category = ordered(case_when(
+      NEOIPC_TEA_SIBLINGS == 1 ~ "Single birth",
+      NEOIPC_TEA_SIBLINGS == 2 ~ "Twins",
+      NEOIPC_TEA_SIBLINGS >= 3 ~ "Triplet or highers"
+      ), levels = c("Single birth","Twins","Triplet or highers")))
 
 if(defaultPatientFilter)
   patients <- patients |>
@@ -137,18 +143,52 @@ bwBoxPlot <- patients |>
         panel.grid.major.y=element_blank(),
         panel.grid.minor.y=element_blank())
 
-bmBarChart <- patients |>
+sexBarChart <- patients |>
+  dplyr::group_by(NEOIPC_TEA_SEX) |>
+  dplyr::summarise(percent = n() / nrow(patients)) |>
+  #left_join(data$metadata$deliveryModes, join_by("NEOIPC_TEA_SEX" == "code")) |>
+  #select(displayName, percent) |>
+  ggplot(aes(y = percent, x = NEOIPC_TEA_SEX)) +
+  geom_col(position = "dodge") +
+  ggtitle(data$metadata$trackedEntityAttributes |>
+            filter(code == "NEOIPC_TEA_SEX") |>
+            pull(displayName)) +
+  scale_y_continuous(labels = label_percent(), limits = c(0.40, 0.60), oob=rescale_none) +
+  coord_flip() +
+  theme(axis.title = element_blank())
+
+mbBarChart <- patients |>
+  dplyr::group_by(multiple_birth_category) |>
+  dplyr::summarise(percent = n() / nrow(patients)) |>
+  #left_join(data$metadata$deliveryModes, join_by("NEOIPC_TEA_SEX" == "code")) |>
+  #select(displayName, percent) |>
+  ggplot(aes(y = percent, x = multiple_birth_category)) +
+  geom_col(position = "dodge") +
+  ggtitle(data$metadata$trackedEntityAttributes |>
+            filter(code == "NEOIPC_TEA_SIBLINGS") |>
+            pull(displayName)) +
+  scale_y_continuous(labels = label_percent()) +
+  coord_flip() +
+  theme(axis.title = element_blank())
+
+dmBarChart <- patients |>
   dplyr::group_by(NEOIPC_TEA_DELIVERY_MODE) |>
   dplyr::summarise(percent = n() / nrow(patients)) |>
   left_join(data$metadata$deliveryModes, join_by("NEOIPC_TEA_DELIVERY_MODE" == "code")) |>
   select(displayName, percent) |>
   ggplot(aes(y = percent, x = displayName)) +
-  geom_col() +
-  ggtitle(data$metadata$trackedEntityAttributes |> filter(code == "NEOIPC_TEA_DELIVERY_MODE") |> pull(displayName)) +
+  geom_col(position = "dodge") +
+  ggtitle(data$metadata$trackedEntityAttributes |>
+            filter(code == "NEOIPC_TEA_DELIVERY_MODE") |>
+            pull(displayName)) +
   scale_y_continuous(labels = label_percent()) +
-  coord_flip() + 
+  coord_flip() +
   theme(axis.title = element_blank())
 
 
-gaDensityPlot / gaBoxPlot / bwDensityPlot / bwBoxPlot / bmBarChart
+gaDensityPlot / gaBoxPlot / bwDensityPlot / bwBoxPlot
+```
+
+```{r}
+sexBarChart / mbBarChart / dmBarChart
 ```
