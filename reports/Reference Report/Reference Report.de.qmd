@@ -80,31 +80,60 @@ Bei neonatologischen Patienten sind z. B. die Dauer der Schwangerschaft bis zur 
 
 Beispiele für in gewissen Grenzen beeinflussbare Merkmale, die sich ebenfalls auf das Infektionsrisiko auswirken können (expositionelle Risikofaktoren), sind dagegen Gefäßzugänge, Beatmung und Ernährung mit Muttermilch sowie die Dauer, während der diese Merkmale vorhanden sind.
 
-Im Folgenden werden die im Rahmen der NeoIPC Surveillance beobachteten Risikofaktoren und ihre Verteilung in den am System beteiligten Partnerabteilungen dargestellt, wobei die dispositionellen Risikofaktoren eher geeignet sind, die Vergleichbarkeit der eigenen Patientenpopulation mit der Population in der NeoIPC Referenzdatenbank zu beurteilen, während die expositionellen Risikofaktoren möglicherweise helfen können, die Prozesse in der eigenen Abteilung (z.B. Indikationsstellung für Therapien) zu beurteilen.
+Im Folgenden werden die im Rahmen der NeoIPC Surveillance beobachteten Risikofaktoren und ihre Verteilung in den am System beteiligten Partnerabteilungen dargestellt, wobei die expositionellen Risikofaktoren möglicherweise helfen können, die Prozesse in der eigenen Abteilung (z.B. Indikationsstellung für Therapien) zu beurteilen, während die dispositionellen Risikofaktoren eher geeignet sind, die Vergleichbarkeit der eigenen Patientenpopulation mit der Population in der NeoIPC Referenzdatenbank zu beurteilen. Sollte sich die Zusammensetzung der Patientenpopulation die Sie mit den in der NeoIPC Surveillance Referenzauswertung dargestellten Raten vergleichen möchten, sich im Hinblick auf die gezeigten Merkmale deutlich unterscheiden, ist ein Benchmarking nur eingeschränkt möglich und die Unterschiede und ihre möglichen Auswirkungen müssen bei der Interpretation sorgfältig berücksichtgt werden.
 
 ```{r}
+label_week <- function(x)
+  sprintf("%i w", x)
 
-bwBoxPlot <- patients |>
-  ggplot(aes(y = NEOIPC_TEA_BIRTH_WEIGHT)) +
-  geom_boxplot() +
-  ggtitle(data$metadata$trackedEntityAttributes |> filter(code == "NEOIPC_TEA_BIRTH_WEIGHT") |> pull(displayName),
-          "(Gramm)") + 
+label_gram <- function(x)
+  sprintf("%s g", prettyNum(x, big.mark =" "))
+
+gaDensityPlot <- patients |>
+  ggplot(aes(x = decimal_gestational_age)) +
+  geom_density() +
+  ggtitle(data$metadata$trackedEntityAttributes |>
+            filter(code == "NEOIPC_TEA_GEST_AGE") |>
+            pull(displayName)) +
   theme(axis.title=element_blank(),
-        axis.text.x=element_blank(),
-        axis.ticks.x=element_blank(),
+        axis.text=element_blank(),
+        axis.ticks=element_blank(),
         panel.grid.major.x=element_blank(),
         panel.grid.minor.x=element_blank())
 
 gaBoxPlot <- patients |>
   ggplot(aes(y = decimal_gestational_age)) +
   geom_boxplot() +
-  ggtitle(data$metadata$trackedEntityAttributes |> filter(code == "NEOIPC_TEA_GEST_AGE") |> pull(displayName),
-          "(Wochen)") + 
+  scale_y_continuous(labels = label_week) +
+  coord_flip() +
   theme(axis.title=element_blank(),
-        axis.text.x=element_blank(),
-        axis.ticks.x=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        panel.grid.major.y=element_blank(),
+        panel.grid.minor.y=element_blank())
+
+bwDensityPlot <- patients |>
+  ggplot(aes(x = NEOIPC_TEA_BIRTH_WEIGHT)) +
+  geom_density() +
+  ggtitle(data$metadata$trackedEntityAttributes |>
+            filter(code == "NEOIPC_TEA_BIRTH_WEIGHT") |>
+            pull(displayName)) +
+  theme(axis.title=element_blank(),
+        axis.text=element_blank(),
+        axis.ticks=element_blank(),
         panel.grid.major.x=element_blank(),
         panel.grid.minor.x=element_blank())
+
+bwBoxPlot <- patients |>
+  ggplot(aes(y = NEOIPC_TEA_BIRTH_WEIGHT)) +
+  geom_boxplot() +
+  scale_y_continuous(labels = label_gram) +
+  coord_flip() +
+  theme(axis.title=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        panel.grid.major.y=element_blank(),
+        panel.grid.minor.y=element_blank())
 
 bmBarChart <- patients |>
   dplyr::group_by(NEOIPC_TEA_DELIVERY_MODE) |>
@@ -119,5 +148,5 @@ bmBarChart <- patients |>
   theme(axis.title = element_blank())
 
 
-(gaBoxPlot + bwBoxPlot) / bmBarChart
+gaDensityPlot / gaBoxPlot / bwDensityPlot / bwBoxPlot / bmBarChart
 ```
