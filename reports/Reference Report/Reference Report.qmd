@@ -20,6 +20,11 @@ params:
 ```{r Pre-Setup}
 locale = "en"
 invisible(Sys.setlocale(category = "LC_ALL", locale = "en_GB.utf8"))
+trnsl <- list(
+  singleBirth <- "Single birth",
+  twins <- "Twins",
+  tripletsOrMore <- "Triplet or more"
+)
 ```
 
 {{< include _setup.qmd >}}
