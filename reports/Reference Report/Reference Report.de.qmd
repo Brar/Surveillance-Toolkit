@@ -27,6 +27,10 @@ trnsl <- list(
     singleBirth = "Einling",
     twins = "Zwillinge",
     tripletsOrMore = "Drillinge oder mehr"
+  ),
+  reportFilterStrings = list(
+    allBirthweights = "Alle Geburtsgewichte",
+    allGestationalAges = "Alle Gestationsalter"
   )
 )
 ```
@@ -34,18 +38,22 @@ trnsl <- list(
 {{< include _setup.qmd >}}
 
 Erstellt:
-: `{r} format(Sys.time(), format = "%x %X", tz = "UTC", usetz = TRUE)`
+
+:   `{r} format(Sys.time(), format = "%x %X", tz = "UTC", usetz = TRUE)`
 
 Auswertungszeitraum:
-: `{r} paste(format(reportingPeriodFrom, format = "%x"), format(reportingPeriodTo, format = "%x"), sep = " - ")`
+
+:   `{r} paste(format(reportingPeriodFrom, format = "%x"), format(reportingPeriodTo, format = "%x"), sep = " - ")`
 
 Geburtsgewichtsfilter:
-: `{r} if(birthWeightFrom == 0L && birthWeightTo == 2147483647L) "Alle Geburtsgewichte" else paste(label_gram(birthWeightFrom), label_gram(birthWeightTo), sep = " - ")`
+
+:   `{r} if(birthWeightFrom == 0L && birthWeightTo == 2147483647L) "Alle Geburtsgewichte" else paste(label_gram(birthWeightFrom), label_gram(birthWeightTo), sep = " - ")`
 
 Gestationsalterfilter:
-: `{r} if(gestationalAgeFrom == 0L && gestationalAgeTo == 2147483647L) "Alle Gestationsalter" else paste0(format_ga(c(gestationalAgeFrom, gestationalAgeTo)), collapse = " - ")`
 
-``` {r Custom report hint}
+:   `{r} if(gestationalAgeFrom == 0L && gestationalAgeTo == 2147483647L) "Alle Gestationsalter" else paste0(format_ga(c(gestationalAgeFrom, gestationalAgeTo)), collapse = " - ")`
+
+```{r Custom report hint}
 #| output: asis
 
 if(!testUnitFilter || !defaultPatientFilter){
@@ -118,42 +126,99 @@ patients <- data$patients |>
       NEOIPC_TEA_SIBLINGS == 1 ~ trnsl$multipleBirthCategories$singleBirth,
       NEOIPC_TEA_SIBLINGS == 2 ~ trnsl$multipleBirthCategories$twins,
       NEOIPC_TEA_SIBLINGS >= 3 ~ trnsl$multipleBirthCategories$tripletsOrMore
-      ), levels = unlist(trnsl$multipleBirthCategories))) |>
-  dplyr::mutate(
-    birthWeightCategory = dplyr::case_when(
-      NEOIPC_TEA_BIRTH_WEIGHT < 500 ~ "< 500g",
-      NEOIPC_TEA_BIRTH_WEIGHT < 1000 ~ "500g - 999g",
-      NEOIPC_TEA_BIRTH_WEIGHT < 1500 ~ "1 000g - 1 499g",
-      NEOIPC_TEA_BIRTH_WEIGHT >= 1500 ~ "≥ 1 500g"))
+      ), levels = unlist(trnsl$multipleBirthCategories)))
 
 if(defaultPatientFilter)
   patients <- patients |>
-      dplyr::filter(NEOIPC_TEA_BIRTH_WEIGHT < 1500 | NeoIPC_TEA_TOTAL_GESTATION_DAYS < 224)
+      filter(NEOIPC_TEA_BIRTH_WEIGHT < 1500 | NeoIPC_TEA_TOTAL_GESTATION_DAYS < 224)
 
-# don't include enrolments of patients that don't meet the inclusion criteria
+# Apply filters in reverse order to remove irrelevant entries from tables that
+# are higher in the hierarchy
 enrollments <- enrollments |>
-  dplyr::semi_join(patients, dplyr::join_by(patient == key))
+  semi_join(patients, dplyr::join_by(patient == key))
 
-sepses <- data$sepses |>
-  filter(status == "COMPLETED") |>
-  dplyr::semi_join(enrollments, dplyr::join_by(enrollment == key))
+departments <- departments |>
+  semi_join(enrollments, dplyr::join_by(key == enrollment_department))
 
+hospitals <- hospitals |>
+  semi_join(departments, dplyr::join_by(key == hospital))
+
+countries <- countries |>
+  semi_join(hospitals, dplyr::join_by(code == country_code))
+
+# filter the actual data
 department_denominators <- enrollments |>
-    dplyr::mutate(
+    mutate(
         NEOIPC_SURVEILLANCE_END_VENT_DAYS =
             NEOIPC_SURVEILLANCE_END_INV_DAYS +
             NEOIPC_SURVEILLANCE_END_NIV_DAYS,
         .before = NEOIPC_SURVEILLANCE_END_INV_DAYS) |>
-  dplyr::mutate(dplyr::across(tidyselect::ends_with("_DAYS"), ~ .x > 0, .names = "{.col}_ANY")) |>
+  mutate(across(ends_with("_DAYS"), ~ .x > 0, .names = "{.col}_ANY")) |>
   group_by(enrollment_department) |>
-  dplyr::summarise(
-    dplyr::across(
-      tidyselect::matches("_DAYS(_ANY)?$"),
+  summarise(
+    across(
+      matches("_DAYS(_ANY)?$"),
       sum,
-      .names = "{.col}_SUM"))
+      .names = "{.col}_SUM")) |>
+  rename(department = enrollment_department)
 
 total_denominators <- department_denominators |>
-  reframe(across(!"enrollment_department", sum))
+  reframe(across(!"department", sum))
+
+sepses <- data$sepses |>
+  filter(status == "COMPLETED") |>
+  semi_join(enrollments, join_by(enrollment == key))
+
+pneumonias <- data$pneumonias |>
+  filter(status == "COMPLETED") |>
+  semi_join(enrollments, join_by(enrollment == key))
+
+necs <- data$necs |>
+  filter(status == "COMPLETED") |>
+  semi_join(enrollments, join_by(enrollment == key))
+
+ssis <- data$ssis |>
+  filter(status == "COMPLETED") |>
+  semi_join(enrollments, join_by(enrollment == key))
+
+causative_pathogens <- data$causative_pathogens |>
+  semi_join(bind_rows(
+    sepses |> select(key, eventType),
+    pneumonias |> select(key, eventType),
+    necs |> select(key, eventType),
+    ssis |> select(key, eventType)
+  ), join_by(key, eventType))
+
+department_sepses <- sepses |>
+  left_join(
+    causative_pathogens |>
+      semi_join(sepses, join_by(key, eventType)) |>
+      group_by(key) |>
+      summarise(
+        maxSource = factor(max(as.integer(PATHOGEN_SOURCE)), levels = c(1,2,3)),
+        .groups = "drop"), join_by(key)) |>
+  group_by(department, bsiType, maxSource) |>
+  summarise(n = n(), .groups = "drop") |>
+  pivot_wider(
+    names_from = c(bsiType, maxSource),
+    names_expand = TRUE,
+    names_sort = TRUE,
+    values_from = n,
+    values_fill = 0) |>
+  select(!c(BSI_NA, CoNS_NA, Clin_1, Clin_2, Clin_3)) |>
+  rename(Clin = Clin_NA) |>
+  mutate(
+    Tot = BSI_1 + BSI_2 + BSI_3 + CoNS_1 + CoNS_2 + CoNS_3 + Clin,
+    BSI = BSI_1 + BSI_2 + BSI_3,
+    CoNS = CoNS_1 + CoNS_2 + CoNS_3,
+    CSF = BSI_2 + BSI_3 + CoNS_2 + CoNS_3,
+    Clin = Clin,
+    .after = department,
+    .keep = "unused") |>
+  relocate(Clin, .before = CSF)
+
+total_sepses <- department_sepses |>
+  reframe(across(!"department", sum))
 
 ```
 
@@ -161,17 +226,28 @@ Dies ist die Referenzauswertung der [NeoIPC Surveillance](https://neoipc.org/sur
 
 Um auch Einrichtungen mit geringen Ressourcen eine kontinuierliche Surveillance zu ermöglichen und um ein Benchmarking anhand einer vergleichbaren Patientengruppe durchführen zu können, beschränkt sich die NeoIPC Surveillance auf neonatologische Hochrisikopatienten sowie auf ausgewählte Risikofaktoren und Infektionen. Details dazu finden Sie bei Bedarf im [NeoIPC Surveillanceprotokoll](https://neoipc.org/wp-content/uploads/2023/08/NeoIPC-Surveillance_Core-Module-Protocol.pdf "Link zum NeoIPC Surveillanceprotokoll (pdf, englisch)").
 
-Dank der aktiven Mitarbeit der an der NeoIPC Surveillance beteiligten Abteilungen umfasst diese Auswertung unter Berücksichtigung der oben angegebenen Filterkriterien die vollständigen Datensätze von insgesamt `{r} fn(nrow(patients))` Patienten aus `{r} fn(nrow(enrollments))` Aufenthalten in `{r} fn(length(unique(enrollments$enrollment_department)))` Abteilungen mit insgesamt `{r} fn(sum(enrollments$NEOIPC_SURVEILLANCE_END_PATIENT_DAYS))` Tagen unter Surveillance. Die Daten weiterer `{r} data$enrollments |> filter(enrollment_status == "ACTIVE") |> nrow() |> fn()` Patienten, die sich derzeit noch in der aktiven Surveillance befinden und daher noch nicht ausgewertet werden können, werden für diese Auswertung zur Verfügung stehen, sobald die Surveillance bei ihnen jeweils abgeschlossen ist.
+Unter Berücksichtigung der oben angegebenen Filterkriterien umfasst diese Auswertung dank der aktiven Mitarbeit der an der NeoIPC Surveillance beteiligten Abteilungen aus *`{r} fn(nrow(countries))` Ländern (`{r} countries |> pull(displayName)`)* die vollständigen Datensätze von insgesamt *`{r} fn(nrow(patients))` Patienten* aus *`{r} fn(nrow(enrollments))` Aufenthalten* in *`{r} fn(length(unique(enrollments$enrollment_department)))` Abteilungen* mit insgesamt *`{r} fn(sum(enrollments$NEOIPC_SURVEILLANCE_END_PATIENT_DAYS))`* Tagen unter Surveillance. Die Daten weiterer *`{r} data$enrollments |> filter(enrollment_status == "ACTIVE") |> nrow() |> fn()` Patienten*, die sich im Auswertungszeitraum noch in der aktiven Surveillance befinden und daher noch nicht ausgewertet werden können, werden für diese Auswertung zur Verfügung stehen, sobald die Surveillance bei ihnen jeweils abgeschlossen ist.
 
 ## Nosokomiale Infektionen
 
-Da Infektionen in der Neonatologie eine lebensbedrohliche Komplikation darstellen, die selbst bei erfolgreicher Behandlung das Risiko für weitere Komplikationen und Entwicklungsstörungen erhöht, stehen sie im Mittelpunkt der NeoIPC Surveillance, wobei nur solche Infektionsarten erfasst werden, die aufgrund ihrer Häufigkeit ein Benchmarking ermöglichen.
+Da Infektionen in der Neonatologie eine lebensbedrohliche Komplikation darstellen, die selbst bei erfolgreicher Behandlung das Risiko für weitere Komplikationen und Entwicklungsstörungen erhöht, stehen sie im Mittelpunkt der NeoIPC Surveillance, wobei nur solche Infektionsarten erfasst werden, die aufgrund ihrer Häufigkeit ein sinnvolles Benchmarking ermöglichen.
 
 # Primäre Sepsis / Blutstrominfektion
 
 Die primäre Sepsis ist die häufigste und wichtigste nosokomiale Infektion in der Neonatologie. Im klinischen Alltag ist die Diagnose jedoch nicht trivial, da der übliche Weg zu einer sensitiven Diagnostik, nämlich die Beimpfung mehrerer Blutkulturflaschen mit einer ausreichenden Menge Blut, oft versperrt ist und es aufgrund der komplexen Abläufe bei der Blutentnahme leicht zu Kontaminationen der Proben kommen kann. Um angesichts der diagnostischen Herausforderungen eine sensitive und spezifische Surveillance zu ermöglichen, werden bei der NeoIPC-Surveillance mehrere Unterdefinitionen verwendet, um die Erfassung von Kontaminationen zu vermeiden und die Erfassung von Sepsisfällen auch bei negativen oder fehlenden Blutkulturergebnissen zu ermöglichen. Die Meningitis, die in der Neonatologie fast immer hämatogen entsteht, wenn sie nicht mit einem chirurgischen Eingriff verbunden ist, wird als Komplikation der Sepsis ebenfalls in diesem Abschnitt dargestellt.
 
-Insgesamt enthält der Referenzdatensatz `{r} fn(length(sepses))` Sepsisfälle, was einer Inzidenz von `{r} fd(length(sepses) / nrow(patients) * 100)` Fällen pro 100 Patienten bzw. einer Inzidenzdichte von `{r} fd(length(sepses) / total_denominators$NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000)` Fällen pro 1 000 Patiententage entspricht.
+Insgesamt enthält diese Auswertung `{r} fn(nrow(sepses))` Sepsisfälle, was einer Inzidenz[^infection_incidence] von `{r} fd(nrow(sepses) / nrow(patients) * 100)` Fällen pro 100 Patienten bzw. einer Inzidenzdichte[^infection_incidence_density] von `{r} fd(nrow(sepses) / total_denominators$NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000)` Fällen pro 1 000 Patiententage entspricht.
+
+[^infection_incidence]: Die  Inzidenz von Infektionen berechnen wir nach folgender Formel:
+  $$
+  \text{Inzidenz} = \frac{\text{Anzahl der Infektionen}}{\text{Anzahl der Patienten}} \times 100
+  $$ {#eq-device-utilisation-rate}
+
+[^infection_incidence_density]: Die  Inzidenzdichte von Infektionen berechnen wir nach folgender Formel:
+  $$
+  \text{Inzidenzdichte} = \frac{\text{Anzahl der Infektionen}}{\text{Summe der Patiententage}} \times 1000
+  $$ {#eq-device-utilisation-rate}
+
 
 ## Risikofaktoren und Schutzfaktoren
 
