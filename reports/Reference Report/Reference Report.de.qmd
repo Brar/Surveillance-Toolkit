@@ -33,7 +33,38 @@ trnsl <- list(
 
 {{< include _setup.qmd >}}
 
-*Erstellt: `{r} format(Sys.time(), format = "%x %X", tz = "UTC", usetz = TRUE)`*
+Erstellt:
+: `{r} format(Sys.time(), format = "%x %X", tz = "UTC", usetz = TRUE)`
+
+Auswertungszeitraum:
+: `{r} paste(format(reportingPeriodFrom, format = "%x"), format(reportingPeriodTo, format = "%x"), sep = " - ")`
+
+Geburtsgewichtsfilter:
+: `{r} if(birthWeightFrom == 0L && birthWeightTo == 2147483647L) "Alle Geburtsgewichte" else paste(label_gram(birthWeightFrom), label_gram(birthWeightTo), sep = " - ")`
+
+Gestationsalterfilter:
+: `{r} if(gestationalAgeFrom == 0L && gestationalAgeTo == 2147483647L) "Alle Gestationsalter" else paste0(format_ga(c(gestationalAgeFrom, gestationalAgeTo)), collapse = " - ")`
+
+``` {r Custom report hint}
+#| output: asis
+
+if(!testUnitFilter || !defaultPatientFilter){
+  cat(sep = "\n", c("::: {.callout-note}", paste0(
+    c(
+    "Dies ist eine Spezialauswertung, welche",
+    if(!testUnitFilter){
+      paste0("Testabteilungen enthält",
+      if(!defaultPatientFilter)
+        " und "
+      else
+        ".", collapse = "")
+    },
+    if (!defaultPatientFilter)
+      "die Einschlusskriterien der NeoIPC Surveillance ignoriert."
+    ), collapse = " "),
+    ":::"))
+}
+```
 
 ```{r Filtering}
 countries <- data$metadata$countries
@@ -103,11 +134,9 @@ if(defaultPatientFilter)
 enrollments <- enrollments |>
   dplyr::semi_join(patients, dplyr::join_by(patient == key))
 
-# ToDo: Filter
-sepses <- data$sepses
-
-fn <- function(x) format(x, big.mark =" ")
-fd <- function(x) format(x, digits = 2, nsmall = 1, scientific = FALSE, big.mark =" ")
+sepses <- data$sepses |>
+  filter(status == "COMPLETED") |>
+  dplyr::semi_join(enrollments, dplyr::join_by(enrollment == key))
 
 department_denominators <- enrollments |>
     dplyr::mutate(
@@ -132,7 +161,7 @@ Dies ist die Referenzauswertung der [NeoIPC Surveillance](https://neoipc.org/sur
 
 Um auch Einrichtungen mit geringen Ressourcen eine kontinuierliche Surveillance zu ermöglichen und um ein Benchmarking anhand einer vergleichbaren Patientengruppe durchführen zu können, beschränkt sich die NeoIPC Surveillance auf neonatologische Hochrisikopatienten sowie auf ausgewählte Risikofaktoren und Infektionen. Details dazu finden Sie bei Bedarf im [NeoIPC Surveillanceprotokoll](https://neoipc.org/wp-content/uploads/2023/08/NeoIPC-Surveillance_Core-Module-Protocol.pdf "Link zum NeoIPC Surveillanceprotokoll (pdf, englisch)").
 
-Dank der aktiven Mitarbeit der an der NeoIPC Surveillance beteiligten Abteilungen umfasst der Referenzdatensatz zum Zeitpunkt der Erstellung dieser Auswertung die vollständigen Datensätze von insgesamt `{r} fn(nrow(patients))` Patienten aus `{r} fn(nrow(enrollments))` Aufenthalten in `{r} fn(length(unique(enrollments$enrollment_department)))` Abteilungen mit insgesamt `{r} fn(sum(enrollments$NEOIPC_SURVEILLANCE_END_PATIENT_DAYS))` Tagen unter Surveillance. Die Daten weiterer `{r} data$enrollments |> filter(enrollment_status == "ACTIVE") |> nrow() |> fn()` Patienten, die sich derzeit noch in der aktiven Surveillance befinden und daher noch nicht ausgewertet werden können, werden für diese Auswertung zur Verfügung stehen, sobald die Surveillance bei ihnen jeweils abgeschlossen ist.
+Dank der aktiven Mitarbeit der an der NeoIPC Surveillance beteiligten Abteilungen umfasst diese Auswertung unter Berücksichtigung der oben angegebenen Filterkriterien die vollständigen Datensätze von insgesamt `{r} fn(nrow(patients))` Patienten aus `{r} fn(nrow(enrollments))` Aufenthalten in `{r} fn(length(unique(enrollments$enrollment_department)))` Abteilungen mit insgesamt `{r} fn(sum(enrollments$NEOIPC_SURVEILLANCE_END_PATIENT_DAYS))` Tagen unter Surveillance. Die Daten weiterer `{r} data$enrollments |> filter(enrollment_status == "ACTIVE") |> nrow() |> fn()` Patienten, die sich derzeit noch in der aktiven Surveillance befinden und daher noch nicht ausgewertet werden können, werden für diese Auswertung zur Verfügung stehen, sobald die Surveillance bei ihnen jeweils abgeschlossen ist.
 
 ## Nosokomiale Infektionen
 
@@ -140,10 +169,7 @@ Da Infektionen in der Neonatologie eine lebensbedrohliche Komplikation darstelle
 
 # Primäre Sepsis / Blutstrominfektion
 
-Die primäre Sepsis ist die häufigste und wichtigste nosokomiale Infektion in der Neonatologie.
-Im klinischen Alltag ist die Diagnose jedoch nicht trivial, da der übliche Weg zu einer sensitiven Diagnostik, nämlich die Beimpfung mehrerer Blutkulturflaschen mit einer ausreichenden Menge Blut, oft versperrt ist und es aufgrund der komplexen Abläufe bei der Blutentnahme leicht zu Kontaminationen der Proben kommen kann.
-Um angesichts der diagnostischen Herausforderungen eine sensitive und spezifische Surveillance zu ermöglichen, werden bei der NeoIPC-Surveillance mehrere Unterdefinitionen verwendet, um die Erfassung von Kontaminationen zu vermeiden und die Erfassung von Sepsisfällen auch bei negativen oder fehlenden Blutkulturergebnissen zu ermöglichen.
-Die Meningitis, die in der Neonatologie fast immer hämatogen entsteht, wenn sie nicht mit einem chirurgischen Eingriff verbunden ist, wird als Komplikation der Sepsis ebenfalls in diesem Abschnitt dargestellt.
+Die primäre Sepsis ist die häufigste und wichtigste nosokomiale Infektion in der Neonatologie. Im klinischen Alltag ist die Diagnose jedoch nicht trivial, da der übliche Weg zu einer sensitiven Diagnostik, nämlich die Beimpfung mehrerer Blutkulturflaschen mit einer ausreichenden Menge Blut, oft versperrt ist und es aufgrund der komplexen Abläufe bei der Blutentnahme leicht zu Kontaminationen der Proben kommen kann. Um angesichts der diagnostischen Herausforderungen eine sensitive und spezifische Surveillance zu ermöglichen, werden bei der NeoIPC-Surveillance mehrere Unterdefinitionen verwendet, um die Erfassung von Kontaminationen zu vermeiden und die Erfassung von Sepsisfällen auch bei negativen oder fehlenden Blutkulturergebnissen zu ermöglichen. Die Meningitis, die in der Neonatologie fast immer hämatogen entsteht, wenn sie nicht mit einem chirurgischen Eingriff verbunden ist, wird als Komplikation der Sepsis ebenfalls in diesem Abschnitt dargestellt.
 
 Insgesamt enthält der Referenzdatensatz `{r} fn(length(sepses))` Sepsisfälle, was einer Inzidenz von `{r} fd(length(sepses) / nrow(patients) * 100)` Fällen pro 100 Patienten bzw. einer Inzidenzdichte von `{r} fd(length(sepses) / total_denominators$NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000)` Fällen pro 1 000 Patiententage entspricht.
 
@@ -162,12 +188,6 @@ Im Folgenden werden die im Rahmen der NeoIPC Surveillance beobachteten Risikofak
 ### Gestationsalter und Geburtsgewicht
 
 ```{r}
-label_week <- function(x)
-  sprintf("%i w", x)
-
-label_gram <- function(x)
-  sprintf("%s g", fn(x))
-
 gaDensityPlot <- patients |>
   ggplot(aes(x = decimal_gestational_age)) +
   geom_density() +

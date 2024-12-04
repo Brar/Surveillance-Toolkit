@@ -8,15 +8,23 @@ suppressMessages(library(neoipcr, warn.conflicts = FALSE, quietly = TRUE))
 
 reportingPeriodFrom <- as_date(coalesce(params[["reportingPeriodFrom"]], "2024-01-01"))
 reportingPeriodTo <- as_date(coalesce(params[["reportingPeriodTo"]], Sys.Date()))
-birthWeightFrom <- coalesce(params[["birthWeightFrom"]], 0L)
-birthWeightTo <- coalesce(params[["birthWeightTo"]], 2147483647L)
-gestationalAgeFrom <- coalesce(params[["gestationalAgeFrom"]], 0L)
-gestationalAgeTo <- coalesce(params[["gestationalAgeTo"]], 2147483647L)
+birthWeightFrom <- coalesce(500L, params[["birthWeightFrom"]], 0L)
+birthWeightTo <- coalesce(999L, params[["birthWeightTo"]], 2147483647L)
+gestationalAgeFrom <- coalesce(175L, params[["gestationalAgeFrom"]], 0L)
+gestationalAgeTo <- coalesce(224L, params[["gestationalAgeTo"]], 2147483647L)
 token <- coalesce(params[["token"]], Sys.getenv("NEOIPC_DHIS2_TOKEN", unset = NA))
+session_id <- coalesce(params[["session_id"]], Sys.getenv("NEOIPC_DHIS2_SESSION_ID", unset = NA))
 countryFilter = params[["countryFilter"]]
 hospitalFilter = params[["hospitalFilter"]]
 defaultPatientFilter = coalesce(params[["defaultPatientFilter"]], TRUE)
 testUnitFilter = coalesce(params[["testUnitFilter"]], TRUE)
 locale <- if(!exists("locale")) NULL else locale
-data <- if(rlang::is_na(token)) import_dhis2(locale = locale) else import_dhis2(connection_options = dhis2_connection_options(token = token), locale = locale)
+data <- if(!rlang::is_na(session_id)) import_dhis2(connection_options = dhis2_connection_options(session_id = session_id), locale = locale) else if(!rlang::is_na(token)) import_dhis2(connection_options = dhis2_connection_options(token = token), locale = locale) else import_dhis2(locale = locale)
+
+fn <- function(x) format(x, big.mark =" ")
+fd <- function(x) format(x, digits = 2, nsmall = 1, scientific = FALSE, big.mark =" ")
+label_week <- function(x) paste(fn(x), "w", sep = " ")
+label_gram <- function(x) paste(fn(x), "g", sep = " ")
+format_ga <- function(x, add_unit = TRUE) paste(fn(as.integer(x / 7)), if(add_unit){label_week(x %% 7)}else{ x %% 7}, sep = "+")
+
 ```
