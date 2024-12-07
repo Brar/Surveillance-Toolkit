@@ -4,6 +4,8 @@ lang: de
 format: html
 editor: visual
 echo: false
+execute:
+  keep-md: true
 params:
   reportingPeriodFrom: NULL
   reportingPeriodTo: NULL
@@ -26,203 +28,40 @@ trnsl <- list(
   multipleBirthCategories = list(
     singleBirth = "Einling",
     twins = "Zwillinge",
-    tripletsOrMore = "Drillinge oder mehr"
-  ),
-  reportFilterStrings = list(
+    tripletsOrMore = "Drillinge oder mehr"),
+  headerList = list(
+    createdAt = "Erstellt",
+    analysisPeriod = "Auswertungszeitraum",
+    birthweightFilter = "Geburtsgewichtsfilter",
     allBirthweights = "Alle Geburtsgewichte",
-    allGestationalAges = "Alle Gestationsalter"
-  )
+    gestationalAgeFilter = "Gestationsalterfilter",
+    allGestationalAges = "Alle Gestationsalter",
+    specialAnalysisHint = "Dies ist eine Sonderauswertung, die",
+    includesTestDepartments = "Testabteilungen enthält",
+    and = " und ",
+    ignoresInclusionCriteria = "die Einschlusskriterien der NeoIPC Surveillance ignoriert."),
+  sepsisTable = list(
+    IncidenceRate = "Inzidenzdichte",
+    NoOfInfections = "Anz. d. Infektionen",
+    PooledMean = "Gep. arithm. Mittel",
+    Q1 = "Q1",
+    Median = "Median",
+    Q3 = "Q3",
+    Total = "Gesamt",
+    Pathogens = "Pathogene",
+    Commensals = "Kommensale",
+    Clinical = "Klinisch",
+    CvcAssociated = "ZVK-assoziiert",
+    PvcAssociated = "PVK-Assoziiert",
+    CsfPositive = "Liquornachweis")
 )
 ```
 
 {{< include _setup.qmd >}}
 
-Erstellt:
+{{< include _header.qmd >}}
 
-:   `{r} format(Sys.time(), format = "%x %X", tz = "UTC", usetz = TRUE)`
-
-Auswertungszeitraum:
-
-:   `{r} paste(format(reportingPeriodFrom, format = "%x"), format(reportingPeriodTo, format = "%x"), sep = " - ")`
-
-Geburtsgewichtsfilter:
-
-:   `{r} if(birthWeightFrom == 0L && birthWeightTo == 2147483647L) "Alle Geburtsgewichte" else paste(label_gram(birthWeightFrom), label_gram(birthWeightTo), sep = " - ")`
-
-Gestationsalterfilter:
-
-:   `{r} if(gestationalAgeFrom == 0L && gestationalAgeTo == 2147483647L) "Alle Gestationsalter" else paste0(format_ga(c(gestationalAgeFrom, gestationalAgeTo)), collapse = " - ")`
-
-```{r Custom report hint}
-#| output: asis
-
-if(!testUnitFilter || !defaultPatientFilter){
-  cat(sep = "\n", c("::: {.callout-note}", paste0(
-    c(
-    "Dies ist eine Spezialauswertung, welche",
-    if(!testUnitFilter){
-      paste0("Testabteilungen enthält",
-      if(!defaultPatientFilter)
-        " und "
-      else
-        ".", collapse = "")
-    },
-    if (!defaultPatientFilter)
-      "die Einschlusskriterien der NeoIPC Surveillance ignoriert."
-    ), collapse = " "),
-    ":::"))
-}
-```
-
-```{r Filtering}
-countries <- data$metadata$countries
-
-if(!rlang::is_null(countryFilter))
-  countries <- countries |>
-    dplyr::filter(code %in% countryFilter)
-
-hospitals <- data$metadata$hospitals |>
-  dplyr::semi_join(countries, dplyr::join_by(country_code == code))
-
-if(!rlang::is_null(hospitalFilter))
-  hospitals <- hospitals |>
-    dplyr::filter(code %in% hospitalFilter)
-
-departments <- data$metadata$departments |>
-    dplyr::filter(is.na(hospital) | hospital %in% hospitals$key)
-
-if(testUnitFilter)
-  departments <- departments |>
-      dplyr::filter(isTestUnit == FALSE)
-
-enrollments <- data$enrollments |>
-  dplyr::semi_join(departments, dplyr::join_by(enrollment_department == key)) |>
-  filter(
-    # We don't filter for completed enrollments since there currently is no
-    # good reason (like some sort of validation) attached to the completion
-    # of enrollments and we'd loose a lot of otherwise perfectly valid patients
-    # because people don't seem to understand the concept of completing an
-    # enrollment.
-    # We may carefully reconsider this decision at some point in the future if
-    # a good reason comes up but we'll have to put a lot of emphasis on training
-    # our partners before doing so
-    admission_status == "COMPLETED" &
-      surveillanceEnd_status == "COMPLETED" &
-      surveillanceEnd_completedAt >= reportingPeriodFrom &
-      surveillanceEnd_completedAt <= reportingPeriodTo &
-      NEOIPC_SURVEILLANCE_END_PATIENT_DAYS > 0)
-
-patients <- data$patients |>
-  # don't include patients that aren't enrolled in one of the selected sites
-  dplyr::semi_join(enrollments, dplyr::join_by(key == patient)) |>
-  dplyr::filter(
-    NEOIPC_TEA_BIRTH_WEIGHT >= birthWeightFrom &
-      NEOIPC_TEA_BIRTH_WEIGHT <= birthWeightTo &
-      NeoIPC_TEA_TOTAL_GESTATION_DAYS >= gestationalAgeFrom &
-      NeoIPC_TEA_TOTAL_GESTATION_DAYS <= gestationalAgeTo) |>
-  dplyr::mutate(
-    decimal_gestational_age = NeoIPC_TEA_TOTAL_GESTATION_DAYS / 7,
-    multiple_birth_category = ordered(case_when(
-      NEOIPC_TEA_SIBLINGS == 1 ~ trnsl$multipleBirthCategories$singleBirth,
-      NEOIPC_TEA_SIBLINGS == 2 ~ trnsl$multipleBirthCategories$twins,
-      NEOIPC_TEA_SIBLINGS >= 3 ~ trnsl$multipleBirthCategories$tripletsOrMore
-      ), levels = unlist(trnsl$multipleBirthCategories)))
-
-if(defaultPatientFilter)
-  patients <- patients |>
-      filter(NEOIPC_TEA_BIRTH_WEIGHT < 1500 | NeoIPC_TEA_TOTAL_GESTATION_DAYS < 224)
-
-# Apply filters in reverse order to remove irrelevant entries from tables that
-# are higher in the hierarchy
-enrollments <- enrollments |>
-  semi_join(patients, dplyr::join_by(patient == key))
-
-departments <- departments |>
-  semi_join(enrollments, dplyr::join_by(key == enrollment_department))
-
-hospitals <- hospitals |>
-  semi_join(departments, dplyr::join_by(key == hospital))
-
-countries <- countries |>
-  semi_join(hospitals, dplyr::join_by(code == country_code))
-
-# filter the actual data
-department_denominators <- enrollments |>
-    mutate(
-        NEOIPC_SURVEILLANCE_END_VENT_DAYS =
-            NEOIPC_SURVEILLANCE_END_INV_DAYS +
-            NEOIPC_SURVEILLANCE_END_NIV_DAYS,
-        .before = NEOIPC_SURVEILLANCE_END_INV_DAYS) |>
-  mutate(across(ends_with("_DAYS"), ~ .x > 0, .names = "{.col}_ANY")) |>
-  group_by(enrollment_department) |>
-  summarise(
-    across(
-      matches("_DAYS(_ANY)?$"),
-      sum,
-      .names = "{.col}_SUM")) |>
-  rename(department = enrollment_department)
-
-total_denominators <- department_denominators |>
-  reframe(across(!"department", sum))
-
-sepses <- data$sepses |>
-  filter(status == "COMPLETED") |>
-  semi_join(enrollments, join_by(enrollment == key))
-
-pneumonias <- data$pneumonias |>
-  filter(status == "COMPLETED") |>
-  semi_join(enrollments, join_by(enrollment == key))
-
-necs <- data$necs |>
-  filter(status == "COMPLETED") |>
-  semi_join(enrollments, join_by(enrollment == key))
-
-ssis <- data$ssis |>
-  filter(status == "COMPLETED") |>
-  semi_join(enrollments, join_by(enrollment == key))
-
-causative_pathogens <- data$causative_pathogens |>
-  semi_join(bind_rows(
-    sepses |> select(key, eventType),
-    pneumonias |> select(key, eventType),
-    necs |> select(key, eventType),
-    ssis |> select(key, eventType)
-  ), join_by(key, eventType))
-
-department_sepses <- sepses |>
-  left_join(
-    causative_pathogens |>
-      semi_join(sepses, join_by(key, eventType)) |>
-      group_by(key) |>
-      summarise(
-        maxSource = factor(max(as.integer(PATHOGEN_SOURCE)), levels = c(1,2,3)),
-        .groups = "drop"), join_by(key)) |>
-  group_by(department, bsiType, maxSource) |>
-  summarise(n = n(), .groups = "drop") |>
-  pivot_wider(
-    names_from = c(bsiType, maxSource),
-    names_expand = TRUE,
-    names_sort = TRUE,
-    values_from = n,
-    values_fill = 0) |>
-  select(!c(BSI_NA, CoNS_NA, Clin_1, Clin_2, Clin_3)) |>
-  rename(Clin = Clin_NA) |>
-  mutate(
-    Tot = BSI_1 + BSI_2 + BSI_3 + CoNS_1 + CoNS_2 + CoNS_3 + Clin,
-    BSI = BSI_1 + BSI_2 + BSI_3,
-    CoNS = CoNS_1 + CoNS_2 + CoNS_3,
-    CSF = BSI_2 + BSI_3 + CoNS_2 + CoNS_3,
-    Clin = Clin,
-    .after = department,
-    .keep = "unused") |>
-  relocate(Clin, .before = CSF)
-
-total_sepses <- department_sepses |>
-  reframe(across(!"department", sum))
-
-```
-
-Dies ist die Referenzauswertung der [NeoIPC Surveillance](https://neoipc.org/surveillance/ "Link zum Surveillance-Bereich der NeoIPC Website"), die wir erstellt haben, um Sie dabei zu unterstützen, die Infektionsprävention in Ihrer neonatologischen Abteilung anhand von Vergleichswerten zu beurteilen und gegebenenfalls Auffälligkeiten und Verbesserungspotenziale zu identifizieren, sofern Sie über eigene Vergleichsdaten verfügen, die mit der selben oder einer vergleichbaren Methode erhoben wurden.
+Dies ist die Referenzauswertung der [NeoIPC Surveillance](https://neoipc.org/surveillance/ "Link zum Surveillance-Bereich der NeoIPC Website"), die Sie verwenden können, um die Infektionsraten Ihrer neonatologischen Abteilung zu bewerten. Wenn Sie über eigene Vergleichsdaten verfügen, die mit der selben oder einer vergleichbaren Methode erhoben wurden, können Sie diese mit den in diesem Dokument dargestellten Referenzwerten vergleichen und gegebenenfalls Auffälligkeiten und Verbesserungspotenziale identifizieren.
 
 Um auch Einrichtungen mit geringen Ressourcen eine kontinuierliche Surveillance zu ermöglichen und um ein Benchmarking anhand einer vergleichbaren Patientengruppe durchführen zu können, beschränkt sich die NeoIPC Surveillance auf neonatologische Hochrisikopatienten sowie auf ausgewählte Risikofaktoren und Infektionen. Details dazu finden Sie bei Bedarf im [NeoIPC Surveillanceprotokoll](https://neoipc.org/wp-content/uploads/2023/08/NeoIPC-Surveillance_Core-Module-Protocol.pdf "Link zum NeoIPC Surveillanceprotokoll (pdf, englisch)").
 
@@ -236,17 +75,15 @@ Da Infektionen in der Neonatologie eine lebensbedrohliche Komplikation darstelle
 
 Die primäre Sepsis ist die häufigste und wichtigste nosokomiale Infektion in der Neonatologie. Im klinischen Alltag ist die Diagnose jedoch nicht trivial, da der übliche Weg zu einer sensitiven Diagnostik, nämlich die Beimpfung mehrerer Blutkulturflaschen mit einer ausreichenden Menge Blut, oft versperrt ist und es aufgrund der komplexen Abläufe bei der Blutentnahme leicht zu Kontaminationen der Proben kommen kann. Um angesichts der diagnostischen Herausforderungen eine sensitive und spezifische Surveillance zu ermöglichen, werden bei der NeoIPC-Surveillance mehrere Unterdefinitionen verwendet, um die Erfassung von Kontaminationen zu vermeiden und die Erfassung von Sepsisfällen auch bei negativen oder fehlenden Blutkulturergebnissen zu ermöglichen. Die Meningitis, die in der Neonatologie fast immer hämatogen entsteht, wenn sie nicht mit einem chirurgischen Eingriff verbunden ist, wird als Komplikation der Sepsis ebenfalls in diesem Abschnitt dargestellt.
 
-Insgesamt enthält diese Auswertung `{r} fn(nrow(sepses))` Sepsisfälle, was einer Inzidenz[^infection_incidence] von `{r} fd(nrow(sepses) / nrow(patients) * 100)` Fällen pro 100 Patienten bzw. einer Inzidenzdichte[^infection_incidence_density] von `{r} fd(nrow(sepses) / total_denominators$NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000)` Fällen pro 1 000 Patiententage entspricht.
+Insgesamt enthält diese Auswertung `{r} fn(nrow(sepses))` Sepsisfälle, was einer Inzidenz[^1] von `{r} fd(nrow(sepses) / nrow(patients) * 100)` Fällen pro 100 Patienten bzw. einer Inzidenzdichte[^2] von `{r} fd(nrow(sepses) / total_denominators$NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000)` Fällen pro 1 000 Patiententage entspricht.
 
-[^infection_incidence]: Die  Inzidenz von Infektionen berechnen wir nach folgender Formel:
-  $$
-  \text{Inzidenz} = \frac{\text{Anzahl der Infektionen}}{\text{Anzahl der Patienten}} \times 100
-  $$ {#eq-device-utilisation-rate}
+[^1]: Die Inzidenz von Infektionen berechnen wir nach folgender Formel: $\text{Inzidenz} = \frac{\text{Anzahl der Infektionen}}{\text{Anzahl der Patienten}} \times 100$
 
-[^infection_incidence_density]: Die  Inzidenzdichte von Infektionen berechnen wir nach folgender Formel:
-  $$
-  \text{Inzidenzdichte} = \frac{\text{Anzahl der Infektionen}}{\text{Summe der Patiententage}} \times 1000
-  $$ {#eq-device-utilisation-rate}
+[^2]: Die Inzidenzdichte von Infektionen berechnen wir nach folgender Formel: $$
+      \text{Inzidenzdichte} = \frac{\text{Anzahl der Infektionen}}{\text{Summe der Patiententage}} \times 1000
+      $$
+
+{{< include _sepsis-table.qmd >}}
 
 
 ## Risikofaktoren und Schutzfaktoren
