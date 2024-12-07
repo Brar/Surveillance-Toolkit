@@ -21,14 +21,44 @@ params:
 locale = "en"
 invisible(Sys.setlocale(category = "LC_ALL", locale = "en_GB.utf8"))
 trnsl <- list(
-  singleBirth <- "Single birth",
-  twins <- "Twins",
-  tripletsOrMore <- "Triplet or more"
+  multipleBirthCategories = list(
+    singleBirth = "Single birth",
+    twins = "Twins",
+    tripletsOrMore = "Triplet or more"
+  ),
+  headerList = list(
+    createdAt = "Created",
+    analysisPeriod = "Analysis period",
+    birthweightFilter = "Birth weight filter",
+    allBirthweights = "All birth weights",
+    gestationalAgeFilter = "Gestational age filter",
+    allGestationalAges = "All gestational ages",
+    specialAnalysisHint = "This is a special analysis that",
+    includesTestDepartments = "includes test units",
+    and = " and ",
+    ignoresInclusionCriteria = "ignores the NeoIPC Surveillance inclusion criteria."),
+  sepsisTable = list(
+    IncidenceRate = "Incidence density rate",
+    NoOfInfections = "No. of infections",
+    PooledMean = "Pooled mean",
+    Q1 = "Q1",
+    Median = "Median",
+    Q3 = "Q3",
+    Total = "Total",
+    Pathogens = "Pathogens",
+    Commensals = "Commensals",
+    Clinical = "Clinical",
+    CvcAssociated = "CVC-associated",
+    PvcAssociated = "PVC-associated",
+    CsfPositive = "CSF positive")
 )
 ```
 
 {{< include _setup.qmd >}}
 
-## Quarto
+{{< include _header.qmd >}}
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+This is the [NeoIPC Surveillance](https://neoipc.org/surveillance/ "Link to the surveillance section of the NeoIPC website") reference analysis that you can use to assess infection rates in your neonatal unit. If you have your own data collected using the same or a comparable method, you can compare them with the reference values presented in this document and identify any anomalies and potential for improvement.
+
+{{< include _sepsis-table.qmd >}}
+

@@ -1,0 +1,28 @@
+```{r Sepsis table}
+sepsis_table <- tibble(
+NoOfInfections = total_sepses |> unlist() |> format(),
+PooledMean = total_sepsis_rates |> select(ends_with("_D")) |> unlist(),
+Q1 := sepsis_rate_quartiles |> select(ends_with("_D")) |> slice(1) |> unlist(),
+Median := sepsis_rate_quartiles |> select(ends_with("_D")) |> slice(2) |> unlist(),
+Q3 := sepsis_rate_quartiles |> select(ends_with("_D")) |> slice(3) |> unlist()) |>
+  as.data.frame()
+
+colnames(sepsis_table) <-c(trnsl$sepsisTable$NoOfInfections, trnsl$sepsisTable$PooledMean, trnsl$sepsisTable$Q1, trnsl$sepsisTable$Median, trnsl$sepsisTable$Q3)
+rownames(sepsis_table) <- c(trnsl$sepsisTable$Total, trnsl$sepsisTable$Pathogens, trnsl$sepsisTable$Commensals, trnsl$sepsisTable$Clinical, trnsl$sepsisTable$CvcAssociated, trnsl$sepsisTable$PvcAssociated, trnsl$sepsisTable$CsfPositive)
+
+sepsis_table |>
+  kbl(
+    digits = c(0,1,1,1,1),
+    align = "rrrrr",
+    format.args = list(nsmall = 1)) |>
+  kable_styling() |>
+#  add_header_above(data.frame(c(" ", trnsl$sepsisTable$IncidenceRate), c(2, 4)))|>
+  add_indent(2:7)
+
+
+# %>%
+  # footnote(
+    # number = "$\\text{Inzidenz} = \\frac{\\text{Anzahl der Infektionen}}{\\text{Anzahl der Patienten}} \\times 100$",
+    # threeparttable = TRUE,
+    # escape = FALSE)
+```

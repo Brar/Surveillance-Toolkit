@@ -1,9 +1,10 @@
 ```{r General setup and parameter preparation, message=FALSE, warning=FALSE}
 suppressMessages(pak::pak("Brar/neoipcr@initial_tests"))
+suppressMessages(library(kableExtra, warn.conflicts = FALSE, quietly = TRUE))
 suppressMessages(library(tidyverse, warn.conflicts = FALSE, quietly = TRUE))
 suppressMessages(library(scales, warn.conflicts = FALSE, quietly = TRUE))
 suppressMessages(library(patchwork, warn.conflicts = FALSE, quietly = TRUE))
-suppressMessages(library(exactRankTests, warn.conflicts = FALSE, quietly = TRUE))
+#suppressMessages(library(exactRankTests, warn.conflicts = FALSE, quietly = TRUE))
 suppressMessages(library(neoipcr, warn.conflicts = FALSE, quietly = TRUE))
 
 reportingPeriodFrom <- as_date(coalesce(params[["reportingPeriodFrom"]], "2024-01-01"))
@@ -26,5 +27,206 @@ fd <- function(x) format(x, digits = 2, nsmall = 1, scientific = FALSE, big.mark
 label_week <- function(x) paste(fn(x), "w", sep = " ")
 label_gram <- function(x) paste(fn(x), "g", sep = " ")
 format_ga <- function(x, add_unit = TRUE) paste(fn(as.integer(x / 7)), if(add_unit){label_week(x %% 7)}else{ x %% 7}, sep = "+")
+
+```
+
+```{r Filtering}
+countries <- data$metadata$countries
+
+if(!rlang::is_null(countryFilter))
+  countries <- countries |>
+    dplyr::filter(code %in% countryFilter)
+
+hospitals <- data$metadata$hospitals |>
+  dplyr::semi_join(countries, dplyr::join_by(country_code == code))
+
+if(!rlang::is_null(hospitalFilter))
+  hospitals <- hospitals |>
+    dplyr::filter(code %in% hospitalFilter)
+
+departments <- data$metadata$departments |>
+    dplyr::filter(is.na(hospital) | hospital %in% hospitals$key)
+
+if(testUnitFilter)
+  departments <- departments |>
+      dplyr::filter(isTestUnit == FALSE)
+
+enrollments <- data$enrollments |>
+  dplyr::semi_join(departments, dplyr::join_by(enrollment_department == key)) |>
+  filter(
+    # We don't filter for completed enrollments since there currently is no
+    # good reason (like some sort of validation) attached to the completion
+    # of enrollments and we'd loose a lot of otherwise perfectly valid patients
+    # because people don't seem to understand the concept of completing an
+    # enrollment.
+    # We may carefully reconsider this decision at some point in the future if
+    # a good reason comes up but we'll have to put a lot of emphasis on training
+    # our partners before doing so
+    admission_status == "COMPLETED" &
+      surveillanceEnd_status == "COMPLETED" &
+      surveillanceEnd_completedAt >= reportingPeriodFrom &
+      surveillanceEnd_completedAt <= reportingPeriodTo &
+      NEOIPC_SURVEILLANCE_END_PATIENT_DAYS > 0)
+
+patients <- data$patients |>
+  # don't include patients that aren't enrolled in one of the selected sites
+  dplyr::semi_join(enrollments, dplyr::join_by(key == patient)) |>
+  dplyr::filter(
+    NEOIPC_TEA_BIRTH_WEIGHT >= birthWeightFrom &
+      NEOIPC_TEA_BIRTH_WEIGHT <= birthWeightTo &
+      NeoIPC_TEA_TOTAL_GESTATION_DAYS >= gestationalAgeFrom &
+      NeoIPC_TEA_TOTAL_GESTATION_DAYS <= gestationalAgeTo) |>
+  dplyr::mutate(
+    decimal_gestational_age = NeoIPC_TEA_TOTAL_GESTATION_DAYS / 7,
+    multiple_birth_category = ordered(case_when(
+      NEOIPC_TEA_SIBLINGS == 1 ~ trnsl$multipleBirthCategories$singleBirth,
+      NEOIPC_TEA_SIBLINGS == 2 ~ trnsl$multipleBirthCategories$twins,
+      NEOIPC_TEA_SIBLINGS >= 3 ~ trnsl$multipleBirthCategories$tripletsOrMore
+      ), levels = unlist(trnsl$multipleBirthCategories)))
+
+if(defaultPatientFilter)
+  patients <- patients |>
+      filter(NEOIPC_TEA_BIRTH_WEIGHT < 1500 | NeoIPC_TEA_TOTAL_GESTATION_DAYS < 224)
+
+# Apply filters in reverse order to remove irrelevant entries from tables that
+# are higher in the hierarchy
+enrollments <- enrollments |>
+  semi_join(patients, dplyr::join_by(patient == key))
+
+departments <- departments |>
+  semi_join(enrollments, dplyr::join_by(key == enrollment_department))
+
+hospitals <- hospitals |>
+  semi_join(departments, dplyr::join_by(key == hospital))
+
+countries <- countries |>
+  semi_join(hospitals, dplyr::join_by(code == country_code))
+
+# filter the actual data
+department_denominators <- enrollments |>
+    mutate(
+        NEOIPC_SURVEILLANCE_END_VENT_DAYS =
+            NEOIPC_SURVEILLANCE_END_INV_DAYS +
+            NEOIPC_SURVEILLANCE_END_NIV_DAYS,
+        .before = NEOIPC_SURVEILLANCE_END_INV_DAYS) |>
+  mutate(across(ends_with("_DAYS"), ~ .x > 0, .names = "{.col}_ANY")) |>
+  group_by(enrollment_department) |>
+  summarise(
+    across(
+      matches("_DAYS(_ANY)?$"),
+      sum,
+      .names = "{.col}_SUM")) |>
+  rename(department = enrollment_department)
+
+total_denominators <- department_denominators |>
+  reframe(across(!"department", sum))
+
+sepses <- data$sepses |>
+  filter(status == "COMPLETED") |>
+  semi_join(enrollments, join_by(enrollment == key))
+
+pneumonias <- data$pneumonias |>
+  filter(status == "COMPLETED") |>
+  semi_join(enrollments, join_by(enrollment == key))
+
+necs <- data$necs |>
+  filter(status == "COMPLETED") |>
+  semi_join(enrollments, join_by(enrollment == key))
+
+ssis <- data$ssis |>
+  filter(status == "COMPLETED") |>
+  semi_join(enrollments, join_by(enrollment == key))
+
+causative_pathogens <- data$causative_pathogens |>
+  semi_join(bind_rows(
+    sepses |> select(key, eventType),
+    pneumonias |> select(key, eventType),
+    necs |> select(key, eventType),
+    ssis |> select(key, eventType)
+  ), join_by(key, eventType))
+
+department_sepses <- sepses |>
+    left_join(
+        causative_pathogens |>
+            semi_join(sepses, join_by(key, eventType)) |>
+            group_by(key) |>
+            summarise(
+                maxSource = factor(max(as.integer(PATHOGEN_SOURCE)), levels = c(1,2,3)),
+                .groups = "drop"), join_by(key)) |>
+    group_by(department, bsiType, NEOIPC_BSI_DEV_ASS, maxSource) |>
+    summarise(n = n(), .groups = "drop") |>
+  inner_join(
+    data$metadata$sepsisDeviceAssociation |>
+      select(code, displayName) |>
+      rename(dev = displayName),
+    join_by(NEOIPC_BSI_DEV_ASS == code)) |>
+  left_join(
+    data$metadata$sepsisPathogenSources |>
+      select(code, displayName) |>
+      rename(source = displayName),
+    join_by(maxSource == code)) |>
+  mutate(source = factor(replace_na(as.character(source), "None"), levels = c("None", levels(source)))) |>
+  select(!c(NEOIPC_BSI_DEV_ASS, maxSource)) |>
+  pivot_wider(
+    names_from = c(bsiType, dev, source),
+    names_expand = TRUE,
+    names_sort = TRUE,
+    values_from = n,
+    values_fill = 0) |>
+  mutate(
+    Tot = rowSums(across(!department)),
+    BSI = rowSums(across(starts_with("BSI"))),
+    CoNS = rowSums(across(starts_with("CoNS"))),
+    Clin = rowSums(across(starts_with("Clin"))),
+    CVC = rowSums(across(contains("_CVC-associated_"))),
+    PVC = rowSums(across(contains("_PVC-associated_"))),
+    CSF = rowSums(across(ends_with("Cerebrospinal fluid"))),
+    .after = department,
+    .keep = "unused")
+
+total_sepses <- department_sepses |>
+  reframe(across(!"department", sum))
+
+department_sepsis_rates = department_sepses |>
+  inner_join(department_denominators, join_by(department)) |>
+  mutate(
+    department = department,
+    Tot_I = Tot / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM * 100,
+    Tot_D = Tot / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000,
+    BSI_I = BSI / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM * 100,
+    BSI_D = BSI / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000,
+    CoNS_I = CoNS / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM * 100,
+    CoNS_D = CoNS / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000,
+    Clin_I = Clin / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM * 100,
+    Clin_D = Clin / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000,
+    CVC_I = CVC / NEOIPC_SURVEILLANCE_END_CVC_DAYS_ANY_SUM * 100,
+    CVC_D = CVC / NEOIPC_SURVEILLANCE_END_CVC_DAYS_SUM * 1000,
+    PVC_I = PVC / NEOIPC_SURVEILLANCE_END_PVC_DAYS_ANY_SUM * 100,
+    PVC_D = PVC / NEOIPC_SURVEILLANCE_END_PVC_DAYS_SUM * 1000,
+    CSF_I = CSF / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM * 100,
+    CSF_D = CSF / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000,
+    .keep = "none")
+
+total_sepsis_rates = total_sepses |> dplyr::bind_cols(total_denominators) |>
+  mutate(
+    Tot_I = Tot / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM * 100,
+    Tot_D = Tot / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000,
+    BSI_I = BSI / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM * 100,
+    BSI_D = BSI / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000,
+    CoNS_I = CoNS / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM * 100,
+    CoNS_D = CoNS / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000,
+    Clin_I = Clin / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM * 100,
+    Clin_D = Clin / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000,
+    CVC_I = CVC / NEOIPC_SURVEILLANCE_END_CVC_DAYS_ANY_SUM * 100,
+    CVC_D = CVC / NEOIPC_SURVEILLANCE_END_CVC_DAYS_SUM * 1000,
+    PVC_I = PVC / NEOIPC_SURVEILLANCE_END_PVC_DAYS_ANY_SUM * 100,
+    PVC_D = PVC / NEOIPC_SURVEILLANCE_END_PVC_DAYS_SUM * 1000,
+    CSF_I = CSF / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM * 100,
+    CSF_D = CSF / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000,
+    .keep = "none")
+
+#sepsis_rate_quartiles <- department_sepsis_rates |> select(!department) |> reframe(across(everything(), ~DescTools::QuantileCI(.x, prob=c(.25,.5,.75))))
+
+sepsis_rate_quartiles <- department_sepsis_rates |> select(!department) |> reframe(across(everything(), ~quantile(.x, prob = c(.25,.5,.75))))
 
 ```
