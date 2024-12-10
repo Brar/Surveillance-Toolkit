@@ -32,10 +32,18 @@ trnsl <- list(
   headerList = list(
     createdAt = "Erstellt",
     analysisPeriod = "Auswertungszeitraum",
+    country = "Land",
+    countries = "Länder",
     birthweightFilter = "Geburtsgewichtsfilter",
     allBirthweights = "Alle Geburtsgewichte",
     gestationalAgeFilter = "Gestationsalterfilter",
     allGestationalAges = "Alle Gestationsalter",
+    multiCountryHintHeader = "Länderübergreifende Auswertung",
+    multiCountryHint = "Diese Auswertung aggregiert Daten von neonatologischen Abteilungen aus mehreren Ländern. Das bedeutet, dass sie zwar einerseits ein breites Spektrum an Versorgungsstrukturen abbildet, andererseits aber aufgrund der teilweise sehr unterschiedlichen Gesundheitssysteme und der dort verfügbaren Ressourcen nur bedingt als Benchmark geeignet ist.",
+    multiCountryHintGoal = "Ziel der NeoIPC Surveillance ist es daher immer, eine nationale oder regionale Auswertung zur Verfügung zu stellen, sofern eine ausreichende Anzahl von Abteilungen aus der jeweiligen Region am System teilnimmt.",
+    singleCountryHintHeader = "Nationale Auswertung",
+    singleCountryHint = "Diese Auswertung umfasst die Daten von neonatologischen Abteilungen eines einzelnen Landes. Dies bedeutet, dass sie aufgrund des relativ homogenen Gesundheitssystems prinzipiell gut als Benchmark geeignet ist. Es muss jedoch darauf hingewiesen werden, dass praktisch immer nur ein Teil der neonatologischen Abteilungen eines Landes an der NeoIPC Surveillance teilnimmt. Da die Teilnahme freiwillig ist, handelt es sich in der Regel um Kliniken, die ein besonderes Interesse an der Infektionsprävention haben und die bereit und in der Lage sind, die für die Surveillance erforderlichen Ressourcen bereitzustellen.",
+    singleCountryRepresentativenessHint = "Die hier dargestellten Informationen können daher die Situation in den einzelnen Ländern nicht vollständig beschreiben.",
     specialAnalysisHint = "Dies ist eine Sonderauswertung, die",
     includesTestDepartments = "Testabteilungen enthält",
     and = " und ",
@@ -65,13 +73,13 @@ Dies ist die Referenzauswertung der [NeoIPC Surveillance](https://neoipc.org/sur
 
 Um auch Einrichtungen mit geringen Ressourcen eine kontinuierliche Surveillance zu ermöglichen und um ein Benchmarking anhand einer vergleichbaren Patientengruppe durchführen zu können, beschränkt sich die NeoIPC Surveillance auf neonatologische Hochrisikopatienten sowie auf ausgewählte Risikofaktoren und Infektionen. Details dazu finden Sie bei Bedarf im [NeoIPC Surveillanceprotokoll](https://neoipc.org/wp-content/uploads/2023/08/NeoIPC-Surveillance_Core-Module-Protocol.pdf "Link zum NeoIPC Surveillanceprotokoll (pdf, englisch)").
 
-Unter Berücksichtigung der oben angegebenen Filterkriterien umfasst diese Auswertung dank der aktiven Mitarbeit der an der NeoIPC Surveillance beteiligten Abteilungen aus *`{r} fn(nrow(countries))` Ländern (`{r} countries |> pull(displayName)`)* die vollständigen Datensätze von insgesamt *`{r} fn(nrow(patients))` Patienten* aus *`{r} fn(nrow(enrollments))` Aufenthalten* in *`{r} fn(length(unique(enrollments$enrollment_department)))` Abteilungen* mit insgesamt *`{r} fn(sum(enrollments$NEOIPC_SURVEILLANCE_END_PATIENT_DAYS))`* Tagen unter Surveillance. Die Daten weiterer *`{r} data$enrollments |> filter(enrollment_status == "ACTIVE") |> nrow() |> fn()` Patienten*, die sich im Auswertungszeitraum noch in der aktiven Surveillance befinden und daher noch nicht ausgewertet werden können, werden für diese Auswertung zur Verfügung stehen, sobald die Surveillance bei ihnen jeweils abgeschlossen ist.
+Unter Berücksichtigung der oben angegebenen Filterkriterien umfasst diese Auswertung dank der aktiven Mitarbeit der an der NeoIPC Surveillance beteiligten Abteilungen die vollständigen Datensätze von insgesamt *`{r} fn(totPat)` Patienten* aus *`{r} fn(totEnr)` Aufenthalten* in *`{r} fn(totDept)` Abteilungen* mit insgesamt *`{r} fn(totPatDay)` Tagen unter Surveillance*. Die Daten weiterer *`{r} fn(totIncPat)` Patienten*, die sich zum Auswertungszeitpunkt noch in der aktiven Surveillance befinden und daher noch nicht ausgewertet werden können, werden für diese Auswertung zur Verfügung stehen, sobald die Surveillance bei ihnen jeweils abgeschlossen ist.
 
 ## Nosokomiale Infektionen
 
 Da Infektionen in der Neonatologie eine lebensbedrohliche Komplikation darstellen, die selbst bei erfolgreicher Behandlung das Risiko für weitere Komplikationen und Entwicklungsstörungen erhöht, stehen sie im Mittelpunkt der NeoIPC Surveillance, wobei nur solche Infektionsarten erfasst werden, die aufgrund ihrer Häufigkeit ein sinnvolles Benchmarking ermöglichen.
 
-# Primäre Sepsis / Blutstrominfektion
+### Primäre Sepsis / Blutstrominfektion
 
 Die primäre Sepsis ist die häufigste und wichtigste nosokomiale Infektion in der Neonatologie. Im klinischen Alltag ist die Diagnose jedoch nicht trivial, da der übliche Weg zu einer sensitiven Diagnostik, nämlich die Beimpfung mehrerer Blutkulturflaschen mit einer ausreichenden Menge Blut, oft versperrt ist und es aufgrund der komplexen Abläufe bei der Blutentnahme leicht zu Kontaminationen der Proben kommen kann. Um angesichts der diagnostischen Herausforderungen eine sensitive und spezifische Surveillance zu ermöglichen, werden bei der NeoIPC-Surveillance mehrere Unterdefinitionen verwendet, um die Erfassung von Kontaminationen zu vermeiden und die Erfassung von Sepsisfällen auch bei negativen oder fehlenden Blutkulturergebnissen zu ermöglichen. Die Meningitis, die in der Neonatologie fast immer hämatogen entsteht, wenn sie nicht mit einem chirurgischen Eingriff verbunden ist, wird als Komplikation der Sepsis ebenfalls in diesem Abschnitt dargestellt.
 

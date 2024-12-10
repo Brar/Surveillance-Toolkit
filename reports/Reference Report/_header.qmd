@@ -6,6 +6,10 @@
 
 :   `{r} paste(format(reportingPeriodFrom, format = "%x"), format(reportingPeriodTo, format = "%x"), sep = " - ")`
 
+`{r} if(nrow(countries) > 1){trnsl$headerList$countries}else{trnsl$headerList$country}`:
+
+:   `{r} paste(countries |> arrange(displayName) |> pull(displayName), sep = ", ")`
+
 `{r} trnsl$headerList$birthweightFilter`:
 
 :   `{r} if(birthWeightFrom == 0L && birthWeightTo == 2147483647L) trnsl$headerList$allBirthweights else paste(label_gram(birthWeightFrom), label_gram(birthWeightTo), sep = " - ")`
@@ -13,6 +17,30 @@
 `{r} trnsl$headerList$gestationalAgeFilter`:
 
 :   `{r} if(gestationalAgeFrom == 0L && gestationalAgeTo == 2147483647L) trnsl$headerList$allGestationalAges else paste0(format_ga(c(gestationalAgeFrom, gestationalAgeTo)), collapse = " - ")`
+
+```{r Countries hint}
+#| output: asis
+
+if(nrow(countries) > 1){
+  cat(sep = "\n", c(
+    "::: {.callout-note}",
+    paste0("## ", trnsl$headerList$multiCountryHintHeader),
+    "",
+    trnsl$headerList$multiCountryHint,
+    "",
+    trnsl$headerList$multiCountryHintGoal,
+    ":::"))
+} else {
+  cat(sep = "\n", c(
+    "::: {.callout-note}",
+    paste0("## ", trnsl$headerList$singleCountryHintHeader),
+    "",
+    trnsl$headerList$singleCountryHint,
+    "",
+    trnsl$headerList$singleCountryRepresentativenessHint,
+    ":::"))
+}
+```
 
 ```{r Custom report hint}
 #| output: asis

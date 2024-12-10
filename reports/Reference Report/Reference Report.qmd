@@ -29,10 +29,18 @@ trnsl <- list(
   headerList = list(
     createdAt = "Created",
     analysisPeriod = "Analysis period",
+    country = "Country",
+    countries = "Countries",
     birthweightFilter = "Birth weight filter",
     allBirthweights = "All birth weights",
     gestationalAgeFilter = "Gestational age filter",
     allGestationalAges = "All gestational ages",
+    multiCountryHintHeader = "Multinational analysis",
+    multiCountryHint = "This report aggregates data from neonatal units in several countries. This means that, while it reflects a broad spectrum of care structures, it is only of limited use as a benchmark due to the sometimes very different healthcare systems and the resources available in the various countries.",
+    multiCountryHintGoal = "The aim of NeoIPC Surveillance is therefore always to provide a national or regional report, provided that a sufficient number of units in the respective region participate in the system.",
+    singleCountryHintHeader = "National report",
+    singleCountryHint = "This report presents data from neonatal units in a single country. This means that, because of the relative homogeneity of the healthcare system, it is in principle a good benchmark. However, it should be noted that only a proportion of neonatal units in a country actually participate in NeoIPC Surveillance. Since participation is voluntary, these are typically hospitals that have a particular interest in infection prevention and are willing and able to provide the resources required for surveillance.",
+    singleCountryRepresentativenessHint = "The information presented here can therefore not fully describe the situation in the individual countries.",
     specialAnalysisHint = "This is a special analysis that",
     includesTestDepartments = "includes test units",
     and = " and ",
@@ -58,7 +66,13 @@ trnsl <- list(
 
 {{< include _header.qmd >}}
 
+## Introduction
+
 This is the [NeoIPC Surveillance](https://neoipc.org/surveillance/ "Link to the surveillance section of the NeoIPC website") reference analysis that you can use to assess infection rates in your neonatal unit. If you have your own data collected using the same or a comparable method, you can compare them with the reference values presented in this document and identify any anomalies and potential for improvement.
+
+To enable institutions with limited resources to carry out continuous surveillance and to allow benchmarking against a comparable group of patients, NeoIPC surveillance is limited to high-risk neonates and selected risk factors and infections. Further details can be found in the [NeoIPC Surveillanceprotokoll](https://neoipc.org/wp-content/uploads/2023/08/NeoIPC-Surveillance_Core-Module-Protocol.pdf "Link to the NeoIPC surveillance protocol (pdf, English)").
+
+Taking into account the filtering criteria mentioned above, and thanks to the active cooperation of the departments involved in NeoIPC surveillance, this report includes the complete data sets of a total of *`{r} fn(totPat)` patients* from *`{r} fn(totEnr)` stays* in *`{r} fn(totDept)` departments* with a total of *`{r} fn(totPatDay)` days of surveillance*. The data of a further *`{r} fn(totIncPat)` patients* who were still under active surveillance at the time of the data analysis and who therefore could not yet be analysed, will be available for this analysis as soon as their surveillance has been completed.
 
 {{< include _sepsis-table.qmd >}}
 
