@@ -55,9 +55,11 @@ rsconnect/
 .quarto
 
 # Generated report files
-Reference\ Report*.pdf
-Reference\ Report*.html
-Reference\ Report*_files/**
-Reference-Report*_files/**
+*.pdf
+*.html
+*_files/**
+
+# Intermediary files
+*.md
 
 /.quarto/

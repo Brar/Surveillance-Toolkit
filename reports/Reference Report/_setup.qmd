@@ -52,7 +52,15 @@ if(testUnitFilter)
       dplyr::filter(isTestUnit == FALSE)
 
 enrollments <- data$enrollments |>
-  dplyr::semi_join(departments, dplyr::join_by(enrollment_department == key)) |>
+  dplyr::semi_join(departments, dplyr::join_by(enrollment_department == key))
+
+incomplete_enrollments <- enrollments |>
+  filter((is.null(surveillanceEnd_status) | is.na(surveillanceEnd_status) | surveillanceEnd_status != "COMPLETED") &
+      (is.null(surveillanceEnd_completedAt) | is.na(surveillanceEnd_completedAt) | (
+          surveillanceEnd_completedAt >= reportingPeriodFrom &
+            surveillanceEnd_completedAt <= reportingPeriodTo)))
+
+enrollments <- enrollments |>
   filter(
     # We don't filter for completed enrollments since there currently is no
     # good reason (like some sort of validation) attached to the completion
@@ -65,8 +73,7 @@ enrollments <- data$enrollments |>
     admission_status == "COMPLETED" &
       surveillanceEnd_status == "COMPLETED" &
       surveillanceEnd_completedAt >= reportingPeriodFrom &
-      surveillanceEnd_completedAt <= reportingPeriodTo &
-      NEOIPC_SURVEILLANCE_END_PATIENT_DAYS > 0)
+      surveillanceEnd_completedAt <= reportingPeriodTo)
 
 patients <- data$patients |>
   # don't include patients that aren't enrolled in one of the selected sites
@@ -84,14 +91,28 @@ patients <- data$patients |>
       NEOIPC_TEA_SIBLINGS >= 3 ~ trnsl$multipleBirthCategories$tripletsOrMore
       ), levels = unlist(trnsl$multipleBirthCategories)))
 
-if(defaultPatientFilter)
+incomplete_patients <- data$patients |>
+  dplyr::semi_join(incomplete_enrollments, dplyr::join_by(key == patient)) |>
+  dplyr::filter(
+    NEOIPC_TEA_BIRTH_WEIGHT >= birthWeightFrom &
+      NEOIPC_TEA_BIRTH_WEIGHT <= birthWeightTo &
+      NeoIPC_TEA_TOTAL_GESTATION_DAYS >= gestationalAgeFrom &
+      NeoIPC_TEA_TOTAL_GESTATION_DAYS <= gestationalAgeTo)
+
+if(defaultPatientFilter){
   patients <- patients |>
       filter(NEOIPC_TEA_BIRTH_WEIGHT < 1500 | NeoIPC_TEA_TOTAL_GESTATION_DAYS < 224)
+  incomplete_patients <- incomplete_patients |>
+      filter(NEOIPC_TEA_BIRTH_WEIGHT < 1500 | NeoIPC_TEA_TOTAL_GESTATION_DAYS < 224)
+}
 
 # Apply filters in reverse order to remove irrelevant entries from tables that
 # are higher in the hierarchy
 enrollments <- enrollments |>
   semi_join(patients, dplyr::join_by(patient == key))
+
+incomplete_enrollments <- incomplete_enrollments |>
+  semi_join(incomplete_patients, dplyr::join_by(patient == key))
 
 departments <- departments |>
   semi_join(enrollments, dplyr::join_by(key == enrollment_department))
@@ -116,10 +137,22 @@ department_denominators <- enrollments |>
       matches("_DAYS(_ANY)?$"),
       sum,
       .names = "{.col}_SUM")) |>
+  inner_join(
+    enrollments |>
+      group_by(enrollment_department) |>
+      summarise(
+        patientCount = n_distinct(patient)),
+    join_by(enrollment_department)) |>
   rename(department = enrollment_department)
 
 total_denominators <- department_denominators |>
   reframe(across(!"department", sum))
+
+totDept <- nrow(departments)
+totPat <- total_denominators$patientCount
+totEnr <- total_denominators$NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM
+totPatDay <- total_denominators$NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM
+totIncPat <- nrow(incomplete_patients)
 
 sepses <- data$sepses |>
   filter(status == "COMPLETED") |>
@@ -151,7 +184,7 @@ department_sepses <- sepses |>
             semi_join(sepses, join_by(key, eventType)) |>
             group_by(key) |>
             summarise(
-                maxSource = factor(max(as.integer(PATHOGEN_SOURCE)), levels = c(1,2,3)),
+                maxSource = factor(max(as.integer(if(length(PATHOGEN_SOURCE) > 0){PATHOGEN_SOURCE}else{NA})), levels = c(1,2,3)),
                 .groups = "drop"), join_by(key)) |>
     group_by(department, bsiType, NEOIPC_BSI_DEV_ASS, maxSource) |>
     summarise(n = n(), .groups = "drop") |>
