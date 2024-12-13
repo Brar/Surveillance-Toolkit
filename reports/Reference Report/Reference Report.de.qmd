@@ -93,7 +93,7 @@ Im Folgenden werden die im Rahmen der NeoIPC Surveillance beobachteten Risikofak
 ```{r}
 gaCombined <- patients |>
   ggplot(aes(x = decimal_gestational_age)) +
-  geom_histogram(aes(y = after_stat(density)), colour = 1, fill = "white", binwidth = 1, boundary = 0, closed = "left") +
+  geom_histogram(aes(y = after_stat(density)), colour = 1, fill = "white", binwidth = 1, boundary = 206/7, closed = "left") +
   geom_density() +
   coord_cartesian(c(min(patients$decimal_gestational_age),max(patients$decimal_gestational_age)+0.75)) +
   theme(axis.title=element_blank(),
@@ -147,11 +147,11 @@ gaCombined / gaBoxPlot
 ```{r}
 bwCombined <- patients |>
   ggplot(aes(x = NEOIPC_TEA_BIRTH_WEIGHT)) +
-  geom_histogram(aes(y = after_stat(density)), colour = 1, fill = "white", binwidth = 50, boundary = 0, closed = "left") +
+  geom_histogram(aes(y = after_stat(density)), colour = 1, fill = "white", binwidth = 50, boundary = 25, closed = "left") +
   geom_density() +
   coord_cartesian(c(min(patients$NEOIPC_TEA_BIRTH_WEIGHT),max(patients$NEOIPC_TEA_BIRTH_WEIGHT))) +
   theme(axis.title=element_blank(),
-        axis.text.y=element_blank(),
+        axis.text=element_blank(),
         axis.ticks=element_blank(),
         panel.grid.major.y=element_blank(),
         panel.grid.minor.y=element_blank())
