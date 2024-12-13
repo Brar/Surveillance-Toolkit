@@ -75,26 +75,8 @@ Um auch Einrichtungen mit geringen Ressourcen eine kontinuierliche Surveillance 
 
 Unter Berücksichtigung der oben angegebenen Filterkriterien umfasst diese Auswertung dank der aktiven Mitarbeit der an der NeoIPC Surveillance beteiligten Abteilungen die vollständigen Datensätze von insgesamt *`{r} fn(totPat)` Patienten* aus *`{r} fn(totEnr)` Aufenthalten* in *`{r} fn(totDept)` Abteilungen* mit insgesamt *`{r} fn(totPatDay)` Tagen unter Surveillance*. Die Daten weiterer *`{r} fn(totIncPat)` Patienten*, die sich zum Auswertungszeitpunkt noch in der aktiven Surveillance befinden und daher noch nicht ausgewertet werden können, werden für diese Auswertung zur Verfügung stehen, sobald die Surveillance bei ihnen jeweils abgeschlossen ist.
 
-## Nosokomiale Infektionen
 
-Da Infektionen in der Neonatologie eine lebensbedrohliche Komplikation darstellen, die selbst bei erfolgreicher Behandlung das Risiko für weitere Komplikationen und Entwicklungsstörungen erhöht, stehen sie im Mittelpunkt der NeoIPC Surveillance, wobei nur solche Infektionsarten erfasst werden, die aufgrund ihrer Häufigkeit ein sinnvolles Benchmarking ermöglichen.
-
-### Primäre Sepsis / Blutstrominfektion
-
-Die primäre Sepsis ist die häufigste und wichtigste nosokomiale Infektion in der Neonatologie. Im klinischen Alltag ist die Diagnose jedoch nicht trivial, da der übliche Weg zu einer sensitiven Diagnostik, nämlich die Beimpfung mehrerer Blutkulturflaschen mit einer ausreichenden Menge Blut, oft versperrt ist und es aufgrund der komplexen Abläufe bei der Blutentnahme leicht zu Kontaminationen der Proben kommen kann. Um angesichts der diagnostischen Herausforderungen eine sensitive und spezifische Surveillance zu ermöglichen, werden bei der NeoIPC-Surveillance mehrere Unterdefinitionen verwendet, um die Erfassung von Kontaminationen zu vermeiden und die Erfassung von Sepsisfällen auch bei negativen oder fehlenden Blutkulturergebnissen zu ermöglichen. Die Meningitis, die in der Neonatologie fast immer hämatogen entsteht, wenn sie nicht mit einem chirurgischen Eingriff verbunden ist, wird als Komplikation der Sepsis ebenfalls in diesem Abschnitt dargestellt.
-
-Insgesamt enthält diese Auswertung `{r} fn(nrow(sepses))` Sepsisfälle, was einer Inzidenz[^1] von `{r} fd(nrow(sepses) / nrow(patients) * 100)` Fällen pro 100 Patienten bzw. einer Inzidenzdichte[^2] von `{r} fd(nrow(sepses) / total_denominators$NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000)` Fällen pro 1 000 Patiententage entspricht.
-
-[^1]: Die Inzidenz von Infektionen berechnen wir nach folgender Formel: $\text{Inzidenz} = \frac{\text{Anzahl der Infektionen}}{\text{Anzahl der Patienten}} \times 100$
-
-[^2]: Die Inzidenzdichte von Infektionen berechnen wir nach folgender Formel: $$
-      \text{Inzidenzdichte} = \frac{\text{Anzahl der Infektionen}}{\text{Summe der Patiententage}} \times 1000
-      $$
-
-{{< include _sepsis-table.qmd >}}
-
-
-## Risikofaktoren und Schutzfaktoren
+## Beschreibung der Population und ihrer Risikofaktoren
 
 Wenn wir aus Sicht der Infektionsprävention von Hochrisikopatienten sprechen, meinen wir, dass es bei diesen Patienten Merkmale gibt, die das Infektionsrisiko erhöhen. Dabei kann es sich sowohl um unveränderliche patienteneigene Merkmale handeln als auch um mehr oder weniger beeinflussbare Merkmale, die sich aus der oft komplexen Behandlung dieser Patienten ergeben.
 
@@ -106,39 +88,90 @@ Beispiele für in gewissen Grenzen beeinflussbare Merkmale, die sich ebenfalls a
 
 Im Folgenden werden die im Rahmen der NeoIPC Surveillance beobachteten Risikofaktoren und ihre Verteilung in den am System beteiligten Partnerabteilungen dargestellt, wobei die expositionellen Risikofaktoren möglicherweise helfen können, die Prozesse in der eigenen Abteilung (z.B. Indikationsstellung für Therapien) zu beurteilen, während die dispositionellen Risikofaktoren eher geeignet sind, die Vergleichbarkeit der eigenen Patientenpopulation mit der Population in der NeoIPC Referenzdatenbank zu beurteilen. Je mehr die Zusammensetzung der Patientenpopulation die Sie mit den in der NeoIPC Surveillance Referenzauswertung dargestellten Raten vergleichen möchten, sich im Hinblick auf die gezeigten Merkmale unterscheidt, desto eingeschränkter ist ein Benchmarking möglich. Unterschiede und ihre möglichen Auswirkungen müssen bei der Interpretation stets sorgfältig berücksichtgt werden.
 
-### Gestationsalter und Geburtsgewicht
+### Gestationsalter
 
 ```{r}
-gaDensityPlot <- patients |>
+gaCombined <- patients |>
   ggplot(aes(x = decimal_gestational_age)) +
+  geom_histogram(aes(y = after_stat(density)), colour = 1, fill = "white", binwidth = 1, boundary = 0, closed = "left") +
   geom_density() +
-  ggtitle(data$metadata$trackedEntityAttributes |>
-            filter(code == "NEOIPC_TEA_GEST_AGE") |>
-            pull(displayName)) +
+  coord_cartesian(c(min(patients$decimal_gestational_age),max(patients$decimal_gestational_age)+0.75)) +
   theme(axis.title=element_blank(),
         axis.text=element_blank(),
         axis.ticks=element_blank(),
-        panel.grid.major.x=element_blank(),
-        panel.grid.minor.x=element_blank())
+        panel.grid.major.y=element_blank(),
+        panel.grid.minor.y=element_blank())
+
+# gaHistogram <- patients |>
+#   ggplot(aes(x = decimal_gestational_age)) +
+#   geom_histogram(binwidth = 1) +
+#   ggtitle(data$metadata$trackedEntityAttributes |>
+#             filter(code == "NEOIPC_TEA_GEST_AGE") |>
+#             pull(displayName)) +
+#   theme(axis.title=element_blank(),
+#         axis.text=element_blank(),
+#         axis.ticks=element_blank(),
+#         panel.grid.major.x=element_blank(),
+#         panel.grid.minor.x=element_blank())
+# 
+# gaDensityPlot <- patients |>
+#   ggplot(aes(x = decimal_gestational_age)) +
+#   geom_density() +
+#   ggtitle(data$metadata$trackedEntityAttributes |>
+#             filter(code == "NEOIPC_TEA_GEST_AGE") |>
+#             pull(displayName)) +
+#   theme(axis.title=element_blank(),
+#         axis.text=element_blank(),
+#         axis.ticks=element_blank(),
+#         panel.grid.major.x=element_blank(),
+#         panel.grid.minor.x=element_blank())
 
 gaBoxPlot <- patients |>
   ggplot(aes(x=factor(0), y = decimal_gestational_age)) +
   geom_boxplot() +
   stat_summary(fun = "mean", geom = "point", shape = 23, size = 3, fill = "white") +
   scale_y_continuous(labels = label_week) +
-  coord_flip() +
+  coord_flip(ylim=c(min(patients$decimal_gestational_age),max(patients$decimal_gestational_age)+0.75)) +
   theme(axis.title=element_blank(),
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank(),
         panel.grid.major.y=element_blank(),
         panel.grid.minor.y=element_blank())
 
-bwDensityPlot <- patients |>
+gaCombined / gaBoxPlot
+#gaHistogram / gaDensityPlot / gaBoxPlot
+```
+
+### Geburtsgewicht
+
+```{r}
+bwCombined <- patients |>
   ggplot(aes(x = NEOIPC_TEA_BIRTH_WEIGHT)) +
+  geom_histogram(aes(y = after_stat(density)), colour = 1, fill = "white", binwidth = 50, boundary = 0, closed = "left") +
   geom_density() +
+  coord_cartesian(c(min(patients$NEOIPC_TEA_BIRTH_WEIGHT),max(patients$NEOIPC_TEA_BIRTH_WEIGHT))) +
+  theme(axis.title=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks=element_blank(),
+        panel.grid.major.y=element_blank(),
+        panel.grid.minor.y=element_blank())
+
+bwBarPlot <- patients |>
+  ggplot(aes(x = birth_weight_category_50g)) +
+  geom_bar(width = 1) +
   ggtitle(data$metadata$trackedEntityAttributes |>
             filter(code == "NEOIPC_TEA_BIRTH_WEIGHT") |>
             pull(displayName)) +
+  theme(axis.title=element_blank(),
+        axis.text=element_blank(),
+        axis.ticks=element_blank(),
+        panel.grid.major.x=element_blank(),
+        panel.grid.minor.x=element_blank()) +
+  scale_x_discrete(drop = FALSE, expand = expansion(add = 2))
+
+bwDensityPlot <- patients |>
+  ggplot(aes(x = NEOIPC_TEA_BIRTH_WEIGHT)) +
+  geom_density() +
   theme(axis.title=element_blank(),
         axis.text=element_blank(),
         axis.ticks=element_blank(),
@@ -150,14 +183,16 @@ bwBoxPlot <- patients |>
   geom_boxplot() +
   stat_summary(fun = "mean", geom = "point", shape = 23, size = 3, fill = "white") +
   scale_y_continuous(labels = label_gram) +
-  coord_flip() +
+  coord_flip(ylim=c(min(patients$NEOIPC_TEA_BIRTH_WEIGHT),max(patients$NEOIPC_TEA_BIRTH_WEIGHT))) +
   theme(axis.title=element_blank(),
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank(),
         panel.grid.major.y=element_blank(),
         panel.grid.minor.y=element_blank())
 
-gaDensityPlot / gaBoxPlot / bwDensityPlot / bwBoxPlot
+#bwBarPlot / bwDensityPlot / bwBoxPlot
+
+bwCombined / bwBoxPlot
 
 ```
 
@@ -209,3 +244,38 @@ dmBarChart <- patients |>
 
 sexBarChart / mbBarChart / dmBarChart
 ```
+
+
+## Nosokomiale Infektionen
+
+Da Infektionen in der Neonatologie eine lebensbedrohliche Komplikation darstellen, die selbst bei erfolgreicher Behandlung das Risiko für weitere Komplikationen und Entwicklungsstörungen erhöht, stehen sie im Mittelpunkt der NeoIPC Surveillance, wobei nur solche Infektionsarten erfasst werden, die aufgrund ihrer Häufigkeit ein sinnvolles Benchmarking ermöglichen.
+
+### Primäre Sepsis / Blutstrominfektion
+
+Die primäre Sepsis ist die häufigste und wichtigste nosokomiale Infektion in der Neonatologie. Im klinischen Alltag ist die Diagnose jedoch nicht trivial, da der übliche Weg zu einer sensitiven Diagnostik, nämlich die Beimpfung mehrerer Blutkulturflaschen mit einer ausreichenden Menge Blut, oft versperrt ist und es aufgrund der komplexen Abläufe bei der Blutentnahme leicht zu Kontaminationen der Proben kommen kann. Um angesichts der diagnostischen Herausforderungen eine sensitive und spezifische Surveillance zu ermöglichen, werden bei der NeoIPC-Surveillance mehrere Unterdefinitionen verwendet, um die Erfassung von Kontaminationen zu vermeiden und die Erfassung von Sepsisfällen auch bei negativen oder fehlenden Blutkulturergebnissen zu ermöglichen. Die Meningitis, die in der Neonatologie fast immer hämatogen entsteht, wenn sie nicht mit einem chirurgischen Eingriff verbunden ist, wird als Komplikation der Sepsis ebenfalls in diesem Abschnitt dargestellt.
+
+Insgesamt enthält diese Auswertung `{r} fn(nrow(sepses))` Sepsisfälle, was einer Inzidenz[^1] von `{r} fd(nrow(sepses) / nrow(patients) * 100)` Fällen pro 100 Patienten bzw. einer Inzidenzdichte[^2] von `{r} fd(nrow(sepses) / total_denominators$NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000)` Fällen pro 1 000 Patiententage entspricht.
+
+[^1]: Die Inzidenz von Infektionen berechnen wir nach folgender Formel: $\text{Inzidenz} = \frac{\text{Anzahl der Infektionen}}{\text{Anzahl der Patienten}} \times 100$
+
+[^2]: Die Inzidenzdichte von Infektionen berechnen wir nach folgender Formel: $$
+      \text{Inzidenzdichte} = \frac{\text{Anzahl der Infektionen}}{\text{Summe der Patiententage}} \times 1000
+      $$
+
+{{< include _sepsis-table.qmd >}}
+
+#### Der Gefäßkatheter als Risikofaktor für Sepsis
+
+### Atemwegsinfektion / Pneumonie
+
+#### Atemunterstützung als Risikofaktor für Atemwegsinfektionen
+
+### Schwere Infektion
+
+### Nekrotisierende Enterokolitis
+
+### Infektionserreger
+
+#### Multiresistente Erreger
+
+### Antbiotikaanwendung
