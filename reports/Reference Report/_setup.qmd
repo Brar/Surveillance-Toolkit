@@ -27,6 +27,18 @@ fd <- function(x) format(x, digits = 2, nsmall = 1, scientific = FALSE, big.mark
 label_week <- function(x) paste(fn(x), "w", sep = " ")
 label_gram <- function(x) paste(fn(x), "g", sep = " ")
 format_ga <- function(x, add_unit = TRUE) paste(fn(as.integer(x / 7)), if(add_unit){label_week(x %% 7)}else{ x %% 7}, sep = "+")
+bw_cat <- function(x, cat_size){
+  cat_lower <- as.integer(x / cat_size) * cat_size
+  cat_upper <- cat_lower + cat_size - 1
+  min_cat_lower <- min(cat_lower)
+  max_cat_lower <- max(cat_lower)
+  min_cat_upper <- min(cat_upper)
+  max_cat_upper <- max(cat_upper)
+  factor(
+    paste0(fn(cat_lower)," - ",fn(cat_upper)," g"),
+    levels = paste0(fn(seq(min_cat_lower, max_cat_lower, cat_size))," - ",fn(seq(min_cat_upper, max_cat_upper, cat_size))," g"),
+    ordered = TRUE)
+}
 
 ```
 
@@ -82,14 +94,7 @@ patients <- data$patients |>
     NEOIPC_TEA_BIRTH_WEIGHT >= birthWeightFrom &
       NEOIPC_TEA_BIRTH_WEIGHT <= birthWeightTo &
       NeoIPC_TEA_TOTAL_GESTATION_DAYS >= gestationalAgeFrom &
-      NeoIPC_TEA_TOTAL_GESTATION_DAYS <= gestationalAgeTo) |>
-  dplyr::mutate(
-    decimal_gestational_age = NeoIPC_TEA_TOTAL_GESTATION_DAYS / 7,
-    multiple_birth_category = ordered(case_when(
-      NEOIPC_TEA_SIBLINGS == 1 ~ trnsl$multipleBirthCategories$singleBirth,
-      NEOIPC_TEA_SIBLINGS == 2 ~ trnsl$multipleBirthCategories$twins,
-      NEOIPC_TEA_SIBLINGS >= 3 ~ trnsl$multipleBirthCategories$tripletsOrMore
-      ), levels = unlist(trnsl$multipleBirthCategories)))
+      NeoIPC_TEA_TOTAL_GESTATION_DAYS <= gestationalAgeTo)
 
 incomplete_patients <- data$patients |>
   dplyr::semi_join(incomplete_enrollments, dplyr::join_by(key == patient)) |>
@@ -105,6 +110,17 @@ if(defaultPatientFilter){
   incomplete_patients <- incomplete_patients |>
       filter(NEOIPC_TEA_BIRTH_WEIGHT < 1500 | NeoIPC_TEA_TOTAL_GESTATION_DAYS < 224)
 }
+
+patients <- patients |>
+  dplyr::mutate(
+    decimal_gestational_age = NeoIPC_TEA_TOTAL_GESTATION_DAYS / 7,
+    full_gestation_week_category = factor(as.integer(NeoIPC_TEA_TOTAL_GESTATION_DAYS / 7), ordered = TRUE),
+    birth_weight_category_50g = bw_cat(NEOIPC_TEA_BIRTH_WEIGHT, 50),
+    multiple_birth_category = ordered(case_when(
+      NEOIPC_TEA_SIBLINGS == 1 ~ trnsl$multipleBirthCategories$singleBirth,
+      NEOIPC_TEA_SIBLINGS == 2 ~ trnsl$multipleBirthCategories$twins,
+      NEOIPC_TEA_SIBLINGS >= 3 ~ trnsl$multipleBirthCategories$tripletsOrMore
+      ), levels = unlist(trnsl$multipleBirthCategories)))
 
 # Apply filters in reverse order to remove irrelevant entries from tables that
 # are higher in the hierarchy
@@ -124,13 +140,15 @@ countries <- countries |>
   semi_join(hospitals, dplyr::join_by(code == country_code))
 
 # filter the actual data
-department_denominators <- enrollments |>
+denominators <- enrollments |>
     mutate(
         NEOIPC_SURVEILLANCE_END_VENT_DAYS =
             NEOIPC_SURVEILLANCE_END_INV_DAYS +
             NEOIPC_SURVEILLANCE_END_NIV_DAYS,
         .before = NEOIPC_SURVEILLANCE_END_INV_DAYS) |>
-  mutate(across(ends_with("_DAYS"), ~ .x > 0, .names = "{.col}_ANY")) |>
+  mutate(across(ends_with("_DAYS"), ~ .x > 0, .names = "{.col}_ANY"))
+
+department_denominators <- denominators |>
   group_by(enrollment_department) |>
   summarise(
     across(
@@ -144,6 +162,22 @@ department_denominators <- enrollments |>
         patientCount = n_distinct(patient)),
     join_by(enrollment_department)) |>
   rename(department = enrollment_department)
+
+bw_50g_denominators <- denominators |>
+  inner_join(patients, join_by(patient == key)) |>
+  group_by(birth_weight_category_50g, .drop = FALSE) |>
+  summarise(
+    across(
+      matches("_DAYS(_ANY)?$"),
+      sum,
+      .names = "{.col}_SUM")) |>
+  inner_join(
+    enrollments |>
+      inner_join(patients, join_by(patient == key)) |>
+      group_by(birth_weight_category_50g, .drop = FALSE) |>
+      summarise(
+        patientCount = n_distinct(patient)),
+    join_by(birth_weight_category_50g))
 
 total_denominators <- department_denominators |>
   reframe(across(!"department", sum))
