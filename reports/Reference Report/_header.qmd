@@ -12,7 +12,7 @@
 
 `{r} trnsl$headerList$birthweightFilter`:
 
-:   `{r} if(birthWeightFrom == 0L && birthWeightTo == 2147483647L) trnsl$headerList$allBirthweights else paste(label_gram(birthWeightFrom), label_gram(birthWeightTo), sep = " - ")`
+:   `{r} if(birthWeightFrom == 0L && birthWeightTo == 2147483647L) trnsl$headerList$allBirthweights else paste(label_bw(birthWeightFrom), label_bw(birthWeightTo), sep = " - ")`
 
 `{r} trnsl$headerList$gestationalAgeFilter`:
 
