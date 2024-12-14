@@ -25,10 +25,14 @@ data <- if(!rlang::is_na(session_id)) import_dhis2(connection_options = dhis2_co
 fn <- function(x) format(x, big.mark =" ")
 fd <- function(x) format(x, digits = 2, nsmall = 1, scientific = FALSE, big.mark =" ")
 label_week <- function(x) paste(fn(x), "w", sep = " ")
-label_gram <- function(x) paste(fn(x), "g", sep = " ")
+breaks_week <- function(x) pretty(x, as.integer((as.integer(x[2]) + 1 - as.integer(x[1])) / 2))
+label_bw <- function(x) paste(fn(x), "g", sep = " ")
+breaks_bw <- function(x) pretty(x, as.integer((as.integer(x[2]) + 1 - as.integer(x[1])) / 100))
+
 format_ga <- function(x, add_unit = TRUE) paste(fn(as.integer(x / 7)), if(add_unit){label_week(x %% 7)}else{ x %% 7}, sep = "+")
 bw_cat <- function(x, cat_size){
-  cat_lower <- as.integer(x / cat_size) * cat_size
+  half_size = cat_size / 2
+  cat_lower <- as.integer(x / half_size) * half_size
   cat_upper <- cat_lower + cat_size - 1
   min_cat_lower <- min(cat_lower)
   max_cat_lower <- max(cat_lower)

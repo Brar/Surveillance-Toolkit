@@ -95,7 +95,8 @@ gaCombined <- patients |>
   ggplot(aes(x = decimal_gestational_age)) +
   geom_histogram(aes(y = after_stat(density)), colour = 1, fill = "white", binwidth = 1, boundary = 206/7, closed = "left") +
   geom_density() +
-  coord_cartesian(c(min(patients$decimal_gestational_age),max(patients$decimal_gestational_age)+0.75)) +
+  scale_x_continuous(breaks = breaks_week) +
+  coord_cartesian(xlim = c(as.integer(min(patients$decimal_gestational_age)) - 1, as.integer(max(patients$decimal_gestational_age)) + 1)) +
   theme(axis.title=element_blank(),
         axis.text=element_blank(),
         axis.ticks=element_blank(),
@@ -130,8 +131,8 @@ gaBoxPlot <- patients |>
   ggplot(aes(x=factor(0), y = decimal_gestational_age)) +
   geom_boxplot() +
   stat_summary(fun = "mean", geom = "point", shape = 23, size = 3, fill = "white") +
-  scale_y_continuous(labels = label_week) +
-  coord_flip(ylim=c(min(patients$decimal_gestational_age),max(patients$decimal_gestational_age)+0.75)) +
+  scale_y_continuous(breaks = breaks_week, labels = label_week) +
+  coord_flip(ylim = c(as.integer(min(patients$decimal_gestational_age)) - 1, as.integer(max(patients$decimal_gestational_age)) + 1)) +
   theme(axis.title=element_blank(),
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank(),
@@ -149,7 +150,8 @@ bwCombined <- patients |>
   ggplot(aes(x = NEOIPC_TEA_BIRTH_WEIGHT)) +
   geom_histogram(aes(y = after_stat(density)), colour = 1, fill = "white", binwidth = 50, boundary = 25, closed = "left") +
   geom_density() +
-  coord_cartesian(c(min(patients$NEOIPC_TEA_BIRTH_WEIGHT),max(patients$NEOIPC_TEA_BIRTH_WEIGHT))) +
+  scale_x_continuous(breaks = breaks_bw) +
+  coord_cartesian(xlim = c(min(patients$NEOIPC_TEA_BIRTH_WEIGHT) - 50, max(patients$NEOIPC_TEA_BIRTH_WEIGHT) + 50)) +
   theme(axis.title=element_blank(),
         axis.text=element_blank(),
         axis.ticks=element_blank(),
@@ -182,9 +184,10 @@ bwBoxPlot <- patients |>
   ggplot(aes(x=factor(0), y = NEOIPC_TEA_BIRTH_WEIGHT)) +
   geom_boxplot() +
   stat_summary(fun = "mean", geom = "point", shape = 23, size = 3, fill = "white") +
-  scale_y_continuous(labels = label_gram) +
-  coord_flip(ylim=c(min(patients$NEOIPC_TEA_BIRTH_WEIGHT),max(patients$NEOIPC_TEA_BIRTH_WEIGHT))) +
+  scale_y_continuous(breaks = breaks_bw, labels = label_bw) +
+  coord_flip(ylim = c(min(patients$NEOIPC_TEA_BIRTH_WEIGHT) - 50, max(patients$NEOIPC_TEA_BIRTH_WEIGHT) + 50)) +
   theme(axis.title=element_blank(),
+        axis.text.x=element_text(angle = 45, hjust = 1, vjust = 1),
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank(),
         panel.grid.major.y=element_blank(),
