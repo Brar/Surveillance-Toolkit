@@ -1,28 +1,62 @@
 ```{r Sepsis table}
-sepsis_table <- tibble(
-NoOfInfections = total_sepses |> unlist() |> format(),
-PooledMean = total_sepsis_rates |> select(ends_with("_D")) |> unlist(),
-Q1 := sepsis_rate_quartiles |> select(ends_with("_D")) |> slice(1) |> unlist(),
-Median := sepsis_rate_quartiles |> select(ends_with("_D")) |> slice(2) |> unlist(),
-Q3 := sepsis_rate_quartiles |> select(ends_with("_D")) |> slice(3) |> unlist()) |>
-  as.data.frame()
+q <- sepsis_rate_quartiles |> select(ends_with("_D") & !c(CVC_D, PVC_D))
 
-colnames(sepsis_table) <-c(trnsl$sepsisTable$NoOfInfections, trnsl$sepsisTable$PooledMean, trnsl$sepsisTable$Q1, trnsl$sepsisTable$Median, trnsl$sepsisTable$Q3)
-rownames(sepsis_table) <- c(trnsl$sepsisTable$Total, trnsl$sepsisTable$Pathogens, trnsl$sepsisTable$Commensals, trnsl$sepsisTable$Clinical, trnsl$sepsisTable$CvcAssociated, trnsl$sepsisTable$PvcAssociated, trnsl$sepsisTable$CsfPositive)
-
-sepsis_table |>
-  kbl(
-    digits = c(0,1,1,1,1),
-    align = "rrrrr",
-    format.args = list(nsmall = 1)) |>
-  kable_styling() |>
-#  add_header_above(data.frame(c(" ", trnsl$sepsisTable$IncidenceRate), c(2, 4)))|>
-  add_indent(2:7)
-
-
-# %>%
-  # footnote(
-    # number = "$\\text{Inzidenz} = \\frac{\\text{Anzahl der Infektionen}}{\\text{Anzahl der Patienten}} \\times 100$",
-    # threeparttable = TRUE,
-    # escape = FALSE)
+tibble(
+  name = c(trnsl$sepsisTable$Total, trnsl$sepsisTable$Pathogens, trnsl$sepsisTable$Commensals, trnsl$sepsisTable$Clinical, trnsl$sepsisTable$CsfPositive),
+  !!trnsl$sepsisTable$NoOfInfections := total_sepses |> select(!c(CVC, PVC)) |> unlist(),
+  !!trnsl$sepsisTable$PooledMean := total_sepsis_rates |> select(ends_with("_D") & !c(CVC_D, PVC_D)) |> unlist(),
+  !!trnsl$sepsisTable$Q1 := q |> slice(1) |> unlist(),
+  !!trnsl$sepsisTable$Median := q |> slice(2) |> unlist(),
+  !!trnsl$sepsisTable$Q3 := q |> slice(3) |> unlist()) |>
+  gt(rowname_col = "name") |>
+  tab_options(table.width = pct(100)) |>
+  tab_header(title = "Sepsis Inzidenzdichte") |>
+  tab_row_group(label = "Sepsis mit Meningitis", rows = 5, id = "bsi_csf_detection") |>
+  tab_row_group(label = "Erregernachweis", rows = 2:4, id = "bsi_pathogen_detection") |>
+  fmt_number(decimals = 1) |>
+  fmt_number(columns = trnsl$sepsisTable$NoOfInfections, decimals = 0) |>
+  tab_spanner(
+    label = "Inzidenzdichte",
+    columns = c(trnsl$sepsisTable$PooledMean, trnsl$sepsisTable$Q1, trnsl$sepsisTable$Median, trnsl$sepsisTable$Q3),
+    id = "incidence_density"
+  ) |>
+  tab_style(
+    style = list(
+      cell_borders(sides = "right", weight = px(0))
+    ),
+    locations = list(
+      cells_stub()
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_text(weight = "bold"),
+      cell_borders(sides = "right", weight = px(0))
+    ),
+    locations = list(
+      cells_row_groups(),
+      cells_column_labels(),
+      cells_stub(rows = trnsl$sepsisTable$Total)
+    )
+  ) |>
+  tab_footnote(
+    footnote = md("$$\\text{Inzidenzdichte} = \\frac{\\text{Anzahl der Infektionen}}{\\text{Summe der Patiententage}} \\times 1 000$$"),
+    locations = cells_column_spanners(spanners = "incidence_density")
+  ) |>
+  tab_footnote(
+    footnote = "Das gepooltes arithmetische Mittel der Inzidenzdichte. Es wird berechnet indem die Anzahl der Infektionen in allen Abteilungen aufsummiert und durch die Summe der Patiententage in allen Abteilungen dividiert wird.",
+    locations = cells_column_labels(columns = trnsl$sepsisTable$PooledMean)
+  ) |>
+  tab_footnote(
+    footnote = "Das erste Quartil (Q1) trennt das Viertel der Abteilungen mit den niedrigsten Inzidenzdichten von den drei Vierteln mit höheren Inzidenzdichten.",
+    locations = cells_column_labels(columns = trnsl$sepsisTable$Q1)
+  ) |>
+  tab_footnote(
+    footnote = "Der Median trennt die Hälfte der Abteilungen mit den niedrigeren Inzidenzdichten von der Hälfte mit den höheren Inzidenzdichten.",
+    locations = cells_column_labels(columns = trnsl$sepsisTable$Median)
+  ) |>
+  tab_footnote(
+    footnote = "Das dritte Quartil (Q3) trennt das Viertel der Abteilungen mit den höchsten Inzidenzdichten von den drei Vierteln mit niedrigeren Inzidenzdichten.",
+    locations = cells_column_labels(columns = trnsl$sepsisTable$Q3)
+  )
 ```

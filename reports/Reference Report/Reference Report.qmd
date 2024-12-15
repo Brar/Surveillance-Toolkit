@@ -19,6 +19,7 @@ params:
 
 ```{r Pre-Setup}
 locale = "en"
+options(OutDec = ",", gt.locale = locale)
 invisible(Sys.setlocale(category = "LC_ALL", locale = "en_GB.utf8"))
 trnsl <- list(
   multipleBirthCategories = list(

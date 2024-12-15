@@ -22,7 +22,7 @@ params:
 
 ```{r Pre-Setup}
 locale = "de"
-options(OutDec = ",")
+options(OutDec = ",", gt.locale = locale)
 invisible(Sys.setlocale(category = "LC_ALL", locale = "de_DE.utf8"))
 trnsl <- list(
   multipleBirthCategories = list(
@@ -56,12 +56,12 @@ trnsl <- list(
     Median = "Median",
     Q3 = "Q3",
     Total = "Gesamt",
-    Pathogens = "Pathogene",
+    Pathogens = "Nicht-Kommensale",
     Commensals = "Kommensale",
-    Clinical = "Klinisch",
+    Clinical = "Klinische Sepsis",
     CvcAssociated = "ZVK-assoziiert",
     PvcAssociated = "PVK-Assoziiert",
-    CsfPositive = "Liquornachweis")
+    CsfPositive = "Erregernachweis im Liquor")
 )
 ```
 
@@ -93,7 +93,7 @@ Im Folgenden werden die im Rahmen der NeoIPC Surveillance beobachteten Risikofak
 ```{r}
 gaCombined <- patients |>
   ggplot(aes(x = decimal_gestational_age)) +
-  geom_histogram(aes(y = after_stat(density)), colour = 1, fill = "white", binwidth = 1, boundary = 206/7, closed = "left") +
+  geom_histogram(aes(y = after_stat(density)), colour = 1, fill = "white", binwidth = 1, boundary = 3/7, closed = "left") +
   geom_density() +
   scale_x_continuous(breaks = breaks_week) +
   coord_cartesian(xlim = c(as.integer(min(patients$decimal_gestational_age)) - 1, as.integer(max(patients$decimal_gestational_age)) + 1)) +
@@ -257,23 +257,21 @@ Da Infektionen in der Neonatologie eine lebensbedrohliche Komplikation darstelle
 
 Die primäre Sepsis ist die häufigste und wichtigste nosokomiale Infektion in der Neonatologie. Im klinischen Alltag ist die Diagnose jedoch nicht trivial, da der übliche Weg zu einer sensitiven Diagnostik, nämlich die Beimpfung mehrerer Blutkulturflaschen mit einer ausreichenden Menge Blut, oft versperrt ist und es aufgrund der komplexen Abläufe bei der Blutentnahme leicht zu Kontaminationen der Proben kommen kann. Um angesichts der diagnostischen Herausforderungen eine sensitive und spezifische Surveillance zu ermöglichen, werden bei der NeoIPC-Surveillance mehrere Unterdefinitionen verwendet, um die Erfassung von Kontaminationen zu vermeiden und die Erfassung von Sepsisfällen auch bei negativen oder fehlenden Blutkulturergebnissen zu ermöglichen. Die Meningitis, die in der Neonatologie fast immer hämatogen entsteht, wenn sie nicht mit einem chirurgischen Eingriff verbunden ist, wird als Komplikation der Sepsis ebenfalls in diesem Abschnitt dargestellt.
 
-Insgesamt enthält diese Auswertung `{r} fn(nrow(sepses))` Sepsisfälle, was einer Inzidenz[^1] von `{r} fd(nrow(sepses) / nrow(patients) * 100)` Fällen pro 100 Patienten bzw. einer Inzidenzdichte[^2] von `{r} fd(nrow(sepses) / total_denominators$NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000)` Fällen pro 1 000 Patiententage entspricht.
-
-[^1]: Die Inzidenz von Infektionen berechnen wir nach folgender Formel: $\text{Inzidenz} = \frac{\text{Anzahl der Infektionen}}{\text{Anzahl der Patienten}} \times 100$
-
-[^2]: Die Inzidenzdichte von Infektionen berechnen wir nach folgender Formel: $$
-      \text{Inzidenzdichte} = \frac{\text{Anzahl der Infektionen}}{\text{Summe der Patiententage}} \times 1000
-      $$
-
 {{< include _sepsis-table.qmd >}}
 
 #### Der Gefäßkatheter als Risikofaktor für Sepsis
 
 ### Atemwegsinfektion / Pneumonie
 
+TODO: Inzidenzdichte der UAWIs
+
 #### Atemunterstützung als Risikofaktor für Atemwegsinfektionen
 
+TODO: Expositions- und Anwendungsraten für INV und NIV sowie Beatmungsassoziierte UAWIs
+
 ### Schwere Infektion
+
+TODO: Inzidenz und Inzidenzdichte schwerer Infektionen und SIR
 
 ### Nekrotisierende Enterokolitis
 
@@ -281,4 +279,12 @@ Insgesamt enthält diese Auswertung `{r} fn(nrow(sepses))` Sepsisfälle, was ein
 
 #### Multiresistente Erreger
 
-### Antbiotikaanwendung
+### Mikrobiom-Maßnahmen
+
+#### Antbiotikaanwendung
+
+TODO: Expositions- und Anwendungsraten für AWaRE-Klassen, ATC-Substanzgruppen und Einzelsubstanzen
+
+#### Humane Milch und Probiotika
+
+#### Kängugruh-Pflege
