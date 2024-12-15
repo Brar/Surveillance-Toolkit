@@ -1,10 +1,9 @@
 ```{r General setup and parameter preparation, message=FALSE, warning=FALSE}
 suppressMessages(pak::pak("Brar/neoipcr@initial_tests"))
-suppressMessages(library(kableExtra, warn.conflicts = FALSE, quietly = TRUE))
 suppressMessages(library(tidyverse, warn.conflicts = FALSE, quietly = TRUE))
 suppressMessages(library(scales, warn.conflicts = FALSE, quietly = TRUE))
 suppressMessages(library(patchwork, warn.conflicts = FALSE, quietly = TRUE))
-#suppressMessages(library(exactRankTests, warn.conflicts = FALSE, quietly = TRUE))
+suppressMessages(library(gt, warn.conflicts = FALSE, quietly = TRUE))
 suppressMessages(library(neoipcr, warn.conflicts = FALSE, quietly = TRUE))
 
 reportingPeriodFrom <- as_date(coalesce(params[["reportingPeriodFrom"]], "2024-01-01"))
@@ -24,23 +23,29 @@ data <- if(!rlang::is_na(session_id)) import_dhis2(connection_options = dhis2_co
 
 fn <- function(x) format(x, big.mark =" ")
 fd <- function(x) format(x, digits = 2, nsmall = 1, scientific = FALSE, big.mark =" ")
-label_week <- function(x) paste(fn(x), "w", sep = " ")
+label_week <- function(x) paste(fn(x), "w", sep = " ")
 breaks_week <- function(x) pretty(x, as.integer((as.integer(x[2]) + 1 - as.integer(x[1])) / 2))
-label_bw <- function(x) paste(fn(x), "g", sep = " ")
+label_bw <- function(x) paste(fn(x), "g", sep = " ")
 breaks_bw <- function(x) pretty(x, as.integer((as.integer(x[2]) + 1 - as.integer(x[1])) / 100))
-
 format_ga <- function(x, add_unit = TRUE) paste(fn(as.integer(x / 7)), if(add_unit){label_week(x %% 7)}else{ x %% 7}, sep = "+")
-bw_cat <- function(x, cat_size){
-  half_size = cat_size / 2
-  cat_lower <- as.integer(x / half_size) * half_size
-  cat_upper <- cat_lower + cat_size - 1
-  min_cat_lower <- min(cat_lower)
-  max_cat_lower <- max(cat_lower)
-  min_cat_upper <- min(cat_upper)
-  max_cat_upper <- max(cat_upper)
+ga_7 <- function(x) {
+  dec <- x / 7
+  cat_lower <- as.integer((dec - 3/7) / 7) * 7 + 3/7
+  cat_upper <- cat_lower + 6/7
+  lower_cats <- seq(min(cat_lower), max(cat_lower), 1)
+  upper_cats <- seq(min(cat_upper), max(cat_upper), 1)
   factor(
-    paste0(fn(cat_lower)," - ",fn(cat_upper)," g"),
-    levels = paste0(fn(seq(min_cat_lower, max_cat_lower, cat_size))," - ",fn(seq(min_cat_upper, max_cat_upper, cat_size))," g"),
+    paste0(as.integer(cat_lower),"+",(cat_lower * 7) %% 7," w - ",as.integer(cat_upper),"+",(cat_upper * 7) %% 7," w"),
+    levels = paste0(as.integer(lower_cats),"+",(lower_cats * 7) %% 7," w - ",as.integer(upper_cats),"+",(upper_cats * 7) %% 7," w"),
+    ordered = TRUE)
+
+}
+bw_50 <- function(x){
+  cat_lower <- as.integer((x - 25) / 50) * 50 + 25
+  cat_upper <- cat_lower + 50 - 1
+  factor(
+    paste0(fn(cat_lower)," g - ",fn(cat_upper)," g"),
+    levels = paste0(fn(seq(min(cat_lower), max(cat_lower), 50))," g - ",fn(seq(min(cat_upper), max(cat_upper), 50))," g"),
     ordered = TRUE)
 }
 
@@ -118,8 +123,8 @@ if(defaultPatientFilter){
 patients <- patients |>
   dplyr::mutate(
     decimal_gestational_age = NeoIPC_TEA_TOTAL_GESTATION_DAYS / 7,
-    full_gestation_week_category = factor(as.integer(NeoIPC_TEA_TOTAL_GESTATION_DAYS / 7), ordered = TRUE),
-    birth_weight_category_50g = bw_cat(NEOIPC_TEA_BIRTH_WEIGHT, 50),
+    gestation_week_category = ga_7(NeoIPC_TEA_TOTAL_GESTATION_DAYS),
+    birth_weight_category_50g = bw_50(NEOIPC_TEA_BIRTH_WEIGHT),
     multiple_birth_category = ordered(case_when(
       NEOIPC_TEA_SIBLINGS == 1 ~ trnsl$multipleBirthCategories$singleBirth,
       NEOIPC_TEA_SIBLINGS == 2 ~ trnsl$multipleBirthCategories$twins,
@@ -216,14 +221,16 @@ causative_pathogens <- data$causative_pathogens |>
     ssis |> select(key, eventType)
   ), join_by(key, eventType))
 
-department_sepses <- sepses |>
+max_source_sepses <- sepses |>
     left_join(
         causative_pathogens |>
             semi_join(sepses, join_by(key, eventType)) |>
             group_by(key) |>
             summarise(
                 maxSource = factor(max(as.integer(if(length(PATHOGEN_SOURCE) > 0){PATHOGEN_SOURCE}else{NA})), levels = c(1,2,3)),
-                .groups = "drop"), join_by(key)) |>
+                .groups = "drop"), join_by(key))
+
+department_sepses <- max_source_sepses |>
     group_by(department, bsiType, NEOIPC_BSI_DEV_ASS, maxSource) |>
     summarise(n = n(), .groups = "drop") |>
   inner_join(
@@ -255,13 +262,67 @@ department_sepses <- sepses |>
     .after = department,
     .keep = "unused")
 
+bw50_sepses <- max_source_sepses |>
+  inner_join(enrollments, join_by(enrollment == key)) |>
+  inner_join(patients, join_by(patient == key)) |>
+  group_by(birth_weight_category_50g, bsiType, NEOIPC_BSI_DEV_ASS, maxSource, .drop = FALSE) |>
+  summarise(n = n(), .groups = "drop") |>
+  inner_join(
+    data$metadata$sepsisDeviceAssociation |>
+      select(code, displayName) |>
+      rename(dev = displayName),
+    join_by(NEOIPC_BSI_DEV_ASS == code)) |>
+  left_join(
+    data$metadata$sepsisPathogenSources |>
+      select(code, displayName) |>
+      rename(source = displayName),
+    join_by(maxSource == code)) |>
+  mutate(source = factor(replace_na(as.character(source), "None"), levels = c("None", levels(source)))) |>
+  select(!c(NEOIPC_BSI_DEV_ASS, maxSource)) |>
+  pivot_wider(
+    names_from = c(bsiType, dev, source),
+    names_expand = TRUE,
+    names_sort = TRUE,
+    values_from = n,
+    values_fill = 0) |>
+  mutate(
+    Tot = rowSums(across(!birth_weight_category_50g)),
+    BSI = rowSums(across(starts_with("BSI"))),
+    CoNS = rowSums(across(starts_with("CoNS"))),
+    Clin = rowSums(across(starts_with("Clin"))),
+    CVC = rowSums(across(contains("_CVC-associated_"))),
+    PVC = rowSums(across(contains("_PVC-associated_"))),
+    CSF = rowSums(across(ends_with("Cerebrospinal fluid"))),
+    .after = birth_weight_category_50g,
+    .keep = "unused")
+
 total_sepses <- department_sepses |>
   reframe(across(!"department", sum))
 
-department_sepsis_rates = department_sepses |>
+department_sepsis_rates <- department_sepses |>
   inner_join(department_denominators, join_by(department)) |>
   mutate(
     department = department,
+    Tot_I = Tot / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM * 100,
+    Tot_D = Tot / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000,
+    BSI_I = BSI / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM * 100,
+    BSI_D = BSI / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000,
+    CoNS_I = CoNS / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM * 100,
+    CoNS_D = CoNS / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000,
+    Clin_I = Clin / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM * 100,
+    Clin_D = Clin / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000,
+    CVC_I = CVC / NEOIPC_SURVEILLANCE_END_CVC_DAYS_ANY_SUM * 100,
+    CVC_D = CVC / NEOIPC_SURVEILLANCE_END_CVC_DAYS_SUM * 1000,
+    PVC_I = PVC / NEOIPC_SURVEILLANCE_END_PVC_DAYS_ANY_SUM * 100,
+    PVC_D = PVC / NEOIPC_SURVEILLANCE_END_PVC_DAYS_SUM * 1000,
+    CSF_I = CSF / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM * 100,
+    CSF_D = CSF / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000,
+    .keep = "none")
+
+bw50_sepsis_rates <- bw50_sepses |>
+  inner_join(bw_50g_denominators, join_by(birth_weight_category_50g)) |>
+  mutate(
+    birth_weight_category_50g = birth_weight_category_50g,
     Tot_I = Tot / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM * 100,
     Tot_D = Tot / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000,
     BSI_I = BSI / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM * 100,
