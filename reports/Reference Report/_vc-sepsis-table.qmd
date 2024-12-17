@@ -1,0 +1,80 @@
+```{r VC associated sepsis table}
+q <- sepsis_rate_quartiles |> select(c(CVC_D, PVC_D))
+
+tibble(
+  name = c(trnsl$vcSepsisTable$CvcAssociated, trnsl$vcSepsisTable$PvcAssociated),
+  !!trnsl$sepsisTable$NoOfInfections := total_sepses |> select(c(CVC, PVC)) |> unlist(),
+  !!trnsl$globalTable$PooledMean := total_sepsis_rates |> select(c(CVC_D, PVC_D)) |> unlist(),
+  !!trnsl$globalTable$Q1 := q |> slice(1) |> unlist(),
+  !!trnsl$globalTable$Median := q |> slice(2) |> unlist(),
+  !!trnsl$globalTable$Q3 := q |> slice(3) |> unlist()) |>
+  gt(rowname_col = "name") |>
+  tab_options(table.width = pct(100)) |>
+  tab_header(title = trnsl$vcSepsisTable$Header) |>
+  tab_row_group(label = trnsl$vcSepsisTable$VcAssociation, rows = 1:2) |>
+  fmt_number(decimals = 1) |>
+  fmt_number(columns = trnsl$sepsisTable$NoOfInfections, decimals = 0) |>
+  tab_spanner(
+    label = trnsl$vcSepsisTable$vcAssociatedIncidenceRate,
+    columns = c(trnsl$globalTable$PooledMean, trnsl$globalTable$Q1, trnsl$globalTable$Median, trnsl$globalTable$Q3),
+    id = "incidence_rate"
+  ) |>
+  tab_style(
+    style = list(
+      cell_borders(sides = c("left", "right"), weight = px(0))
+    ),
+    locations = list(
+      cells_stub()
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_text(weight = "bold"),
+      cell_borders(sides = "right", weight = px(0))
+    ),
+    locations = list(
+      cells_row_groups(),
+      cells_column_labels()
+    )
+  ) |>
+  tab_footnote(
+    footnote = md(paste(
+      paste0(
+        "$$\\text{",
+        trnsl$vcSepsisTable$CvcAssociatedIncidenceRate,
+        "} = \\frac{\\text{",
+        trnsl$vcSepsisTable$NumberOfCvcAssociatedInfections,
+        "}}{\\text{",
+        trnsl$vcSepsisTable$SumOfCvcDays,
+        "}} \\times 1 000$$"
+      ),
+      paste0(
+        "$$\\text{",
+        trnsl$vcSepsisTable$PvcAssociatedIncidenceRate,
+        "} = \\frac{\\text{",
+        trnsl$vcSepsisTable$NumberOfPvcAssociatedInfections,
+        "}}{\\text{",
+        trnsl$vcSepsisTable$SumOfPvcDays,
+        "}} \\times 1 000$$"
+        ),
+      sep = "\\n")),
+    locations = cells_column_spanners(spanners = "incidence_rate")
+  ) |>
+  tab_footnote(
+    footnote = trnsl$vcSepsisTable$PooledMeanFootnote,
+    locations = cells_column_labels(columns = trnsl$globalTable$PooledMean)
+  ) |>
+  tab_footnote(
+    footnote = trnsl$vcSepsisTable$Q1Footnote,
+    locations = cells_column_labels(columns = trnsl$globalTable$Q1)
+  ) |>
+  tab_footnote(
+    footnote = trnsl$vcSepsisTable$MedianFootnote,
+    locations = cells_column_labels(columns = trnsl$globalTable$Median)
+  ) |>
+  tab_footnote(
+    footnote = trnsl$vcSepsisTable$Q3Footnote,
+    locations = cells_column_labels(columns = trnsl$globalTable$Q3)
+  )
+
+```

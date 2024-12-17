@@ -1,8 +1,10 @@
 ---
 title: "NeoIPC Reference Report"
+lang: en
 format: html
-editor: visual
 echo: false
+execute:
+  keep-md: true
 params:
   reportingPeriodFrom: NULL
   reportingPeriodTo: NULL
@@ -37,7 +39,7 @@ trnsl <- list(
     gestationalAgeFilter = "Gestational age filter",
     allGestationalAges = "All gestational ages",
     multiCountryHintHeader = "Multinational analysis",
-    multiCountryHint = "This report aggregates data from neonatal units in several countries. This means that, while it reflects a broad spectrum of care structures, it is only of limited use as a benchmark due to the sometimes very different healthcare systems and the resources available in the various countries.",
+    multiCountryHint = "This report aggregates data from neonatal units in several countries. This means that, while it reflects a broad spectrum of care structures, it is only suitable as a benchmark to a somewhat limited extent due to the sometimes very different healthcare systems and the resources available there.",
     multiCountryHintGoal = "The aim of NeoIPC Surveillance is therefore always to provide a national or regional report, provided that a sufficient number of units in the respective region participate in the system.",
     singleCountryHintHeader = "National report",
     singleCountryHint = "This report presents data from neonatal units in a single country. This means that, because of the relative homogeneity of the healthcare system, it is in principle a good benchmark. However, it should be noted that only a proportion of neonatal units in a country actually participate in NeoIPC Surveillance. Since participation is voluntary, these are typically hospitals that have a particular interest in infection prevention and are willing and able to provide the resources required for surveillance.",
@@ -45,21 +47,90 @@ trnsl <- list(
     specialAnalysisHint = "This is a special analysis that",
     includesTestDepartments = "includes test units",
     and = " and ",
-    ignoresInclusionCriteria = "ignores the NeoIPC Surveillance inclusion criteria."),
+    ignoresInclusionCriteria = "ignores the NeoIPC Surveillance inclusion criteria."
+  ),
+  pats = list(
+    all = "Number of all patients",
+    days = "Sum of all patient days"
+  ),
+  devs = list(
+    VC = list(
+      days = "Vascular-Catheter Utilisation Duration",
+      days.abbr = "Vasc.-cath. days",
+      pats = "Patients With Vascular Cathteters",
+      pats.abbr = "Pat. w. vasc. cath.",
+      rate = "Vascular-catheter utilisation rate",
+      density_rate = "Vascular-catheter utilisation density rate",
+      CVC = list(
+        name = "CVC",
+        rate = "CVC utilisation rate",
+        density_rate = "CVC utilisation density rate",
+        pats.no = "Number of patients with CVC",
+        days.sum = "Sum of CVC Days"
+      ),
+      PVC = list(
+        name = "PVC",
+        rate = "PVC utilisation rate",
+        density_rate = "PVC utilisation density rate",
+        pats.no = "Number of patients with PVC",
+        days.sum = "Sum of PVC Days"
+      )
+    ),
+    VS = list(
+      days = "Vent.-supp. days",
+      pats = "Pat. w. vent. supp.",
+      NIV = list(
+        name = "NIV"
+      ),
+      INV = list(
+        name = "INV"
+      )
+    )
+  ),
+  globalTable = list(
+    PooledMean = "Pooled mean",
+    Q1 = "Q1",
+    Median = "Median",
+    Q3 = "Q3"
+  ),
   sepsisTable = list(
+    Header = "Sepsis/Meningitis",
+    PathogenSource = "Source of pathogen detection",
+    Definition = "Definition",
     IncidenceRate = "Incidence density rate",
     NoOfInfections = "No. of infections",
-    PooledMean = "Pooled mean",
     Q1 = "Q1",
     Median = "Median",
     Q3 = "Q3",
     Total = "Total",
-    Pathogens = "Pathogens",
+    Pathogens = "Non-commensals",
     Commensals = "Commensals",
-    Clinical = "Clinical",
+    Clinical = "Clinical sepsis",
+    CsfPositive = "CSF",
+    NumberOfInfections = "Number of infections",
+    SumOfPatientDays = "Sum of patient days",
+    PooledMeanFootnote = "The pooled mean of the incidence density. It is calculated by summing the number of infections in all departments and dividing by the sum of patient days in all departments.",
+    Q1Footnote = "The first quartile (Q1) separates the quarter of departments with the lowest incidence densities from the three quarters with higher incidence densities.",
+    MedianFootnote = "The median separates the half of the departments with the lower incidence densities from the half with the higher incidence densities.",
+    Q3Footnote = "The third quartile (Q3) separates the quarter of the departments with the highest incidence densities from the three quarters with lower incidence densities."
+  ),
+  vcSepsisTable = list(
+    Header = "Vascular-Catheter-Associated Sepsis",
+    VcAssociation = "Vascular-catheter association",
+    vcAssociatedIncidenceRate = "Vascular-catheter-associated sepsis rate",
     CvcAssociated = "CVC-associated",
     PvcAssociated = "PVC-associated",
-    CsfPositive = "CSF positive")
+    CvcAssociatedIncidenceRate = "CVC-associated sepsis rate",
+    NumberOfCvcAssociatedInfections = "Number of CVC-associated sepsis cases",
+    SumOfCvcDays = "Sum of CVC-days",
+    PvcAssociatedIncidenceRate = "PVC-associated sepsis rate",
+    NumberOfPvcAssociatedInfections = "Number of PVC-associated sepsis cases",
+    SumOfPvcDays = "Sum of PVC-days",
+    PooledMeanFootnote = "The pooled mean of the vascular-catheter-associated sepsis rate. It is calculated by adding up the number of sepsis cases associated with the respective vascular catheter in all departments and dividing it by the sum of the patient days in all departments during which the respective vascular catheter was present",
+    Q1Footnote = "The first quartile (Q1) separates the quarter of departments with the lowest vascular-catheter-associated sepsis rates from the three quarters with higher vascular-catheter-associated sepsis rates.",
+    MedianFootnote = "The median separates the half of the departments with the lower vascular-catheter-associated sepsis rates from the half with the higher vascular-catheter-associated sepsis rates.",
+    Q3Footnote = "The third quartile (Q3) separates the quarter of departments with the highest vascular-catheter-associated sepsis rates from the three quarters with lower vascular-catheter-associated sepsis rates."
+  )
 )
 ```
 
@@ -75,5 +146,35 @@ To enable institutions with limited resources to carry out continuous surveillan
 
 Taking into account the filtering criteria mentioned above, and thanks to the active cooperation of the departments involved in NeoIPC surveillance, this report includes the complete data sets of a total of *`{r} fn(totPat)` patients* from *`{r} fn(totEnr)` stays* in *`{r} fn(totDept)` departments* with a total of *`{r} fn(totPatDay)` days of surveillance*. The data of a further *`{r} fn(totIncPat)` patients* who were still under active surveillance at the time of the data analysis and who therefore could not yet be analysed, will be available for this analysis as soon as their surveillance has been completed.
 
+### Primary Sepsis / Bloodstream Infection
+
+Primary sepsis is the most common and most important nosocomial infection in neonatology. However, in clinical practice, diagnosis is not trivial because the usual way to achieve sensitive diagnostics, namely the inoculation of several blood culture bottles with a sufficient amount of blood, is often blocked and contamination of the samples can easily occur due to the complex blood collection process. To enable sensitive and specific surveillance in the face of these diagnostic challenges, NeoIPC surveillance uses a number of sub-definitions to avoid the misclassification of contamination and to enable the detection of sepsis cases even when blood culture results are negative or unavailable. Meningitis, which in neonatology is almost always hematogenous in origin unless associated with a surgical procedure, is also presented in this section as a complication of sepsis.
+
 {{< include _sepsis-table.qmd >}}
+
+#### The Vascular Catheter as a Risk Factor for Sepsis
+
+{{< include _vc-application-rate-table.qmd >}}
+
+{{< include _vc-application-density-rate-table.qmd >}}
+
+{{< include _vc-sepsis-table.qmd >}}
+
+### Infections of the Lower Respiratory Tract / Pneumonia
+
+TODO: Inzidenzdichte der UAWIs
+
+#### Atemunterstützung als Risikofaktor für Atemwegsinfektionen
+
+TODO: Expositions- und Anwendungsraten für INV und NIV sowie Beatmungsassoziierte UAWIs
+
+### Schwere Infektion
+
+TODO: Inzidenz und Inzidenzdichte schwerer Infektionen und SIR
+
+### Nekrotisierende Enterokolitis
+
+### Infektionserreger
+
+#### Multiresistente Erreger
 

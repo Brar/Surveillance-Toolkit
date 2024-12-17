@@ -19,8 +19,13 @@ hospitalFilter = params[["hospitalFilter"]]
 defaultPatientFilter = coalesce(params[["defaultPatientFilter"]], TRUE)
 testUnitFilter = coalesce(params[["testUnitFilter"]], TRUE)
 locale <- if(!exists("locale")) NULL else locale
-data <- if(!rlang::is_na(session_id)) import_dhis2(connection_options = dhis2_connection_options(session_id = session_id), locale = locale) else if(!rlang::is_na(token)) import_dhis2(connection_options = dhis2_connection_options(token = token), locale = locale) else import_dhis2(locale = locale)
+```
 
+```{r Importing data}
+data <- if(!rlang::is_na(session_id)) import_dhis2(connection_options = dhis2_connection_options(session_id = session_id), locale = locale) else if(!rlang::is_na(token)) import_dhis2(connection_options = dhis2_connection_options(token = token), locale = locale) else import_dhis2(locale = locale)
+```
+
+```{r Functions}
 fn <- function(x) format(x, big.mark =" ")
 fd <- function(x) format(x, digits = 2, nsmall = 1, scientific = FALSE, big.mark =" ")
 label_week <- function(x) paste(fn(x), "w", sep = " ")
@@ -48,7 +53,6 @@ bw_50 <- function(x){
     levels = paste0(fn(seq(min(cat_lower), max(cat_lower), 50))," g - ",fn(seq(min(cat_upper), max(cat_upper), 50))," g"),
     ordered = TRUE)
 }
-
 ```
 
 ```{r Filtering}

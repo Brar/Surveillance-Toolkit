@@ -2,7 +2,6 @@
 title: "NeoIPC Surveillance Referenzauswertung"
 lang: de
 format: html
-editor: visual
 echo: false
 execute:
   keep-md: true
@@ -28,7 +27,8 @@ trnsl <- list(
   multipleBirthCategories = list(
     singleBirth = "Einling",
     twins = "Zwillinge",
-    tripletsOrMore = "Drillinge oder mehr"),
+    tripletsOrMore = "Drillinge oder mehr"
+  ),
   headerList = list(
     createdAt = "Erstellt",
     analysisPeriod = "Auswertungszeitraum",
@@ -47,21 +47,87 @@ trnsl <- list(
     specialAnalysisHint = "Dies ist eine Sonderauswertung, die",
     includesTestDepartments = "Testabteilungen enthält",
     and = " und ",
-    ignoresInclusionCriteria = "die Einschlusskriterien der NeoIPC Surveillance ignoriert."),
-  sepsisTable = list(
-    IncidenceRate = "Inzidenzdichte",
-    NoOfInfections = "Anz. d. Infektionen",
+    ignoresInclusionCriteria = "die Einschlusskriterien der NeoIPC Surveillance ignoriert."
+  ),
+  pats = list(
+    all = "Anzahl aller Patienten",
+    days = "Summe aller Patiententage"
+  ),
+  devs = list(
+    VC = list(
+      days = "Gefäßkathetertage",
+      days.abbr = "Gefäßkath.-Tage",
+      pats = "Patienten mit Gefäßkathteter",
+      pats.abbr = "Pat. m. Gefäßkath.",
+      rate = "Gefäßkatheter-Anwendungsrate",
+      density_rate = "Gefäßkatheter-Anwendungsdichte",
+      CVC = list(
+        name = "ZVK",
+        rate = "ZVK-Anwendungsrate",
+        density_rate = "ZVK-Anwendungsdichte",
+        pats.no = "Anzahl der Patienten mit ZVK",
+        days.sum = "Summe der ZVK-Tage"
+      ),
+      PVC = list(
+        name = "PVK",
+        rate = "PVK-Anwendungsrate",
+        density_rate = "PVK-Anwendungsdichte",
+        pats.no = "Anzahl der Patienten mit PVK",
+        days.sum = "Summe der PVK-Tage"
+      )
+    ),
+    VS = list(
+      days = "Atemunterst.-Tage",
+      pats = "Pat. m. Atemunterst.",
+      NIV = list(
+        name = "NIV"
+      ),
+      INV = list(
+        name = "INV"
+      )
+    )
+  ),
+  globalTable = list(
     PooledMean = "Gep. arithm. Mittel",
     Q1 = "Q1",
     Median = "Median",
-    Q3 = "Q3",
+    Q3 = "Q3"
+  ),
+  sepsisTable = list(
+    Header = "Sepsis/Meningitis",
+    PathogenSource = "Erregernachweisquelle",
+    Definition = "Definition",
+    IncidenceRate = "Inzidenzdichte",
+    NoOfInfections = "Anz. d. Inf.",
     Total = "Gesamt",
     Pathogens = "Nicht-Kommensale",
     Commensals = "Kommensale",
     Clinical = "Klinische Sepsis",
+    CsfPositive = "Liquor",
+    NumberOfInfections = "Anzahl der Infektionen",
+    SumOfPatientDays = "Summe der Patiententage",
+    PooledMeanFootnote = "Das gepooltes arithmetische Mittel der Inzidenzdichte. Es wird berechnet indem die Anzahl der Infektionen in allen Abteilungen aufsummiert und durch die Summe der Patiententage in allen Abteilungen dividiert wird.",
+    Q1Footnote = "Das erste Quartil (Q1) trennt das Viertel der Abteilungen mit den niedrigsten Inzidenzdichten von den drei Vierteln mit höheren Inzidenzdichten.",
+    MedianFootnote = "Der Median trennt die Hälfte der Abteilungen mit den niedrigeren Inzidenzdichten von der Hälfte mit den höheren Inzidenzdichten.",
+    Q3Footnote = "Das dritte Quartil (Q3) trennt das Viertel der Abteilungen mit den höchsten Inzidenzdichten von den drei Vierteln mit niedrigeren Inzidenzdichten."
+  ),
+  vcSepsisTable = list(
+    Header = "Gefäßkatheter-assoziierte Sepsis",
+    VcAssociation = "Gefäßkatheter-Assoziation",
+    vcAssociatedIncidenceRate = "Gefäßkatheter-assoziierte Sepsisrate",
     CvcAssociated = "ZVK-assoziiert",
-    PvcAssociated = "PVK-Assoziiert",
-    CsfPositive = "Erregernachweis im Liquor")
+    PvcAssociated = "PVK-assoziiert",
+    CvcAssociatedIncidenceRate = "ZVK-assoziierte Sepsisrate",
+    NumberOfCvcAssociatedInfections = "Anzahl der ZVK-assoziierten Sepsisfälle",
+    SumOfCvcDays = "Summe der ZVK-Tage",
+    PvcAssociatedIncidenceRate = "PVK-assoziierte Sepsisrate",
+    NumberOfPvcAssociatedInfections = "Anzahl der PVK-assoziierten Sepsisfälle",
+    SumOfPvcDays = "Summe der PVK-Tage",
+    PooledMeanFootnote = "Das gepoolte arithmetische Mittel der Gefäßkatheter-assoziierten Sepsisrate. Es wird berechnet indem die Anzahl der mit dem jeweiligen Gefäßkatheter assoziierten Sepsisfälle in allen Abteilungen aufsummiert und durch die Summe der Patiententage in allen Abteilungen dividiert wird, an denen der jeweiligen Gefäßkatheter lag.",
+    Q1Footnote = "Das erste Quartil (Q1) trennt das Viertel der Abteilungen mit den niedrigsten Gefäßkatheter-assoziierten Sepsisraten von den drei Vierteln mit höheren Gefäßkatheter-assoziierten Sepsisraten.",
+    MedianFootnote = "Der Median trennt die Hälfte der Abteilungen mit den niedrigeren Gefäßkatheter-assoziierten Sepsisraten von der Hälfte mit den höheren Gefäßkatheter-assoziierten Sepsisraten.",
+    Q3Footnote = "Das dritte Quartil (Q3) trennt das Viertel der Abteilungen mit den höchsten Gefäßkatheter-assoziierten Sepsisraten von den drei Vierteln mit niedrigeren Gefäßkatheter-assoziierten Sepsisraten."
+  )
 )
 ```
 
@@ -69,12 +135,13 @@ trnsl <- list(
 
 {{< include _header.qmd >}}
 
+## Einführung
+
 Dies ist die Referenzauswertung der [NeoIPC Surveillance](https://neoipc.org/surveillance/ "Link zum Surveillance-Bereich der NeoIPC Website"), die Sie verwenden können, um die Infektionsraten Ihrer neonatologischen Abteilung zu bewerten. Wenn Sie über eigene Vergleichsdaten verfügen, die mit der selben oder einer vergleichbaren Methode erhoben wurden, können Sie diese mit den in diesem Dokument dargestellten Referenzwerten vergleichen und gegebenenfalls Auffälligkeiten und Verbesserungspotenziale identifizieren.
 
 Um auch Einrichtungen mit geringen Ressourcen eine kontinuierliche Surveillance zu ermöglichen und um ein Benchmarking anhand einer vergleichbaren Patientengruppe durchführen zu können, beschränkt sich die NeoIPC Surveillance auf neonatologische Hochrisikopatienten sowie auf ausgewählte Risikofaktoren und Infektionen. Details dazu finden Sie bei Bedarf im [NeoIPC Surveillanceprotokoll](https://neoipc.org/wp-content/uploads/2023/08/NeoIPC-Surveillance_Core-Module-Protocol.pdf "Link zum NeoIPC Surveillanceprotokoll (pdf, englisch)").
 
 Unter Berücksichtigung der oben angegebenen Filterkriterien umfasst diese Auswertung dank der aktiven Mitarbeit der an der NeoIPC Surveillance beteiligten Abteilungen die vollständigen Datensätze von insgesamt *`{r} fn(totPat)` Patienten* aus *`{r} fn(totEnr)` Aufenthalten* in *`{r} fn(totDept)` Abteilungen* mit insgesamt *`{r} fn(totPatDay)` Tagen unter Surveillance*. Die Daten weiterer *`{r} fn(totIncPat)` Patienten*, die sich zum Auswertungszeitpunkt noch in der aktiven Surveillance befinden und daher noch nicht ausgewertet werden können, werden für diese Auswertung zur Verfügung stehen, sobald die Surveillance bei ihnen jeweils abgeschlossen ist.
-
 
 ## Beschreibung der Population und ihrer Risikofaktoren
 
@@ -199,6 +266,10 @@ bwCombined / bwBoxPlot
 
 ```
 
+### Aufnahmezeitpunkt und Verweildauer
+
+ToDo
+
 ### Weitere dispositionelle Risikofaktoren
 
 ```{r}
@@ -248,6 +319,15 @@ dmBarChart <- patients |>
 sexBarChart / mbBarChart / dmBarChart
 ```
 
+### Faktoren die das Mikrobiom beeinflussen
+
+#### Antbiotikaanwendung
+
+TODO: Expositions- und Anwendungsraten für AWaRE-Klassen, ATC-Substanzgruppen und Einzelsubstanzen
+
+#### Humane Milch und Probiotika
+
+#### Kängugruh-Pflege
 
 ## Nosokomiale Infektionen
 
@@ -257,11 +337,19 @@ Da Infektionen in der Neonatologie eine lebensbedrohliche Komplikation darstelle
 
 Die primäre Sepsis ist die häufigste und wichtigste nosokomiale Infektion in der Neonatologie. Im klinischen Alltag ist die Diagnose jedoch nicht trivial, da der übliche Weg zu einer sensitiven Diagnostik, nämlich die Beimpfung mehrerer Blutkulturflaschen mit einer ausreichenden Menge Blut, oft versperrt ist und es aufgrund der komplexen Abläufe bei der Blutentnahme leicht zu Kontaminationen der Proben kommen kann. Um angesichts der diagnostischen Herausforderungen eine sensitive und spezifische Surveillance zu ermöglichen, werden bei der NeoIPC-Surveillance mehrere Unterdefinitionen verwendet, um die Erfassung von Kontaminationen zu vermeiden und die Erfassung von Sepsisfällen auch bei negativen oder fehlenden Blutkulturergebnissen zu ermöglichen. Die Meningitis, die in der Neonatologie fast immer hämatogen entsteht, wenn sie nicht mit einem chirurgischen Eingriff verbunden ist, wird als Komplikation der Sepsis ebenfalls in diesem Abschnitt dargestellt.
 
+<!--# Todo: Graph displaying the proportion of the different definitions, maybe even sub-definitions -->
+
 {{< include _sepsis-table.qmd >}}
 
 #### Der Gefäßkatheter als Risikofaktor für Sepsis
 
-### Atemwegsinfektion / Pneumonie
+{{< include _vc-application-rate-table.qmd >}}
+
+{{< include _vc-application-density-rate-table.qmd >}}
+
+{{< include _vc-sepsis-table.qmd >}}
+
+### Infektionen der unteren Atemwege / Pneumonie
 
 TODO: Inzidenzdichte der UAWIs
 
@@ -278,13 +366,3 @@ TODO: Inzidenz und Inzidenzdichte schwerer Infektionen und SIR
 ### Infektionserreger
 
 #### Multiresistente Erreger
-
-### Mikrobiom-Maßnahmen
-
-#### Antbiotikaanwendung
-
-TODO: Expositions- und Anwendungsraten für AWaRE-Klassen, ATC-Substanzgruppen und Einzelsubstanzen
-
-#### Humane Milch und Probiotika
-
-#### Kängugruh-Pflege
