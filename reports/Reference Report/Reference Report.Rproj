@@ -1,4 +1,5 @@
 Version: 1.0
+ProjectId: 3a50ff97-51e1-49d1-9d1a-164916df9447
 
 RestoreWorkspace: No
 SaveWorkspace: No
@@ -14,6 +15,8 @@ LaTeX: pdfLaTeX
 
 AutoAppendNewline: Yes
 StripTrailingWhitespace: Yes
+
+UseNativePipeOperator: Yes
 
 SpellingDictionary: en_GB
 
