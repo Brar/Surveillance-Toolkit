@@ -1,0 +1,52 @@
+```{r Gestational age figure}
+gaCombined <- patients |>
+  ggplot(aes(x = decimal_gestational_age)) +
+  geom_histogram(aes(y = after_stat(density)), colour = 1, fill = "white", binwidth = 1, boundary = 3/7, closed = "left") +
+  geom_density() +
+  scale_x_continuous(breaks = breaks_week) +
+  coord_cartesian(xlim = c(as.integer(min(patients$decimal_gestational_age)) - 1, as.integer(max(patients$decimal_gestational_age)) + 1)) +
+  theme(axis.title=element_blank(),
+        axis.text=element_blank(),
+        axis.ticks=element_blank(),
+        panel.grid.major.y=element_blank(),
+        panel.grid.minor.y=element_blank())
+
+# gaHistogram <- patients |>
+#   ggplot(aes(x = decimal_gestational_age)) +
+#   geom_histogram(binwidth = 1) +
+#   ggtitle(data$metadata$trackedEntityAttributes |>
+#             filter(code == "NEOIPC_TEA_GEST_AGE") |>
+#             pull(displayName)) +
+#   theme(axis.title=element_blank(),
+#         axis.text=element_blank(),
+#         axis.ticks=element_blank(),
+#         panel.grid.major.x=element_blank(),
+#         panel.grid.minor.x=element_blank())
+# 
+# gaDensityPlot <- patients |>
+#   ggplot(aes(x = decimal_gestational_age)) +
+#   geom_density() +
+#   ggtitle(data$metadata$trackedEntityAttributes |>
+#             filter(code == "NEOIPC_TEA_GEST_AGE") |>
+#             pull(displayName)) +
+#   theme(axis.title=element_blank(),
+#         axis.text=element_blank(),
+#         axis.ticks=element_blank(),
+#         panel.grid.major.x=element_blank(),
+#         panel.grid.minor.x=element_blank())
+
+gaBoxPlot <- patients |>
+  ggplot(aes(x=factor(0), y = decimal_gestational_age)) +
+  geom_boxplot() +
+  stat_summary(fun = "mean", geom = "point", shape = 23, size = 3, fill = "white") +
+  scale_y_continuous(breaks = breaks_week, labels = label_week) +
+  coord_flip(ylim = c(as.integer(min(patients$decimal_gestational_age)) - 1, as.integer(max(patients$decimal_gestational_age)) + 1)) +
+  theme(axis.title=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        panel.grid.major.y=element_blank(),
+        panel.grid.minor.y=element_blank())
+
+gaCombined / gaBoxPlot
+#gaHistogram / gaDensityPlot / gaBoxPlot
+```
