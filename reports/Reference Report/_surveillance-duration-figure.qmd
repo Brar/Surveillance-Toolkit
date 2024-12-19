@@ -1,0 +1,13 @@
+``` {r Surveillance duration}
+enrollments |>
+  inner_join(patients, join_by(patient == key)) |>
+  filter(NEOIPC_ADMISSION_DOL == 1 & NEOIPC_SURVEILLANCE_END_REASON == 1) |>
+  group_by(birth_weight_category_50g, .drop = FALSE) |>
+  summarise(pd = median(NEOIPC_SURVEILLANCE_END_PATIENT_DAYS)) |>
+  subset(!is.na(pd)) |>
+  ggplot(aes(x = birth_weight_category_50g, y = pd, group=1)) +
+  geom_line() +
+  geom_point() +
+  scale_x_discrete(drop = FALSE, breaks = \(x) x[c(FALSE, TRUE)]) +
+  theme(axis.text.x=element_text(angle = 45, hjust = 1, vjust = 1))
+```
