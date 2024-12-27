@@ -53,12 +53,6 @@ Im Folgenden werden die im Rahmen der NeoIPC Surveillance beobachteten Risikofak
 
 {{< include _bw-figure.qmd >}}
 
-### Aufnahmezeitpunkt und Verweildauer
-
-{{< include _surveillance-duration-figure.qmd >}}
-
-ToDo
-
 ### Weitere dispositionelle Risikofaktoren
 
 ```{r}
@@ -108,6 +102,29 @@ dmBarChart <- patients |>
 sexBarChart / mbBarChart / dmBarChart
 ```
 
+### Aufnahmezeitpunkt und Verweildauer
+
+{{< include _surveillance-duration-figure.qmd >}}
+
+ToDo
+
+### Operative Eingriffe
+
+```{r}
+
+# Export for validation
+#surgeries |> inner_join(enrollments, join_by(enrollment == key)) |> inner_join(patients |> select(key, NEOIPC_PATIENT_ID), join_by(patient == key)) |> inner_join(departments |> select(key, hospital, displayName) |> rename(unitName = displayName), join_by(enrollment_department == key)) |> inner_join(hospitals |> select(key, displayName) |> rename(hospitalName = displayName), join_by(hospital == key)) |> select(hospitalName, unitName, NEOIPC_PATIENT_ID, occurredAt, NEOIPC_SURGERY_PROCEDURE_DESCRIPTION, NEOIPC_SURGERY_MAIN_PROCEDURE_CODE, NEOIPC_SURGERY_SIDE_PROCEDURE_CODE_1, NEOIPC_SURGERY_SIDE_PROCEDURE_CODE_2) |> arrange(hospitalName, unitName, NEOIPC_PATIENT_ID, occurredAt) |> write_excel_csv2("/home/brar/dev/NeoIPC/Prozeduren.csv", na = "")
+
+
+surgeries |>
+  left_join(ichi_health_interventions, join_by(NEOIPC_SURGERY_MAIN_PROCEDURE_CODE == code), keep = TRUE) |>
+  group_by(code, intervention, intervention_url) |>
+  summarise(n = n(), .groups = "drop") |>
+  arrange(code)
+
+```
+
+
 ### Faktoren die das Mikrobiom beeinflussen
 
 #### Antbiotikaanwendung
@@ -151,6 +168,8 @@ TODO: Expositions- und Anwendungsraten für INV und NIV sowie Beatmungsassoziier
 TODO: Inzidenz und Inzidenzdichte schwerer Infektionen und SIR
 
 ### Nekrotisierende Enterokolitis
+
+### Postoperative Wundinfektionen
 
 ### Infektionserreger
 

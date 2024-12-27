@@ -6,6 +6,7 @@ suppressMessages(library(patchwork, warn.conflicts = FALSE, quietly = TRUE))
 suppressMessages(library(gt, warn.conflicts = FALSE, quietly = TRUE))
 suppressMessages(library(neoipcr, warn.conflicts = FALSE, quietly = TRUE))
 
+if(!exists("params")) params <- list()
 reportingPeriodFrom <- as_date(coalesce(params[["reportingPeriodFrom"]], "2024-01-01"))
 reportingPeriodTo <- as_date(coalesce(params[["reportingPeriodTo"]], Sys.Date()))
 birthWeightFrom <- coalesce(params[["birthWeightFrom"]], 0L)
@@ -23,6 +24,10 @@ locale <- if(!exists("locale")) NULL else locale
 
 ```{r Importing data}
 data <- if(!rlang::is_na(session_id)) import_dhis2(connection_options = dhis2_connection_options(session_id = session_id), locale = locale) else if(!rlang::is_na(token)) import_dhis2(connection_options = dhis2_connection_options(token = token), locale = locale) else import_dhis2(locale = locale)
+ichi_targets <- read_csv("../../../Surveillance-Private/metadata/WHO/ICHI/Targets.csv", col_names = c("code", "target", "target_url"), col_types = "ccc")
+ichi_actions <- read_csv("../../../Surveillance-Private/metadata/WHO/ICHI/Actions.csv", col_names = c("code", "action", "action_url"), col_types = "ccc")
+ichi_means <- read_csv("../../../Surveillance-Private/metadata/WHO/ICHI/Means.csv", col_names = c("code", "means", "means_url"), col_types = "ccc")
+ichi_health_interventions <- read_csv("../../../Surveillance-Private/metadata/WHO/ICHI/Health interventions.csv", col_names = c("code", "intervention", "intervention_url"), col_types = "ccc")
 ```
 
 ```{r Functions}
@@ -200,6 +205,10 @@ totPat <- total_denominators$patientCount
 totEnr <- total_denominators$NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM
 totPatDay <- total_denominators$NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM
 totIncPat <- nrow(incomplete_patients)
+
+surgeries <- data$surgeries |>
+  filter(status == "COMPLETED") |>
+  semi_join(enrollments, join_by(enrollment == key))
 
 sepses <- data$sepses |>
   filter(status == "COMPLETED") |>
