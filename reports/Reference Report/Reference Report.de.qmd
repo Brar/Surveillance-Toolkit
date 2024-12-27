@@ -124,6 +124,33 @@ surgeries |>
 
 ```
 
+```{r}
+surgeries |>
+  mutate(t = ichi_target_extract(NEOIPC_SURGERY_MAIN_PROCEDURE_CODE)) |>
+  left_join(ichi_targets, join_by(t == code), keep = TRUE) |>
+  group_by(code, target, target_url) |>
+  summarise(n = n(), .groups = "drop") |>
+  arrange(code)
+```
+
+```{r}
+surgeries |>
+  mutate(a = ichi_action_extract(NEOIPC_SURGERY_MAIN_PROCEDURE_CODE)) |>
+  left_join(ichi_actions, join_by(a == code), keep = TRUE) |>
+  group_by(code, action, action_url) |>
+  summarise(n = n(), .groups = "drop") |>
+  arrange(code)
+```
+
+```{r}
+surgeries |>
+  mutate(m = ichi_means_extract(NEOIPC_SURGERY_MAIN_PROCEDURE_CODE)) |>
+  left_join(ichi_means, join_by(m == code), keep = TRUE) |>
+  group_by(code, means, means_url) |>
+  summarise(n = n(), .groups = "drop") |>
+  arrange(code)
+```
+
 
 ### Faktoren die das Mikrobiom beeinflussen
 
