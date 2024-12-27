@@ -58,6 +58,21 @@ bw_50 <- function(x){
     levels = paste0(fn(seq(min(cat_lower), max(cat_lower), 50))," g - ",fn(seq(min(cat_upper), max(cat_upper), 50))," g"),
     ordered = TRUE)
 }
+
+ichi_target_extract <- function(x){
+  y <- stringr::str_extract(x, "^(...)\\.(..)\\.(..)$", group = 1)
+  y[dplyr::na_if(y %in% ichi_targets$code, FALSE)]
+}
+
+ichi_action_extract <- function(x){
+  y <- stringr::str_extract(x, "^(...)\\.(..)\\.(..)$", group = 2)
+  y[dplyr::na_if(y %in% ichi_actions$code, FALSE)]
+}
+
+ichi_means_extract <- function(x){
+  y <- stringr::str_extract(x, "^(...)\\.(..)\\.(..)$", group = 3)
+  y[dplyr::na_if(y %in% ichi_means$code, FALSE)]
+}
 ```
 
 ```{r Filtering}
