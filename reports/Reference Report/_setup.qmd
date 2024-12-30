@@ -24,9 +24,6 @@ locale <- if(!exists("locale")) NULL else locale
 
 ```{r Importing data}
 data <- if(!rlang::is_na(session_id)) import_dhis2(connection_options = dhis2_connection_options(session_id = session_id), locale = locale) else if(!rlang::is_na(token)) import_dhis2(connection_options = dhis2_connection_options(token = token), locale = locale) else import_dhis2(locale = locale)
-ichi_targets <- read_csv("../../../Surveillance-Private/metadata/WHO/ICHI/Targets.csv", col_names = c("code", "target", "target_url"), col_types = "ccc")
-ichi_actions <- read_csv("../../../Surveillance-Private/metadata/WHO/ICHI/Actions.csv", col_names = c("code", "action", "action_url"), col_types = "ccc")
-ichi_means <- read_csv("../../../Surveillance-Private/metadata/WHO/ICHI/Means.csv", col_names = c("code", "means", "means_url"), col_types = "ccc")
 ichi_health_interventions <- read_csv("../../../Surveillance-Private/metadata/WHO/ICHI/Health interventions.csv", col_names = c("code", "intervention", "intervention_url"), col_types = "ccc")
 ```
 
@@ -60,19 +57,69 @@ bw_50 <- function(x){
 }
 
 ichi_target_extract <- function(x){
-  y <- stringr::str_extract(x, "^(...)\\.(..)\\.(..)$", group = 1)
-  y[dplyr::na_if(y %in% ichi_targets$code, FALSE)]
+   y <- stringr::str_extract(x, "^(...)\\.(..)\\.(..)$", group = 1)
+   y[dplyr::na_if(y %in% ichi_targets_by_category$code, FALSE)]
+ }
+
+surgery_cat <- function(mpc, spc1, spc2){
+  apc <- c(
+    mpc[dplyr::na_if(mpc %in% ichi_health_interventions$code, FALSE)],
+    spc1[dplyr::na_if(spc1 %in% ichi_health_interventions$code, FALSE)],
+    spc2[dplyr::na_if(spc2 %in% ichi_health_interventions$code, FALSE)]
+    )
+
+  # only invalid ICHE codes
+  inv <- split(is.na(apc), cut(seq_along(apc), 3, labels=FALSE))
+  inv <- inv$`1` & inv$`2` & inv$`3`
+
+  targets <- stringr::str_extract(apc, "^(...)\\.(..)\\.(..)$", group = 1)
+  means <- stringr::str_extract(apc, "^(...)\\.(..)\\.(..)$", group = 3)
+
+  # Brain ventricle surgery
+  bvs <- tidyr::replace_na(targets == "AAE" & means %in% c("AA","AB"), FALSE)
+  bvs <- split(bvs, cut(seq_along(bvs), 3, labels=FALSE))
+  bvs <- bvs$`1` | bvs$`2` | bvs$`3`
+
+  # Other surgery on brain or cranial nerve
+  obs <- tidyr::replace_na(startsWith(targets, "AA") & means %in% c("AA","AB"), FALSE)
+  obs <- split(obs, cut(seq_along(obs), 3, labels=FALSE))
+  obs <- (obs$`1` | obs$`2` | obs$`3`) & !bvs
+
+  # Bowel surgery
+  bs <- tidyr::replace_na(apc %in% c("PTA.LA.AC","PTB.LA.AC") | (startsWith(targets, "KB") & substr(targets, 3, 3) %in% c("I","K","O","P","U") & means %in% c("AA","AB")), FALSE)
+  bs <- split(bs, cut(seq_along(bs), 3, labels=FALSE))
+  bs <- bs$`1` | bs$`2` | bs$`3`
+
+  # Inguinal herniorrhaphy
+  ih <- tidyr::replace_na(startsWith(apc, "PAM.MK") & means %in% c("AA","AB"), FALSE)
+  ih <- split(ih, cut(seq_along(ih), 3, labels=FALSE))
+  ih <- ih$`1` | ih$`2` | ih$`3` 
+
+  # CVC insertion/removal
+  cir <- tidyr::replace_na(means == "AF" & substr(apc, 1, 6) %in% c("IBD.DL","IDB.DL","ICD.DL","IZD.DL","IZD.JD") , FALSE)
+  cir <- split(cir, cut(seq_along(cir), 3, labels=FALSE))
+  cir <- cir$`1` | cir$`2` | cir$`3`
+
+  # multiple of the above
+  mult <- bvs & obs | bvs & bs | bvs & ih | bvs & cir | obs & bs | obs & ih | obs & cir | bs & ih | bs & cir | ih & cir
+
+  # none of the above
+  oth <- !bvs & !obs & !bs & !ih & !cir
+
+  factor(
+    dplyr::case_when(
+      inv ~ NA,
+      mult ~ "multiple",
+      bvs ~ "brain_ventricle",
+      obs ~ "other_brain",
+      bs ~ "bowel",
+      ih ~ "herniorrhaphy",
+      cir ~ "cvc",
+      oth ~ "other"
+      ),
+    levels = surgeryCategories)
 }
 
-ichi_action_extract <- function(x){
-  y <- stringr::str_extract(x, "^(...)\\.(..)\\.(..)$", group = 2)
-  y[dplyr::na_if(y %in% ichi_actions$code, FALSE)]
-}
-
-ichi_means_extract <- function(x){
-  y <- stringr::str_extract(x, "^(...)\\.(..)\\.(..)$", group = 3)
-  y[dplyr::na_if(y %in% ichi_means$code, FALSE)]
-}
 ```
 
 ```{r Filtering}

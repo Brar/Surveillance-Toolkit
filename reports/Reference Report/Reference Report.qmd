@@ -108,11 +108,7 @@ trnsl <- list(
     Clinical = "Clinical sepsis",
     CsfPositive = "CSF",
     NumberOfInfections = "Number of infections",
-    SumOfPatientDays = "Sum of patient days",
-    PooledMeanFootnote = "The pooled mean of the incidence density. It is calculated by summing the number of infections in all departments and dividing by the sum of patient days in all departments.",
-    Q1Footnote = "The first quartile (Q1) separates the quarter of departments with the lowest incidence densities from the three quarters with higher incidence densities.",
-    MedianFootnote = "The median separates the half of the departments with the lower incidence densities from the half with the higher incidence densities.",
-    Q3Footnote = "The third quartile (Q3) separates the quarter of the departments with the highest incidence densities from the three quarters with lower incidence densities."
+    SumOfPatientDays = "Sum of patient days"
   ),
   vcSepsisTable = list(
     Header = "Vascular-Catheter-Associated Sepsis",
@@ -125,11 +121,7 @@ trnsl <- list(
     SumOfCvcDays = "Sum of CVC-days",
     PvcAssociatedIncidenceRate = "PVC-associated sepsis rate",
     NumberOfPvcAssociatedInfections = "Number of PVC-associated sepsis cases",
-    SumOfPvcDays = "Sum of PVC-days",
-    PooledMeanFootnote = "The pooled mean of the vascular-catheter-associated sepsis rate. It is calculated by adding up the number of sepsis cases associated with the respective vascular catheter in all departments and dividing it by the sum of the patient days in all departments during which the respective vascular catheter was present",
-    Q1Footnote = "The first quartile (Q1) separates the quarter of departments with the lowest vascular-catheter-associated sepsis rates from the three quarters with higher vascular-catheter-associated sepsis rates.",
-    MedianFootnote = "The median separates the half of the departments with the lower vascular-catheter-associated sepsis rates from the half with the higher vascular-catheter-associated sepsis rates.",
-    Q3Footnote = "The third quartile (Q3) separates the quarter of departments with the highest vascular-catheter-associated sepsis rates from the three quarters with lower vascular-catheter-associated sepsis rates."
+    SumOfPvcDays = "Sum of PVC-days"
   )
 )
 ```
@@ -145,6 +137,30 @@ This is the [NeoIPC Surveillance](https://neoipc.org/surveillance/ "Link to the 
 To enable institutions with limited resources to carry out continuous surveillance and to allow benchmarking against a comparable group of patients, NeoIPC surveillance is limited to high-risk neonates and selected risk factors and infections. Further details can be found in the [NeoIPC Surveillanceprotokoll](https://neoipc.org/wp-content/uploads/2023/08/NeoIPC-Surveillance_Core-Module-Protocol.pdf "Link to the NeoIPC surveillance protocol (pdf, English)").
 
 Taking into account the filtering criteria mentioned above, and thanks to the active cooperation of the departments involved in NeoIPC surveillance, this report includes the complete data sets of a total of *`{r} fn(totPat)` patients* from *`{r} fn(totEnr)` stays* in *`{r} fn(totDept)` departments* with a total of *`{r} fn(totPatDay)` days of surveillance*. The data of a further *`{r} fn(totIncPat)` patients* who were still under active surveillance at the time of the data analysis and who therefore could not yet be analysed, will be available for this analysis as soon as their surveillance has been completed.
+
+### General remarks
+
+The following values are repeated in the reference tables for each indicator:
+
+Pooled arithmetic mean:
+
+:   This is calculated by adding the respective numerator across all departments and then dividing by the denominator, which is also added across all departments. The whole data set is thus treated as a single neonatal department by pooling the data from the individual departments.
+
+Quartiles:
+
+:    To calculate the quartiles, the corresponding rate is first calculated for all units in the data set, and then the quantiles are calculated for the determined rates at p = 0.25, p = 0.5 and p = 0.75.
+    
+    Q1:
+    
+    : The first quartile separates the quarter of departments with the lowest values of the respective rate from the three quarters with higher values.
+    
+    Median:
+    
+    : The median separates the half of the departments with the lower values of the respective rate from the half with the higher values.
+    
+    Q3:
+    
+    : The third quartile separates the quarter of departments with the highest values of the respective rate from the three quarters with lower values.
 
 ### Primary Sepsis / Bloodstream Infection
 
@@ -177,4 +193,3 @@ TODO: Inzidenz und Inzidenzdichte schwerer Infektionen und SIR
 ### Infektionserreger
 
 #### Multiresistente Erreger
-

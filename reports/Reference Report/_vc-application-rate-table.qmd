@@ -48,6 +48,7 @@ total_denominators |>
       cell_borders(sides = "right", weight = px(0))
     ),
     locations = list(
+      cells_column_spanners(),
       cells_column_labels()
     )
   ) |>
@@ -71,9 +72,8 @@ total_denominators |>
         trnsl$pats$all,
         "}} \\times 100$$"
         ),
-      sep = "\\n")),
+      sep = "\n\n")),
     locations = cells_column_spanners(spanners = "vc_rate")
   )
 
-```  
-
+```
