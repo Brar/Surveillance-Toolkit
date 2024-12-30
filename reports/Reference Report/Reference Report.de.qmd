@@ -1,7 +1,12 @@
 ---
 title: "NeoIPC Surveillance Referenzauswertung"
 lang: de
-format: html
+format:
+  html:
+    link-external-icon: true
+    link-external-newwindow: true
+  pdf:
+    colorlinks: true
 echo: false
 execute:
   keep-md: true
@@ -32,6 +37,31 @@ Dies ist die Referenzauswertung der [NeoIPC Surveillance](https://neoipc.org/sur
 Um auch Einrichtungen mit geringen Ressourcen eine kontinuierliche Surveillance zu ermöglichen und um ein Benchmarking anhand einer vergleichbaren Patientengruppe durchführen zu können, beschränkt sich die NeoIPC Surveillance auf neonatologische Hochrisikopatienten sowie auf ausgewählte Risikofaktoren und Infektionen. Details dazu finden Sie bei Bedarf im [NeoIPC Surveillanceprotokoll](https://neoipc.org/wp-content/uploads/2023/08/NeoIPC-Surveillance_Core-Module-Protocol.pdf "Link zum NeoIPC Surveillanceprotokoll (pdf, englisch)").
 
 Unter Berücksichtigung der oben angegebenen Filterkriterien umfasst diese Auswertung dank der aktiven Mitarbeit der an der NeoIPC Surveillance beteiligten Abteilungen die vollständigen Datensätze von insgesamt *`{r} fn(totPat)` Patienten* aus *`{r} fn(totEnr)` Aufenthalten* in *`{r} fn(totDept)` Abteilungen* mit insgesamt *`{r} fn(totPatDay)` Tagen unter Surveillance*. Die Daten weiterer *`{r} fn(totIncPat)` Patienten*, die sich zum Auswertungszeitpunkt noch in der aktiven Surveillance befinden und daher noch nicht ausgewertet werden können, werden für diese Auswertung zur Verfügung stehen, sobald die Surveillance bei ihnen jeweils abgeschlossen ist.
+
+### Allgemeine Hinweise
+
+In den Referenztabellen werden die folgenden Werte für die jeweiligen Kennzahlen wiederholt dargestellt:
+
+Gepooltes arithmetisches Mittel:
+
+:   Es wird berechnet indem der jeweilige Zähler über alle Abteilungen aufsummiert wird und anschließend durch den ebenfalls über alle Abteilungen aufsummierten Nenner dividiert wird. Der gesamte Datensatz wird also wie eine einzige neonatologische Abteilung behandelt indem die Daten der einzelnen Abteilungen zusammengefasst (gepoolt) werden.
+
+Die Quartile:
+
+:    Zur Berechnung der Quartile wird zunächst die entsprechende Rate für alle im Datensatz enthaltenen Abteilungen berechnet und anschließend werden für die ermittelten Raten die Quantile mit p = 0,25 p = 0,5 und p = 0,75 berechnet.
+    
+    Q1:
+    
+    : Das erste Quartil trennt das Viertel der Abteilungen mit den niedrigsten Werten der jeweiligen Rate von den drei Vierteln mit höheren Werten.
+    
+    Median:
+    
+    : Der Median trennt die Hälfte der Abteilungen mit den niedrigeren Werten der jeweiligen Rate von der Hälfte mit den höheren Werten.
+    
+    Q3:
+    
+    : Das dritte Quartil trennt das Viertel der Abteilungen mit den niedrigsten Werten der jeweiligen Rate von den drei Vierteln mit niedrigeren Werten.
+
 
 ## Beschreibung der Population und ihrer Risikofaktoren
 
@@ -110,45 +140,41 @@ ToDo
 
 ### Operative Eingriffe
 
+Aufgrund der Einschlusskriterien für die NeoIPC Surveillance und der Tatsache, dass nicht alle an der Surveillance teilnehmenden Zentren in der Lage sind, Operationen bei diesen kleinen Kindern durchzuführen, sind chirurgische Eingriffe in der Patientenpopulation relativ selten und das Spektrum beschränkt sich auf relativ wenige typische Eingriffe, die, wenn möglich, meist elektiv zu einem Zeitpunkt durchgeführt werden, zu dem sich die klinische Situation des betroffenen Patienten stabilisiert hat. Dennoch stellt jeder chirurgische Eingriff bei Neugeborenen und Säuglingen einen Risikofaktor für postoperative Wundinfektionen, aber auch für andere nosokomiale Infektionen dar.
+
+
 ```{r}
+#| label: tbl-surgeries-by-cat
+#| tbl-cap: Anzahl der erfassten Operationen
 
 # Export for validation
-#surgeries |> inner_join(enrollments, join_by(enrollment == key)) |> inner_join(patients |> select(key, NEOIPC_PATIENT_ID), join_by(patient == key)) |> inner_join(departments |> select(key, hospital, displayName) |> rename(unitName = displayName), join_by(enrollment_department == key)) |> inner_join(hospitals |> select(key, displayName) |> rename(hospitalName = displayName), join_by(hospital == key)) |> select(hospitalName, unitName, NEOIPC_PATIENT_ID, occurredAt, NEOIPC_SURGERY_PROCEDURE_DESCRIPTION, NEOIPC_SURGERY_MAIN_PROCEDURE_CODE, NEOIPC_SURGERY_SIDE_PROCEDURE_CODE_1, NEOIPC_SURGERY_SIDE_PROCEDURE_CODE_2) |> arrange(hospitalName, unitName, NEOIPC_PATIENT_ID, occurredAt) |> write_excel_csv2("/home/brar/dev/NeoIPC/Prozeduren.csv", na = "")
-
+#surgeries |> inner_join(enrollments, join_by(enrollment == key)) |> inner_join(patients |> select(key, NEOIPC_PATIENT_ID), join_by(patient == key)) |> inner_join(departments |> select(key, hospital, displayName) |> rename(unitName = displayName), join_by(enrollment_department == key)) |> inner_join(hospitals |> select(key, displayName) |> rename(hospitalName = displayName), join_by(hospital == key)) |> select(hospitalName, unitName, NEOIPC_PATIENT_ID, occurredAt, NEOIPC_SURGERY_PROCEDURE_DESCRIPTION, NEOIPC_SURGERY_MAIN_PROCEDURE_CODE, NEOIPC_SURGERY_SIDE_PROCEDURE_CODE_1, NEOIPC_SURGERY_SIDE_PROCEDURE_CODE_2) |> mutate(MAIN_PROC_VALID = NEOIPC_SURGERY_MAIN_PROCEDURE_CODE %in% ichi_health_interventions$code, .after = NEOIPC_SURGERY_MAIN_PROCEDURE_CODE) |>  mutate(SIDE_PROC_1_VALID = is.na(NEOIPC_SURGERY_SIDE_PROCEDURE_CODE_1) | NEOIPC_SURGERY_SIDE_PROCEDURE_CODE_1 %in% ichi_health_interventions$code, .after = NEOIPC_SURGERY_SIDE_PROCEDURE_CODE_1) |>  mutate(SIDE_PROC_2_VALID = is.na(NEOIPC_SURGERY_SIDE_PROCEDURE_CODE_2) | NEOIPC_SURGERY_SIDE_PROCEDURE_CODE_2 %in% ichi_health_interventions$code, .after = NEOIPC_SURGERY_SIDE_PROCEDURE_CODE_2) |> arrange(hospitalName, unitName, NEOIPC_PATIENT_ID, occurredAt) |> View()
+#write_excel_csv2("Procedures.csv", na = "")?
 
 surgeries |>
-  left_join(ichi_health_interventions, join_by(NEOIPC_SURGERY_MAIN_PROCEDURE_CODE == code), keep = TRUE) |>
-  group_by(code, intervention, intervention_url) |>
+  mutate(cat = surgery_cat(NEOIPC_SURGERY_MAIN_PROCEDURE_CODE, NEOIPC_SURGERY_SIDE_PROCEDURE_CODE_1, NEOIPC_SURGERY_SIDE_PROCEDURE_CODE_2)) |>
+  group_by(cat) |>
   summarise(n = n(), .groups = "drop") |>
-  arrange(code)
+  arrange(cat) |>
+  left_join(trnsl$surgeryCategories, join_by(cat), copy = TRUE) |>
+  mutate(cat = translation, .keep = "unused") |>
+  gt(rowname_col = "cat") |>
+  tab_options(table.width = pct(100)) |>
+  cols_width(
+    cat ~ pct(90),
+    n ~ pct(10)
+    ) |>
+  tab_stubhead(label = "Kategorie") |>
+  cols_label(n = "Anzahl") |>
+  tab_style(
+    style = list(
+      cell_borders(sides = c("left", "right"), weight = px(0))
+    ),
+    locations = list(
+      cells_stub()
+    )
+  )
 
-```
-
-```{r}
-surgeries |>
-  mutate(t = ichi_target_extract(NEOIPC_SURGERY_MAIN_PROCEDURE_CODE)) |>
-  left_join(ichi_targets, join_by(t == code), keep = TRUE) |>
-  group_by(code, target, target_url) |>
-  summarise(n = n(), .groups = "drop") |>
-  arrange(code)
-```
-
-```{r}
-surgeries |>
-  mutate(a = ichi_action_extract(NEOIPC_SURGERY_MAIN_PROCEDURE_CODE)) |>
-  left_join(ichi_actions, join_by(a == code), keep = TRUE) |>
-  group_by(code, action, action_url) |>
-  summarise(n = n(), .groups = "drop") |>
-  arrange(code)
-```
-
-```{r}
-surgeries |>
-  mutate(m = ichi_means_extract(NEOIPC_SURGERY_MAIN_PROCEDURE_CODE)) |>
-  left_join(ichi_means, join_by(m == code), keep = TRUE) |>
-  group_by(code, means, means_url) |>
-  summarise(n = n(), .groups = "drop") |>
-  arrange(code)
 ```
 
 
@@ -201,3 +227,37 @@ TODO: Inzidenz und Inzidenzdichte schwerer Infektionen und SIR
 ### Infektionserreger
 
 #### Multiresistente Erreger
+
+## Liste der erfassten Operationen {.appendix}
+
+```{r}
+#| label: tbl-apndx-surgeries
+#| tbl-cap: Liste der erfassten Hauptprozeduren
+
+surgeries |>
+  left_join(ichi_health_interventions, join_by(NEOIPC_SURGERY_MAIN_PROCEDURE_CODE == code), keep = TRUE) |>
+  group_by(code, intervention, intervention_url) |>
+  summarise(n = n(), .groups = "drop") |>
+  arrange(code) |>
+  mutate(code = if_else(is.na(code), "Invalid", paste("[", code, "](", intervention_url, ")", sep = "")), .keep = "unused") |>
+  gt(rowname_col = "code") |>
+  fmt_markdown(columns = "code") |>
+  tab_options(table.width = pct(100)) |>
+  cols_width(
+    code ~ pct(20),
+    intervention ~ pct(70),
+    n ~ pct(10)) |>
+  tab_stubhead(label = "ICHE Code") |>
+  tab_style(
+    style = list(
+      cell_borders(sides = c("left", "right"), weight = px(0))
+    ),
+    locations = list(
+      cells_stub()
+    )) |>
+  cols_label(
+    intervention = "Procedure",
+    n = "Anzahl")
+
+```
+

@@ -45,9 +45,10 @@ total_denominators |>
   tab_style(
     style = list(
       cell_text(weight = "bold"),
-      cell_borders(sides = "right", weight = px(0))
+      cell_borders(sides = c("left", "right"), weight = px(0))
     ),
     locations = list(
+      cells_column_spanners(),
       cells_column_labels()
     )
   ) |>
@@ -71,7 +72,7 @@ total_denominators |>
         trnsl$pats$days,
         "}} \\times 100$$"
         ),
-      sep = "\\n")),
+      sep = "\n\n")),
     locations = cells_column_spanners(spanners = "vc_density_rate")
   )
 

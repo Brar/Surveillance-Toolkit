@@ -1,0 +1,11 @@
+```{r Pre-Setup}
+surgeryCategories <- c(
+  "brain_ventricle",
+  "other_brain",
+  "bowel",
+  "herniorrhaphy",
+  "cvc",
+  "multiple",
+  "other")
+
+```
