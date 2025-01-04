@@ -32,9 +32,11 @@ params:
 
 ## Einführung
 
-Dies ist die Referenzauswertung der [NeoIPC Surveillance](https://neoipc.org/surveillance/ "Link zum Surveillance-Bereich der NeoIPC Website"), die Sie verwenden können, um die Infektionsraten Ihrer neonatologischen Abteilung zu bewerten. Wenn Sie über eigene Vergleichsdaten verfügen, die mit der selben oder einer vergleichbaren Methode erhoben wurden, können Sie diese mit den in diesem Dokument dargestellten Referenzwerten vergleichen und gegebenenfalls Auffälligkeiten und Verbesserungspotenziale identifizieren.
+Dies ist die Referenzauswertung der [NeoIPC Surveillance](https://neoipc.org/surveillance/ "Link zum Surveillance-Bereich der NeoIPC Website"), die Sie verwenden können, um die Infektionsraten Ihrer neonatologischen Abteilung zu bewerten.
+Wenn Sie über eigene Vergleichsdaten verfügen, die mit der selben oder einer vergleichbaren Methode erhoben wurden, können Sie diese mit den in diesem Dokument dargestellten Referenzwerten vergleichen und gegebenenfalls Auffälligkeiten und Verbesserungspotenziale identifizieren.
 
-Um auch Einrichtungen mit geringen Ressourcen eine kontinuierliche Surveillance zu ermöglichen und um ein Benchmarking anhand einer vergleichbaren Patientengruppe durchführen zu können, beschränkt sich die NeoIPC Surveillance auf neonatologische Hochrisikopatienten sowie auf ausgewählte Risikofaktoren und Infektionen. Details dazu finden Sie bei Bedarf im [NeoIPC Surveillanceprotokoll](https://neoipc.org/wp-content/uploads/2023/08/NeoIPC-Surveillance_Core-Module-Protocol.pdf "Link zum NeoIPC Surveillanceprotokoll (pdf, englisch)").
+Um auch Einrichtungen mit geringen Ressourcen eine kontinuierliche Surveillance zu ermöglichen und um ein Benchmarking anhand einer vergleichbaren Patientengruppe durchführen zu können, beschränkt sich die NeoIPC Surveillance auf neonatologische Hochrisikopatienten sowie auf ausgewählte Risikofaktoren und Infektionen.
+Details dazu finden Sie bei Bedarf im [NeoIPC Surveillanceprotokoll](https://neoipc.org/wp-content/uploads/2023/08/NeoIPC-Surveillance_Core-Module-Protocol.pdf "Link zum NeoIPC Surveillanceprotokoll (pdf, englisch)").
 
 Unter Berücksichtigung der oben angegebenen Filterkriterien umfasst diese Auswertung dank der aktiven Mitarbeit der an der NeoIPC Surveillance beteiligten Abteilungen die vollständigen Datensätze von insgesamt *`{r} fn(totPat)` Patienten* aus *`{r} fn(totEnr)` Aufenthalten* in *`{r} fn(totDept)` Abteilungen* mit insgesamt *`{r} fn(totPatDay)` Tagen unter Surveillance*. Die Daten weiterer *`{r} fn(totIncPat)` Patienten*, die sich zum Auswertungszeitpunkt noch in der aktiven Surveillance befinden und daher noch nicht ausgewertet werden können, werden für diese Auswertung zur Verfügung stehen, sobald die Surveillance bei ihnen jeweils abgeschlossen ist.
 
@@ -85,7 +87,7 @@ Im Folgenden werden die im Rahmen der NeoIPC Surveillance beobachteten Risikofak
 
 ### Weitere dispositionelle Risikofaktoren
 
-```{r}
+```{r Other risk factors}
 
 sexBarChart <- patients |>
   dplyr::group_by(NEOIPC_TEA_SEX) |>
@@ -143,7 +145,7 @@ ToDo
 Aufgrund der Einschlusskriterien für die NeoIPC Surveillance und der Tatsache, dass nicht alle an der Surveillance teilnehmenden Zentren in der Lage sind, Operationen bei diesen kleinen Kindern durchzuführen, sind chirurgische Eingriffe in der Patientenpopulation relativ selten und das Spektrum beschränkt sich auf relativ wenige typische Eingriffe, die, wenn möglich, meist elektiv zu einem Zeitpunkt durchgeführt werden, zu dem sich die klinische Situation des betroffenen Patienten stabilisiert hat. Dennoch stellt jeder chirurgische Eingriff bei Neugeborenen und Säuglingen einen Risikofaktor für postoperative Wundinfektionen, aber auch für andere nosokomiale Infektionen dar.
 
 
-```{r}
+```{r Surgeries}
 #| label: tbl-surgeries-by-cat
 #| tbl-cap: Anzahl der erfassten Operationen
 
@@ -230,7 +232,7 @@ TODO: Inzidenz und Inzidenzdichte schwerer Infektionen und SIR
 
 ## Liste der erfassten Operationen {.appendix}
 
-```{r}
+```{r Full surgeries}
 #| label: tbl-apndx-surgeries
 #| tbl-cap: Liste der erfassten Hauptprozeduren
 
