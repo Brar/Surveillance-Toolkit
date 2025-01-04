@@ -268,6 +268,12 @@ totEnr <- total_denominators$NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM
 totPatDay <- total_denominators$NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM
 totIncPat <- nrow(incomplete_patients)
 
+ab_treatments <- data$ab_treatments |>
+  filter(surveillanceEnd_status == "COMPLETED") |>
+  semi_join(enrollments, join_by(enrollment == key)) |>
+  group_by(enrollment, substance_code) |>
+  summarise(days = sum(.data$days), .groups = "drop")
+
 surgeries <- data$surgeries |>
   filter(status == "COMPLETED") |>
   semi_join(enrollments, join_by(enrollment == key))
