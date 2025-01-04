@@ -268,11 +268,46 @@ totEnr <- total_denominators$NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM
 totPatDay <- total_denominators$NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM
 totIncPat <- nrow(incomplete_patients)
 
-ab_treatments <- data$ab_treatments |>
+ab_base <- data$ab_treatments |>
   filter(surveillanceEnd_status == "COMPLETED") |>
-  semi_join(enrollments, join_by(enrollment == key)) |>
-  group_by(enrollment, substance_code) |>
-  summarise(days = sum(.data$days), .groups = "drop")
+  inner_join(
+    enrollments |>
+      select(key, enrollment_department) |>
+      rename(department = enrollment_department),
+    join_by(enrollment == key)) |>
+  inner_join(
+    data$metadata$antimicrobialSubstances |>
+      select(code, displayName, ATC5, WHO_AWARE),
+    join_by(substance_code == code)) |>
+  mutate(
+    code = as.factor(substance_code),
+    displayName = as.factor(as.character(displayName)),
+    ATC5 = as.factor(as.character(ATC5)),
+    .keep = "unused")
+
+department_ab_treatments_subst <- ab_base |>
+  group_by(department, code, .drop = FALSE) |>
+  summarise(days = sum(.data$days), cases = n_distinct(.data$enrollment), .groups = "drop")
+
+total_ab_treatments_subst <- ab_base |>
+  group_by(code, .drop = FALSE) |>
+  summarise(days = sum(.data$days), cases = n_distinct(.data$enrollment))
+
+department_ab_treatments_atc5 <- ab_base |>
+  group_by(department, ATC5, .drop = FALSE) |>
+  summarise(days = sum(.data$days), cases = n_distinct(.data$enrollment), .groups = "drop")
+
+total_ab_treatments_atc5 <- ab_base |>
+  group_by(ATC5, .drop = FALSE) |>
+  summarise(days = sum(.data$days), cases = n_distinct(.data$enrollment))
+
+department_ab_treatments_aware <- ab_base |>
+  group_by(department, WHO_AWARE, .drop = FALSE) |>
+  summarise(days = sum(.data$days), cases = n_distinct(.data$enrollment), .groups = "drop")
+
+total_ab_treatments_aware <- ab_base |>
+  group_by(WHO_AWARE, .drop = FALSE) |>
+  summarise(days = sum(.data$days), cases = n_distinct(.data$enrollment))
 
 surgeries <- data$surgeries |>
   filter(status == "COMPLETED") |>
@@ -441,5 +476,34 @@ total_sepsis_rates = total_sepses |> dplyr::bind_cols(total_denominators) |>
 #sepsis_rate_quartiles <- department_sepsis_rates |> select(!department) |> reframe(across(everything(), ~DescTools::QuantileCI(.x, prob=c(.25,.5,.75))))
 
 sepsis_rate_quartiles <- department_sepsis_rates |> select(!department) |> reframe(across(everything(), ~quantile(.x, prob = c(.25,.5,.75))))
+
+
+
+department_ab_rates_aware <- department_ab_treatments_aware |>
+  inner_join(department_denominators |>
+               select(
+                 department,
+                 NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM,
+                 NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM,
+                 NEOIPC_SURVEILLANCE_END_AB_DAYS_ANY_SUM,
+                 NEOIPC_SURVEILLANCE_END_AB_DAYS_SUM),
+             join_by(department)) |>
+  mutate(
+    department = department,
+    aware = case_match(as.character(WHO_AWARE),
+                       "WHO_AWARE_ACCESS" ~ "A",
+                       "WHO_AWARE_WATCH" ~ "W",
+                       "WHO_AWARE_RESERVE" ~ "R"),
+    prop_all = cases / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM * 100,
+    prop_treated = cases / NEOIPC_SURVEILLANCE_END_AB_DAYS_ANY_SUM * 100,
+    prop_utilisation = days / NEOIPC_SURVEILLANCE_END_AB_DAYS_SUM * 100,
+    utilisation_rate = days / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 1000,
+    .keep = "none") |>
+  pivot_wider(
+    names_from = aware,
+    values_from = c(prop_all, prop_treated, prop_utilisation, utilisation_rate))
+
+department_ab_rates_aware_quartiles <- department_ab_rates_aware |> select(!department) |> reframe(across(everything(), ~quantile(.x, prob = c(.25,.5,.75))))
+
 
 ```
