@@ -309,6 +309,13 @@ total_ab_treatments_aware <- ab_base |>
   group_by(WHO_AWARE, .drop = FALSE) |>
   summarise(days = sum(.data$days), cases = n_distinct(.data$enrollment))
 
+department_ab_treatments_overall <- ab_base |>
+  group_by(department) |>
+  summarise(days = sum(.data$days), cases = n_distinct(.data$enrollment), .groups = "drop")
+
+total_ab_treatments_overall <- ab_base |>
+  summarise(days = sum(.data$days), cases = n_distinct(.data$enrollment))
+
 surgeries <- data$surgeries |>
   filter(status == "COMPLETED") |>
   semi_join(enrollments, join_by(enrollment == key))
@@ -477,6 +484,28 @@ total_sepsis_rates = total_sepses |> dplyr::bind_cols(total_denominators) |>
 
 sepsis_rate_quartiles <- department_sepsis_rates |> select(!department) |> reframe(across(everything(), ~quantile(.x, prob = c(.25,.5,.75))))
 
+# ToDo: Investigate treatment days without substance days
+# ToDo: Calculate rates
+total_ab_rates_overall <- total_ab_treatments_overall |>
+  bind_cols(
+    total_denominators |>
+      select(
+        NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM,
+        NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM,
+        NEOIPC_SURVEILLANCE_END_AB_DAYS_ANY_SUM,
+        NEOIPC_SURVEILLANCE_END_AB_DAYS_SUM))
+
+# ToDo: Calculate rates
+department_ab_rates_overall <- department_ab_treatments_overall |>
+  inner_join(
+    department_denominators |>
+      select(
+        department,
+        NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM,
+        NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM,
+        NEOIPC_SURVEILLANCE_END_AB_DAYS_ANY_SUM,
+        NEOIPC_SURVEILLANCE_END_AB_DAYS_SUM),
+    join_by(department))
 
 
 department_ab_rates_aware <- department_ab_treatments_aware |>
@@ -504,6 +533,5 @@ department_ab_rates_aware <- department_ab_treatments_aware |>
     values_from = c(prop_all, prop_treated, prop_utilisation, utilisation_rate))
 
 department_ab_rates_aware_quartiles <- department_ab_rates_aware |> select(!department) |> reframe(across(everything(), ~quantile(.x, prob = c(.25,.5,.75))))
-
 
 ```
