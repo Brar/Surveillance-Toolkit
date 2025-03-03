@@ -33,7 +33,9 @@ translation_file <- paste0("translations/",stringr::str_extract(locale, "^([^.]+
 
 ```{r Importing data}
 data <- if(!rlang::is_na(session_id)) import_dhis2(connection_options = dhis2_connection_options(session_id = session_id), locale = locale) else if(!rlang::is_na(token)) import_dhis2(connection_options = dhis2_connection_options(token = token), locale = locale) else import_dhis2(locale = locale)
+
 ichi_health_interventions <- read_csv("../../../Surveillance-Private/metadata/WHO/ICHI/Health interventions.csv", col_names = c("code", "intervention", "intervention_url"), col_types = "ccc")
+
 if(file.exists(translation_file)) {
   translations <- readr::read_file(translation_file) |> jsonlite::fromJSON()
 } else {
@@ -578,3 +580,5 @@ department_ab_rates_aware <- department_ab_treatments_aware |>
 department_ab_rates_aware_quartiles <- department_ab_rates_aware |> select(!department) |> reframe(across(everything(), ~quantile(.x, prob = c(.25,.5,.75))))
 
 ```
+
+{{< include _header.qmd >}}

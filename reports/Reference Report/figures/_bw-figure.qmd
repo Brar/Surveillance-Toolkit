@@ -11,28 +11,6 @@ bwCombined <- patients |>
         panel.grid.major.y=element_blank(),
         panel.grid.minor.y=element_blank())
 
-bwBarPlot <- patients |>
-  ggplot(aes(x = birth_weight_category_50g)) +
-  geom_bar(width = 1) +
-  ggtitle(data$metadata$trackedEntityAttributes |>
-            filter(code == "NEOIPC_TEA_BIRTH_WEIGHT") |>
-            pull(displayName)) +
-  theme(axis.title=element_blank(),
-        axis.text=element_blank(),
-        axis.ticks=element_blank(),
-        panel.grid.major.x=element_blank(),
-        panel.grid.minor.x=element_blank()) +
-  scale_x_discrete(drop = FALSE, expand = expansion(add = 2))
-
-bwDensityPlot <- patients |>
-  ggplot(aes(x = NEOIPC_TEA_BIRTH_WEIGHT)) +
-  geom_density() +
-  theme(axis.title=element_blank(),
-        axis.text=element_blank(),
-        axis.ticks=element_blank(),
-        panel.grid.major.x=element_blank(),
-        panel.grid.minor.x=element_blank())
-
 bwBoxPlot <- patients |>
   ggplot(aes(x=factor(0), y = NEOIPC_TEA_BIRTH_WEIGHT)) +
   geom_boxplot() +
@@ -46,8 +24,5 @@ bwBoxPlot <- patients |>
         panel.grid.major.y=element_blank(),
         panel.grid.minor.y=element_blank())
 
-#bwBarPlot / bwDensityPlot / bwBoxPlot
-
 bwCombined / bwBoxPlot
-
 ```

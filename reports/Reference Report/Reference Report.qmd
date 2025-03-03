@@ -5,8 +5,6 @@ title: "NeoIPC Reference Report"
 
 {{< include _setup.qmd >}}
 
-{{< include _header.qmd >}}
-
 ## Introduction
 
 This is the [NeoIPC Surveillance](https://neoipc.org/surveillance/ "Link to the surveillance section of the NeoIPC website") reference analysis that you can use to assess infection rates in your neonatal unit. If you have your own data collected using the same or a comparable method, you can compare them with the reference values presented in this document and identify any anomalies and potential for improvement.
@@ -15,58 +13,30 @@ To enable institutions with limited resources to carry out continuous surveillan
 
 Taking into account the filtering criteria mentioned above, and thanks to the active cooperation of the departments involved in NeoIPC surveillance, this report includes the complete data sets of a total of *`{r} fn(totPat)` patients* from *`{r} fn(totEnr)` stays* in *`{r} fn(totDept)` departments* with a total of *`{r} fn(totPatDay)` days of surveillance*. The data of a further *`{r} fn(totIncPat)` patients* who were still under active surveillance at the time of the data analysis and who therefore could not yet be analysed, will be available for this analysis as soon as their surveillance has been completed.
 
-### General remarks
+## Description of the Population and Its Risk Factors
 
-The following values are repeated in the reference tables for each indicator:
+When we talk about high-risk patients from an infection prevention perspective, we mean that these patients have characteristics that increase their risk of infection. These may be unchangeable patient characteristics or characteristics that can be influenced to a greater or lesser extent by the often complex management of these patients.
 
-Pooled arithmetic mean:
+When we observe these characteristics epidemiologically, we often call them risk factors, and sometimes also protective factors, which are then seen as the opposite of a risk factor.
 
-:   This is calculated by adding the respective numerator across all departments and then dividing by the denominator, which is also added across all departments. The whole data set is thus treated as a single neonatal department by pooling the data from the individual departments.
+In neonates, for example, gestational age, birth weight and postnatal age are prominent patient-specific characteristics that influence the risk of developing an infection (dispositional risk factors).
 
-Quartiles:
+Examples of characteristics that can be influenced to some degree and that can also influence the risk of infection (known as 'exposure risk factors') include vascular access, mechanical ventilation and breastfeeding, as well as the duration of these interventions (dose effect).
 
-:   To calculate the quartiles, the corresponding rate is first calculated for all units in the data set, and then the quantiles are calculated for the determined rates at p = 0.25, p = 0.5 and p = 0.75.
+The risk factors observed in the NeoIPC Surveillance and their distribution in the participating partner hospitals are shown below. The expositional risk factors may help to assess the processes in your own department (e.g. indication for therapies), whereas the dispositional risk factors are more suitable for assessing the comparability of your own patient population with the population in the NeoIPC reference database. The more the composition of a unit's patient population differs from that of the NeoIPC Surveillance Reference Report in terms of dispositional risk factors, the less useful the benchmarking will be. Differences and their possible effects must always be carefully considered in interpretation.
 
-    Q1:
+### Gestational Age
 
-    :   The first quartile separates the quarter of departments with the lowest values of the respective rate from the three quarters with higher values.
+{{< include figures/_ga-figure.qmd >}}
 
-    Median:
+### Birth Weight
 
-    :   The median separates the half of the departments with the lower values of the respective rate from the half with the higher values.
+{{< include figures/_bw-figure.qmd >}}
 
-    Q3:
+### Further Dispositional Risk Factors
 
-    :   The third quartile separates the quarter of departments with the highest values of the respective rate from the three quarters with lower values.
+{{< include figures/_sex-figure.qmd >}}
 
-### Primary Sepsis / Bloodstream Infection
+{{< include figures/_multiple-birth-figure.qmd >}}
 
-Primary sepsis is the most common and most important nosocomial infection in neonatology. However, in clinical practice, diagnosis is not trivial because the usual way to achieve sensitive diagnostics, namely the inoculation of several blood culture bottles with a sufficient amount of blood, is often blocked and contamination of the samples can easily occur due to the complex blood collection process. To enable sensitive and specific surveillance in the face of these diagnostic challenges, NeoIPC surveillance uses a number of sub-definitions to avoid the misclassification of contamination and to enable the detection of sepsis cases even when blood culture results are negative or unavailable. Meningitis, which in neonatology is almost always hematogenous in origin unless associated with a surgical procedure, is also presented in this section as a complication of sepsis.
-
-{{< include _sepsis-table.qmd >}}
-
-#### The Vascular Catheter as a Risk Factor for Sepsis
-
-{{< include _vc-application-rate-table.qmd >}}
-
-{{< include _vc-application-density-rate-table.qmd >}}
-
-{{< include _vc-sepsis-table.qmd >}}
-
-### Infections of the Lower Respiratory Tract / Pneumonia
-
-TODO: Inzidenzdichte der UAWIs
-
-#### Atemunterstützung als Risikofaktor für Atemwegsinfektionen
-
-TODO: Expositions- und Anwendungsraten für INV und NIV sowie Beatmungsassoziierte UAWIs
-
-### Schwere Infektion
-
-TODO: Inzidenz und Inzidenzdichte schwerer Infektionen und SIR
-
-### Nekrotisierende Enterokolitis
-
-### Infektionserreger
-
-#### Multiresistente Erreger
+{{< include figures/_delivery-mode-figure.qmd >}}

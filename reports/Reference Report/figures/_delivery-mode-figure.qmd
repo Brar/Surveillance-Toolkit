@@ -1,0 +1,17 @@
+```{r Delivery mode figure}
+
+patients |>
+  dplyr::group_by(NEOIPC_TEA_DELIVERY_MODE) |>
+  dplyr::summarise(percent = n() / nrow(patients)) |>
+  left_join(data$metadata$deliveryModes, join_by("NEOIPC_TEA_DELIVERY_MODE" == "code")) |>
+  select(displayName, percent) |>
+  ggplot(aes(y = percent, x = displayName)) +
+  geom_col(position = "dodge") +
+  ggtitle(data$metadata$trackedEntityAttributes |>
+            filter(code == "NEOIPC_TEA_DELIVERY_MODE") |>
+            pull(displayName)) +
+  scale_y_continuous(labels = label_percent()) +
+  coord_flip() +
+  theme(axis.title = element_blank())
+
+```
