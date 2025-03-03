@@ -40,3 +40,11 @@ The risk factors observed in the NeoIPC Surveillance and their distribution in t
 {{< include figures/_multiple-birth-figure.qmd >}}
 
 {{< include figures/_delivery-mode-figure.qmd >}}
+
+### Factors Influencing the Microbiome
+
+#### Antibiotic Use
+
+{{< include tables/_tbl-ab-rates-overall.qmd >}}
+
+{{< include tables/_tbl-ab-rates-aware.qmd >}}
