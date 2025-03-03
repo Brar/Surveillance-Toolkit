@@ -1,22 +1,6 @@
 ---
-title: "NeoIPC Reference Report"
 lang: en
-format: html
-echo: false
-execute:
-  keep-md: true
-params:
-  reportingPeriodFrom: NULL
-  reportingPeriodTo: NULL
-  birthWeightFrom: NULL
-  birthWeightTo: NULL
-  gestationalAgeFrom: NULL
-  gestationalAgeTo: NULL
-  countryFilter: NULL
-  hospitalFilter: NULL
-  testUnitFilter: true
-  defaultPatientFilter: true
-  token: NULL
+title: "NeoIPC Reference Report"
 ---
 
 ```{r Pre-Setup}
@@ -148,19 +132,19 @@ Pooled arithmetic mean:
 
 Quartiles:
 
-:    To calculate the quartiles, the corresponding rate is first calculated for all units in the data set, and then the quantiles are calculated for the determined rates at p = 0.25, p = 0.5 and p = 0.75.
-    
+:   To calculate the quartiles, the corresponding rate is first calculated for all units in the data set, and then the quantiles are calculated for the determined rates at p = 0.25, p = 0.5 and p = 0.75.
+
     Q1:
-    
-    : The first quartile separates the quarter of departments with the lowest values of the respective rate from the three quarters with higher values.
-    
+
+    :   The first quartile separates the quarter of departments with the lowest values of the respective rate from the three quarters with higher values.
+
     Median:
-    
-    : The median separates the half of the departments with the lower values of the respective rate from the half with the higher values.
-    
+
+    :   The median separates the half of the departments with the lower values of the respective rate from the half with the higher values.
+
     Q3:
-    
-    : The third quartile separates the quarter of departments with the highest values of the respective rate from the three quarters with lower values.
+
+    :   The third quartile separates the quarter of departments with the highest values of the respective rate from the three quarters with lower values.
 
 ### Primary Sepsis / Bloodstream Infection
 

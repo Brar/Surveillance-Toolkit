@@ -1,27 +1,6 @@
 ---
-title: "NeoIPC Surveillance Referenzauswertung"
 lang: de
-format:
-  html:
-    link-external-icon: true
-    link-external-newwindow: true
-  pdf:
-    colorlinks: true
-echo: false
-execute:
-  keep-md: true
-params:
-  reportingPeriodFrom: NULL
-  reportingPeriodTo: NULL
-  birthWeightFrom: NULL
-  birthWeightTo: NULL
-  gestationalAgeFrom: NULL
-  gestationalAgeTo: NULL
-  countryFilter: NULL
-  hospitalFilter: NULL
-  testUnitFilter: true
-  defaultPatientFilter: true
-  token: NULL
+title: "NeoIPC Surveillance Referenzauswertung"
 ---
 
 {{< include _pre-setup.de.qmd >}}
@@ -32,11 +11,9 @@ params:
 
 ## Einführung
 
-Dies ist die Referenzauswertung der [NeoIPC Surveillance](https://neoipc.org/surveillance/ "Link zum Surveillance-Bereich der NeoIPC Website"), die Sie verwenden können, um die Infektionsraten Ihrer neonatologischen Abteilung zu bewerten.
-Wenn Sie über eigene Vergleichsdaten verfügen, die mit der selben oder einer vergleichbaren Methode erhoben wurden, können Sie diese mit den in diesem Dokument dargestellten Referenzwerten vergleichen und gegebenenfalls Auffälligkeiten und Verbesserungspotenziale identifizieren.
+Dies ist die Referenzauswertung der [NeoIPC Surveillance](https://neoipc.org/surveillance/ "Link zum Surveillance-Bereich der NeoIPC Website"), die Sie verwenden können, um die Infektionsraten Ihrer neonatologischen Abteilung zu bewerten. Wenn Sie über eigene Vergleichsdaten verfügen, die mit der selben oder einer vergleichbaren Methode erhoben wurden, können Sie diese mit den in diesem Dokument dargestellten Referenzwerten vergleichen und gegebenenfalls Auffälligkeiten und Verbesserungspotenziale identifizieren.
 
-Um auch Einrichtungen mit geringen Ressourcen eine kontinuierliche Surveillance zu ermöglichen und um ein Benchmarking anhand einer vergleichbaren Patientengruppe durchführen zu können, beschränkt sich die NeoIPC Surveillance auf neonatologische Hochrisikopatienten sowie auf ausgewählte Risikofaktoren und Infektionen.
-Details dazu finden Sie bei Bedarf im [NeoIPC Surveillanceprotokoll](https://neoipc.org/wp-content/uploads/2023/08/NeoIPC-Surveillance_Core-Module-Protocol.pdf "Link zum NeoIPC Surveillanceprotokoll (pdf, englisch)").
+Um auch Einrichtungen mit geringen Ressourcen eine kontinuierliche Surveillance zu ermöglichen und um ein Benchmarking anhand einer vergleichbaren Patientengruppe durchführen zu können, beschränkt sich die NeoIPC Surveillance auf neonatologische Hochrisikopatienten sowie auf ausgewählte Risikofaktoren und Infektionen. Details dazu finden Sie bei Bedarf im [NeoIPC Surveillanceprotokoll](https://neoipc.org/wp-content/uploads/2023/08/NeoIPC-Surveillance_Core-Module-Protocol.pdf "Link zum NeoIPC Surveillanceprotokoll (pdf, englisch)").
 
 Unter Berücksichtigung der oben angegebenen Filterkriterien umfasst diese Auswertung dank der aktiven Mitarbeit der an der NeoIPC Surveillance beteiligten Abteilungen die vollständigen Datensätze von insgesamt *`{r} fn(totPat)` Patienten* aus *`{r} fn(totEnr)` Aufenthalten* in *`{r} fn(totDept)` Abteilungen* mit insgesamt *`{r} fn(totPatDay)` Tagen unter Surveillance*. Die Daten weiterer *`{r} fn(totIncPat)` Patienten*, die sich zum Auswertungszeitpunkt noch in der aktiven Surveillance befinden und daher noch nicht ausgewertet werden können, werden für diese Auswertung zur Verfügung stehen, sobald die Surveillance bei ihnen jeweils abgeschlossen ist.
 
@@ -50,20 +27,19 @@ Gepooltes arithmetisches Mittel:
 
 Die Quartile:
 
-:    Zur Berechnung der Quartile wird zunächst die entsprechende Rate für alle im Datensatz enthaltenen Abteilungen berechnet und anschließend werden für die ermittelten Raten die Quantile mit p = 0,25 p = 0,5 und p = 0,75 berechnet.
-    
-    Q1:
-    
-    : Das erste Quartil trennt das Viertel der Abteilungen mit den niedrigsten Werten der jeweiligen Rate von den drei Vierteln mit höheren Werten.
-    
-    Median:
-    
-    : Der Median trennt die Hälfte der Abteilungen mit den niedrigeren Werten der jeweiligen Rate von der Hälfte mit den höheren Werten.
-    
-    Q3:
-    
-    : Das dritte Quartil trennt das Viertel der Abteilungen mit den niedrigsten Werten der jeweiligen Rate von den drei Vierteln mit niedrigeren Werten.
+:   Zur Berechnung der Quartile wird zunächst die entsprechende Rate für alle im Datensatz enthaltenen Abteilungen berechnet und anschließend werden für die ermittelten Raten die Quantile mit p = 0,25 p = 0,5 und p = 0,75 berechnet.
 
+    Q1:
+
+    :   Das erste Quartil trennt das Viertel der Abteilungen mit den niedrigsten Werten der jeweiligen Rate von den drei Vierteln mit höheren Werten.
+
+    Median:
+
+    :   Der Median trennt die Hälfte der Abteilungen mit den niedrigeren Werten der jeweiligen Rate von der Hälfte mit den höheren Werten.
+
+    Q3:
+
+    :   Das dritte Quartil trennt das Viertel der Abteilungen mit den niedrigsten Werten der jeweiligen Rate von den drei Vierteln mit niedrigeren Werten.
 
 ## Beschreibung der Population und ihrer Risikofaktoren
 
@@ -140,10 +116,30 @@ sexBarChart / mbBarChart / dmBarChart
 
 ToDo
 
+### Faktoren die das Mikrobiom beeinflussen
+
+#### Antbiotikaanwendung
+
+```{r}
+
+total_ab_rates_overall |>
+  bind_rows(ab_rates_overall_quartiles) |>
+  select("ab_use_density","substance_use_density")|>
+  bind_cols(tibble(rate = c("Pooled mean","Q1","Median","Q3"))) |>
+  pivot_longer(c("ab_use_density","substance_use_density")) |>
+  pivot_wider(names_from = rate) |>
+  gt(rowname_col = "name")
+```
+
+TODO: Expositions- und Anwendungsraten für AWaRE-Klassen, ATC-Substanzgruppen und Einzelsubstanzen
+
+#### Humane Milch und Probiotika
+
+#### Kängugruh-Pflege
+
 ### Operative Eingriffe
 
 Aufgrund der Einschlusskriterien für die NeoIPC Surveillance und der Tatsache, dass nicht alle an der Surveillance teilnehmenden Zentren in der Lage sind, Operationen bei diesen kleinen Kindern durchzuführen, sind chirurgische Eingriffe in der Patientenpopulation relativ selten und das Spektrum beschränkt sich auf relativ wenige typische Eingriffe, die, wenn möglich, meist elektiv zu einem Zeitpunkt durchgeführt werden, zu dem sich die klinische Situation des betroffenen Patienten stabilisiert hat. Dennoch stellt jeder chirurgische Eingriff bei Neugeborenen und Säuglingen einen Risikofaktor für postoperative Wundinfektionen, aber auch für andere nosokomiale Infektionen dar.
-
 
 ```{r Surgeries}
 #| label: tbl-surgeries-by-cat
@@ -178,17 +174,6 @@ surgeries |>
   )
 
 ```
-
-
-### Faktoren die das Mikrobiom beeinflussen
-
-#### Antbiotikaanwendung
-
-TODO: Expositions- und Anwendungsraten für AWaRE-Klassen, ATC-Substanzgruppen und Einzelsubstanzen
-
-#### Humane Milch und Probiotika
-
-#### Kängugruh-Pflege
 
 ## Nosokomiale Infektionen
 
@@ -262,4 +247,3 @@ surgeries |>
     n = "Anzahl")
 
 ```
-
