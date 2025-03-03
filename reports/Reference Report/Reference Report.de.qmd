@@ -154,7 +154,7 @@ surgeries |>
   group_by(cat) |>
   summarise(n = n(), .groups = "drop") |>
   arrange(cat) |>
-  left_join(trnsl$surgeryCategories, join_by(cat), copy = TRUE) |>
+  left_join(translations$surgeryCategories, join_by(cat), copy = TRUE) |>
   mutate(cat = translation, .keep = "unused") |>
   gt(rowname_col = "cat") |>
   tab_options(table.width = pct(100)) |>

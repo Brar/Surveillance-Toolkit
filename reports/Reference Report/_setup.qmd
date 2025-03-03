@@ -19,12 +19,31 @@ countryFilter = params[["countryFilter"]]
 hospitalFilter = params[["hospitalFilter"]]
 defaultPatientFilter = coalesce(params[["defaultPatientFilter"]], TRUE)
 testUnitFilter = coalesce(params[["testUnitFilter"]], TRUE)
-locale <- if(!exists("locale")) NULL else locale
+language <- dplyr::coalesce(params$language, "en")
+default_countries <- list(
+  en = "GB",
+  de = "DE"
+)
+country <- dplyr::coalesce(params$country, default_countries[[language]], NA_character_)
+codepage <- dplyr::coalesce(params$codepage, "UTF-8")
+locale <- paste0(language, (if(is.na(country)) NULL else paste0("_", country)), ".", codepage)
+invisible(Sys.setlocale(category = "LC_ALL", locale = locale))
+translation_file <- paste0("translations/",stringr::str_extract(locale, "^([^.]+)"),".json")
 ```
 
 ```{r Importing data}
 data <- if(!rlang::is_na(session_id)) import_dhis2(connection_options = dhis2_connection_options(session_id = session_id), locale = locale) else if(!rlang::is_na(token)) import_dhis2(connection_options = dhis2_connection_options(token = token), locale = locale) else import_dhis2(locale = locale)
 ichi_health_interventions <- read_csv("../../../Surveillance-Private/metadata/WHO/ICHI/Health interventions.csv", col_names = c("code", "intervention", "intervention_url"), col_types = "ccc")
+if(file.exists(translation_file)) {
+  translations <- readr::read_file(translation_file) |> jsonlite::fromJSON()
+} else {
+  translation_file <- paste0("translations/",stringr::str_extract(locale, "^([^_]+)"),".json")
+  if(file.exists(translation_file)) {
+    translations <- readr::read_file(translation_file) |> jsonlite::fromJSON()
+  } else {
+    rlang::abort(paste0("Failed to find translation file for locale", locale))
+  }
+}
 ```
 
 ```{r Functions}
@@ -197,10 +216,10 @@ patients <- patients |>
     gestation_week_category = ga_7(NeoIPC_TEA_TOTAL_GESTATION_DAYS),
     birth_weight_category_50g = bw_50(NEOIPC_TEA_BIRTH_WEIGHT),
     multiple_birth_category = ordered(case_when(
-      NEOIPC_TEA_SIBLINGS == 1 ~ trnsl$multipleBirthCategories$singleBirth,
-      NEOIPC_TEA_SIBLINGS == 2 ~ trnsl$multipleBirthCategories$twins,
-      NEOIPC_TEA_SIBLINGS >= 3 ~ trnsl$multipleBirthCategories$tripletsOrMore
-      ), levels = unlist(trnsl$multipleBirthCategories)))
+      NEOIPC_TEA_SIBLINGS == 1 ~ translations$multipleBirthCategories$singleBirth,
+      NEOIPC_TEA_SIBLINGS == 2 ~ translations$multipleBirthCategories$twins,
+      NEOIPC_TEA_SIBLINGS >= 3 ~ translations$multipleBirthCategories$tripletsOrMore
+      ), levels = unlist(translations$multipleBirthCategories)))
 
 # Apply filters in reverse order to remove irrelevant entries from tables that
 # are higher in the hierarchy
