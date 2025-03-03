@@ -3,11 +3,7 @@ lang: de
 title: "NeoIPC Surveillance Referenzauswertung"
 ---
 
-{{< include _pre-setup.de.qmd >}}
-
 {{< include _setup.qmd >}}
-
-{{< include _header.qmd >}}
 
 ## Einführung
 
@@ -55,11 +51,11 @@ Im Folgenden werden die im Rahmen der NeoIPC Surveillance beobachteten Risikofak
 
 ### Gestationsalter
 
-{{< include _ga-figure.qmd >}}
+{{< include figures/_ga-figure.qmd >}}
 
 ### Geburtsgewicht
 
-{{< include _bw-figure.qmd >}}
+{{< include figures/_bw-figure.qmd >}}
 
 ### Weitere dispositionelle Risikofaktoren
 

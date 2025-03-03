@@ -11,30 +11,6 @@ gaCombined <- patients |>
         panel.grid.major.y=element_blank(),
         panel.grid.minor.y=element_blank())
 
-# gaHistogram <- patients |>
-#   ggplot(aes(x = decimal_gestational_age)) +
-#   geom_histogram(binwidth = 1) +
-#   ggtitle(data$metadata$trackedEntityAttributes |>
-#             filter(code == "NEOIPC_TEA_GEST_AGE") |>
-#             pull(displayName)) +
-#   theme(axis.title=element_blank(),
-#         axis.text=element_blank(),
-#         axis.ticks=element_blank(),
-#         panel.grid.major.x=element_blank(),
-#         panel.grid.minor.x=element_blank())
-# 
-# gaDensityPlot <- patients |>
-#   ggplot(aes(x = decimal_gestational_age)) +
-#   geom_density() +
-#   ggtitle(data$metadata$trackedEntityAttributes |>
-#             filter(code == "NEOIPC_TEA_GEST_AGE") |>
-#             pull(displayName)) +
-#   theme(axis.title=element_blank(),
-#         axis.text=element_blank(),
-#         axis.ticks=element_blank(),
-#         panel.grid.major.x=element_blank(),
-#         panel.grid.minor.x=element_blank())
-
 gaBoxPlot <- patients |>
   ggplot(aes(x=factor(0), y = decimal_gestational_age)) +
   geom_boxplot() +
@@ -48,5 +24,4 @@ gaBoxPlot <- patients |>
         panel.grid.minor.y=element_blank())
 
 gaCombined / gaBoxPlot
-#gaHistogram / gaDensityPlot / gaBoxPlot
 ```
