@@ -1,0 +1,7 @@
+format:
+  pdf:
+    documentclass: scrartcl
+    papersize: a4paper
+    fig-pos: 'h'
+    colorlinks: true
+number-sections: true

@@ -18,6 +18,8 @@ StripTrailingWhitespace: Yes
 
 UseNativePipeOperator: Yes
 
+MarkdownCanonical: Yes
+
 SpellingDictionary: en_GB
 
 ProjectName: NeoIPC Reference Report

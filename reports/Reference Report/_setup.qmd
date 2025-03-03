@@ -314,7 +314,14 @@ department_ab_treatments_overall <- ab_base |>
   summarise(days = sum(.data$days), cases = n_distinct(.data$enrollment), .groups = "drop")
 
 total_ab_treatments_overall <- ab_base |>
-  summarise(days = sum(.data$days), cases = n_distinct(.data$enrollment))
+  summarise(days = sum(.data$days), cases = n_distinct(.data$enrollment)) |>
+  bind_cols(
+    ab_base |>
+      group_by(enrollment) |>
+      summarise(n_substances = n_distinct(code)) |>
+      summarise(sum_different_substances_per_patient = sum(n_substances))
+  )
+
 
 surgeries <- data$surgeries |>
   filter(status == "COMPLETED") |>
@@ -484,8 +491,6 @@ total_sepsis_rates = total_sepses |> dplyr::bind_cols(total_denominators) |>
 
 sepsis_rate_quartiles <- department_sepsis_rates |> select(!department) |> reframe(across(everything(), ~quantile(.x, prob = c(.25,.5,.75))))
 
-# ToDo: Investigate treatment days without substance days
-# ToDo: Calculate rates
 total_ab_rates_overall <- total_ab_treatments_overall |>
   bind_cols(
     total_denominators |>
@@ -493,9 +498,14 @@ total_ab_rates_overall <- total_ab_treatments_overall |>
         NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM,
         NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM,
         NEOIPC_SURVEILLANCE_END_AB_DAYS_ANY_SUM,
-        NEOIPC_SURVEILLANCE_END_AB_DAYS_SUM))
+        NEOIPC_SURVEILLANCE_END_AB_DAYS_SUM)) |>
+  mutate(
+    ab_use_density = days / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 100,
+    ab_use_rate = NEOIPC_SURVEILLANCE_END_AB_DAYS_ANY_SUM / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM * 100,
+    substance_use_density = days / NEOIPC_SURVEILLANCE_END_AB_DAYS_SUM,
+    substance_use_rate = sum_different_substances_per_patient / cases,
+    .keep = "none")
 
-# ToDo: Calculate rates
 department_ab_rates_overall <- department_ab_treatments_overall |>
   inner_join(
     department_denominators |>
@@ -505,7 +515,21 @@ department_ab_rates_overall <- department_ab_treatments_overall |>
         NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM,
         NEOIPC_SURVEILLANCE_END_AB_DAYS_ANY_SUM,
         NEOIPC_SURVEILLANCE_END_AB_DAYS_SUM),
-    join_by(department))
+    join_by(department)) |>
+  inner_join(
+    ab_base |>
+      group_by(department, enrollment) |>
+      summarise(n_substances = n_distinct(code), .groups = "drop_last") |>
+      summarise(sum_different_substances_per_patient = sum(n_substances)),
+    join_by(department)) |>
+  mutate(
+    ab_use_density = days / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_SUM * 100,
+    ab_use_rate = NEOIPC_SURVEILLANCE_END_AB_DAYS_ANY_SUM / NEOIPC_SURVEILLANCE_END_PATIENT_DAYS_ANY_SUM * 100,
+    substance_use_density = days / NEOIPC_SURVEILLANCE_END_AB_DAYS_SUM,
+    substance_use_rate = sum_different_substances_per_patient / cases,
+    .keep = "unused")
+
+ab_rates_overall_quartiles <- department_ab_rates_overall |> select(!department) |> reframe(across(everything(), ~quantile(.x, prob = c(.25,.5,.75))))
 
 
 department_ab_rates_aware <- department_ab_treatments_aware |>
