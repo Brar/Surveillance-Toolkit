@@ -61,5 +61,7 @@ rsconnect/
 
 # Intermediary files
 *.md
+*.rmarkdown
 
 /.quarto/
+_output

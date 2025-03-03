@@ -1,0 +1,5 @@
+```{r AWaRe antibiotic use rates table}
+total_ab_rates_aware |>
+  inner_join(department_ab_rates_aware_quartiles, join_by(rate, category)) |>
+  gt()
+```

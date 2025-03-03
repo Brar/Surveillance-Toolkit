@@ -108,7 +108,7 @@ sexBarChart / mbBarChart / dmBarChart
 
 ### Aufnahmezeitpunkt und Verweildauer
 
-{{< include _surveillance-duration-figure.qmd >}}
+{{< include figures/_surveillance-duration-figure.qmd >}}
 
 ToDo
 
@@ -181,15 +181,15 @@ Die primäre Sepsis ist die häufigste und wichtigste nosokomiale Infektion in d
 
 <!--# Todo: Graph displaying the proportion of the different definitions, maybe even sub-definitions -->
 
-{{< include _sepsis-table.qmd >}}
+{{< include tables/_sepsis-table.qmd >}}
 
 #### Der Gefäßkatheter als Risikofaktor für Sepsis
 
-{{< include _vc-application-rate-table.qmd >}}
+{{< include tables/_vc-application-rate-table.qmd >}}
 
-{{< include _vc-application-density-rate-table.qmd >}}
+{{< include tables/_vc-application-density-rate-table.qmd >}}
 
-{{< include _vc-sepsis-table.qmd >}}
+{{< include tables/_vc-sepsis-table.qmd >}}
 
 ### Infektionen der unteren Atemwege / Pneumonie
 
