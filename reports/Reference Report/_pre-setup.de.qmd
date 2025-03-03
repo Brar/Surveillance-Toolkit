@@ -4,7 +4,7 @@
 locale = "de"
 options(OutDec = ",", gt.locale = locale)
 invisible(Sys.setlocale(category = "LC_ALL", locale = "de_DE.utf8"))
-trnsl <- list(
+translations <- list(
   multipleBirthCategories = list(
     singleBirth = "Einling",
     twins = "Zwillinge",

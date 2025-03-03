@@ -2,7 +2,7 @@
 q <- sepsis_rate_quartiles |> select(ends_with("_D") & !c(CVC_D, PVC_D))
 
 tibble(
-  name = c(trnsl$sepsisTable$Total, trnsl$sepsisTable$Pathogens, trnsl$sepsisTable$Commensals, trnsl$sepsisTable$Clinical, trnsl$sepsisTable$CsfPositive),
+  name = c(translations$sepsisTable$Total, translations$sepsisTable$Pathogens, translations$sepsisTable$Commensals, translations$sepsisTable$Clinical, translations$sepsisTable$CsfPositive),
   total_sepses = total_sepses |> select(!c(CVC, PVC)) |> unlist(),
   total_sepsis_rates = total_sepsis_rates |> select(ends_with("_D") & !c(CVC_D, PVC_D)) |> unlist(),
   q1 = q |> slice(1) |> unlist(),
@@ -10,13 +10,13 @@ tibble(
   q3 = q |> slice(3) |> unlist()) |>
   gt(rowname_col = "name") |>
   tab_options(table.width = pct(100)) |>
-  tab_header(title = trnsl$sepsisTable$Header) |>
-  tab_row_group(label = trnsl$sepsisTable$PathogenSource, rows = 5) |>
-  tab_row_group(label = trnsl$sepsisTable$Definition, rows = 2:4) |>
+  tab_header(title = translations$sepsisTable$Header) |>
+  tab_row_group(label = translations$sepsisTable$PathogenSource, rows = 5) |>
+  tab_row_group(label = translations$sepsisTable$Definition, rows = 2:4) |>
   fmt_number(decimals = 1) |>
   fmt_number(columns = total_sepses, decimals = 0) |>
   tab_spanner(
-    label = trnsl$sepsisTable$IncidenceRate,
+    label = translations$sepsisTable$IncidenceRate,
     columns = c(total_sepsis_rates, q1, q2, q3),
     id = "incidence_rate"
   ) |>
@@ -45,26 +45,26 @@ tibble(
       cells_column_spanners(),
       cells_row_groups(),
       cells_column_labels(),
-      cells_stub(rows = trnsl$sepsisTable$Total)
+      cells_stub(rows = translations$sepsisTable$Total)
     )
   ) |>
   tab_footnote(
     footnote = md(paste0(
       "$$\\text{",
-      trnsl$sepsisTable$IncidenceRate,
+      translations$sepsisTable$IncidenceRate,
       "} = \\frac{\\text{",
-      trnsl$sepsisTable$NumberOfInfections,
+      translations$sepsisTable$NumberOfInfections,
       "}}{\\text{",
-      trnsl$sepsisTable$SumOfPatientDays,
+      translations$sepsisTable$SumOfPatientDays,
       "}} \\times 1 000$$"
     )),
     locations = cells_column_spanners(spanners = "incidence_rate")
   ) |>
   cols_label(
-    total_sepses = trnsl$sepsisTable$NoOfInfections,
-    total_sepsis_rates = trnsl$globalTable$PooledMean,
-    q1 = trnsl$globalTable$Q1,
-    q2 = trnsl$globalTable$Median,
-    q3 = trnsl$globalTable$Q3
+    total_sepses = translations$sepsisTable$NoOfInfections,
+    total_sepsis_rates = translations$globalTable$PooledMean,
+    q1 = translations$globalTable$Q1,
+    q2 = translations$globalTable$Median,
+    q3 = translations$globalTable$Q3
   )
 ```

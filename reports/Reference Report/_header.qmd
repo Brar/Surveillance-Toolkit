@@ -1,22 +1,22 @@
-`{r} trnsl$headerList$createdAt`:
+`{r} translations$headerList$createdAt`:
 
 :   `{r} format(Sys.time(), format = "%x %X", tz = "UTC", usetz = TRUE)`
 
-`{r} trnsl$headerList$analysisPeriod`:
+`{r} translations$headerList$analysisPeriod`:
 
 :   `{r} paste(format(reportingPeriodFrom, format = "%x"), format(reportingPeriodTo, format = "%x"), sep = " - ")`
 
-`{r} if(nrow(countries) > 1){trnsl$headerList$countries}else{trnsl$headerList$country}`:
+`{r} if(nrow(countries) > 1){translations$headerList$countries}else{translations$headerList$country}`:
 
 :   `{r} paste(countries |> arrange(displayName) |> pull(displayName), sep = ", ")`
 
-`{r} trnsl$headerList$birthweightFilter`:
+`{r} translations$headerList$birthweightFilter`:
 
-:   `{r} if(birthWeightFrom == 0L && birthWeightTo == 2147483647L) trnsl$headerList$allBirthweights else paste(label_bw(birthWeightFrom), label_bw(birthWeightTo), sep = " - ")`
+:   `{r} if(birthWeightFrom == 0L && birthWeightTo == 2147483647L) translations$headerList$allBirthweights else paste(label_bw(birthWeightFrom), label_bw(birthWeightTo), sep = " - ")`
 
-`{r} trnsl$headerList$gestationalAgeFilter`:
+`{r} translations$headerList$gestationalAgeFilter`:
 
-:   `{r} if(gestationalAgeFrom == 0L && gestationalAgeTo == 2147483647L) trnsl$headerList$allGestationalAges else paste0(format_ga(c(gestationalAgeFrom, gestationalAgeTo)), collapse = " - ")`
+:   `{r} if(gestationalAgeFrom == 0L && gestationalAgeTo == 2147483647L) translations$headerList$allGestationalAges else paste0(format_ga(c(gestationalAgeFrom, gestationalAgeTo)), collapse = " - ")`
 
 ```{r Countries hint}
 #| output: asis
@@ -24,20 +24,20 @@
 if(nrow(countries) > 1){
   cat(sep = "\n", c(
     "::: {.callout-note}",
-    paste0("## ", trnsl$headerList$multiCountryHintHeader),
+    paste0("## ", translations$headerList$multiCountryHintHeader),
     "",
-    trnsl$headerList$multiCountryHint,
+    translations$headerList$multiCountryHint,
     "",
-    trnsl$headerList$multiCountryHintGoal,
+    translations$headerList$multiCountryHintGoal,
     ":::"))
 } else {
   cat(sep = "\n", c(
     "::: {.callout-note}",
-    paste0("## ", trnsl$headerList$singleCountryHintHeader),
+    paste0("## ", translations$headerList$singleCountryHintHeader),
     "",
-    trnsl$headerList$singleCountryHint,
+    translations$headerList$singleCountryHint,
     "",
-    trnsl$headerList$singleCountryRepresentativenessHint,
+    translations$headerList$singleCountryRepresentativenessHint,
     ":::"))
 }
 ```
@@ -48,16 +48,16 @@ if(nrow(countries) > 1){
 if(!testUnitFilter || !defaultPatientFilter){
   cat(sep = "\n", c("::: {.callout-note}", paste0(
     c(
-    trnsl$headerList$specialAnalysisHint,
+    translations$headerList$specialAnalysisHint,
     if(!testUnitFilter){
-      paste0(trnsl$headerList$includesTestDepartments,
+      paste0(translations$headerList$includesTestDepartments,
       if(!defaultPatientFilter)
-        trnsl$headerList$and
+        translations$headerList$and
       else
         ".", collapse = "")
     },
     if (!defaultPatientFilter)
-      trnsl$headerList$ignoresInclusionCriteria
+      translations$headerList$ignoresInclusionCriteria
     ), collapse = " "),
     ":::"))
 }
