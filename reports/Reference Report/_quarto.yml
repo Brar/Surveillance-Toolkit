@@ -8,15 +8,3 @@ filters: ["../filters/pandoc-quotes.lua"]
 profile:
   group:
     - [html, pdf, minimal]
-params:
-  reportingPeriodFrom: NULL
-  reportingPeriodTo: NULL
-  birthWeightFrom: NULL
-  birthWeightTo: NULL
-  gestationalAgeFrom: NULL
-  gestationalAgeTo: NULL
-  countryFilter: NULL
-  hospitalFilter: NULL
-  testUnitFilter: true
-  defaultPatientFilter: true
-  token: NULL

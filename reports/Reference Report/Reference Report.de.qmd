@@ -1,6 +1,18 @@
 ---
 lang: de
 title: "NeoIPC Surveillance Referenzauswertung"
+params:
+  reportingPeriodFrom: NULL
+  reportingPeriodTo: NULL
+  birthWeightFrom: NULL
+  birthWeightTo: NULL
+  gestationalAgeFrom: NULL
+  gestationalAgeTo: NULL
+  countryFilter: NULL
+  hospitalFilter: NULL
+  testUnitFilter: true
+  defaultPatientFilter: true
+  token: NULL
 ---
 
 {{< include _setup.qmd >}}
@@ -119,7 +131,7 @@ ToDo
 ```{r}
 
 total_ab_rates_overall |>
-  bind_rows(ab_rates_overall_quartiles) |>
+  bind_rows(total_ab_rates_overall_quartiles) |>
   select("ab_use_density","substance_use_density")|>
   bind_cols(tibble(rate = c("Pooled mean","Q1","Median","Q3"))) |>
   pivot_longer(c("ab_use_density","substance_use_density")) |>

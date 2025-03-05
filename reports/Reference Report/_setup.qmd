@@ -1,6 +1,8 @@
 ```{r General setup and parameter preparation, message=FALSE, warning=FALSE}
+#| include: false
 suppressMessages(pak::pak("Brar/neoipcr@initial_tests"))
 suppressMessages(library(tidyverse, warn.conflicts = FALSE, quietly = TRUE))
+suppressMessages(library(smplot2, warn.conflicts = FALSE, quietly = TRUE))
 suppressMessages(library(scales, warn.conflicts = FALSE, quietly = TRUE))
 suppressMessages(library(patchwork, warn.conflicts = FALSE, quietly = TRUE))
 suppressMessages(library(gt, warn.conflicts = FALSE, quietly = TRUE))
@@ -13,7 +15,7 @@ birthWeightFrom <- coalesce(params[["birthWeightFrom"]], 0L)
 birthWeightTo <- coalesce(params[["birthWeightTo"]], 2147483647L)
 gestationalAgeFrom <- coalesce(params[["gestationalAgeFrom"]], 0L)
 gestationalAgeTo <- coalesce(params[["gestationalAgeTo"]], 2147483647L)
-token <- coalesce(params[["token"]], Sys.getenv("NEOIPC_DHIS2_TOKEN", unset = NA))
+token <- coalesce(params$token, Sys.getenv("NEOIPC_DHIS2_TOKEN", unset = NA))
 session_id <- coalesce(params[["session_id"]], Sys.getenv("NEOIPC_DHIS2_SESSION_ID", unset = NA))
 countryFilter = params[["countryFilter"]]
 hospitalFilter = params[["hospitalFilter"]]
@@ -32,6 +34,7 @@ translation_file <- paste0("translations/",stringr::str_extract(locale, "^([^.]+
 ```
 
 ```{r Importing data}
+#| include: false
 data <- if(!rlang::is_na(session_id)) import_dhis2(connection_options = dhis2_connection_options(session_id = session_id), locale = locale) else if(!rlang::is_na(token)) import_dhis2(connection_options = dhis2_connection_options(token = token), locale = locale) else import_dhis2(locale = locale)
 
 ichi_health_interventions <- read_csv("../../../Surveillance-Private/metadata/WHO/ICHI/Health interventions.csv", col_names = c("code", "intervention", "intervention_url"), col_types = "ccc")
@@ -49,6 +52,7 @@ if(file.exists(translation_file)) {
 ```
 
 ```{r Functions}
+#| include: false
 fn <- function(x) format(x, big.mark =" ")
 fd <- function(x) format(x, digits = 2, nsmall = 1, scientific = FALSE, big.mark =" ")
 label_week <- function(x) paste(fn(x), "w", sep = " ")
@@ -144,6 +148,7 @@ surgery_cat <- function(mpc, spc1, spc2){
 ```
 
 ```{r Filtering}
+#| include: false
 countries <- data$metadata$countries
 
 if(!rlang::is_null(countryFilter))
