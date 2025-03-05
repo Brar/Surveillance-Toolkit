@@ -19,6 +19,7 @@
 :   `{r} if(gestationalAgeFrom == 0L && gestationalAgeTo == 2147483647L) translations$headerList$allGestationalAges else paste0(format_ga(c(gestationalAgeFrom, gestationalAgeTo)), collapse = " - ")`
 
 ```{r Countries hint}
+#| echo: false
 #| output: asis
 
 if(nrow(countries) > 1){
@@ -43,6 +44,7 @@ if(nrow(countries) > 1){
 ```
 
 ```{r Custom report hint}
+#| echo: false
 #| output: asis
 
 if(!testUnitFilter || !defaultPatientFilter){
