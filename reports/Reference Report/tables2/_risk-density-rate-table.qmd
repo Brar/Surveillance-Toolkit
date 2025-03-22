@@ -1,0 +1,4 @@
+```{r risk density rate table}
+table_1 |>
+  gt()
+```

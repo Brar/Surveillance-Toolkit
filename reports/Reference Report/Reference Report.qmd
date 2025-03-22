@@ -1,6 +1,6 @@
 ---
 lang: en
-title: "NeoIPC Reference Report"
+title: "NeoIPC Surveillance Reference Report"
 params:
   reportingPeriodFrom: NULL
   reportingPeriodTo: NULL
@@ -16,3 +16,78 @@ params:
 ---
 
 {{< include _setup2.qmd >}}
+
+`{r} translations$headerList$createdAt`:
+
+:   `{r} format(Sys.time(), format = "%x %X", tz = "UTC", usetz = TRUE)`
+
+`{r} translations$headerList$analysisPeriod`:
+
+:   `{r} paste(format(reportingPeriodFrom, format = "%x"), format(reportingPeriodTo, format = "%x"), sep = " - ")`
+
+`{r} if(nrow(data$metadata$countries) > 1){translations$headerList$countries}else{translations$headerList$country}`:
+
+:   `{r} paste0(data$metadata$countries |> arrange(displayName) |> pull(displayName), collapse = ", ")`
+
+`{r} translations$headerList$birthweightFilter`:
+
+:   `{r} if(birthWeightFrom == 0L && birthWeightTo == 2147483647L) translations$headerList$allBirthweights else paste(label_bw(birthWeightFrom), label_bw(birthWeightTo), sep = " - ")`
+
+`{r} translations$headerList$gestationalAgeFilter`:
+
+:   `{r} if(gestationalAgeFrom == 0L && gestationalAgeTo == 2147483647L) translations$headerList$allGestationalAges else paste0(format_ga(c(gestationalAgeFrom, gestationalAgeTo)), collapse = " - ")`
+
+```{r Countries hint}
+#| echo: false
+#| output: asis
+
+if(nrow(data$metadata$countries) > 1){
+  cat(sep = "\n", c(
+    "::: {.callout-note}",
+    paste0("## ", translations$headerList$multiCountryHintHeader),
+    "",
+    translations$headerList$multiCountryHint,
+    "",
+    translations$headerList$multiCountryHintGoal,
+    ":::"))
+} else {
+  cat(sep = "\n", c(
+    "::: {.callout-note}",
+    paste0("## ", translations$headerList$singleCountryHintHeader),
+    "",
+    translations$headerList$singleCountryHint,
+    "",
+    translations$headerList$singleCountryRepresentativenessHint,
+    ":::"))
+}
+```
+
+```{r Custom report hint}
+#| echo: false
+#| output: asis
+
+if(!testUnitFilter || !defaultPatientFilter){
+  cat(sep = "\n", c("::: {.callout-note}", paste0(
+    c(
+    translations$headerList$specialAnalysisHint,
+    if(!testUnitFilter){
+      paste0(translations$headerList$includesTestDepartments,
+      if(!defaultPatientFilter)
+        translations$headerList$and
+      else
+        ".", collapse = "")
+    },
+    if (!defaultPatientFilter)
+      translations$headerList$ignoresInclusionCriteria
+    ), collapse = " "),
+    ":::"))
+}
+```
+
+{{< pagebreak >}}
+
+{{< include _header.qmd >}}
+
+{{< include figures2/_bw-figure.qmd >}}
+
+{{< include tables2/_risk-density-rate-table.qmd >}}

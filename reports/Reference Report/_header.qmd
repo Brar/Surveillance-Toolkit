@@ -1,66 +1,19 @@
-`{r} translations$headerList$createdAt`:
+Number of partner departments contributing at least one patient record:
 
-:   `{r} format(Sys.time(), format = "%x %X", tz = "UTC", usetz = TRUE)`
+:   `{r} format(nrow(data$metadata$departments), big.mark =" ")`
 
-`{r} translations$headerList$analysisPeriod`:
+Number of patient records:
 
-:   `{r} paste(format(reportingPeriodFrom, format = "%x"), format(reportingPeriodTo, format = "%x"), sep = " - ")`
+:   `{r} format(nrow(data$patients), big.mark =" ")`
 
-`{r} if(nrow(countries) > 1){translations$headerList$countries}else{translations$headerList$country}`:
+Number of patient admissions:
 
-:   `{r} paste(countries |> arrange(displayName) |> pull(displayName), sep = ", ")`
+:   `{r} format(nrow(data$enrollments), big.mark =" ")`
 
-`{r} translations$headerList$birthweightFilter`:
+Sum of patient days:
 
-:   `{r} if(birthWeightFrom == 0L && birthWeightTo == 2147483647L) translations$headerList$allBirthweights else paste(label_bw(birthWeightFrom), label_bw(birthWeightTo), sep = " - ")`
+:   `{r} format(sum(data$surveillanceEndData$patient_days_value), big.mark =" ")`
 
-`{r} translations$headerList$gestationalAgeFilter`:
+Average surveillance period per patient:
 
-:   `{r} if(gestationalAgeFrom == 0L && gestationalAgeTo == 2147483647L) translations$headerList$allGestationalAges else paste0(format_ga(c(gestationalAgeFrom, gestationalAgeTo)), collapse = " - ")`
-
-```{r Countries hint}
-#| echo: false
-#| output: asis
-
-if(nrow(countries) > 1){
-  cat(sep = "\n", c(
-    "::: {.callout-note}",
-    paste0("## ", translations$headerList$multiCountryHintHeader),
-    "",
-    translations$headerList$multiCountryHint,
-    "",
-    translations$headerList$multiCountryHintGoal,
-    ":::"))
-} else {
-  cat(sep = "\n", c(
-    "::: {.callout-note}",
-    paste0("## ", translations$headerList$singleCountryHintHeader),
-    "",
-    translations$headerList$singleCountryHint,
-    "",
-    translations$headerList$singleCountryRepresentativenessHint,
-    ":::"))
-}
-```
-
-```{r Custom report hint}
-#| echo: false
-#| output: asis
-
-if(!testUnitFilter || !defaultPatientFilter){
-  cat(sep = "\n", c("::: {.callout-note}", paste0(
-    c(
-    translations$headerList$specialAnalysisHint,
-    if(!testUnitFilter){
-      paste0(translations$headerList$includesTestDepartments,
-      if(!defaultPatientFilter)
-        translations$headerList$and
-      else
-        ".", collapse = "")
-    },
-    if (!defaultPatientFilter)
-      translations$headerList$ignoresInclusionCriteria
-    ), collapse = " "),
-    ":::"))
-}
-```
+:   `{r} format(sum(data$surveillanceEndData$patient_days_value) / nrow(data$patients), digits = 2, nsmall = 1, scientific = FALSE)` days
