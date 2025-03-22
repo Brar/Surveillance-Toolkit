@@ -1,0 +1,34 @@
+```{r Birth weight figure}
+label_bw <- function(x) paste(format(x, big.mark =" "), "g", sep = " ")
+breaks_bw <- function(x) pretty(x, as.integer((as.integer(x[2]) + 1 - as.integer(x[1])) / 100))
+min_bw <- min(data$patients$birth_weight)
+max_bw <- max(data$patients$birth_weight)
+
+
+bwCombined <- data$patients |>
+  ggplot(aes(x = birth_weight)) +
+  geom_histogram(aes(y = after_stat(density)), colour = 1, fill = "white", binwidth = 50, boundary = 25, closed = "left") +
+  geom_density() +
+  scale_x_continuous(breaks = breaks_bw) +
+  coord_cartesian(xlim = c(min_bw - 50, max_bw + 50)) +
+  theme(axis.title=element_blank(),
+        axis.text=element_blank(),
+        axis.ticks=element_blank(),
+        panel.grid.major.y=element_blank(),
+        panel.grid.minor.y=element_blank())
+
+bwBoxPlot <- data$patients |>
+  ggplot(aes(x=factor(0), y = birth_weight)) +
+  geom_boxplot() +
+  stat_summary(fun = "mean", geom = "point", shape = 23, size = 3, fill = "white") +
+  scale_y_continuous(breaks = breaks_bw, labels = label_bw) +
+  coord_flip(ylim = c(min_bw - 50, max_bw + 50)) +
+  theme(axis.title=element_blank(),
+        axis.text.x=element_text(angle = 45, hjust = 1, vjust = 1),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        panel.grid.major.y=element_blank(),
+        panel.grid.minor.y=element_blank())
+
+bwCombined / bwBoxPlot
+```

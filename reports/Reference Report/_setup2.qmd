@@ -35,7 +35,7 @@ translation_file <- paste0("translations/", stringr::str_extract(locale, "^([^.]
 
 ```{r Importing data}
 #| include: false
-data <- import_dhis2()
+data <- import_dhis2(dataset_options = dhis2_dataset_options(include_country = "yes", include_department = "yes"))
 
 ichi_health_interventions <- read_csv("../../../Surveillance-Private/metadata/WHO/ICHI/Health interventions.csv", col_names = c("code", "intervention", "intervention_url"), col_types = "ccc")
 
@@ -49,6 +49,63 @@ if(file.exists(translation_file)) {
     rlang::abort(paste0("Failed to find translation file for locale", locale))
   }
 }
-```
 
-{{< include _header.qmd >}}
+risk_time <- data$surveillanceEndData |>
+  dplyr::reframe(
+    across(
+      tidyselect::ends_with("_days"),
+      sum)) |>
+  dplyr::mutate(
+    across(
+      !"patient_days",
+      ~ .x / .data$patient_days * 100,
+      .names = "{.col}_rate")) |>
+  dplyr::rename_with(~ stringr::str_remove_all(.x, "days_"))
+
+department_risk_time <- data$surveillanceEndData |>
+  dplyr::inner_join(
+    data$events |>
+      dplyr::select("event_key","enrollment_key"),
+    dplyr::join_by("event_key")) |>
+  dplyr::inner_join(
+    data$enrollments |>
+      dplyr::select("enrollment_key","department_key"),
+    dplyr::join_by("enrollment_key")) |>
+  dplyr::group_by(.data$department_key) |>
+  dplyr::summarise(across(tidyselect::ends_with("_days"), sum)) |>
+  dplyr::mutate(
+    across(
+      !c("department_key","patient_days"),
+      ~ .x / .data$patient_days * 100,
+      .names = "{.col}_rate")) |>
+  dplyr::rename_with(~ stringr::str_remove_all(.x, "days_"))
+
+risk_rate_quartiles <- department_risk_time |> select(tidyselect::ends_with("_rate")) |> reframe(across(everything(), ~quantile(.x, prob = c(.25,.5,.75))))
+
+table_1 <- risk_time |>
+  dplyr::select(!"patient_days" & tidyselect::ends_with("_days")) |>
+  pivot_longer(
+    cols = tidyselect::ends_with("_days"),
+    values_to = "Device-Days") |>
+  dplyr::mutate(
+    Device = .data$name,
+    .before = 1,
+    .keep = "unused") |>
+  dplyr::bind_cols(
+    risk_time |>
+      dplyr::select(tidyselect::ends_with("_rate")) |>
+      tidyr::pivot_longer(
+        cols = tidyselect::ends_with("_rate"),
+        values_to = "Pooled Mean")) |>
+  dplyr::bind_cols(
+    risk_rate_quartiles |>
+      dplyr::bind_cols(tibble::tibble(name = c("Q1","Q2","Q3"))) |>
+      tidyr::pivot_wider(
+        values_from = tidyselect::ends_with("_rate")) |>
+      tidyr::pivot_longer(
+        tidyselect::everything(),
+        names_pattern = "^(.+)_(Q\\d)$",
+        names_to = c("rate",".value"))) |>
+  dplyr::select(!tidyselect::all_of(c("name","rate")))
+
+```
