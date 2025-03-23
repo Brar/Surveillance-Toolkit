@@ -1,4 +1,7 @@
 ```{r risk density rate table}
+#| label: tab-risk-density-rates
+#| tbl-cap: "Overview over the collected factors influencing the infants' risk of developing an infection or acquiring a drug resistant pathogen. Factor: The risk factor. Risk days: The aggregated number of days the risk factor was present in all infants. Pooled mean: The risk density rate calculated as risk days per 100 patient days calculatted across all infants. Q1, Q2, Q3: The quartiles (25%, 50% and 75% quantiles) of the risk density rates of the partner departments"
+
 table_1 |>
   gt()
 ```

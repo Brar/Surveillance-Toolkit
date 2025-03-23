@@ -1,4 +1,7 @@
 ```{r Gestational age figure}
+#| label: fig-ga
+#| fig-cap: "A histogram in 1 week steps with density curve and a boxplot of the gestational ages of the patients contained in this analysis"
+
 p <- data$patients |>
   dplyr::semi_join(data$enrollments, join_by("patient_key")) |>
   dplyr::mutate(decimal_gestational_age = total_gestation_days / 7)

@@ -1,4 +1,7 @@
 ```{r Birth weight figure}
+#| label: fig-bw
+#| fig-cap: "A histogram in 50 g steps with density curve and a boxplot of the birth weights of the patients contained in this analysis"
+
 label_bw <- function(x) paste(format(x, big.mark =" "), "g", sep = " ")
 breaks_bw <- function(x) pretty(x, as.integer((as.integer(x[2]) + 1 - as.integer(x[1])) / 100))
 min_bw <- min(data$patients$birth_weight)

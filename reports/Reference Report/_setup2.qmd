@@ -86,9 +86,9 @@ table_1 <- risk_time |>
   dplyr::select(!"patient_days" & tidyselect::ends_with("_days")) |>
   pivot_longer(
     cols = tidyselect::ends_with("_days"),
-    values_to = "Device-Days") |>
+    values_to = "Risk days") |>
   dplyr::mutate(
-    Device = .data$name,
+    Factor = .data$name,
     .before = 1,
     .keep = "unused") |>
   dplyr::bind_cols(
@@ -96,7 +96,7 @@ table_1 <- risk_time |>
       dplyr::select(tidyselect::ends_with("_rate")) |>
       tidyr::pivot_longer(
         cols = tidyselect::ends_with("_rate"),
-        values_to = "Pooled Mean")) |>
+        values_to = "Pooled mean")) |>
   dplyr::bind_cols(
     risk_rate_quartiles |>
       dplyr::bind_cols(tibble::tibble(name = c("Q1","Q2","Q3"))) |>
