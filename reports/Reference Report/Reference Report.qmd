@@ -120,6 +120,6 @@ For the sake of sustainability, the NeoIPC surveillance currently focuses on the
 
 ## Risk and Protective Factors
 
-Next to the inherent risk factors gestational age and birth weight there are also a number of expositional factors that influence the risk of an infant to develop an infection.
+Next to the inherent risk factors gestational age and birth weight there are also a number of expositional factors that influence the risk of an infant to acquire a multi-drug-resistant pathogen or to develop an infection.
 
 {{< include tables2/_risk-density-rate-table.qmd >}}

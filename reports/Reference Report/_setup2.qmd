@@ -50,7 +50,36 @@ if(file.exists(translation_file)) {
   }
 }
 
+get_AWaRe_days <- function()
+{
+  data$substanceDays |>
+    dplyr::group_by(.data$event_key, .data$substance_code) |>
+    dplyr::summarise(days = sum(days), .groups = "drop") |>
+    dplyr::inner_join(
+      data$metadata$antimicrobialSubstances |>
+        dplyr::mutate(
+          AWaRe = factor(
+            tolower(
+              stringr::str_extract(
+                .data$WHO_AWARE,
+                "^WHO_AWARE_(A|W|R).+$",
+                group = 1)),
+            levels = c("a","w","r"))) |>
+        dplyr::select(code, AWaRe),
+      dplyr::join_by("substance_code" == "code")) |>
+    dplyr::group_by(event_key, AWaRe) |>
+    dplyr::summarise(days = sum(days), .groups = "drop") |>
+    tidyr::pivot_wider(
+      names_from = AWaRe,
+      values_from = days,
+      names_glue = "{AWaRe}_{.value}",
+      values_fill = 0L)
+}
+
+AWaReDays <- get_AWaRe_days()
+
 risk_time <- data$surveillanceEndData |>
+  dplyr::inner_join(AWaReDays, dplyr::join_by(event_key)) |>
   dplyr::reframe(
     across(
       tidyselect::ends_with("_days"),
@@ -63,6 +92,7 @@ risk_time <- data$surveillanceEndData |>
   dplyr::rename_with(~ stringr::str_remove_all(.x, "days_"))
 
 department_risk_time <- data$surveillanceEndData |>
+  dplyr::inner_join(AWaReDays, dplyr::join_by(event_key)) |>
   dplyr::inner_join(
     data$events |>
       dplyr::select("event_key","enrollment_key"),
@@ -86,7 +116,7 @@ table_1 <- risk_time |>
   dplyr::select(!"patient_days" & tidyselect::ends_with("_days")) |>
   pivot_longer(
     cols = tidyselect::ends_with("_days"),
-    values_to = "Risk days") |>
+    values_to = "Usage days") |>
   dplyr::mutate(
     Factor = .data$name,
     .before = 1,
@@ -106,6 +136,27 @@ table_1 <- risk_time |>
         tidyselect::everything(),
         names_pattern = "^(.+)_(Q\\d)$",
         names_to = c("rate",".value"))) |>
-  dplyr::select(!tidyselect::all_of(c("name","rate")))
+  dplyr::select(!tidyselect::all_of(c("name","rate"))) |>
+  dplyr::mutate(
+    Factor = factor(
+      stringr::str_extract(.data$Factor,"^(.+)_days", 1),
+      levels = c("cvc","pvc","vs","inv","niv","human_milk","kangaroo_care",
+                 "probiotic","ab","a","w","r"))) |>
+  dplyr::arrange(Factor) |>
+  dplyr::mutate(
+    Factor = dplyr::case_match(
+      as.character(.data$Factor),
+      "cvc" ~ "Central vascular catheter",
+      "pvc" ~ "Peripheral vascular catheter",
+      "vs" ~ "Ventilatory support (any)",
+      "inv" ~ "Invasive ventilation",
+      "niv" ~ "Non-invasive ventilatory support",
+      "human_milk" ~ "Human milk",
+      "kangaroo_care" ~ "Kangaroo care",
+      "probiotic" ~ "Probiotic",
+      "ab" ~ "Antibiotics (any)",
+      "a" ~ "Access antibiotics",
+      "w" ~ "Watch antibiotics",
+      "r" ~ "Reserve antibiotics"))
 
 ```

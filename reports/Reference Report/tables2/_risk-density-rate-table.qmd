@@ -1,7 +1,52 @@
 ```{r risk density rate table}
 #| label: tab-risk-density-rates
-#| tbl-cap: "Overview over the collected factors influencing the infants' risk of developing an infection or acquiring a drug resistant pathogen. Factor: The risk factor. Risk days: The aggregated number of days the risk factor was present in all infants. Pooled mean: The risk density rate calculated as risk days per 100 patient days calculatted across all infants. Q1, Q2, Q3: The quartiles (25%, 50% and 75% quantiles) of the risk density rates of the partner departments"
+#| tbl-cap: "Overview over the factors influencing the infants' risk of developing an infection or acquiring a drug resistant pathogen. Usage days: The aggregated number of days the risk/protective factor was present in all infants. Pooled mean: The usage density rate calculated as usage days per 100 patient days calculated across all infants. Q1, Q2, Q3: The quartiles (25%, 50% and 75% quantiles) of the usage density rates of the partner departments"
+#| tbl-cap-location: bottom
 
 table_1 |>
-  gt()
+  gt(rowname_col = "Factor") |>
+  tab_options(table.width = pct(100)) |>
+  fmt_number(decimals = 1) |>
+  fmt_number(columns = "Usage days", decimals = 0) |>
+  tab_spanner(
+    label = "Usage density rate",
+    columns = c("Pooled mean","Q1","Q2","Q3"),
+    id = "usage_density_rate"
+  ) |>
+  tab_style(
+    style = list(
+      cell_borders(sides = c("left", "right"), weight = px(0))
+    ),
+    locations = list(
+      cells_stub()
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_text(weight = "bold"),
+      cell_borders(sides = c("left", "right"), weight = px(0))
+    ),
+    locations = list(
+      cells_column_spanners(),
+      cells_column_labels()
+    )
+  ) |>
+  tab_footnote(
+    footnote = md(
+      paste0(
+        "$$\\text{",
+        "Usage density rate",
+        "} = \\frac{\\text{",
+        "Usage days",
+        "}}{\\text{",
+        "Patient days",
+        "}} \\times 100$$"
+      )),
+    locations = cells_column_spanners(spanners = "usage_density_rate")
+  ) |>
+  tab_footnote(
+    footnote = "As cumulative treatment days for individual substances are recorded per patient, combination therapies using several substances on one day are counted as multiple use days.",
+    locations = gt::cells_stub(rows = c("Access antibiotics",
+                                        "Watch antibiotics","Reserve antibiotics"))
+  )
 ```
