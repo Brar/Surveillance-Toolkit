@@ -2,7 +2,7 @@ id,synonym,concept_source,concept_id,synonym_for
 1230,Abiotrophia adiacens,LPSN,species/abiotrophia-adiacens,201
 1195,Abiotrophia elegans,LPSN,species/abiotrophia-elegans,99
 1482,Achromobacter xylosoxidans xylosoxidans,LPSN,subspecies/achromobacter-xylosoxidans-xylosoxidans,1374
-2179,Acladium castellanii,MycoBank,120097,145
+2179,Acladium castellanii,MycoBank,120097,657
 2699,Acremonium alabamensis,NeoIPC,29,2698
 96,Acremonium kiliense,MycoBank,252874,3382
 1064,Acremonium recifei,MycoBank,308188,3401
@@ -29,7 +29,7 @@ id,synonym,concept_source,concept_id,synonym_for
 1584,Alcaligenes xylosoxidans,LPSN,species/alcaligenes-xylosoxidans,1374
 351,Alcaligenes xylosoxidans xylosoxidans,LPSN,subspecies/alcaligenes-xylosoxidans-xylosoxidans,1374
 1718,Aleurisma apiospermum,MycoBank,250730,1795
-683,Allescheria boydii,MycoBank,258760,145
+683,Allescheria boydii,MycoBank,258760,657
 1659,Anaerorhabdus furcosus,LPSN,species/anaerorhabdus-furcosus,3051
 2239,Arcanobacterium bernardiae,LPSN,species/arcanobacterium-bernardiae,295
 112,Arcanobacterium pyogenes,LPSN,species/arcanobacterium-pyogenes,2122
@@ -69,7 +69,6 @@ id,synonym,concept_source,concept_id,synonym_for
 2554,Aureobacterium liquefaciens,LPSN,species/aureobacterium-liquefaciens,1203
 1943,Azymoprocandida lipolytica,MycoBank,326863,3377
 2614,B19 virus,NeoIPC,10,2612
-2470,BK polyomavirus,ICTV,202104459,2642
 278,Bacillus agaradhaerens,LPSN,species/bacillus-agaradhaerens,3085
 320,Bacillus agri,LPSN,species/bacillus-agri,962
 722,Bacillus alcalophilus,LPSN,species/bacillus-alcalophilus,2992
@@ -235,6 +234,7 @@ id,synonym,concept_source,concept_id,synonym_for
 1292,Bifidobacterium suis,LPSN,species/bifidobacterium-suis,3065
 1927,Bipolaris australiensis,MycoBank,112052,3402
 948,Bipolaris hawaiiensis,MycoBank,309555,3385
+2470,BK polyomavirus,ICTV,202104459,2642
 2691,Bocavirus,ICTV,202104241,2690
 2240,Botryodiplodia theobromae,MycoBank,157658,842
 496,Brachycladium spiciferum,MycoBank,221562,307
@@ -262,17 +262,28 @@ id,synonym,concept_source,concept_id,synonym_for
 676,Campylobacter nitrofigilis,LPSN,species/campylobacter-nitrofigilis,875
 2570,Campylobacter pylori,LPSN,species/campylobacter-pylori,258
 380,Campylobacter sputorum mucosalis,LPSN,subspecies/campylobacter-sputorum-mucosalis,441
+1183,Candida auris,MycoBank,508967,3431
 1264,Candida catenulata,MycoBank,284767,3403
 1889,Candida ciferrii,MycoBank,327426,3371
-1354,Candida duobushaemulonii,MycoBank,800921,3362
+3473,Candida duobushaemuli,MycoBank,661998,3435
+1354,Candida duobushaemulonii,MycoBank,800921,3435
+3362,Candida duobushaemulonis,MycoBank,584804,3435
+512,Candida fabianii,MycoBank,327431,3436
+2078,Candida glabrata,MycoBank,310265,3437
 52,Candida guilliermondii,MycoBank,252488,2187
 2694,Candida guilliermondii var. membranaefaciens,MycoBank,306134,1722
 2693,Candida guilliermondii var. membranifaciens,MycoBank,346605,1722
-2243,Candida haemulonii,MycoBank,292874,3380
+3472,Candida haemuli,MycoBank,661996,3432
+3380,Candida haemuloni,MycoBank,634000,3432
+2243,Candida haemulonii,MycoBank,292874,3432
+1805,Candida inconspicua,MycoBank,310280,3438
+1466,Candida intermedia,MycoBank,252746,3439
 62,Candida krusei,MycoBank,268707,2597
 451,Candida lambica,MycoBank,108744,3365
 1707,Candida lipolytica,MycoBank,284772,3377
 1192,Candida lusitaniae,MycoBank,294031,2157
+1322,Candida nivariensis,MycoBank,357391,3440
+1055,Candida pararugosa,MycoBank,310318,3441
 2582,Candida pelliculosa,MycoBank,253866,3386
 396,Candida pintolopesii,MycoBank,310322,3348
 568,Candida pulcherrima,MycoBank,284777,3414
@@ -342,7 +353,7 @@ id,synonym,concept_source,concept_id,synonym_for
 677,Corynebacterium variabilis,LPSN,species/corynebacterium-variabilis,1821
 1548,Corynebacterium vitarumen,LPSN,species/corynebacterium-vitarumen,2372
 632,Crimean-Congo hemorrhagic fever virus,ICTV,202100070,3340
-900,Cryptococcus aggregatus,MycoBank,456230,1055
+900,Cryptococcus aggregatus,MycoBank,456230,3441
 2460,Cryptococcus utilis,MycoBank,456262,3356
 2012,Curvularia spicifera,MycoBank,278597,307
 771,Cytophaga heparina,LPSN,species/cytophaga-heparina,1048
@@ -461,8 +472,6 @@ id,synonym,concept_source,concept_id,synonym_for
 822,Hormiscium dermatitidis,MycoBank,118937,212
 510,Hormodendrum dermatitidis,MycoBank,491663,212
 803,Hormonema,MycoBank,8562,3392
-2676,Human T-lymphotropic virus 1,NeoIPC,25,2675
-2678,Human T-lymphotropic virus 2,NeoIPC,26,2677
 2605,Human cytomegalovirus,NeoIPC,5,2604
 2650,Human hepatitis E virus,ICTV,202103665,2649
 2671,Human herpesvirus 6A,ICTV,202101475,2670
@@ -477,6 +486,8 @@ id,synonym,concept_source,concept_id,synonym_for
 2643,Human polyomavirus 1,ICTV,202104459,2642
 2683,Human polyomavirus 2,ICTV,202104460,2682
 376,Human respiratory syncytial virus,ICTV,202101651,2603
+2676,Human T-lymphotropic virus 1,NeoIPC,25,2675
+2678,Human T-lymphotropic virus 2,NeoIPC,26,2677
 2526,Influenza A virus,ICTV,202103956,2654
 710,Influenza B virus,ICTV,202103958,2655
 1420,Influenza C virus,ICTV,202103962,2656
@@ -614,7 +625,7 @@ id,synonym,concept_source,concept_id,synonym_for
 2533,Peptostreptococcus productus,LPSN,species/peptostreptococcus-productus,631
 774,Peptostreptococcus tetradius,LPSN,species/peptostreptococcus-tetradius,1388
 826,Peptostreptococcus vaginalis,LPSN,species/peptostreptococcus-vaginalis,2031
-1602,Petriellidium boydii,MycoBank,319444,145
+1602,Petriellidium boydii,MycoBank,319444,657
 1503,Phaeoannellomyces werneckii,MycoBank,105002,1624
 2373,Phaeococcomyces exophialae,MycoBank,319527,3374
 1648,Phialemonium curvatum,MycoBank,108341,3373
@@ -659,7 +670,6 @@ id,synonym,concept_source,concept_id,synonym_for
 747,Proteus rettgeri,LPSN,species/proteus-rettgeri,516
 2209,Prototheca filamenta,MycoBank,321038,3413
 2112,Providencia friedericiana,LPSN,species/providencia-friedericiana,2120
-657,Pseudallescheria boydii,MycoBank,110950,145
 1604,Pseudomonas acidovorans,LPSN,species/pseudomonas-acidovorans,2356
 1387,Pseudomonas antimicrobica,LPSN,species/pseudomonas-antimicrobica,1427
 1002,Pseudomonas betle,LPSN,species/pseudomonas-betle,2448
@@ -718,8 +728,9 @@ id,synonym,concept_source,concept_id,synonym_for
 223,Rubella virus,ICTV,202105115,3342
 883,Ruminococcus hansenii,LPSN,species/ruminococcus-hansenii,168
 1087,Ruminococcus productus,LPSN,species/ruminococcus-productus,631
-2608,SARS-CoV-2,NeoIPC,6,2607
 2741,Salmonella Bareilly,NeoIPC,38,2740
+2735,Salmonella choleraesuis,LPSN,species/salmonella-choleraesuis,2734
+2737,Salmonella enteritidis,LPSN,species/salmonella-enteritidis,2736
 2739,Salmonella Infantis,NeoIPC,36,2738
 2743,Salmonella Isangi,NeoIPC,40,2742
 2745,Salmonella Kottbus,NeoIPC,42,2744
@@ -734,10 +745,9 @@ id,synonym,concept_source,concept_id,synonym_for
 2759,Salmonella Urbana,NeoIPC,56,2758
 2761,Salmonella Virchow,NeoIPC,58,2760
 2763,Salmonella Worthington,NeoIPC,60,2762
-2735,Salmonella choleraesuis,LPSN,species/salmonella-choleraesuis,2734
-2737,Salmonella enteritidis,LPSN,species/salmonella-enteritidis,2736
 1935,Sarcinosporon,MycoBank,9785,83
 2540,Sarcinosporon inkin,MycoBank,323077,1834
+2608,SARS-CoV-2,NeoIPC,6,2607
 1506,Scedosporium inflatum,MycoBank,106457,2547
 2254,Schwanniomyces,MycoBank,4918,2966
 691,Scolecobasidium constrictum,MycoBank,261824,1429
@@ -812,9 +822,9 @@ id,synonym,concept_source,concept_id,synonym_for
 605,Torula dimidiata,MycoBank,151916,2145
 2593,Torula lipolytica,MycoBank,456575,3377
 737,Torula utilis,MycoBank,456582,3356
-425,Torulopsis aggregata,MycoBank,291457,1055
-558,Torulopsis haemulonii,MycoBank,581361,3380
-2086,Torulopsis inconspicua,MycoBank,306936,1805
+425,Torulopsis aggregata,MycoBank,291457,3441
+558,Torulopsis haemulonii,MycoBank,581361,3432
+2086,Torulopsis inconspicua,MycoBank,306936,3438
 1284,Torulopsis pintolopesii,MycoBank,306944,3348
 1574,Torulopsis utilis,MycoBank,281224,3356
 2180,Trichosporon cutaneum,MycoBank,122298,3358
