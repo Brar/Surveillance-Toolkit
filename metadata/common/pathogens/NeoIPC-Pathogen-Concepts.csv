@@ -235,41 +235,41 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 3420,Bacillati,kingdom,LPSN,kingdom/bacillati,,,,,,,,,,,,,,,,3420,3421
 3418,Bacilli,class,LPSN,class/bacilli,,,,,,,,,,,,3418,,3419,,3420,3421
 3419,Bacillota,phylum,LPSN,phylum/bacillota,,,,,,,,,,,,,,3419,,3420,3421
-1256,Bacillus,genus,LPSN,genus/bacillus,t,,f,f,f,f,f,,1256,,,,,,,,
-2933,Bacillus aeolius,species,LPSN,species/bacillus-aeolius,t,,f,f,f,f,f,2933,1256,,,,,,,,
-2934,Bacillus aerius,species,LPSN,species/bacillus-aerius,t,,f,f,f,f,f,2934,1256,,,,,,,,
-315,Bacillus amyloliquefaciens,species,LPSN,species/bacillus-amyloliquefaciens,t,,f,f,f,f,f,315,1256,,,,,,,,
-3290,Bacillus aneurinilyticus,species,LPSN,species/bacillus-aneurinilyticus,f,,f,f,f,f,f,3290,1256,,,,,,,,
-2032,Bacillus anthracis,species,LPSN,species/bacillus-anthracis,f,,f,f,f,f,f,2032,1256,,,,,,,,
-1796,Bacillus atrophaeus,species,LPSN,species/bacillus-atrophaeus,t,,f,f,f,f,f,1796,1256,,,,,,,,
-1617,Bacillus badius,species,LPSN,species/bacillus-badius,t,,f,f,f,f,f,1617,1256,,,,,,,,
-2241,Bacillus benzoevorans,species,LPSN,species/bacillus-benzoevorans,t,,f,f,f,f,f,2241,1256,,,,,,,,
-1403,Bacillus carboniphilus,species,LPSN,species/bacillus-carboniphilus,t,,f,f,f,f,f,1403,1256,,,,,,,,
-1202,Bacillus cereus,species,LPSN,species/bacillus-cereus,t,,f,f,f,f,f,1202,1256,,,,,,,,
-2935,Bacillus cereus group,group,NeoIPC,76,t,,f,f,f,f,f,,1256,,,,,,,,
-2912,Bacillus cytotoxicus,species,LPSN,species/bacillus-cytotoxicus,t,,f,f,f,f,f,2912,1256,,,,,,,,
-130,Bacillus decisifrondis,species,LPSN,species/bacillus-decisifrondis,t,,f,f,f,f,f,130,1256,,,,,,,,
-1581,Bacillus horti,species,LPSN,species/bacillus-horti,t,,f,f,f,f,f,1581,1256,,,,,,,,
-3329,Bacillus inaquosorum,species,LPSN,species/bacillus-inaquosorum,t,,f,f,f,f,f,3329,1256,,,,,,,,
-1962,Bacillus infantis,species,LPSN,species/bacillus-infantis,t,,f,f,f,f,f,1962,1256,,,,,,,,
-2306,Bacillus infernus,species,LPSN,species/bacillus-infernus,t,,f,f,f,f,f,2306,1256,,,,,,,,
-1406,Bacillus licheniformis,species,LPSN,species/bacillus-licheniformis,t,,f,f,f,f,f,1406,1256,,,,,,,,
-1038,Bacillus methanolicus,species,LPSN,species/bacillus-methanolicus,t,,f,f,f,f,f,1038,1256,,,,,,,,
-672,Bacillus mojavensis,species,LPSN,species/bacillus-mojavensis,t,,f,f,f,f,f,672,1256,,,,,,,,
-2506,Bacillus mycoides,species,LPSN,species/bacillus-mycoides,t,,f,f,f,f,f,2506,1256,,,,,,,,
-2089,Bacillus pseudomycoides,species,LPSN,species/bacillus-pseudomycoides,t,,f,f,f,f,f,2089,1256,,,,,,,,
-2045,Bacillus pumilus,species,LPSN,species/bacillus-pumilus,t,,f,f,f,f,f,2045,1256,,,,,,,,
-1941,Bacillus smithii,species,LPSN,species/bacillus-smithii,t,,f,f,f,f,f,1941,1256,,,,,,,,
-2560,Bacillus sonorensis,species,LPSN,species/bacillus-sonorensis,t,,f,f,f,f,f,2560,1256,,,,,,,,
-3213,Bacillus spizizenii,species,LPSN,species/bacillus-spizizenii,t,,f,f,f,f,f,3213,1256,,,,,,,,
-1364,Bacillus subtilis,species,LPSN,species/bacillus-subtilis,t,,f,f,f,f,f,1364,1256,,,,,,,,
-2938,Bacillus subtilis group,group,NeoIPC,77,t,,f,f,f,f,f,2938,1256,,,,,,,,
-851,Bacillus tequilensis,species,LPSN,species/bacillus-tequilensis,t,,f,f,f,f,f,851,1256,,,,,,,,
-2525,Bacillus thermoamylovorans,species,LPSN,species/bacillus-thermoamylovorans,t,,f,f,f,f,f,2525,1256,,,,,,,,
-794,Bacillus thermocloacae,species,LPSN,species/bacillus-thermocloacae,t,,f,f,f,f,f,794,1256,,,,,,,,
-282,Bacillus thuringiensis,species,LPSN,species/bacillus-thuringiensis,t,,f,f,f,f,f,282,1256,,,,,,,,
-854,Bacillus vallismortis,species,LPSN,species/bacillus-vallismortis,t,,f,f,f,f,f,854,1256,,,,,,,,
-659,Bacillus velezensis,species,LPSN,species/bacillus-velezensis,t,,f,f,f,f,f,659,1256,,,,,,,,
+1256,Bacillus,genus,LPSN,genus/bacillus,t,,f,f,f,f,f,,1256,3416,3417,3418,,3419,,3420,3421
+2933,Bacillus aeolius,species,LPSN,species/bacillus-aeolius,t,,f,f,f,f,f,2933,1256,3416,3417,3418,,3419,,3420,3421
+2934,Bacillus aerius,species,LPSN,species/bacillus-aerius,t,,f,f,f,f,f,2934,1256,3416,3417,3418,,3419,,3420,3421
+315,Bacillus amyloliquefaciens,species,LPSN,species/bacillus-amyloliquefaciens,t,,f,f,f,f,f,315,1256,3416,3417,3418,,3419,,3420,3421
+3290,Bacillus aneurinilyticus,species,LPSN,species/bacillus-aneurinilyticus,f,,f,f,f,f,f,3290,1256,3416,3417,3418,,3419,,3420,3421
+2032,Bacillus anthracis,species,LPSN,species/bacillus-anthracis,f,,f,f,f,f,f,2032,1256,3416,3417,3418,,3419,,3420,3421
+1796,Bacillus atrophaeus,species,LPSN,species/bacillus-atrophaeus,t,,f,f,f,f,f,1796,1256,3416,3417,3418,,3419,,3420,3421
+1617,Bacillus badius,species,LPSN,species/bacillus-badius,t,,f,f,f,f,f,1617,1256,3416,3417,3418,,3419,,3420,3421
+2241,Bacillus benzoevorans,species,LPSN,species/bacillus-benzoevorans,t,,f,f,f,f,f,2241,1256,3416,3417,3418,,3419,,3420,3421
+1403,Bacillus carboniphilus,species,LPSN,species/bacillus-carboniphilus,t,,f,f,f,f,f,1403,1256,3416,3417,3418,,3419,,3420,3421
+1202,Bacillus cereus,species,LPSN,species/bacillus-cereus,t,,f,f,f,f,f,1202,1256,3416,3417,3418,,3419,,3420,3421
+2935,Bacillus cereus group,group,NeoIPC,76,t,,f,f,f,f,f,,1256,3416,3417,3418,,3419,,3420,3421
+2912,Bacillus cytotoxicus,species,LPSN,species/bacillus-cytotoxicus,t,,f,f,f,f,f,2912,1256,3416,3417,3418,,3419,,3420,3421
+130,Bacillus decisifrondis,species,LPSN,species/bacillus-decisifrondis,t,,f,f,f,f,f,130,1256,3416,3417,3418,,3419,,3420,3421
+1581,Bacillus horti,species,LPSN,species/bacillus-horti,t,,f,f,f,f,f,1581,1256,3416,3417,3418,,3419,,3420,3421
+3329,Bacillus inaquosorum,species,LPSN,species/bacillus-inaquosorum,t,,f,f,f,f,f,3329,1256,3416,3417,3418,,3419,,3420,3421
+1962,Bacillus infantis,species,LPSN,species/bacillus-infantis,t,,f,f,f,f,f,1962,1256,3416,3417,3418,,3419,,3420,3421
+2306,Bacillus infernus,species,LPSN,species/bacillus-infernus,t,,f,f,f,f,f,2306,1256,3416,3417,3418,,3419,,3420,3421
+1406,Bacillus licheniformis,species,LPSN,species/bacillus-licheniformis,t,,f,f,f,f,f,1406,1256,3416,3417,3418,,3419,,3420,3421
+1038,Bacillus methanolicus,species,LPSN,species/bacillus-methanolicus,t,,f,f,f,f,f,1038,1256,3416,3417,3418,,3419,,3420,3421
+672,Bacillus mojavensis,species,LPSN,species/bacillus-mojavensis,t,,f,f,f,f,f,672,1256,3416,3417,3418,,3419,,3420,3421
+2506,Bacillus mycoides,species,LPSN,species/bacillus-mycoides,t,,f,f,f,f,f,2506,1256,3416,3417,3418,,3419,,3420,3421
+2089,Bacillus pseudomycoides,species,LPSN,species/bacillus-pseudomycoides,t,,f,f,f,f,f,2089,1256,3416,3417,3418,,3419,,3420,3421
+2045,Bacillus pumilus,species,LPSN,species/bacillus-pumilus,t,,f,f,f,f,f,2045,1256,3416,3417,3418,,3419,,3420,3421
+1941,Bacillus smithii,species,LPSN,species/bacillus-smithii,t,,f,f,f,f,f,1941,1256,3416,3417,3418,,3419,,3420,3421
+2560,Bacillus sonorensis,species,LPSN,species/bacillus-sonorensis,t,,f,f,f,f,f,2560,1256,3416,3417,3418,,3419,,3420,3421
+3213,Bacillus spizizenii,species,LPSN,species/bacillus-spizizenii,t,,f,f,f,f,f,3213,1256,3416,3417,3418,,3419,,3420,3421
+1364,Bacillus subtilis,species,LPSN,species/bacillus-subtilis,t,,f,f,f,f,f,1364,1256,3416,3417,3418,,3419,,3420,3421
+2938,Bacillus subtilis group,group,NeoIPC,77,t,,f,f,f,f,f,2938,1256,3416,3417,3418,,3419,,3420,3421
+851,Bacillus tequilensis,species,LPSN,species/bacillus-tequilensis,t,,f,f,f,f,f,851,1256,3416,3417,3418,,3419,,3420,3421
+2525,Bacillus thermoamylovorans,species,LPSN,species/bacillus-thermoamylovorans,t,,f,f,f,f,f,2525,1256,3416,3417,3418,,3419,,3420,3421
+794,Bacillus thermocloacae,species,LPSN,species/bacillus-thermocloacae,t,,f,f,f,f,f,794,1256,3416,3417,3418,,3419,,3420,3421
+282,Bacillus thuringiensis,species,LPSN,species/bacillus-thuringiensis,t,,f,f,f,f,f,282,1256,3416,3417,3418,,3419,,3420,3421
+854,Bacillus vallismortis,species,LPSN,species/bacillus-vallismortis,t,,f,f,f,f,f,854,1256,3416,3417,3418,,3419,,3420,3421
+659,Bacillus velezensis,species,LPSN,species/bacillus-velezensis,t,,f,f,f,f,f,659,1256,3416,3417,3418,,3419,,3420,3421
 3421,Bacteria,domain,LPSN,domain/bacteria,,,,,,,,,,,,,,,,,3421
 44,Bacteroides,genus,LPSN,genus/bacteroides,f,,f,f,f,f,f,,,,,,,,,,
 2408,Bacteroides caccae,species,LPSN,species/bacteroides-caccae,f,,f,f,f,f,f,,,,,,,,,,
@@ -592,8 +592,8 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 454,Clostridium symbiosum,species,LPSN,species/clostridium-symbiosum,f,,f,f,f,f,f,,,,,,,,,,
 519,Clostridium tertium,species,LPSN,species/clostridium-tertium,f,,f,f,f,f,f,,,,,,,,,,
 42,Clostridium tetani,species,LPSN,species/clostridium-tetani,f,,f,f,f,f,f,,,,,,,,,,
-2776,Coagulase-negative staphylococcus,group,NeoIPC,63,t,n,f,f,f,f,f,,481,,,,,,,,
-2777,Coagulase-positive staphylococcus,group,NeoIPC,64,f,p,f,f,f,f,f,,481,,,,,,,,
+2776,Coagulase-negative staphylococcus,group,NeoIPC,63,t,n,f,f,f,f,f,,481,3460,3417,3418,,3419,,3420,3421
+2777,Coagulase-positive staphylococcus,group,NeoIPC,64,f,p,f,f,f,f,f,,481,3460,3417,3418,,3419,,3420,3421
 248,Cokeromyces,genus,MycoBank,23001,f,,f,f,f,f,f,,,,,,,,,,
 17,Cokeromyces recurvatus,species,MycoBank,295277,f,,f,f,f,f,f,,,,,,,,,,
 897,Collinsella,genus,LPSN,genus/collinsella,f,,f,f,f,f,f,,,,,,,,,,
@@ -1350,8 +1350,8 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 3202,Methylorubrum zatmanii,species,LPSN,species/methylorubrum-zatmanii,f,,f,f,f,f,f,,,,,,,,,,
 3414,Metschnikowia pulcherrima,species,MycoBank,334124,f,,f,f,f,f,f,,,,,,,,,,
 3434,Metschnikowiaceae,family,MycoBank,80999,,,,,,,,,,3434,3424,3425,3426,3427,3428,3429,3430
-1310,Meyerozyma,genus,MycoBank,513456,f,,f,f,f,f,f,,,,,,,,,,
-2187,Meyerozyma guilliermondii,species,MycoBank,513463,f,,f,f,f,f,f,,,,,,,,,,
+1310,Meyerozyma,genus,MycoBank,513456,f,,f,f,f,f,f,,1310,3423,3424,3425,3426,3427,3428,3429,3430
+2187,Meyerozyma guilliermondii,species,MycoBank,513463,f,,f,f,f,f,f,2187,1310,3423,3424,3425,3426,3427,3428,3429,3430
 3355,Microascus paisii,species,MycoBank,809213,f,,f,f,f,f,f,,,,,,,,,,
 832,Microbacterium,genus,LPSN,genus/microbacterium,t,,f,f,f,f,f,,,,,,,,,,
 1830,Microbacterium arborescens,species,LPSN,species/microbacterium-arborescens,t,,f,f,f,f,f,,,,,,,,,,
