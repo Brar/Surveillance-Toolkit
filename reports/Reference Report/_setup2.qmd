@@ -112,7 +112,7 @@ department_risk_time <- data$surveillanceEndData |>
 
 risk_rate_quartiles <- department_risk_time |> select(tidyselect::ends_with("_rate")) |> reframe(across(everything(), ~quantile(.x, prob = c(.25,.5,.75))))
 
-table_1 <- risk_time |>
+table_usage_density_rate <- risk_time |>
   dplyr::select(!"patient_days" & tidyselect::ends_with("_days")) |>
   pivot_longer(
     cols = tidyselect::ends_with("_days"),
@@ -153,7 +153,7 @@ table_1 <- risk_time |>
       "niv" ~ "Non-invasive ventilatory support",
       "human_milk" ~ "Human milk",
       "kangaroo_care" ~ "Kangaroo care",
-      "probiotic" ~ "Probiotic",
+      "probiotic" ~ "Probiotics",
       "ab" ~ "Antibiotics (any)",
       "a" ~ "Access antibiotics",
       "w" ~ "Watch antibiotics",

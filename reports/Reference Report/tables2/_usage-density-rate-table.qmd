@@ -1,9 +1,9 @@
-```{r risk density rate table}
+```{r usage density rate table}
 #| label: tab-risk-density-rates
 #| tbl-cap: "Overview over the factors influencing the infants' risk of developing an infection or acquiring a drug resistant pathogen. Usage days: The aggregated number of days the risk/protective factor was present in all infants. Pooled mean: The usage density rate calculated as usage days per 100 patient days calculated across all infants. Q1, Q2, Q3: The quartiles (25%, 50% and 75% quantiles) of the usage density rates of the partner departments"
 #| tbl-cap-location: bottom
 
-table_1 |>
+table_usage_density_rate |>
   gt(rowname_col = "Factor") |>
   tab_options(table.width = pct(100)) |>
   fmt_number(decimals = 1) |>
@@ -45,7 +45,7 @@ table_1 |>
     locations = cells_column_spanners(spanners = "usage_density_rate")
   ) |>
   tab_footnote(
-    footnote = "As cumulative treatment days for individual substances are recorded per patient, combination therapies using several substances on one day are counted as multiple use days.",
+    footnote = "As cumulative treatment days for individual substances are recorded per patient, combination therapies using several substances on one day are counted as multiple usage days.",
     locations = gt::cells_stub(rows = c("Access antibiotics",
                                         "Watch antibiotics","Reserve antibiotics"))
   )

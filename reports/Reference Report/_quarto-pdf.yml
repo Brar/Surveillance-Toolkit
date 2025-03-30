@@ -5,7 +5,7 @@ format:
     documentclass: scrartcl
     classoption: [footsepline=true, plainfootsepline=true]
     papersize: a4paper
-    fig-pos: 'h'
+    fig-pos: 'H'
     colorlinks: true
     geometry:
       - top=30mm
@@ -15,6 +15,7 @@ format:
       - heightrounded
     include-in-header:
       text: |
+        \usepackage{float}
         \usepackage{graphicx}
         \usepackage{wrapfig}
         \usepackage{scrlayer-scrpage}
