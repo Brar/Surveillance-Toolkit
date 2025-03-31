@@ -1,0 +1,25 @@
+```{r incidence density rate table}
+#| label: tab-incidence-density-rates
+#| tbl-cap: "Incidence densities of infections"
+#| tbl-cap-location: bottom
+
+table_incidence_density_rates |>
+  dplyr::mutate(
+    Infection = dplyr::case_match(
+      as.character(.data$Infection),
+      "si" ~ "Severe infection",
+      "bsi" ~ "Sepsis/BSI",
+      "hap" ~ "Pneumonia",
+      "nec" ~ "Necrotising Enterocolitis")) |>
+  gt(rowname_col = "Infection") |>
+  fmt_number(decimals = 1) |>
+  fmt_number(columns = "No of infections", decimals = 0) |>
+  tab_row_group(label = "Sepsis/BSI/Pneumonia", rows = 1:3, id = "grp_si") |>
+  tab_row_group(label = "Other", rows = 4, id = "grp_othr") |>
+  row_group_order(groups = c("grp_si", "grp_othr")) |>
+  tab_spanner(
+    label = "Incidence density rate",
+    columns = c("Pooled mean","Q1","Q2","Q3"),
+    id = "incidence_density_rate"
+  )
+```

@@ -86,7 +86,7 @@ if(!testUnitFilter || !defaultPatientFilter){
 
 {{< pagebreak >}}
 
-## Introduction
+# Introduction
 
 This document is the reference report of the NeoIPC Surveillance. It contains information about nosocomial infections, the causative infectious agents and associated risk and protective factors that has been collected by partners from multiple neonatology departments who share a passion for preventing infection in neonates. The following numbers present a short overview over the current data set:
 
@@ -110,7 +110,7 @@ Average surveillance period per patient:
 
 :   `{r} format(sum(risk_time$patient_days) / nrow(data$patients), digits = 2, nsmall = 1, scientific = FALSE)` days
 
-## Patient Population
+# Patient Population
 
 For the sake of sustainability, the NeoIPC surveillance currently focuses on the most frequently ocurring nosocomial infections in high risk infants. This means that patients with a birth weight below 1 500 g or a gestational age below 32 weeks at the time of birth are included into the surveillance database if they are admitted to a ward of participating neonatology department within the first 120 days of life. This results in the composition of the patient population that is shown in @fig-bw and @fig-ga.
 
@@ -118,8 +118,24 @@ For the sake of sustainability, the NeoIPC surveillance currently focuses on the
 
 {{< include figures2/_ga-figure.qmd >}}
 
-## Risk and Protective Factors
+# Risk and Protective Factors
 
 Next to the inherent risk factors gestational age and birth weight there are also a number of expositional factors that influence the risk of an infant to acquire a multi-drug-resistant pathogen or to develop an infection.
 
 {{< include tables2/_usage-density-rate-table.qmd >}}
+
+# Nosocomial infections
+
+{{< include tables2/_incidence-density-rate-table.qmd >}}
+
+# Infectious Agents
+
+```{r}
+data$infectiousAgentFindings |> dplyr::inner_join(data$infectiousAgentFindings$pathogen_key |> unique() |> neoipcr::get_pathogen_taxonomy(), dplyr::join_by(pathogen_key == inputId)) |> dplyr::group_by(is_cc) |> dplyr::summarise(n=n())
+
+data$infectiousAgentFindings |> dplyr::inner_join(data$infectiousAgentFindings$pathogen_key |> unique() |> neoipcr::get_pathogen_taxonomy(), dplyr::join_by(pathogen_key == inputId)) |> dplyr::group_by(order) |> dplyr::summarise(n=n())
+
+data$infectiousAgentFindings |> dplyr::inner_join(data$infectiousAgentFindings$pathogen_key |> unique() |> neoipcr::get_pathogen_taxonomy(), dplyr::join_by(pathogen_key == inputId)) |> dplyr::group_by(genus, coagulase) |> dplyr::summarise(n=n())
+
+data$infectiousAgentFindings |> dplyr::inner_join(data$infectiousAgentFindings$pathogen_key |> unique() |> neoipcr::get_pathogen_taxonomy(), dplyr::join_by(pathogen_key == inputId)) |> dplyr::group_by(species) |> dplyr::summarise(n=n())
+```
