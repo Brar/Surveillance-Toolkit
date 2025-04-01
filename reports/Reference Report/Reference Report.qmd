@@ -128,6 +128,8 @@ Next to the inherent risk factors gestational age and birth weight there are als
 
 {{< include tables2/_incidence-density-rate-table.qmd >}}
 
+{{< include tables2/_device-associated-incidence-density-rate-table.qmd >}}
+
 # Infectious Agents
 
 ```{r}
