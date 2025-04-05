@@ -19,7 +19,34 @@ table_incidence_density_rates |>
   row_group_order(groups = c("grp_si", "grp_othr")) |>
   tab_spanner(
     label = "Incidence density rate",
-    columns = c("Pooled mean","Q1","Q2","Q3"),
+    columns = c("Pooled mean","Q₁","Q₂","Q₃"),
     id = "incidence_density_rate"
-  )
+  ) |>
+  tab_footnote(
+    footnote = md(
+      paste0(
+        "$$\\text{",
+        "Incidence density rate",
+        "} = \\frac{\\text{",
+        "No of infections",
+        "}}{\\text{",
+        "Patient days",
+        "}} \\times ",
+        format(1000, big.mark = locale_sep_mark),
+        "$$"
+      )),
+    locations = cells_column_spanners(spanners = "incidence_density_rate")
+  ) |>
+  tab_footnote(
+    footnote = "No of infections: The aggregated number of infections in all infants.",
+    locations = cells_column_labels(columns = "No of infections")) |>
+  tab_footnote(
+    footnote = "Pooled mean: The incidence density rate calculated as infections per 1000 patient days calculated across all infants.",
+    locations = cells_column_labels(columns = "Pooled mean")) |>
+  tab_footnote(
+    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the incidence density rates of the partner departments",
+    locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃"))) |>
+  tab_footnote(
+    footnote = "Combines the outcomes Sepsis/BSI and Pneumonia",
+    locations = gt::cells_stub(rows = "Severe infection"))
 ```

@@ -7,20 +7,44 @@ table_device_associated_incidence_density_rates |>
   dplyr::mutate(
     Infection = dplyr::case_match(
       as.character(.data$Infection),
-      "cvc_ass_bsi" ~ "CVC-associated",
-      "pvc_ass_bsi" ~ "PVC-associated",
+      "cvc_ass_bsi" ~ "CVC",
+      "pvc_ass_bsi" ~ "PVC",
       "vs_ass_hap" ~ "Any ventilatory support",
-      "inv_ass_hap" ~ "Invasive",
-      "niv_ass_hap" ~ "Non-invasive")) |>
+      "inv_ass_hap" ~ "INV",
+      "niv_ass_hap" ~ "NIV")) |>
   gt(rowname_col = "Infection") |>
   fmt_number(decimals = 1) |>
-  fmt_number(columns = "No of infections", decimals = 0) |>
+  fmt_number(columns = "No of dev-ass inf.", decimals = 0) |>
   tab_row_group(label = "Vascular catheter associated sepsis / bloodstream infection", rows = 1:2, id = "grp_vc") |>
   tab_row_group(label = "Ventilatory support associated pneumonia", rows = 3:5, id = "grp_vs") |>
   row_group_order(groups = c("grp_vc", "grp_vs")) |>
   tab_spanner(
-    label = "Incidence density rate",
-    columns = c("Pooled mean","Q1","Q2","Q3"),
-    id = "incidence_density_rate"
-  )
+    label = "Dev-ass incidence density rate",
+    columns = c("Pooled mean","Q₁","Q₂","Q₃"),
+    id = "da_incidence_density_rate"
+  ) |>
+  tab_footnote(
+    footnote = md(
+      paste0(
+        "$$\\parbox{6cm}{",
+        "\\centering Device-associated incidence density rate",
+        "} = \\frac{\\text{",
+        "No of device-associated infections",
+        "}}{\\text{",
+        "Device days",
+        "}} \\times ",
+        format(1000, big.mark = locale_sep_mark),
+        "$$"
+      )),
+    locations = cells_column_spanners(spanners = "da_incidence_density_rate")
+  ) |>
+  tab_footnote(
+    footnote = "No of device-associated infections: The aggregated number of device-associated infections in all infants.",
+    locations = cells_column_labels(columns = "No of dev-ass inf.")) |>
+  tab_footnote(
+    footnote = "Pooled mean: The incidence density rate calculated as device-associated infections per 1000 device days calculated across all infants.",
+    locations = cells_column_labels(columns = "Pooled mean")) |>
+  tab_footnote(
+    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the device-associated incidence density rates of the partner departments",
+    locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃")))
 ```

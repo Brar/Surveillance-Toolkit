@@ -29,8 +29,13 @@ default_countries <- list(
 country <- dplyr::coalesce(params$country, default_countries[[language]], NA_character_)
 codepage <- dplyr::coalesce(params$codepage, "UTF-8")
 locale <- paste0(language, (if(is.na(country)) NULL else paste0("_", country)), ".", codepage)
+gt_locale <- paste0(language, (if(is.na(country)) NULL else paste0("-", country)))
+options(`gt.locale` = gt_locale)
+`_locales` <- (gt::info_locales(begins_with = substr(gt_locale,1,1)))$`_data`
+locale_sep_mark <- `_locales`$group[`_locales`$locale == gt_locale]
 invisible(Sys.setlocale(category = "LC_ALL", locale = locale))
 translation_file <- paste0("translations/", stringr::str_extract(locale, "^([^.]+)"),".json")
+rm(gt_locale, `_locales`)
 ```
 
 ```{r Importing data}
@@ -129,12 +134,12 @@ table_usage_density_rate <- risk_time |>
         values_to = "Pooled mean")) |>
   dplyr::bind_cols(
     risk_rate_quartiles |>
-      dplyr::bind_cols(tibble::tibble(name = c("Q1","Q2","Q3"))) |>
+      dplyr::bind_cols(tibble::tibble(name = c("Q₁","Q₂","Q₃"))) |>
       tidyr::pivot_wider(
         values_from = tidyselect::ends_with("_rate")) |>
       tidyr::pivot_longer(
         tidyselect::everything(),
-        names_pattern = "^(.+)_(Q\\d)$",
+        names_pattern = "^(.+)_(Q(?:₁|₂|₃))$",
         names_to = c("rate",".value"))) |>
   dplyr::select(!tidyselect::all_of(c("name","rate"))) |>
   dplyr::mutate(
@@ -163,11 +168,11 @@ incidence_density_rate_quartiles <- data$events |>
         .names = "{.col}_rate")) |>
   select(tidyselect::ends_with("_rate")) |>
   reframe(across(everything(), ~quantile(.x, prob = c(.25,.5,.75)))) |>
-  dplyr::bind_cols(tibble::tibble(name = c("Q1","Q2","Q3"))) |>
+  dplyr::bind_cols(tibble::tibble(name = c("Q₁","Q₂","Q₃"))) |>
   tidyr::pivot_wider(values_from = tidyselect::ends_with("_rate")) |>
   tidyr::pivot_longer(
     tidyselect::everything(),
-    names_pattern = "^(.+)_(Q\\d)$",
+    names_pattern = "^(.+)_(Q(?:₁|₂|₃))$",
     names_to = c("rate",".value"))
 
 table_incidence_density_rates <- data$events |>
@@ -230,7 +235,7 @@ table_device_associated_incidence_density_rates <- data$events |>
   tidyr::pivot_wider() |>
   dplyr::mutate(
     Infection = paste0(.data$Infection,"_ass_bsi"),
-    `No of infections` = as.integer(ass),
+    `No of dev-ass inf.` = as.integer(ass),
     .keep = "unused",
     .before = 2) |>
   dplyr::rename(`Pooled mean` = bsi) |>
@@ -262,11 +267,11 @@ table_device_associated_incidence_density_rates <- data$events |>
         .keep = "none") |>
       reframe(
         across(everything(), ~quantile(.x, prob = c(.25,.5,.75)))) |>
-      dplyr::bind_cols(tibble::tibble(name = c("Q1","Q2","Q3"))) |>
+      dplyr::bind_cols(tibble::tibble(name = c("Q₁","Q₂","Q₃"))) |>
       tidyr::pivot_wider(values_from = tidyselect::ends_with("_bsi")) |>
       tidyr::pivot_longer(
         tidyselect::everything(),
-        names_pattern = "^(.+)_(Q\\d)$",
+        names_pattern = "^(.+)_(Q(?:₁|₂|₃))$",
         names_to = c("Infection",".value")), dplyr::join_by("Infection")) |>
   dplyr::bind_rows(
     data$events |>
@@ -298,7 +303,7 @@ table_device_associated_incidence_density_rates <- data$events |>
       tidyr::pivot_wider() |>
       dplyr::mutate(
         Infection = paste0(.data$Infection,"_ass_hap"),
-        `No of infections` = as.integer(ass),
+        `No of dev-ass inf.` = as.integer(ass),
         .keep = "unused",
         .before = 2) |>
       dplyr::rename(`Pooled mean` = ass_hap) |>
@@ -329,11 +334,11 @@ table_device_associated_incidence_density_rates <- data$events |>
             niv_ass_hap = niv_ass / niv_days * 1000,
             inv_ass_hap = inv_ass / inv_days * 1000, .keep = "none") |>
           reframe(across(everything(), ~quantile(.x, prob = c(.25,.5,.75)))) |>
-          dplyr::bind_cols(tibble::tibble(name = c("Q1","Q2","Q3"))) |>
+          dplyr::bind_cols(tibble::tibble(name = c("Q₁","Q₂","Q₃"))) |>
           tidyr::pivot_wider(values_from = tidyselect::ends_with("_hap")) |>
           tidyr::pivot_longer(
             tidyselect::everything(),
-            names_pattern = "^(.+)_(Q\\d)$",
+            names_pattern = "^(.+)_(Q(?:₁|₂|₃))$",
             names_to = c("Infection",".value")),
         dplyr::join_by("Infection"))) |>
   dplyr::mutate(

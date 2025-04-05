@@ -7,11 +7,11 @@ table_usage_density_rate |>
   dplyr::mutate(
     Factor = dplyr::case_match(
       as.character(.data$Factor),
-      "cvc" ~ "Central",
-      "pvc" ~ "Peripheral",
+      "cvc" ~ "CVC",
+      "pvc" ~ "PVC",
       "vs" ~ "Any",
-      "inv" ~ "Invasive",
-      "niv" ~ "Non-invasive",
+      "inv" ~ "INV",
+      "niv" ~ "NIV",
       "human_milk" ~ "Human milk",
       "probiotic" ~ "Probiotics",
       "kangaroo_care" ~ "Kangaroo care",
@@ -29,7 +29,7 @@ table_usage_density_rate |>
   row_group_order(groups = c("grp_vc", "grp_vs", "grp_ab", "grp_othr")) |>
   tab_spanner(
     label = "Usage density rate",
-    columns = c("Pooled mean","Q1","Q2","Q3"),
+    columns = c("Pooled mean","Q₁","Q₂","Q₃"),
     id = "usage_density_rate"
   ) |>
   tab_footnote(
@@ -41,7 +41,9 @@ table_usage_density_rate |>
         "Usage days",
         "}}{\\text{",
         "Patient days",
-        "}} \\times 100$$"
+        "}} \\times ",
+        format(100, big.mark = locale_sep_mark),
+        "$$"
       )),
     locations = cells_column_spanners(spanners = "usage_density_rate")
   ) |>
@@ -52,8 +54,8 @@ table_usage_density_rate |>
     footnote = "Pooled mean: The usage density rate calculated as usage days per 100 patient days calculated across all infants.",
     locations = cells_column_labels(columns = "Pooled mean")) |>
   tab_footnote(
-    footnote = "Q1, Q2, Q3: The quartiles (25%, 50% and 75% quantiles) of the usage density rates of the partner departments",
-    locations = cells_column_labels(columns = c("Q1","Q2","Q3"))) |>
+    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the usage density rates of the partner departments",
+    locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃"))) |>
   tab_footnote(
     footnote = "As cumulative treatment days for individual substances are recorded per patient, combination therapies using several substances on one day are counted as multiple usage days.",
     locations = gt::cells_stub(
