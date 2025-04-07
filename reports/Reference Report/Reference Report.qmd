@@ -149,3 +149,5 @@ data$infectiousAgentFindings |> dplyr::inner_join(data$infectiousAgentFindings$p
 
 data$infectiousAgentFindings |> dplyr::inner_join(data$infectiousAgentFindings$pathogen_key |> unique() |> neoipcr::get_pathogen_taxonomy(), dplyr::join_by(pathogen_key == inputId)) |> dplyr::group_by(species) |> dplyr::summarise(n=n())
 ```
+
+{{< include tables2/_iche-codes-table.qmd >}}

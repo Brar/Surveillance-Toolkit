@@ -7,4 +7,4 @@ execute:
 filters: ["../filters/pandoc-quotes.lua"]
 profile:
   group:
-    - [html, pdf, minimal]
+    - [pdf, html, minimal]
