@@ -42,7 +42,8 @@ rm(gt_locale, `_locales`)
 #| include: false
 data <- import_dhis2(dataset_options = dhis2_dataset_options(include_country = "yes", include_department = "yes"))
 
-ichi_health_interventions <- read_csv("../../../Surveillance-Private/metadata/WHO/ICHI/Health interventions.csv", col_names = c("code", "intervention", "intervention_url"), col_types = "ccc")
+ichi_health_interventions <- read_csv("../../../Surveillance-Private/metadata/WHO/ICHI/Health interventions.csv", col_names = c("code","intervention","url"), col_types = "ccc")
+ichi_targets <- read_csv("../../../Surveillance-Private/metadata/WHO/ICHI/Targets.csv", col_names = c("code","target","url"), col_types = "ccc")
 
 if(file.exists(translation_file)) {
   translations <- readr::read_file(translation_file) |> jsonlite::fromJSON()
@@ -54,6 +55,40 @@ if(file.exists(translation_file)) {
     rlang::abort(paste0("Failed to find translation file for locale", locale))
   }
 }
+
+department_with_enrollment_keys <- data$enrollments |>
+  dplyr::pull(department_key) |>
+  unique() |>
+  sort()
+
+n_departments_with_enrollments <- length(department_with_enrollment_keys)
+
+surgical_department_keys <- data$enrollments |>
+  dplyr::semi_join(
+    data$events |>
+      dplyr::filter(event_type_key == "pro"),
+    dplyr::join_by(enrollment_key)) |>
+  dplyr::pull(department_key) |>
+  unique() |>
+  sort()
+
+n_surgical_departments <- length(surgical_department_keys)
+
+n_enrolled_patients = data$enrollments$patient_key |>
+  unique() |>
+  length()
+
+department_patients <- data$enrollments |>
+  dplyr::group_by(department_key) |>
+  dplyr::summarise(
+    n_patients = dplyr::n_distinct(patient_key),
+    n_enrollments = dplyr::n())
+
+n_procedures_per_patient <- data$events |>
+  dplyr::inner_join(data$surgeryData, dplyr::join_by(event_key)) |>
+  dplyr::summarise(n_patients = n_distinct(patient_key), n_procedures = n()) |>
+  dplyr::mutate(procedures_per_patient = n_procedures / n_patients) |>
+  dplyr::pull(procedures_per_patient)
 
 get_AWaRe_days <- function()
 {
@@ -134,12 +169,12 @@ table_usage_density_rate <- risk_time |>
         values_to = "Pooled mean")) |>
   dplyr::bind_cols(
     risk_rate_quartiles |>
-      dplyr::bind_cols(tibble::tibble(name = c("Q₁","Q₂","Q₃"))) |>
+      dplyr::bind_cols(tibble::tibble(name = c("q1","q2","q3"))) |>
       tidyr::pivot_wider(
         values_from = tidyselect::ends_with("_rate")) |>
       tidyr::pivot_longer(
         tidyselect::everything(),
-        names_pattern = "^(.+)_(Q(?:₁|₂|₃))$",
+        names_pattern = "^(.+)_(q(?:1|2|3))$",
         names_to = c("rate",".value"))) |>
   dplyr::select(!tidyselect::all_of(c("name","rate"))) |>
   dplyr::mutate(
@@ -168,11 +203,11 @@ incidence_density_rate_quartiles <- data$events |>
         .names = "{.col}_rate")) |>
   select(tidyselect::ends_with("_rate")) |>
   reframe(across(everything(), ~quantile(.x, prob = c(.25,.5,.75)))) |>
-  dplyr::bind_cols(tibble::tibble(name = c("Q₁","Q₂","Q₃"))) |>
+  dplyr::bind_cols(tibble::tibble(name = c("q1","q2","q3"))) |>
   tidyr::pivot_wider(values_from = tidyselect::ends_with("_rate")) |>
   tidyr::pivot_longer(
     tidyselect::everything(),
-    names_pattern = "^(.+)_(Q(?:₁|₂|₃))$",
+    names_pattern = "^(.+)_(q(?:1|2|3))$",
     names_to = c("rate",".value"))
 
 table_incidence_density_rates <- data$events |>
@@ -267,11 +302,11 @@ table_device_associated_incidence_density_rates <- data$events |>
         .keep = "none") |>
       reframe(
         across(everything(), ~quantile(.x, prob = c(.25,.5,.75)))) |>
-      dplyr::bind_cols(tibble::tibble(name = c("Q₁","Q₂","Q₃"))) |>
+      dplyr::bind_cols(tibble::tibble(name = c("q1","q2","q3"))) |>
       tidyr::pivot_wider(values_from = tidyselect::ends_with("_bsi")) |>
       tidyr::pivot_longer(
         tidyselect::everything(),
-        names_pattern = "^(.+)_(Q(?:₁|₂|₃))$",
+        names_pattern = "^(.+)_(q(?:1|2|3))$",
         names_to = c("Infection",".value")), dplyr::join_by("Infection")) |>
   dplyr::bind_rows(
     data$events |>
@@ -334,11 +369,11 @@ table_device_associated_incidence_density_rates <- data$events |>
             niv_ass_hap = niv_ass / niv_days * 1000,
             inv_ass_hap = inv_ass / inv_days * 1000, .keep = "none") |>
           reframe(across(everything(), ~quantile(.x, prob = c(.25,.5,.75)))) |>
-          dplyr::bind_cols(tibble::tibble(name = c("Q₁","Q₂","Q₃"))) |>
+          dplyr::bind_cols(tibble::tibble(name = c("q1","q2","q3"))) |>
           tidyr::pivot_wider(values_from = tidyselect::ends_with("_hap")) |>
           tidyr::pivot_longer(
             tidyselect::everything(),
-            names_pattern = "^(.+)_(Q(?:₁|₂|₃))$",
+            names_pattern = "^(.+)_(q(?:1|2|3))$",
             names_to = c("Infection",".value")),
         dplyr::join_by("Infection"))) |>
   dplyr::mutate(
@@ -347,4 +382,61 @@ table_device_associated_incidence_density_rates <- data$events |>
       levels = c("cvc_ass_bsi","pvc_ass_bsi","vs_ass_hap","inv_ass_hap",
                  "niv_ass_hap"))) |>
   dplyr::arrange(Infection)
+
+
+table_surgery_rates <- tibble::tibble(
+  main_procedure_code = NA,
+  main_procedure = "Any",
+  n_procedures = nrow(data$surgeryData),
+  procedure_rate = nrow(data$surgeryData) / n_enrolled_patients * 100) |> 
+  bind_cols(
+    department_patients |>
+      dplyr::select(!"n_enrollments") |>
+      dplyr::left_join(
+        data$surgeryData |>
+          inner_join(data$events, join_by(event_key)) |>
+          dplyr::group_by(department_key) |>
+          dplyr::summarise(n_procedures = n()),
+        dplyr::join_by(department_key)) |>
+      dplyr::mutate(
+        procedure_rate = tidyr::replace_na(n_procedures, 0) / n_patients * 100,
+        .keep = "unused") |>
+      dplyr::pull(procedure_rate) |>
+      quantile(prob = c(.25,.5,.75)) |>
+      tibble::tibble(name = c("q1","q2","q3")) |>
+      pivot_wider(values_from = "quantile(...)")) |>
+  bind_rows(
+    data$surgeryData |>
+      dplyr::group_by(main_procedure_code) |>
+      dplyr::summarise(n_procedures = dplyr::n()) |>
+      dplyr::mutate(procedure_rate = n_procedures / n_enrolled_patients * 100) |>
+      dplyr::inner_join(
+        data$enrollments |>
+          dplyr::group_by(department_key) |>
+          dplyr::summarise(n_patients = dplyr::n_distinct(patient_key)) |>
+          dplyr::left_join(
+            data$events |>
+              dplyr::inner_join(
+                data$surgeryData,
+                dplyr::join_by(event_key)) |>
+              dplyr::group_by(department_key, main_procedure_code) |>
+              dplyr::summarise(n_procedures = dplyr::n(), .groups = "drop"),
+            dplyr::join_by(department_key)) |>
+          dplyr::mutate(rate = n_procedures / n_patients * 1000, .keep = "unused") |>
+          tidyr::pivot_wider(
+            names_from = "main_procedure_code",
+            values_from = "rate",
+            values_fill = 0) |>
+          dplyr::select(!c("NA","department_key")) |>
+          dplyr::reframe(dplyr::across(tidyselect::everything(), ~quantile(.x, prob = c(.25,.5,.75)))) |>
+          dplyr::bind_cols(tibble::tibble(Q = c("q1","q2","q3"))) |>
+          tidyr::pivot_longer(!"Q", names_to = "main_procedure_code") |>
+          tidyr::pivot_wider(names_from = Q),
+        dplyr::join_by(main_procedure_code)) |>
+      dplyr::left_join(
+        ichi_health_interventions,
+        dplyr::join_by(main_procedure_code == code)) |>
+      dplyr::arrange(dplyr::desc(n_procedures)) |>
+      dplyr::relocate(main_procedure = intervention, .after = main_procedure_code))
+
 ```

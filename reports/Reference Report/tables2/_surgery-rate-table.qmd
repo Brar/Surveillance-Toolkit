@@ -1,0 +1,28 @@
+```{r}
+table_surgery_rates |>
+  dplyr::filter(.data$procedure_rate >= 0.45) |>
+  dplyr::mutate(
+    main_procedure = dplyr::if_else(
+      is.na(url),
+      .data$main_procedure,
+      paste0("[",.data$main_procedure,"](",.data$url,")")),
+    .keep="unused") |>
+  dplyr::select(!"main_procedure_code") |>
+  dplyr::rename(
+    "Main procedure"="main_procedure",
+    "No of procedures"="n_procedures",
+    "Procedure rate"="procedure_rate",
+    "Q₁"="q1",
+    "Q₂"="q2",
+    "Q₃"="q3") |>
+  gt(rowname_col = "Main procedure") |>
+  fmt_number(decimals = 1) |>
+  fmt_number(columns = "No of procedures", decimals = 0) |>
+  cols_width(`Main procedure` ~ pct(35)) |>
+  fmt_markdown(columns = "Main procedure") |>
+  tab_row_group(
+    label = "By ICHE health intervention",
+    rows = `Main procedure` != "Any",
+    id = "grp_iche") |>
+  row_group_order(groups = c(NA, "grp_iche"))
+```

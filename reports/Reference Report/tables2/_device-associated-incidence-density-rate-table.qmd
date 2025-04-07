@@ -4,6 +4,7 @@
 #| tbl-cap-location: bottom
 
 table_device_associated_incidence_density_rates |>
+  dplyr::rename("Q₁"="q1","Q₂"="q2","Q₃"="q3") |>
   dplyr::mutate(
     Infection = dplyr::case_match(
       as.character(.data$Infection),

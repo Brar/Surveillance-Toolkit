@@ -4,6 +4,7 @@
 #| tbl-cap-location: bottom
 
 table_usage_density_rate |>
+  dplyr::rename("Q₁"="q1","Q₂"="q2","Q₃"="q3") |>
   dplyr::mutate(
     Factor = dplyr::case_match(
       as.character(.data$Factor),

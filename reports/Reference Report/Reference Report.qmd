@@ -92,19 +92,19 @@ This document is the reference report of the NeoIPC Surveillance. It contains in
 
 Number of partner departments contributing at least one patient record:
 
-:   `{r} format(nrow(data$metadata$departments), big.mark =" ")`
+:   `{r} format(nrow(data$metadata$departments), big.mark = locale_sep_mark)`
 
 Number of patient records:
 
-:   `{r} format(nrow(data$patients), big.mark =" ")`
+:   `{r} format(nrow(data$patients), big.mark = locale_sep_mark)`
 
 Number of patient admissions:
 
-:   `{r} format(nrow(data$enrollments), big.mark =" ")`
+:   `{r} format(nrow(data$enrollments), big.mark = locale_sep_mark)`
 
 Sum of patient days:
 
-:   `{r} format(sum(risk_time$patient_days), big.mark =" ")`
+:   `{r} format(sum(risk_time$patient_days), big.mark = locale_sep_mark)`
 
 Average surveillance period per patient:
 
@@ -123,6 +123,14 @@ For the sake of sustainability, the NeoIPC surveillance currently focuses on the
 Next to the inherent risk factors gestational age and birth weight there are also a number of expositional factors that influence the risk of an infant to acquire a multi-drug-resistant pathogen or to develop an infection.
 
 {{< include tables2/_usage-density-rate-table.qmd >}}
+
+## Surgery
+
+The NeoIPC Surveillance patient population is characterised by a low volume of surgical procedures. In this dataset, only `{r} format(n_surgical_departments, big.mark = locale_sep_mark)` of the partner departments (`{r} format(round(n_surgical_departments / n_departments_with_enrollments * 100))`%) recorded any surgical procedures at all.
+
+On the other hand, surgically treated neonates often require more than one operation, so that on average `{r} format(n_procedures_per_patient, digits = 2, nsmall = 1, scientific = FALSE)` operations have been performed for each surgical patient.
+
+{{< include tables2/_surgery-rate-table.qmd >}}
 
 # Nosocomial infections
 
