@@ -140,6 +140,8 @@ On the other hand, surgically treated neonates often require more than one opera
 
 # Infectious Agents
 
+{{< include tables2/_infections-with-agent-table.qmd >}}
+
 ```{r}
 data$infectiousAgentFindings |> dplyr::inner_join(data$infectiousAgentFindings$pathogen_key |> unique() |> neoipcr::get_pathogen_taxonomy(), dplyr::join_by(pathogen_key == inputId)) |> dplyr::group_by(is_cc) |> dplyr::summarise(n=n())
 

@@ -1,0 +1,57 @@
+```{r}
+data$events |>
+    dplyr::filter(!event_type_key %in% c("adm","end","pro","nec")) |>
+    dplyr::semi_join(
+        data$infectiousAgentFindings |>
+          dplyr::filter(!secondary_bsi),
+        dplyr::join_by(event_key)) |>
+    dplyr::group_by(event_type_key) |>
+    dplyr::summarise(infections_with_agent_n = dplyr::n(), .groups = "drop") |>
+  dplyr::inner_join(
+    data$events |>
+      dplyr::filter(!event_type_key %in% c("adm","end","pro","nec")) |>
+      dplyr::group_by(event_type_key) |>
+      dplyr::summarise(infections_n = dplyr::n()),
+    dplyr::join_by(event_type_key)) |>
+  dplyr::mutate(infectious_agent_detection_rate = infections_with_agent_n / infections_n * 100) |>
+  dplyr::inner_join(
+    data$events |>
+      dplyr::filter(!event_type_key %in% c("adm","end","pro","nec")) |>
+      dplyr::semi_join(
+        data$infectiousAgentFindings |>
+          dplyr::filter(!secondary_bsi),
+        dplyr::join_by(event_key)) |>
+      dplyr::group_by(department_key,event_type_key) |>
+      dplyr::summarise(infections_with_agent_n = dplyr::n(), .groups = "drop") |>
+      dplyr::right_join(
+        data$events |>
+          dplyr::filter(!event_type_key %in% c("adm","end","pro","nec")) |>
+          dplyr::group_by(department_key, event_type_key) |>
+          dplyr::summarise(infections_n = dplyr::n(), .groups = "drop"),
+        dplyr::join_by(department_key,event_type_key)) |>
+      dplyr::mutate(
+        infections_with_agent_n = tidyr::replace_na(infections_with_agent_n, 0),
+        infectious_agent_detection_rate = infections_with_agent_n / infections_n * 100,
+        .keep = "unused") |>
+      tidyr::pivot_wider(
+        names_from = event_type_key,
+        values_from = infectious_agent_detection_rate) |>
+      select(!department_key) |>
+      dplyr::reframe(
+        dplyr::across(
+          tidyselect::everything(),
+          ~quantile(.x, prob = c(.25,.5,.75), na.rm = TRUE))) |>
+      dplyr::bind_cols(tibble::tibble(Q = c("q1","q2","q3"))) |>
+      tidyr::pivot_longer(!"Q", names_to = "event_type_key") |>
+      tidyr::pivot_wider(names_from = Q), dplyr::join_by(event_type_key)
+    ) |>
+  dplyr::select(!infections_n) |>
+  gt()
+
+#tibble::tibble(secondary_bsi = TRUE, event_type_key = "nec", n = data$necData |> dplyr::filter(sec_bsi != -1) |> nrow())
+
+#tibble::tibble(secondary_bsi = TRUE, event_type_key = "hap", n = data$pneumoniaData |> dplyr::filter(sec_bsi != -1) |> nrow())
+
+#tibble::tibble(secondary_bsi = TRUE, event_type_key = "ssi", n = data$ssiData |> dplyr::filter(sec_bsi != -1) |> nrow())
+
+```

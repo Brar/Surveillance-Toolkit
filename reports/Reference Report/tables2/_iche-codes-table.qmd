@@ -2,14 +2,18 @@
 data$surgeryData |>
   dplyr::select(main_procedure_code) |>
       dplyr::rename(code = main_procedure_code) |>
+#  dplyr::union_all(
   dplyr::union(
     data$surgeryData |>
       dplyr::select(side_procedure_code_1) |>
       dplyr::rename(code = side_procedure_code_1)) |>
+#  dplyr::union_all(
   dplyr::union(
     data$surgeryData |>
       dplyr::select(side_procedure_code_2) |>
       dplyr::rename(code = side_procedure_code_2)) |>
+#  dplyr::group_by(code) |>
+#  dplyr::summarise(N = dplyr::n()) |>
   dplyr::distinct() |>
   dplyr::arrange(code) |>
   dplyr::inner_join(ichi_health_interventions, dplyr::join_by(code)) |>
