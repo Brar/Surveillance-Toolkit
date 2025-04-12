@@ -814,19 +814,19 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 1116,Emmonsia,genus,MycoBank,8151,f,,f,f,f,f,f,,,,,,,,,,
 13,Empedobacter,genus,LPSN,genus/empedobacter,f,,f,f,f,f,f,,,,,,,,,,
 1338,Empedobacter brevis,species,LPSN,species/empedobacter-brevis,f,,f,f,f,f,f,,,,,,,,,,
-1849,Enterobacter,genus,LPSN,genus/enterobacter,f,,f,f,t,t,t,,,,,,,,,,
-1431,Enterobacter asburiae,species,LPSN,species/enterobacter-asburiae,f,,f,f,t,t,t,,,,,,,,,,
-2713,Enterobacter bugandensis,species,LPSN,species/enterobacter-bugandensis,f,,f,f,t,t,t,,,,,,,,,,
-1417,Enterobacter cancerogenus,species,LPSN,species/enterobacter-cancerogenus,f,,f,f,t,t,t,,,,,,,,,,
-1212,Enterobacter cloacae,species,LPSN,species/enterobacter-cloacae,f,,f,f,t,t,t,,,,,,,,,,
-2711,Enterobacter cloacae complex,species complex,NeoIPC,32,f,,f,f,t,t,t,,,,,,,,,,
-1130,Enterobacter cloacae dissolvens,subspecies,LPSN,subspecies/enterobacter-cloacae-dissolvens,f,,f,f,t,t,t,,,,,,,,,,
-1495,Enterobacter hormaechei,species,LPSN,species/enterobacter-hormaechei,f,,f,f,t,t,t,,,,,,,,,,
-2714,Enterobacter huaxiensis,species,LPSN,species/enterobacter-huaxiensis,f,,f,f,t,t,t,,,,,,,,,,
-1591,Enterobacter kobei,species,LPSN,species/enterobacter-kobei,f,,f,f,t,t,t,,,,,,,,,,
-117,Enterobacter ludwigii,species,LPSN,species/enterobacter-ludwigii,f,,f,f,t,t,t,,,,,,,,,,
-2715,Enterobacter quasihormaechei,species,LPSN,species/enterobacter-quasihormaechei,f,,f,f,t,t,t,,,,,,,,,,
-2717,Enterobacter wuhouensis,species,LPSN,species/enterobacter-wuhouensis,f,,f,f,t,t,t,,,,,,,,,,
+1849,Enterobacter,genus,LPSN,genus/enterobacter,f,,f,f,t,t,t,,1849,3463,3459,3464,,3465,,3466,3421
+1431,Enterobacter asburiae,species,LPSN,species/enterobacter-asburiae,f,,f,f,t,t,t,1431,1849,3463,3459,3464,,3465,,3466,3421
+2713,Enterobacter bugandensis,species,LPSN,species/enterobacter-bugandensis,f,,f,f,t,t,t,2713,1849,3463,3459,3464,,3465,,3466,3421
+1417,Enterobacter cancerogenus,species,LPSN,species/enterobacter-cancerogenus,f,,f,f,t,t,t,1417,1849,3463,3459,3464,,3465,,3466,3421
+1212,Enterobacter cloacae,species,LPSN,species/enterobacter-cloacae,f,,f,f,t,t,t,1212,1849,3463,3459,3464,,3465,,3466,3421
+2711,Enterobacter cloacae complex,species complex,NeoIPC,32,f,,f,f,t,t,t,,1849,3463,3459,3464,,3465,,3466,3421
+1130,Enterobacter cloacae dissolvens,subspecies,LPSN,subspecies/enterobacter-cloacae-dissolvens,f,,f,f,t,t,t,1212,1849,3463,3459,3464,,3465,,3466,3421
+1495,Enterobacter hormaechei,species,LPSN,species/enterobacter-hormaechei,f,,f,f,t,t,t,1495,1849,3463,3459,3464,,3465,,3466,3421
+2714,Enterobacter huaxiensis,species,LPSN,species/enterobacter-huaxiensis,f,,f,f,t,t,t,2714,1849,3463,3459,3464,,3465,,3466,3421
+1591,Enterobacter kobei,species,LPSN,species/enterobacter-kobei,f,,f,f,t,t,t,1591,1849,3463,3459,3464,,3465,,3466,3421
+117,Enterobacter ludwigii,species,LPSN,species/enterobacter-ludwigii,f,,f,f,t,t,t,117,1849,3463,3459,3464,,3465,,3466,3421
+2715,Enterobacter quasihormaechei,species,LPSN,species/enterobacter-quasihormaechei,f,2715,f,f,t,t,t,,1849,3463,3459,3464,,3465,,3466,3421
+2717,Enterobacter wuhouensis,species,LPSN,species/enterobacter-wuhouensis,f,,f,f,t,t,t,2717,1849,3463,3459,3464,,3465,,3466,3421
 3459,Enterobacterales,order,LPSN,order/enterobacterales,,,,,,,,,,,3459,3464,,3465,,3466,3421
 3463,Enterobacteriaceae,family,LPSN,family/enterobacteriaceae,,,,,,,,,,3463,3459,3464,,3465,,3466,3421
 3067,Enterocloster bolteae,species,LPSN,species/enterocloster-bolteae,f,,f,f,f,f,f,,,,,,,,,,
