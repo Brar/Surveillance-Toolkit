@@ -46,7 +46,51 @@ data$events |>
       tidyr::pivot_wider(names_from = Q), dplyr::join_by(event_type_key)
     ) |>
   dplyr::select(!infections_n) |>
-  gt()
+  dplyr::rename(
+    "No of inf. w. agent"="infections_with_agent_n",
+    "Pooled mean"="infectious_agent_detection_rate",
+    "Q₁"="q1",
+    "Q₂"="q2",
+    "Q₃"="q3") |>
+  dplyr::mutate(
+    Infection = dplyr::case_match(
+      as.character(.data$event_type_key),
+      "bsi" ~ "Sepsis/BSI",
+      "ssi" ~ "Surgical site infection",
+      "hap" ~ "Pneumonia"),
+    .keep = "unused") |>
+  gt(rowname_col = "Infection") |>
+  fmt_number(decimals = 1) |>
+  fmt_number(columns = "No of inf. w. agent", decimals = 0) |>
+  tab_spanner(
+    label = "Infectious agent detection rate",
+    columns = c("Pooled mean","Q₁","Q₂","Q₃"),
+    id = "infectious_agent_detection_rate"
+  ) |>
+  tab_footnote(
+    footnote = md(
+      paste0(
+        "$$\\text{",
+        "Infectious agent detection rate",
+        "} = \\frac{\\text{",
+        "No of infections with agent",
+        "}}{\\text{",
+        "No of infections",
+        "}} \\times ",
+        format(100, big.mark = locale_sep_mark),
+        "$$"
+      )),
+    locations = cells_column_spanners(spanners = "infectious_agent_detection_rate")
+  ) |>
+  tab_footnote(
+    footnote = "No of infections with agent: The number of infections where at least one infectious agent was recorded, aggregated across all infants.",
+    locations = cells_column_labels(columns = "No of inf. w. agent")) |>
+  tab_footnote(
+    footnote = "Pooled mean: The infectious agent detection rate calculated as infections with agent per 100 infections calculated across all infants.",
+    locations = cells_column_labels(columns = "Pooled mean")) |>
+  tab_footnote(
+    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the infectious agent detection rates of the partner departments",
+    locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃")))
 
 #tibble::tibble(secondary_bsi = TRUE, event_type_key = "nec", n = data$necData |> dplyr::filter(sec_bsi != -1) |> nrow())
 
