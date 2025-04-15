@@ -1,28 +1,84 @@
-```{r}
-table_surgery_rates |>
-  dplyr::filter(.data$procedure_rate >= 0.45) |>
-  dplyr::mutate(
-    main_procedure = dplyr::if_else(
-      is.na(url),
-      .data$main_procedure,
-      paste0("[",.data$main_procedure,"](",.data$url,")")),
-    .keep="unused") |>
-  dplyr::select(!"main_procedure_code") |>
+```{r surgery rate table}
+#| label: tab-surgery-rates
+#| tbl-cap: "Surgical procedures"
+#| tbl-cap-location: bottom
+group_texts <- tibble::tibble(
+  group = c("overall","abdominal_surgery","neurosurgery","inguinal_hernia_surgery",
+          "cardiac_and_large_vessel_surgery",
+          "lung_pleural_space_thoracic_surgery","other"),
+  text = c("Overall","Abdominal surgery","Neurosurgery","Inguinal hernia surgery",
+            "Cardiac- / large vessel surgery",
+            "Lung- / pleural space- / thoracic surgery","Other")
+)
+
+output <- table_surgery_rates |>
   dplyr::rename(
-    "Main procedure"="main_procedure",
     "No of procedures"="n_procedures",
-    "Procedure rate"="procedure_rate",
+    "Pooled mean"="procedure_rate",
     "Q₁"="q1",
     "Q₂"="q2",
     "Q₃"="q3") |>
-  gt(rowname_col = "Main procedure") |>
+  dplyr::left_join(group_texts, dplyr::join_by(group)) |>
+  dplyr::mutate(group = text, .keep = "unused") |>
+  gt(rowname_col = "group") |>
   fmt_number(decimals = 1) |>
   fmt_number(columns = "No of procedures", decimals = 0) |>
-  cols_width(`Main procedure` ~ pct(35)) |>
-  fmt_markdown(columns = "Main procedure") |>
+  cols_width(group ~ pct(35)) |>
   tab_row_group(
-    label = "By ICHE health intervention",
-    rows = `Main procedure` != "Any",
-    id = "grp_iche") |>
-  row_group_order(groups = c(NA, "grp_iche"))
+    label = "By category",
+    rows = group != "Overall",
+    id = "grp_cat") |>
+#  row_group_order(groups = c(NA, "grp_cat")) |>
+  tab_options(footnotes.font.size = pct(60)) |>
+  tab_spanner(
+    label = "Procedure rate",
+    columns = c("Pooled mean","Q₁","Q₂","Q₃"),
+    id = "procedure_rate"
+  ) |>
+  tab_footnote(
+    footnote = md(
+      paste0(
+        "$$\\text{",
+        "Procedure rate",
+        "} = \\frac{\\text{",
+        "Procedures",
+        "}}{\\text{",
+        "Patients",
+        "}} \\times ",
+        format(100, big.mark = locale_sep_mark),
+        "$$"
+      )),
+    locations = cells_column_spanners(spanners = "procedure_rate")
+  ) |>
+  tab_footnote(
+    footnote = "No of procedures: The aggregated number surgical procedures performed in all infants.",
+    locations = cells_column_labels(columns = "No of procedures")) |>
+  tab_footnote(
+    footnote = "Pooled mean: The procedure rate calculated as procedures per 100 patients calculated across all infants.",
+    locations = cells_column_labels(columns = "Pooled mean")) |>
+  tab_footnote(
+    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the procedure rates of the partner departments",
+    locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃")))
+
+for (i in 1:nrow(group_texts)) {
+  grp <- group_texts[i,]
+  if(grp$group == "overall")
+    next
+
+    output <- output |>
+      tab_footnote(
+        footnote = surgeries |>
+          dplyr::filter(group == grp$group) |>
+          dplyr::select(main_procedure_code) |>
+          dplyr::distinct() |>
+          dplyr::inner_join(ichi_health_interventions, join_by(main_procedure_code == code)) |>
+          dplyr::arrange(main_procedure_code) |>
+          dplyr::mutate(x = paste0("[",.data$intervention,"](",.data$url,")"), .keep = "none") |>
+          dplyr::pull(x) |>
+          paste0(collapse = ", ") |>
+          gt::md(),
+        locations = gt::cells_stub(rows = grp$text))
+}
+
+output
 ```

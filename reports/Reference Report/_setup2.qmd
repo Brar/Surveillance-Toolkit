@@ -56,6 +56,70 @@ if(file.exists(translation_file)) {
   }
 }
 
+get_procedure_category <- function(x) {
+  target <- stringr::str_extract(x, "^([A-Za-z]{3})\\.", 1)
+  action <- stringr::str_extract(x, "^([A-Za-z]{3})\\.([A-Za-z]{2})", 2)
+  means <- stringr::str_extract(x, "^([A-Za-z]{3})\\.([A-Za-z]{2})\\.([A-Za-z]{2})", 3)
+  dplyr::case_when(
+    # Neurosurgery
+    ############################################################################
+    target %in% c("AAE","MAA") &
+      means %in% c("AA","AB") ~ "neurosurgery",
+
+    # Cardiac/large vessel surgery
+    ############################################################################
+    target == "HIJ" & action == "LA" ~ "cardiac_and_large_vessel_surgery",
+
+    target == "HIK" & means == "AA" ~ "cardiac_and_large_vessel_surgery",
+
+    # Lung/pleural space/thoracic surgery
+    ############################################################################
+    target == "MCX" & means %in% c("AA","AB") ~ "lung_pleural_space_thoracic_surgery",
+
+    x == "JBF.LL.AA" ~ "lung_pleural_space_thoracic_surgery",
+
+    # Abdominal surgery
+    ############################################################################
+    target %in% c("KBF","KBK","KBP","KBZ","KMA","PAK","PAL") &
+      means %in% c("AA","AB") ~ "abdominal_surgery",
+
+    target %in% c("PTA","PTB") &
+      action == "LA" &
+      means == "AC" ~ "abdominal_surgery",
+
+    x == "KMA.JB.AE" ~ "abdominal_surgery",
+
+    # Inguinal hernia surgery
+    ############################################################################
+    x == "PAM.MK.AA" ~ "inguinal_hernia_surgery",
+
+    # Other
+    ############################################################################
+    x %in% c("IZD.DL.AF","JBA.LI.AA","KAB.FB.AC",
+             "PAW.JB.AA") ~ "other",
+
+    x == "BCD.DB.AE" ~ "other",
+
+    # Not considered as surgery (remove)
+    ############################################################################
+    x %in% c("KBA.LG.AD","KBK.LD.AH","PTB.SN.AC") ~ "not_surgery",
+
+    # To be categorised (default)
+    ############################################################################
+    .default = "to_be_categorised"
+  ) |>
+    factor(
+      levels = c(
+        "abdominal_surgery",
+        "neurosurgery",
+        "inguinal_hernia_surgery",
+        "cardiac_and_large_vessel_surgery",
+        "lung_pleural_space_thoracic_surgery",
+        "other",
+        "not_surgery",
+        "to_be_categorised"))
+}
+
 department_with_enrollment_keys <- data$enrollments |>
   dplyr::pull(department_key) |>
   unique() |>
@@ -383,17 +447,29 @@ table_device_associated_incidence_density_rates <- data$events |>
                  "niv_ass_hap"))) |>
   dplyr::arrange(Infection)
 
+surgeries <- data$surgeryData |>
+  dplyr::mutate(group = get_procedure_category(main_procedure_code)) |>
+  dplyr::filter(group != "not_surgery") |>
+  dplyr::inner_join(
+    data$events |>
+      dplyr::select(event_key, patient_key),
+    dplyr::join_by(event_key))
+
+n_procedures <- nrow(surgeries)
+n_operated_patients <- surgeries |>
+  dplyr::pull(patient_key) |>
+  unique() |>
+  length()
 
 table_surgery_rates <- tibble::tibble(
-  main_procedure_code = NA,
-  main_procedure = "Any",
-  n_procedures = nrow(data$surgeryData),
-  procedure_rate = nrow(data$surgeryData) / n_enrolled_patients * 100) |> 
+  group = "overall",
+  n_procedures = n_procedures,
+  procedure_rate = n_procedures / n_enrolled_patients * 100) |> 
   bind_cols(
     department_patients |>
       dplyr::select(!"n_enrollments") |>
       dplyr::left_join(
-        data$surgeryData |>
+        surgeries |>
           inner_join(data$events, join_by(event_key)) |>
           dplyr::group_by(department_key) |>
           dplyr::summarise(n_procedures = n()),
@@ -406,8 +482,8 @@ table_surgery_rates <- tibble::tibble(
       tibble::tibble(name = c("q1","q2","q3")) |>
       pivot_wider(values_from = "quantile(...)")) |>
   bind_rows(
-    data$surgeryData |>
-      dplyr::group_by(main_procedure_code) |>
+    surgeries |>
+      dplyr::group_by(group) |>
       dplyr::summarise(n_procedures = dplyr::n()) |>
       dplyr::mutate(procedure_rate = n_procedures / n_enrolled_patients * 100) |>
       dplyr::inner_join(
@@ -417,26 +493,32 @@ table_surgery_rates <- tibble::tibble(
           dplyr::left_join(
             data$events |>
               dplyr::inner_join(
-                data$surgeryData,
+                surgeries,
                 dplyr::join_by(event_key)) |>
-              dplyr::group_by(department_key, main_procedure_code) |>
+              dplyr::group_by(department_key, group) |>
               dplyr::summarise(n_procedures = dplyr::n(), .groups = "drop"),
             dplyr::join_by(department_key)) |>
-          dplyr::mutate(rate = n_procedures / n_patients * 1000, .keep = "unused") |>
+          dplyr::mutate(rate = n_procedures / n_patients * 100, .keep = "unused") |>
           tidyr::pivot_wider(
-            names_from = "main_procedure_code",
+            names_from = "group",
             values_from = "rate",
             values_fill = 0) |>
           dplyr::select(!c("NA","department_key")) |>
           dplyr::reframe(dplyr::across(tidyselect::everything(), ~quantile(.x, prob = c(.25,.5,.75)))) |>
           dplyr::bind_cols(tibble::tibble(Q = c("q1","q2","q3"))) |>
-          tidyr::pivot_longer(!"Q", names_to = "main_procedure_code") |>
+          tidyr::pivot_longer(!"Q", names_to = "group") |>
           tidyr::pivot_wider(names_from = Q),
-        dplyr::join_by(main_procedure_code)) |>
-      dplyr::left_join(
-        ichi_health_interventions,
-        dplyr::join_by(main_procedure_code == code)) |>
-      dplyr::arrange(dplyr::desc(n_procedures)) |>
-      dplyr::relocate(main_procedure = intervention, .after = main_procedure_code))
+        dplyr::join_by(group)) |>
+      dplyr::mutate(group = factor(
+        group,
+        levels = c(
+          "overall",
+          "abdominal_surgery",
+          "neurosurgery",
+          "inguinal_hernia_surgery",
+          "cardiac_and_large_vessel_surgery",
+          "lung_pleural_space_thoracic_surgery",
+          "other"))) |>
+      dplyr::arrange(group))
 
 ```
