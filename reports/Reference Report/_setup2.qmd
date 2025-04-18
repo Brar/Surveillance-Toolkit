@@ -216,38 +216,6 @@ department_risk_time <- data$surveillanceEndData |>
 
 risk_rate_quartiles <- department_risk_time |> select(tidyselect::ends_with("_rate")) |> reframe(across(everything(), ~quantile(.x, prob = c(.25,.5,.75))))
 
-table_usage_density_rate <- risk_time |>
-  dplyr::select(!"patient_days" & tidyselect::ends_with("_days")) |>
-  pivot_longer(
-    cols = tidyselect::ends_with("_days"),
-    values_to = "Usage days") |>
-  dplyr::mutate(
-    Factor = .data$name,
-    .before = 1,
-    .keep = "unused") |>
-  dplyr::bind_cols(
-    risk_time |>
-      dplyr::select(tidyselect::ends_with("_rate")) |>
-      tidyr::pivot_longer(
-        cols = tidyselect::ends_with("_rate"),
-        values_to = "Pooled mean")) |>
-  dplyr::bind_cols(
-    risk_rate_quartiles |>
-      dplyr::bind_cols(tibble::tibble(name = c("q1","q2","q3"))) |>
-      tidyr::pivot_wider(
-        values_from = tidyselect::ends_with("_rate")) |>
-      tidyr::pivot_longer(
-        tidyselect::everything(),
-        names_pattern = "^(.+)_(q(?:1|2|3))$",
-        names_to = c("rate",".value"))) |>
-  dplyr::select(!tidyselect::all_of(c("name","rate"))) |>
-  dplyr::mutate(
-    Factor = factor(
-      stringr::str_extract(.data$Factor,"^(.+)_days", 1),
-      levels = c("cvc","pvc","vs","inv","niv","human_milk","probiotic",
-                 "kangaroo_care","ab","a","w","r"))) |>
-  dplyr::arrange(Factor)
-
 incidence_density_rate_quartiles <- data$events |>
   dplyr::filter(event_type_key %in% c("bsi","nec","hap")) |>
   dplyr::group_by(event_type_key, department_key) |>

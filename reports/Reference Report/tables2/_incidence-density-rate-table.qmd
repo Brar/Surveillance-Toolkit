@@ -3,8 +3,15 @@
 #| tbl-cap: "Incidence densities of infections"
 #| tbl-cap-location: bottom
 
-table_incidence_density_rates |>
-  dplyr::rename("Q₁"="q1","Q₂"="q2","Q₃"="q3") |>
+data |>
+  neoipcr::get_incidence_density_rate_table() |>
+  dplyr::rename(
+    "Infection"="inf",
+    "No of infections"="n",
+    "Pooled mean"="rate",
+    "Q₁"="q1",
+    "Q₂"="q2",
+    "Q₃"="q3") |>
   dplyr::mutate(
     Infection = dplyr::case_match(
       as.character(.data$Infection),
