@@ -3,17 +3,24 @@
 #| tbl-cap: "Incidence densities of device-associated infections"
 #| tbl-cap-location: bottom
 
-table_device_associated_incidence_density_rates |>
-  dplyr::rename("Q₁"="q1","Q₂"="q2","Q₃"="q3") |>
+data |>
+  neoipcr::get_dev_ass_incidence_density_rate_table() |>
+  dplyr::rename(
+    "Device"="dev",
+    "No of dev-ass inf."="n",
+    "Pooled mean"="rate",
+    "Q₁"="q1",
+    "Q₂"="q2",
+    "Q₃"="q3") |>
   dplyr::mutate(
-    Infection = dplyr::case_match(
-      as.character(.data$Infection),
-      "cvc_ass_bsi" ~ "CVC",
-      "pvc_ass_bsi" ~ "PVC",
-      "vs_ass_hap" ~ "Any ventilatory support",
-      "inv_ass_hap" ~ "INV",
-      "niv_ass_hap" ~ "NIV")) |>
-  gt(rowname_col = "Infection") |>
+    Device = dplyr::case_match(
+      as.character(.data$Device),
+      "cvc" ~ "CVC",
+      "pvc" ~ "PVC",
+      "vs" ~ "Any ventilatory support",
+      "inv" ~ "INV",
+      "niv" ~ "NIV")) |>
+  gt(rowname_col = "Device") |>
   fmt_number(decimals = 1) |>
   fmt_number(columns = "No of dev-ass inf.", decimals = 0) |>
   tab_row_group(label = "Vascular catheter associated sepsis / bloodstream infection", rows = 1:2, id = "grp_vc") |>
