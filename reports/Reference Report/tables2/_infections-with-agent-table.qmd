@@ -91,11 +91,4 @@ data$events |>
   tab_footnote(
     footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the infectious agent detection rates of the partner departments",
     locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃")))
-
-#tibble::tibble(secondary_bsi = TRUE, event_type_key = "nec", n = data$necData |> dplyr::filter(sec_bsi != -1) |> nrow())
-
-#tibble::tibble(secondary_bsi = TRUE, event_type_key = "hap", n = data$pneumoniaData |> dplyr::filter(sec_bsi != -1) |> nrow())
-
-#tibble::tibble(secondary_bsi = TRUE, event_type_key = "ssi", n = data$ssiData |> dplyr::filter(sec_bsi != -1) |> nrow())
-
 ```

@@ -96,19 +96,19 @@ Number of partner departments contributing at least one patient record:
 
 Number of patient records:
 
-:   `{r} format(nrow(data$patients), big.mark = locale_sep_mark)`
+:   `{r} format(neoipcr:::get_risk_population(data)$n_patients, big.mark = locale_sep_mark)`
 
 Number of patient admissions:
 
-:   `{r} format(nrow(data$enrollments), big.mark = locale_sep_mark)`
+:   `{r} format(neoipcr:::get_risk_population(data)$n_enrollments, big.mark = locale_sep_mark)`
 
 Sum of patient days:
 
-:   `{r} format(sum(risk_time$patient_days), big.mark = locale_sep_mark)`
+:   `{r} format(neoipcr:::get_risk_time(data)$patient_days, big.mark = locale_sep_mark)`
 
 Average surveillance period per patient:
 
-:   `{r} format(sum(risk_time$patient_days) / nrow(data$patients), digits = 2, nsmall = 1, scientific = FALSE)` days
+:   `{r} format(neoipcr:::get_risk_time(data)$patient_days / nrow(neoipcr:::get_risk_population(data)$n_patients), digits = 2, nsmall = 1, scientific = FALSE)` days
 
 # Patient Population
 

@@ -2,37 +2,32 @@
 #| label: tab-surgery-rates
 #| tbl-cap: "Surgical procedures"
 #| tbl-cap-location: bottom
-group_texts <- tibble::tibble(
-  group = c("overall","abdominal_surgery","neurosurgery","inguinal_hernia_surgery",
-          "cardiac_and_large_vessel_surgery",
-          "lung_pleural_space_thoracic_surgery","other"),
-  text = c("Overall","Abdominal surgery","Neurosurgery","Inguinal hernia surgery",
-            "Cardiac- / large vessel surgery",
-            "Lung- / pleural space- / thoracic surgery","Other")
-)
 
-output <- table_surgery_rates |>
-  dplyr::rename(
-    "No of procedures"="n_procedures",
-    "Pooled mean"="procedure_rate",
-    "Q₁"="q1",
-    "Q₂"="q2",
-    "Q₃"="q3") |>
-  dplyr::left_join(group_texts, dplyr::join_by(group)) |>
-  dplyr::mutate(group = text, .keep = "unused") |>
-  gt(rowname_col = "group") |>
+tmp <- data |>
+  neoipcr::get_surgery_rate_table() |>
+  neoipcr::pretty_names()
+
+col_names <- attr(tmp, "names.pretty")
+row_names <- attr(tmp, "row.names.pretty")
+proc_cat <- col_names[["procedure_category"]]
+
+out <- tmp |>
+  gt(rowname_col = proc_cat) |>
   fmt_number(decimals = 1) |>
-  fmt_number(columns = "No of procedures", decimals = 0) |>
-  cols_width(group ~ pct(35)) |>
+  fmt_number(columns = col_names[["n"]], decimals = 0) |>
+  cols_width(matches(proc_cat) ~ pct(35)) |>
   tab_row_group(
     label = "By category",
-    rows = group != "Overall",
+    rows = proc_cat != row_names[["overall"]],
     id = "grp_cat") |>
-#  row_group_order(groups = c(NA, "grp_cat")) |>
   tab_options(footnotes.font.size = pct(60)) |>
   tab_spanner(
     label = "Procedure rate",
-    columns = c("Pooled mean","Q₁","Q₂","Q₃"),
+    columns = c(
+      col_names[["rate"]],
+      col_names[["q1"]],
+      col_names[["q2"]],
+      col_names[["q3"]]),
     id = "procedure_rate"
   ) |>
   tab_footnote(
@@ -52,33 +47,35 @@ output <- table_surgery_rates |>
   ) |>
   tab_footnote(
     footnote = "No of procedures: The aggregated number surgical procedures performed in all infants.",
-    locations = cells_column_labels(columns = "No of procedures")) |>
+    locations = cells_column_labels(columns = col_names[["n"]])) |>
   tab_footnote(
     footnote = "Pooled mean: The procedure rate calculated as procedures per 100 patients calculated across all infants.",
-    locations = cells_column_labels(columns = "Pooled mean")) |>
+    locations = cells_column_labels(columns = col_names[["rate"]])) |>
   tab_footnote(
-    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the procedure rates of the partner departments",
-    locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃")))
+    footnote = paste(paste(col_names[["q1"]],col_names[["q2"]],col_names[["q3"]], sep = ", "), ": The quartiles (25%, 50% and 75% quantiles) of the procedure rates of the partner departments."),
+    locations = cells_column_labels(columns = c(col_names[["q1"]],col_names[["q2"]],col_names[["q3"]])))
 
-for (i in 1:nrow(group_texts)) {
-  grp <- group_texts[i,]
-  if(grp$group == "overall")
-    next
+# cats <- neoipcr:::get_procedure_categories(data, pretty = TRUE)
+# col_names2 <- attr(cats, "names.pretty")
+# for (i in 1:nrow(tmp)) {
+#   name <- unlist(tmp[i,1], use.names = FALSE)
+#   if(name == row_names[["overall"]])
+#     next
+#
+#     out <- out |>
+#       tab_footnote(
+#         footnote = cats |>
+#           dplyr::filter(!!as.name(col_names2[["procedure_category"]]) == !!name) |>
+#           dplyr::select(tidyselect::all_of(col_names2[["procedure_code"]])) |>
+#           dplyr::distinct() |>
+#           dplyr::inner_join(ichi_health_interventions, dplyr::join_by(!!as.name(col_names2[["procedure_code"]]) == code)) |>
+#           dplyr::arrange(dplyr::pick(tidyselect::all_of(col_names2[["procedure_code"]]))) |>
+#           dplyr::mutate(x = paste0("[",.data$intervention,"](",.data$url,")"), .keep = "none") |>
+#           dplyr::pull(x) |>
+#           paste0(collapse = ", ") |>
+#           gt::md(),
+#         locations = gt::cells_stub(rows = name))
+# }
 
-    output <- output |>
-      tab_footnote(
-        footnote = surgeries |>
-          dplyr::filter(group == grp$group) |>
-          dplyr::select(main_procedure_code) |>
-          dplyr::distinct() |>
-          dplyr::inner_join(ichi_health_interventions, join_by(main_procedure_code == code)) |>
-          dplyr::arrange(main_procedure_code) |>
-          dplyr::mutate(x = paste0("[",.data$intervention,"](",.data$url,")"), .keep = "none") |>
-          dplyr::pull(x) |>
-          paste0(collapse = ", ") |>
-          gt::md(),
-        locations = gt::cells_stub(rows = grp$text))
-}
-
-output
+out
 ```
