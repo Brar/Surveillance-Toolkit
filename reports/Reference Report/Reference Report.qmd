@@ -126,7 +126,7 @@ Next to the inherent risk factors gestational age and birth weight there are als
 
 ## Surgery
 
-The NeoIPC Surveillance patient population is characterised by a low volume of surgical procedures. In this dataset, only `{r} format(n_surgical_departments, big.mark = locale_sep_mark)` of the partner departments (`{r} format(round(n_surgical_departments / n_departments_with_enrollments * 100))`%) recorded any surgical procedures at all.
+The NeoIPC Surveillance patient population is characterised by a low volume of surgical procedures. In this dataset, only `{r} format(n_surgical_departments, big.mark = locale_sep_mark)` of the partner departments (`{r} format(round(n_surgical_departments / nrow(data$metadata$departments) * 100))`%) recorded any surgical procedures at all.
 
 On the other hand, surgically treated neonates often require more than one operation, so that on average `{r} format(n_procedures_per_patient, digits = 2, nsmall = 1, scientific = FALSE)` operations have been performed for each surgical patient.
 

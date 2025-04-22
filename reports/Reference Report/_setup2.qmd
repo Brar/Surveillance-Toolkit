@@ -59,11 +59,6 @@ if(file.exists(translation_file)) {
   }
 }
 
-n_departments_with_enrollments <- data$enrollments |>
-  dplyr::pull(department_key) |>
-  unique() |>
-  length()
-
 n_surgical_departments <- data$enrollments |>
   dplyr::semi_join(
     data$events |>
@@ -74,8 +69,8 @@ n_surgical_departments <- data$enrollments |>
   length()
 
 n_procedures_per_patient <- data$events |>
-  dplyr::inner_join(data$surgeryData, dplyr::join_by(event_key)) |>
-  dplyr::summarise(n_patients = n_distinct(patient_key), n_procedures = n()) |>
+  dplyr::filter(event_type_key == "pro") |>
+  dplyr::summarise(n_departments = n_distinct(department_key), n_patients = n_distinct(patient_key), n_procedures = n()) |>
   dplyr::mutate(procedures_per_patient = n_procedures / n_patients) |>
   dplyr::pull(procedures_per_patient)
 
