@@ -788,7 +788,7 @@ id,synonym,concept_source,concept_id,synonym_for
 1282,Staphylococcus succinus succinus,LPSN,subspecies/staphylococcus-succinus-succinus,1026
 595,Staphylococcus vitulinus,LPSN,species/staphylococcus-vitulinus,2987
 942,Stenotrophomonas,LPSN,genus/stenotrophomonas,1508
-681,Stenotrophomonas maltophilia,LPSN,species/stenotrophomonas-maltophilia,2385
+2385,Xanthomonas maltophilia,LPSN,species/xanthomonas-maltophilia,681
 2259,Stephanoascus ciferrii,MycoBank,324077,3371
 2171,Stomatococcus mucilaginosus,LPSN,species/stomatococcus-mucilaginosus,1242
 1325,Streptococcus adjacens,LPSN,species/streptococcus-adjacens,201

@@ -529,19 +529,19 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 417,Chryseomonas,genus,LPSN,genus/chryseomonas,f,,f,f,f,f,f,,,,,,,,,,
 1254,Chryseomonas luteola,species,LPSN,species/chryseomonas-luteola,f,,f,f,f,f,f,,,,,,,,,,
 1457,Chrysosporium,genus,MycoBank,7645,f,,f,f,f,f,f,,,,,,,,,,
-1940,Citrobacter,genus,LPSN,genus/citrobacter,f,,f,f,t,t,t,,,,,,,,,,
-1302,Citrobacter amalonaticus,species,LPSN,species/citrobacter-amalonaticus,f,,f,f,t,t,t,,,,,,,,,,
-841,Citrobacter braakii,species,LPSN,species/citrobacter-braakii,f,,f,f,t,t,t,,,,,,,,,,
-292,Citrobacter farmeri,species,LPSN,species/citrobacter-farmeri,f,,f,f,t,t,t,,,,,,,,,,
-1430,Citrobacter freundii,species,LPSN,species/citrobacter-freundii,f,,f,f,t,t,t,,,,,,,,,,
-1079,Citrobacter gillenii,species,LPSN,species/citrobacter-gillenii,f,,f,f,t,t,t,,,,,,,,,,
-1747,Citrobacter koseri,species,LPSN,species/citrobacter-koseri,f,,f,f,t,t,t,,,,,,,,,,
-1810,Citrobacter murliniae,species,LPSN,species/citrobacter-murliniae,f,,f,f,t,t,t,,,,,,,,,,
-2712,Citrobacter pasteurii,species,LPSN,species/citrobacter-pasteurii,f,,f,f,t,t,t,,,,,,,,,,
-131,Citrobacter rodentium,species,LPSN,species/citrobacter-rodentium,f,,f,f,t,t,t,,,,,,,,,,
-2400,Citrobacter sedlakii,species,LPSN,species/citrobacter-sedlakii,f,,f,f,t,t,t,,,,,,,,,,
-1432,Citrobacter werkmanii,species,LPSN,species/citrobacter-werkmanii,f,,f,f,t,t,t,,,,,,,,,,
-1014,Citrobacter youngae,species,LPSN,species/citrobacter-youngae,f,,f,f,t,t,t,,,,,,,,,,
+1940,Citrobacter,genus,LPSN,genus/citrobacter,f,,f,f,t,t,t,,1940,3463,3459,3464,,3465,,3466,3421
+1302,Citrobacter amalonaticus,species,LPSN,species/citrobacter-amalonaticus,f,,f,f,t,t,t,1302,1940,3463,3459,3464,,3465,,3466,3421
+841,Citrobacter braakii,species,LPSN,species/citrobacter-braakii,f,,f,f,t,t,t,841,1940,3463,3459,3464,,3465,,3466,3421
+292,Citrobacter farmeri,species,LPSN,species/citrobacter-farmeri,f,,f,f,t,t,t,292,1940,3463,3459,3464,,3465,,3466,3421
+1430,Citrobacter freundii,species,LPSN,species/citrobacter-freundii,f,,f,f,t,t,t,1430,1940,3463,3459,3464,,3465,,3466,3421
+1079,Citrobacter gillenii,species,LPSN,species/citrobacter-gillenii,f,,f,f,t,t,t,1079,1940,3463,3459,3464,,3465,,3466,3421
+1747,Citrobacter koseri,species,LPSN,species/citrobacter-koseri,f,,f,f,t,t,t,1747,1940,3463,3459,3464,,3465,,3466,3421
+1810,Citrobacter murliniae,species,LPSN,species/citrobacter-murliniae,f,,f,f,t,t,t,1810,1940,3463,3459,3464,,3465,,3466,3421
+2712,Citrobacter pasteurii,species,LPSN,species/citrobacter-pasteurii,f,,f,f,t,t,t,2712,1940,3463,3459,3464,,3465,,3466,3421
+131,Citrobacter rodentium,species,LPSN,species/citrobacter-rodentium,f,,f,f,t,t,t,131,1940,3463,3459,3464,,3465,,3466,3421
+2400,Citrobacter sedlakii,species,LPSN,species/citrobacter-sedlakii,f,,f,f,t,t,t,2400,1940,3463,3459,3464,,3465,,3466,3421
+1432,Citrobacter werkmanii,species,LPSN,species/citrobacter-werkmanii,f,,f,f,t,t,t,1432,1940,3463,3459,3464,,3465,,3466,3421
+1014,Citrobacter youngae,species,LPSN,species/citrobacter-youngae,f,,f,f,t,t,t,1014,1940,3463,3459,3464,,3465,,3466,3421
 1500,Cladophialophora,genus,MycoBank,7677,f,,f,f,f,f,f,,,,,,,,,,
 2224,Cladophialophora bantiana,species,MycoBank,412791,f,,f,f,f,f,f,,,,,,,,,,
 1335,Cladosporium,genus,MycoBank,7681,f,,f,f,f,f,f,,,,,,,,,,
@@ -866,9 +866,10 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 2622,Enterovirus B,species,ICTV,202101984,f,,f,f,f,f,f,,,,,,,,,,
 2636,Enterovirus C,species,ICTV,202101985,f,,f,f,f,f,f,,,,,,,,,,
 1185,Epicoccum,genus,MycoBank,8188,f,,f,f,f,f,f,,,,,,,,,,
-1286,Erwinia,genus,LPSN,genus/erwinia,f,,f,f,t,t,t,,,,,,,,,,
-3086,Erwinia ananatis,species,LPSN,species/erwinia-ananatis,f,,f,f,t,t,t,,,,,,,,,,
-1063,Erwinia persicina,species,LPSN,species/erwinia-persicina,f,,f,f,t,t,t,,,,,,,,,,
+3474,Erwiniaceae,family,LPSN,family/erwiniaceae,,,,,,,,,,3474,3459,3464,,3465,,3466,3421
+1286,Erwinia,genus,LPSN,genus/erwinia,f,,f,f,t,t,t,,1286,3474,3459,3464,,3465,,3466,3421
+3086,Erwinia ananatis,species,LPSN,species/erwinia-ananatis,f,,f,f,t,t,t,3086,1286,3474,3459,3464,,3465,,3466,3421
+1063,Erwinia persicina,species,LPSN,species/erwinia-persicina,f,,f,f,t,t,t,1063,1286,3474,3459,3464,,3465,,3466,3421
 1740,Erysipelothrix,genus,LPSN,genus/erysipelothrix,f,,f,f,f,f,f,,,,,,,,,,
 567,Erysipelothrix inopinata,species,LPSN,species/erysipelothrix-inopinata,f,,f,f,f,f,f,,,,,,,,,,
 438,Erysipelothrix rhusiopathiae,species,LPSN,species/erysipelothrix-rhusiopathiae,f,,f,f,f,f,f,,,,,,,,,,
@@ -1296,6 +1297,8 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 3343,Lymphocytic choriomeningitis mammarenavirus,species,ICTV,202102586,f,,f,f,f,f,f,,,,,,,,,,
 3091,Lysinibacillus odysseyi,species,LPSN,species/lysinibacillus-odysseyi,t,,f,f,f,f,f,,,,,,,,,,
 2913,Lysinibacillus sphaericus,species,LPSN,species/lysinibacillus-sphaericus,t,,f,f,f,f,f,,,,,,,,,,
+3477,Lysobacterales,order,LPSN,order/lysobacterales,,,,,,,,,,,3477,3464,,3465,,3466,3421
+3476,Lysobacteraceae,family,LPSN,family/lysobacteraceae,,,,,,,,,,3476,3477,3464,,3465,,3466,3421
 3336,Lyssavirus rabies,species,ICTV,202101733,f,,f,f,f,f,f,,,,,,,,,,
 2218,Macrococcus,genus,LPSN,genus/macrococcus,f,,f,f,f,f,f,,,,,,,,,,
 2134,Macrococcus bovicus,species,LPSN,species/macrococcus-bovicus,f,,f,f,f,f,f,,,,,,,,,,
@@ -1721,14 +1724,14 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 848,Pandoraea pnomenusa,species,LPSN,species/pandoraea-pnomenusa,f,,f,f,f,f,f,,,,,,,,,,
 698,Pandoraea pulmonicola,species,LPSN,species/pandoraea-pulmonicola,f,,f,f,f,f,f,,,,,,,,,,
 1345,Pandoraea sputorum,species,LPSN,species/pandoraea-sputorum,f,,f,f,f,f,f,,,,,,,,,,
-1288,Pantoea,genus,LPSN,genus/pantoea,f,,f,f,t,t,t,,,,,,,,,,
-987,Pantoea agglomerans,species,LPSN,species/pantoea-agglomerans,f,,f,f,t,t,t,,,,,,,,,,
-2041,Pantoea ananatis,species,LPSN,species/pantoea-ananatis,f,,f,f,t,t,t,,,,,,,,,,
-2725,Pantoea brenneri,species,LPSN,species/pantoea-brenneri,f,,f,f,t,t,t,,,,,,,,,,
-2728,Pantoea conspicua,species,LPSN,species/pantoea-conspicua,f,,f,f,t,t,t,,,,,,,,,,
-913,Pantoea dispersa,species,LPSN,species/pantoea-dispersa,f,,f,f,t,t,t,,,,,,,,,,
-2729,Pantoea eucrina,species,LPSN,species/pantoea-eucrina,f,,f,f,t,t,t,,,,,,,,,,
-2730,Pantoea septica,species,LPSN,species/pantoea-septica,f,,f,f,t,t,t,,,,,,,,,,
+1288,Pantoea,genus,LPSN,genus/pantoea,f,,f,f,t,t,t,,1288,3474,3459,3464,,3465,,3466,3421
+987,Pantoea agglomerans,species,LPSN,species/pantoea-agglomerans,f,,f,f,t,t,t,987,1288,3474,3459,3464,,3465,,3466,3421
+2041,Pantoea ananatis,species,LPSN,species/pantoea-ananatis,f,,f,f,t,t,t,2041,1288,3474,3459,3464,,3465,,3466,3421
+2725,Pantoea brenneri,species,LPSN,species/pantoea-brenneri,f,,f,f,t,t,t,2725,1288,3474,3459,3464,,3465,,3466,3421
+2728,Pantoea conspicua,species,LPSN,species/pantoea-conspicua,f,,f,f,t,t,t,2728,1288,3474,3459,3464,,3465,,3466,3421
+913,Pantoea dispersa,species,LPSN,species/pantoea-dispersa,f,,f,f,t,t,t,913,1288,3474,3459,3464,,3465,,3466,3421
+2729,Pantoea eucrina,species,LPSN,species/pantoea-eucrina,f,,f,f,t,t,t,2729,1288,3474,3459,3464,,3465,,3466,3421
+2730,Pantoea septica,species,LPSN,species/pantoea-septica,f,,f,f,t,t,t,2730,1288,3474,3459,3464,,3465,,3466,3421
 1493,Parabacteroides,genus,LPSN,genus/parabacteroides,f,,f,f,f,f,f,,,,,,,,,,
 2905,Parabacteroides chongii,species,LPSN,species/parabacteroides-chongii,f,,f,f,f,f,f,,,,,,,,,,
 1928,Parabacteroides distasonis,species,LPSN,species/parabacteroides-distasonis,f,,f,f,f,f,f,,,,,,,,,,
@@ -2239,6 +2242,8 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 1416,Staphylococcus xylosus,species,LPSN,species/staphylococcus-xylosus,t,n,f,f,f,f,f,1416,481,3460,3417,3418,,3419,,3420,3421
 3350,Starmera stellimalicola,species,MycoBank,814380,f,,f,f,f,f,f,,,,,,,,,,
 144,Stemphylium,genus,MycoBank,10081,f,,f,f,f,f,f,,,,,,,,,,
+3475,Stenotrophomonas,genus,LPSN,genus/stenotrophomonas,f,,f,f,f,f,f,,3475,3476,3477,3464,,3465,,3466,3421
+681,Stenotrophomonas maltophilia,species,LPSN,species/stenotrophomonas-maltophilia,f,,f,f,f,f,f,681,3475,3476,3477,3464,,3465,,3466,3421
 364,Stephanoascus,genus,MycoBank,5209,f,,f,f,f,f,f,,,,,,,,,,
 231,Streptobacillus,genus,LPSN,genus/streptobacillus,f,,f,f,f,f,f,,,,,,,,,,
 566,Streptobacillus moniliformis,species,LPSN,species/streptobacillus-moniliformis,f,,f,f,f,f,f,,,,,,,,,,
@@ -2449,7 +2454,6 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 1497,Wolinella,genus,LPSN,genus/wolinella,f,,f,f,f,f,f,,,,,,,,,,
 1804,Wolinella succinogenes,species,LPSN,species/wolinella-succinogenes,f,,f,f,f,f,f,,,,,,,,,,
 1508,Xanthomonas,genus,LPSN,genus/xanthomonas,f,,f,f,f,f,f,,,,,,,,,,
-2385,Xanthomonas maltophilia,species,LPSN,species/xanthomonas-maltophilia,f,,f,f,f,f,f,,,,,,,,,,
 3401,Xenoacremonium recifei,species,MycoBank,810272,f,,f,f,f,f,f,,,,,,,,,,
 1257,Xenorhabdus,genus,LPSN,genus/xenorhabdus,f,,f,f,t,t,t,,,,,,,,,,
 944,Xenorhabdus nematophila,species,LPSN,species/xenorhabdus-nematophila,f,,f,f,t,t,t,,,,,,,,,,
