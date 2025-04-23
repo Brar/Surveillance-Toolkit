@@ -145,7 +145,43 @@ On the other hand, surgically treated neonates often require more than one opera
 {{< include tables2/_secondary-bsi-table.qmd >}}
 
 ```{r}
-#data$infectiousAgentFindings |> dplyr::inner_join(data$infectiousAgentFindings$pathogen_key |> unique() |> neoipcr::get_pathogen_taxonomy(), dplyr::join_by(pathogen_key == inputId)) |> dplyr::group_by(is_cc) |> dplyr::summarise(n=n())
+data |>
+  neoipcr::get_pathogen_detection_rate_table() |>
+  gt(rowname_col = "group") |>
+  gt::tab_options(
+    table.font.size = 13
+  ) |>
+  fmt_number(decimals = 1) |>
+  fmt_number(columns = "n", decimals = 0) |>
+  cols_width(matches("group") ~ pct(50)) |>
+  gt::tab_stub_indent(
+    rows = gt::everything(),
+    indent = gt::from_column(column = "lv")
+  ) |>
+  tab_style(
+    style = cell_text(
+      weight = "bold"
+    ),
+    locations = cells_stub(
+      rows = tl %in% c(
+        "none",
+        "domain",
+        "kingdom",
+        "order",
+        "genus",
+        "coag_type")
+    )
+  ) |>
+  tab_style(
+    style = cell_text(
+      style = "italic"
+      ),
+    locations = cells_stub(
+      rows = tl == "species"
+    )
+  ) |>
+  cols_hide(columns = any_of(c("lv","tl"))) |>
+  sub_missing()
 
 #data$infectiousAgentFindings |> dplyr::inner_join(data$infectiousAgentFindings$pathogen_key |> unique() |> neoipcr::get_pathogen_taxonomy(), dplyr::join_by(pathogen_key == inputId)) |> dplyr::group_by(order) |> dplyr::summarise(n=n())
 
