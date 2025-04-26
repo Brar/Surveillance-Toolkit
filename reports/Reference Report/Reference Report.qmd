@@ -6,9 +6,9 @@ params:
   reportingPeriodTo: NULL
   birthWeightFrom: NULL
   birthWeightTo: NULL
-  gestationalAgeFrom: NULL
-  gestationalAgeTo: NULL
-  countryFilter: NULL
+  gestationWeeksFrom: NULL
+  gestationWeeksTo: NULL
+  reportingCountries: NULL
   hospitalFilter: NULL
   testUnitFilter: true
   defaultPatientFilter: true
@@ -31,11 +31,11 @@ params:
 
 `{r} translations$headerList$birthweightFilter`:
 
-:   `{r} if(birthWeightFrom == 0L && birthWeightTo == 2147483647L) translations$headerList$allBirthweights else paste(label_bw(birthWeightFrom), label_bw(birthWeightTo), sep = " - ")`
+:   `{r} if(birthWeightFrom == 0L && birthWeightTo == 2147483647L) translations$headerList$allBirthweights else if(birthWeightFrom == 0) paste0(c("≤ ", format(birthWeightTo), " g"), collapse = "") else if(birthWeightTo == 2147483647L) paste0(c("≥ ", format(birthWeightFrom), " g"), collapse = "") else paste0(c(format(birthWeightFrom), " g - ", format(birthWeightTo), " g"), collapse = "")`
 
 `{r} translations$headerList$gestationalAgeFilter`:
 
-:   `{r} if(gestationalAgeFrom == 0L && gestationalAgeTo == 2147483647L) translations$headerList$allGestationalAges else paste0(format_ga(c(gestationalAgeFrom, gestationalAgeTo)), collapse = " - ")`
+:   `{r} if(gestationWeeksFrom == 0L && gestationWeeksTo == 2147483647L) translations$headerList$allGestationalAges else if(gestationWeeksFrom == 0) paste0(c("≤ ", format(gestationWeeksTo), " w"), collapse = "") else if(gestationWeeksTo == 2147483647L) paste0(c("≥ ", format(gestationWeeksFrom), " w"), collapse = "") else paste0(c(format(gestationWeeksFrom), " w - ", format(gestationWeeksTo), " w"), collapse = "")`
 
 ```{r Countries hint}
 #| echo: false
@@ -108,7 +108,7 @@ Sum of patient days:
 
 Average surveillance period per patient:
 
-:   `{r} format(neoipcr:::get_risk_time(data)$patient_days / nrow(neoipcr:::get_risk_population(data)$n_patients), digits = 2, nsmall = 1, scientific = FALSE)` days
+:   `{r} format(neoipcr:::get_risk_time(data)$patient_days / neoipcr:::get_risk_population(data)$n_patients, digits = 2, nsmall = 1, scientific = FALSE)` days
 
 # Patient Population
 

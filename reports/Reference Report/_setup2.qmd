@@ -12,17 +12,32 @@ library(neoipcr, warn.conflicts = FALSE, quietly = TRUE)
 
 if(!exists("params")) params <- list()
 reportingPeriodFrom <- as_date(coalesce(params[["reportingPeriodFrom"]], "2024-01-01"))
-reportingPeriodTo <- as_date(coalesce(params[["reportingPeriodTo"]], Sys.Date()))
+reportingPeriodTo <- as_date(coalesce(params[["reportingPeriodTo"]], as.character(Sys.Date())))
 birthWeightFrom <- coalesce(params[["birthWeightFrom"]], 0L)
 birthWeightTo <- coalesce(params[["birthWeightTo"]], 2147483647L)
-gestationalAgeFrom <- coalesce(params[["gestationalAgeFrom"]], 0L)
-gestationalAgeTo <- coalesce(params[["gestationalAgeTo"]], 2147483647L)
+gestationWeeksFrom <- coalesce(params[["gestationWeeksFrom"]], 0L)
+gestationWeeksTo <- coalesce(params[["gestationWeeksTo"]], 2147483647L)
 token <- coalesce(params$token, Sys.getenv("NEOIPC_DHIS2_TOKEN", unset = NA))
 session_id <- coalesce(params[["session_id"]], Sys.getenv("NEOIPC_DHIS2_SESSION_ID", unset = NA))
-countryFilter = params[["countryFilter"]]
+connection_options <- if(is.na(session_id))
+  dhis2_connection_options(token = token) else
+    dhis2_connection_options(session_id = session_id)
+reportingCountries = params[["reportingCountries"]]
 hospitalFilter = params[["hospitalFilter"]]
 defaultPatientFilter = coalesce(params[["defaultPatientFilter"]], TRUE)
 testUnitFilter = coalesce(params[["testUnitFilter"]], TRUE)
+
+dataset_options <- dhis2_dataset_options(
+    include_country = "yes",
+    include_department = "yes",
+    surveillance_end_from = reportingPeriodFrom,
+    surveillance_end_to = reportingPeriodTo,
+    birth_weight_from = birthWeightFrom,
+    birth_weight_to = birthWeightTo,
+    gestational_age_from = gestationWeeksFrom,
+    gestational_age_to = gestationWeeksTo,
+    country_filter = reportingCountries)
+
 language <- dplyr::coalesce(params$language, "en")
 default_countries <- list(
   en = "GB",
@@ -43,7 +58,11 @@ rm(gt_locale, `_locales`)
 
 ```{r Importing data}
 #| include: false
-data <- import_dhis2(dataset_options = dhis2_dataset_options(include_country = "yes", include_department = "yes"))
+
+data <- import_dhis2(
+  connection_options = connection_options,
+  dataset_options = dataset_options
+  )
 
 ichi_health_interventions <- read_csv("../../../Surveillance-Private/metadata/WHO/ICHI/Health interventions.csv", col_names = c("code","intervention","url"), col_types = "ccc")
 ichi_targets <- read_csv("../../../Surveillance-Private/metadata/WHO/ICHI/Targets.csv", col_names = c("code","target","url"), col_types = "ccc")
@@ -73,5 +92,4 @@ n_procedures_per_patient <- data$events |>
   dplyr::summarise(n_departments = n_distinct(department_key), n_patients = n_distinct(patient_key), n_procedures = n()) |>
   dplyr::mutate(procedures_per_patient = n_procedures / n_patients) |>
   dplyr::pull(procedures_per_patient)
-
 ```
