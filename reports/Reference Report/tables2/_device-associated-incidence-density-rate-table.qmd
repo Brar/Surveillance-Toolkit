@@ -1,4 +1,4 @@
-```{r device associated incidence density rate table}
+```{r}
 #| label: tab-device-associated-incidence-density-rates
 #| tbl-cap: "Incidence densities of device-associated infections"
 #| tbl-cap-location: bottom
@@ -34,8 +34,8 @@ data |>
   tab_footnote(
     footnote = md(
       paste0(
-        "$$\\parbox{6cm}{",
-        "\\centering Device-associated incidence density rate",
+        "$$\\text{",
+        "Device-associated incidence density rate",
         "} = \\frac{\\text{",
         "No of device-associated infections",
         "}}{\\text{",

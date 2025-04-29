@@ -1,4 +1,4 @@
-```{r surgery rate table}
+```{r}
 #| label: tab-surgery-rates
 #| tbl-cap: "Surgical procedures"
 #| tbl-cap-location: bottom

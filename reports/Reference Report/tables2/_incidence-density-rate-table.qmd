@@ -1,4 +1,4 @@
-```{r incidence density rate table}
+```{r}
 #| label: tab-incidence-density-rates
 #| tbl-cap: "Incidence densities of infections"
 #| tbl-cap-location: bottom

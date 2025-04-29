@@ -1,4 +1,4 @@
-```{r Birth weight figure}
+```{r}
 #| label: fig-bw
 #| fig-cap: "A histogram in 50 g steps with density curve and a boxplot of the birth weights of the patients contained in this analysis"
 
