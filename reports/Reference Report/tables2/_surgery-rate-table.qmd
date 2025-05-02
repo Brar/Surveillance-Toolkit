@@ -53,7 +53,8 @@ out <- tmp |>
     locations = cells_column_labels(columns = col_names[["rate"]])) |>
   tab_footnote(
     footnote = paste(paste(col_names[["q1"]],col_names[["q2"]],col_names[["q3"]], sep = ", "), ": The quartiles (25%, 50% and 75% quantiles) of the procedure rates of the partner departments."),
-    locations = cells_column_labels(columns = c(col_names[["q1"]],col_names[["q2"]],col_names[["q3"]])))
+    locations = cells_column_labels(columns = c(col_names[["q1"]],col_names[["q2"]],col_names[["q3"]]))) |>
+  sub_missing()
 
 # cats <- neoipcr:::get_procedure_categories(data, pretty = TRUE)
 # col_names2 <- attr(cats, "names.pretty")

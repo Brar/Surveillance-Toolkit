@@ -54,5 +54,6 @@ data |>
     locations = cells_column_labels(columns = "Pooled mean")) |>
   tab_footnote(
     footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the device-associated incidence density rates of the partner departments",
-    locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃")))
+    locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃"))) |>
+  sub_missing()
 ```

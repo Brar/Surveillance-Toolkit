@@ -56,5 +56,6 @@ data |>
     locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃"))) |>
   tab_footnote(
     footnote = "Combines the outcomes Sepsis/BSI and Pneumonia",
-    locations = gt::cells_stub(rows = "Severe infection"))
+    locations = gt::cells_stub(rows = "Severe infection")) |>
+  sub_missing()
 ```

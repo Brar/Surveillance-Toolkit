@@ -67,5 +67,6 @@ data |>
     footnote = "As cumulative treatment days for individual substances are recorded per patient, combination therapies using several substances on one day are counted as multiple usage days.",
     locations = gt::cells_stub(
       rows = c("Access","Watch","Reserve"))
-  )
+  ) |>
+  sub_missing()
 ```
