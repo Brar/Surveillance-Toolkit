@@ -22,7 +22,7 @@ bwCombined <- data$patients |>
 
 bwBoxPlot <- data$patients |>
   ggplot(aes(x=factor(0), y = birth_weight)) +
-  geom_boxplot() +
+  geom_boxplot(outlier.shape = NA, coef = 0) +
   stat_summary(fun = "mean", geom = "point", shape = 23, size = 3, fill = "white") +
   scale_y_continuous(breaks = breaks_bw, labels = label_bw) +
   coord_flip(ylim = c(min_bw - 50, max_bw + 50)) +

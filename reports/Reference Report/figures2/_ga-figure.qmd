@@ -24,7 +24,7 @@ gaCombined <- p |>
 
 gaBoxPlot <- p |>
   ggplot(aes(x=factor(0), y = decimal_gestational_age)) +
-  geom_boxplot() +
+  geom_boxplot(outlier.shape = NA, coef = 0) +
   stat_summary(fun = "mean", geom = "point", shape = 23, size = 3, fill = "white") +
   scale_y_continuous(breaks = week_breaks, labels = week_labels) +
   coord_flip(ylim = c(min_ga - 1, max_ga + 1)) +
