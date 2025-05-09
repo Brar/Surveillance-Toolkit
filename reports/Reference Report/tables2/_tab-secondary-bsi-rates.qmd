@@ -1,4 +1,8 @@
 ```{r}
+#| label: tab-secondary-bsi-rates
+#| tbl-cap: "Secondary bloodstream infections"
+#| tbl-cap-location: bottom
+
 data$events |>
     dplyr::filter(event_type_key %in% c("nec","ssi","hap")) |>
     dplyr::semi_join(
@@ -68,7 +72,7 @@ data$events |>
       tidyr::pivot_wider(
         names_from = event_type_key,
         values_from = secondary_bsi_rate) |>
-      select(nec,hap,ssi) |>
+      select(any_of(c("nec","hap","ssi"))) |>
       dplyr::reframe(
         dplyr::across(
           tidyselect::everything(),

@@ -122,7 +122,7 @@ For the sake of sustainability, the NeoIPC surveillance currently focuses on the
 
 Next to the inherent risk factors gestational age and birth weight there are also a number of expositional factors that influence the risk of an infant to acquire a multi-drug-resistant pathogen or to develop an infection.
 
-{{< include tables2/_usage-density-rate-table.qmd >}}
+{{< include tables2/_tab-usage-density-rates.qmd >}}
 
 ## Surgery
 
@@ -130,62 +130,18 @@ The NeoIPC Surveillance patient population is characterised by a low volume of s
 
 On the other hand, surgically treated neonates often require more than one operation, so that on average `{r} format(n_procedures_per_patient, digits = 2, nsmall = 1, scientific = FALSE)` operations have been performed for each surgical patient.
 
-{{< include tables2/_surgery-rate-table.qmd >}}
+{{< include tables2/_tab-surgery-rates.qmd >}}
 
 # Nosocomial infections
 
-{{< include tables2/_incidence-density-rate-table.qmd >}}
+{{< include tables2/_tab-incidence-density-rates.qmd >}}
 
-{{< include tables2/_device-associated-incidence-density-rate-table.qmd >}}
+{{< include tables2/_tab-device-associated-incidence-density-rates.qmd >}}
 
 # Infectious Agents
 
-{{< include tables2/_infections-with-agent-table.qmd >}}
+{{< include tables2/_tab-infectious-agent-detection-rate-per-inf-type.qmd >}}
 
-{{< include tables2/_secondary-bsi-table.qmd >}}
+{{< include tables2/_tab-secondary-bsi-rates.qmd >}}
 
-```{r}
-data |>
-  neoipcr::get_pathogen_detection_rate_table() |>
-  gt(rowname_col = "group") |>
-  gt::tab_options(
-    table.font.size = 13
-  ) |>
-  fmt_number(decimals = 1) |>
-  fmt_number(columns = "n", decimals = 0) |>
-  cols_width(matches("group") ~ pct(50)) |>
-  gt::tab_stub_indent(
-    rows = gt::everything(),
-    indent = gt::from_column(column = "lv")
-  ) |>
-  tab_style(
-    style = cell_text(
-      weight = "bold"
-    ),
-    locations = cells_stub(
-      rows = tl %in% c(
-        "none",
-        "domain",
-        "kingdom",
-        "order",
-        "genus",
-        "coag_type")
-    )
-  ) |>
-  tab_style(
-    style = cell_text(
-      style = "italic"
-      ),
-    locations = cells_stub(
-      rows = tl == "species"
-    )
-  ) |>
-  cols_hide(columns = any_of(c("lv","tl"))) |>
-  sub_missing()
-
-#data$infectiousAgentFindings |> dplyr::inner_join(data$infectiousAgentFindings$pathogen_key |> unique() |> neoipcr::get_pathogen_taxonomy(), dplyr::join_by(pathogen_key == inputId)) |> dplyr::group_by(order) |> dplyr::summarise(n=n())
-
-#data$infectiousAgentFindings |> dplyr::inner_join(data$infectiousAgentFindings$pathogen_key |> unique() |> neoipcr::get_pathogen_taxonomy(), dplyr::join_by(pathogen_key == inputId)) |> dplyr::group_by(genus, coagulase) |> dplyr::summarise(n=n())
-
-#data$infectiousAgentFindings |> dplyr::inner_join(data$infectiousAgentFindings$pathogen_key |> unique() |> neoipcr::get_pathogen_taxonomy(), dplyr::join_by(pathogen_key == inputId)) |> dplyr::group_by(species) |> dplyr::summarise(n=n())
-```
+{{< include tables2/_tab-infectious-agent-detection-rate-per-agent.qmd >}}
