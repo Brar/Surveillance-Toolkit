@@ -1,0 +1,29 @@
+```{r}
+#| label: tab-resistance-test-rate
+#| tbl-cap: "Resistance test rates"
+#| tbl-cap-location: bottom
+
+data |>
+    neoipcr::get_resistance_test_rate_table() |>
+  dplyr::mutate(
+    i = dplyr::if_else(
+      .data$type == "routine",
+      0,
+      2),
+    r = dplyr::if_else(
+      .data$type == "routine",
+      .data$res,
+      paste0("- ",.data$type)),
+    .before = 1,
+    .keep = "unused") |>
+  gt(rowname_col = "r") |>
+  sub_missing() |>
+  fmt_number(decimals = 1) |>
+  fmt_number(columns = "tested", decimals = 0) |>
+  cols_width("r" ~ pct(40)) |>
+  gt::tab_stub_indent(
+    rows = gt::everything(),
+    indent = gt::from_column(column = "i")
+  ) |>
+  cols_hide(columns = "i")
+```

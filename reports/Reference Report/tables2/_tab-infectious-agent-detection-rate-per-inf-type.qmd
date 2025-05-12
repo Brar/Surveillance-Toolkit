@@ -1,13 +1,13 @@
 ```{r}
 #| label: tab-infectious-agent-detection-rate-per-inf-type
-#| tbl-cap: "Infections where an infectious agent was found"
+#| tbl-cap: "Infections in which an infectious agent has been identified"
 #| tbl-cap-location: bottom
 
 data |>
   neoipcr::get_infectious_agent_detection_rate_per_inf_type_table() |>
   dplyr::rename(
     "No of inf. w. agent"="inf_with_pathogen",
-    "Pooled mean"="rate",
+    "Pooled rate"="rate",
     "Q₁"="q1",
     "Q₂"="q2",
     "Q₃"="q3") |>
@@ -26,7 +26,7 @@ data |>
   fmt_number(columns = "No of inf. w. agent", decimals = 0) |>
   tab_spanner(
     label = "Infectious agent detection rate",
-    columns = c("Pooled mean","Q₁","Q₂","Q₃"),
+    columns = c("Pooled rate","Q₁","Q₂","Q₃"),
     id = "infectious_agent_detection_rate"
   ) |>
   tab_footnote(
@@ -48,8 +48,8 @@ data |>
     footnote = "No of infections with agent: The number of infections where at least one infectious agent was recorded, aggregated across all infants.",
     locations = cells_column_labels(columns = "No of inf. w. agent")) |>
   tab_footnote(
-    footnote = "Pooled mean: The infectious agent detection rate calculated as infections with agent per 100 infections calculated across all infants.",
-    locations = cells_column_labels(columns = "Pooled mean")) |>
+    footnote = "Pooled rate: The infectious agent detection rate calculated as infections with agent per 100 infections calculated across all infants.",
+    locations = cells_column_labels(columns = "Pooled rate")) |>
   tab_footnote(
     footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the infectious agent detection rates of the partner departments",
     locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃")))

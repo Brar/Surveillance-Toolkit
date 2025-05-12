@@ -1,18 +1,24 @@
 ```{r}
 #| label: tab-infectious-agent-detection-rate-per-agent
-#| tbl-cap: "Pathogens"
+#| tbl-cap: "Infectious agents detected in the context of nosocomial infections"
 #| tbl-cap-location: bottom
 
 data |>
   neoipcr::get_infectious_agent_detection_rate_per_agent_table() |>
+  dplyr::rename(
+    "No of inf. w. agent"="n",
+    "Pooled rate"="rate",
+    "Q₁"="q1",
+    "Q₂"="q2",
+    "Q₃"="q3") |>
   gt(rowname_col = "group") |>
   sub_missing() |>
   gt::tab_options(
     table.font.size = 13
   ) |>
   fmt_number(decimals = 1) |>
-  fmt_number(columns = "n", decimals = 0) |>
-  cols_width(matches("group") ~ pct(50)) |>
+  fmt_number(columns = "No of inf. w. agent", decimals = 0) |>
+  cols_width(matches("group") ~ pct(40)) |>
   gt::tab_stub_indent(
     rows = gt::everything(),
     indent = gt::from_column(column = "lv")
@@ -39,11 +45,35 @@ data |>
       rows = tl == "species"
     )
   ) |>
-  cols_hide(columns = any_of(c("lv","tl")))
+  cols_hide(columns = any_of(c("lv","tl"))) |>
+  tab_spanner(
+    label = "Infectious agent detection rate",
+    columns = c("Pooled rate","Q₁","Q₂","Q₃"),
+    id = "infectious_agent_detection_rate"
+  ) |>
+  tab_footnote(
+    footnote = md(
+      paste0(
+        "$$\\text{",
+        "Infectious agent detection rate",
+        "} = \\frac{\\text{",
+        "No of infections with agent",
+        "}}{\\text{",
+        "No of infections",
+        "}} \\times ",
+        format(100, big.mark = locale_sep_mark),
+        "$$"
+      )),
+    locations = cells_column_spanners(spanners = "infectious_agent_detection_rate")
+  ) |>
+  tab_footnote(
+    footnote = "No of infections with agent: The number of infections where at least one infectious agent was recorded, aggregated across all infants.",
+    locations = cells_column_labels(columns = "No of inf. w. agent")) |>
+  tab_footnote(
+    footnote = "Pooled rate: The infectious agent detection rate calculated as infections with agent per 100 infections calculated across all infants.",
+    locations = cells_column_labels(columns = "Pooled rate")) |>
+  tab_footnote(
+    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the infectious agent detection rates of the partner departments",
+    locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃")))
 
-#data$infectiousAgentFindings |> dplyr::inner_join(data$infectiousAgentFindings$pathogen_key |> unique() |> neoipcr::get_pathogen_taxonomy(), dplyr::join_by(pathogen_key == inputId)) |> dplyr::group_by(order) |> dplyr::summarise(n=n())
-
-#data$infectiousAgentFindings |> dplyr::inner_join(data$infectiousAgentFindings$pathogen_key |> unique() |> neoipcr::get_pathogen_taxonomy(), dplyr::join_by(pathogen_key == inputId)) |> dplyr::group_by(genus, coagulase) |> dplyr::summarise(n=n())
-
-#data$infectiousAgentFindings |> dplyr::inner_join(data$infectiousAgentFindings$pathogen_key |> unique() |> neoipcr::get_pathogen_taxonomy(), dplyr::join_by(pathogen_key == inputId)) |> dplyr::group_by(species) |> dplyr::summarise(n=n())
 ```
