@@ -6,7 +6,7 @@
 data |>
   neoipcr::get_infectious_agent_detection_rate_per_agent_table() |>
   dplyr::rename(
-    "No of inf. w. agent"="n",
+    "No of detected agents"="n",
     "Pooled rate"="rate",
     "Q₁"="q1",
     "Q₂"="q2",
@@ -17,7 +17,7 @@ data |>
     table.font.size = 13
   ) |>
   fmt_number(decimals = 1) |>
-  fmt_number(columns = "No of inf. w. agent", decimals = 0) |>
+  fmt_number(columns = "No of detected agents", decimals = 0) |>
   cols_width(matches("group") ~ pct(40)) |>
   gt::tab_stub_indent(
     rows = gt::everything(),
@@ -57,9 +57,9 @@ data |>
         "$$\\text{",
         "Infectious agent detection rate",
         "} = \\frac{\\text{",
-        "No of infections with agent",
+        "No of agents that were detected in infections",
         "}}{\\text{",
-        "No of infections",
+        "No of infections where an agent was detected",
         "}} \\times ",
         format(100, big.mark = locale_sep_mark),
         "$$"
@@ -67,10 +67,10 @@ data |>
     locations = cells_column_spanners(spanners = "infectious_agent_detection_rate")
   ) |>
   tab_footnote(
-    footnote = "No of infections with agent: The number of infections where at least one infectious agent was recorded, aggregated across all infants.",
-    locations = cells_column_labels(columns = "No of inf. w. agent")) |>
+    footnote = "No of detected agents: The aggregated number of infectious agents that were detected.",
+    locations = cells_column_labels(columns = "No of detected agents")) |>
   tab_footnote(
-    footnote = "Pooled rate: The infectious agent detection rate calculated as infections with agent per 100 infections calculated across all infants.",
+    footnote = "Pooled rate: The infectious agent detection rate calculated across all departments",
     locations = cells_column_labels(columns = "Pooled rate")) |>
   tab_footnote(
     footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the infectious agent detection rates of the partner departments",
