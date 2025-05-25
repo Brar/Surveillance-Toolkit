@@ -1,5 +1,5 @@
 ```{r}
-#| label: fig-ga
+#| label: fig-ga-ref
 #| fig-cap: "A histogram in 1 week steps with density curve and a boxplot of the gestational ages of the patients contained in this analysis"
 
 p <- data$patients |>

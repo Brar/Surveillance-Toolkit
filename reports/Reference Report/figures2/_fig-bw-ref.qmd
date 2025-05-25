@@ -1,5 +1,5 @@
 ```{r}
-#| label: fig-bw
+#| label: fig-bw-ref
 #| fig-cap: "A histogram in 50 g steps with density curve and a boxplot of the birth weights of the patients contained in this analysis"
 
 label_bw <- function(x) paste(format(x, big.mark =" "), "g", sep = " ")

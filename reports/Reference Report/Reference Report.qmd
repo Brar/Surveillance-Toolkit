@@ -112,11 +112,11 @@ Average surveillance period per patient:
 
 # Patient Population
 
-As the process, although supported by various tools, relies on the collection, interpretation and monitoring of information by qualified professionals, NeoIPC surveillance is currently being targeted at the most common nosocomial infections in high-risk neonates, in order to make it sustainable in a continuous manner in as many settings as possible. This means that patients with a birth weight below 1 500 g or a gestational age below 32 weeks at the time of birth are included into the surveillance database if they are admitted to a ward of participating neonatology department within the first 120 days of life. This results in the composition of the patient population that is shown in @fig-bw and @fig-ga.
+As the process, although supported by various tools, relies on the collection, interpretation and monitoring of information by qualified professionals, NeoIPC surveillance is currently being targeted at the most common nosocomial infections in high-risk neonates, in order to make it sustainable in a continuous manner in as many settings as possible. This means that patients with a birth weight below 1 500 g or a gestational age below 32 weeks at the time of birth are included into the surveillance database if they are admitted to a ward of participating neonatology department within the first 120 days of life. This results in the composition of the patient population that is shown in @fig-bw-ref and @fig-ga-ref.
 
-{{< include figures2/_bw-figure.qmd >}}
+{{< include figures2/_fig-bw-ref.qmd >}}
 
-{{< include figures2/_ga-figure.qmd >}}
+{{< include figures2/_fig-ga-ref.qmd >}}
 
 # Risk and Protective Factors
 
