@@ -710,7 +710,8 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 1821,Corynebacterium variabile,species,LPSN,species/corynebacterium-variabile,t,,f,f,f,f,f,,,,,,,,,,
 2372,Corynebacterium vitaeruminis,species,LPSN,species/corynebacterium-vitaeruminis,t,,f,f,f,f,f,,,,,,,,,,
 1686,Corynebacterium xerosis,species,LPSN,species/corynebacterium-xerosis,t,,f,f,f,f,f,,,,,,,,,,
-3238,Cosenzaea myxofaciens,species,LPSN,species/cosenzaea-myxofaciens,f,,f,f,t,t,f,,,,,,,,,,
+3479,Cosenzaea,genus,LPSN,genus/cosenzaea,f,,f,f,t,t,f,,,3478,3459,3464,,3465,,3466,3421
+3238,Cosenzaea myxofaciens,species,LPSN,species/cosenzaea-myxofaciens,f,,f,f,t,t,f,3238,3479,3478,3459,3464,,3465,,3466,3421
 2346,Coxiella,genus,LPSN,genus/coxiella,f,,f,f,f,f,f,,,,,,,,,,
 917,Coxiella burnetii,species,LPSN,species/coxiella-burnetii,f,,f,f,f,f,f,,,,,,,,,,
 3340,Crimean-Congo hemorrhagic fever orthonairovirus,species,ICTV,202100070,f,,f,f,f,f,f,,,,,,,,,,
@@ -1385,8 +1386,8 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 2297,Mobiluncus curtisii,species,LPSN,species/mobiluncus-curtisii,f,,f,f,f,f,f,,,,,,,,,,
 3322,Mobiluncus holmesii,species,LPSN,species/mobiluncus-holmesii,f,,f,f,f,f,f,,,,,,,,,,
 1819,Mobiluncus mulieris,species,LPSN,species/mobiluncus-mulieris,f,,f,f,f,f,f,,,,,,,,,,
-472,Moellerella,genus,LPSN,genus/moellerella,f,,f,f,t,t,t,,,,,,,,,,
-761,Moellerella wisconsensis,species,LPSN,species/moellerella-wisconsensis,f,,f,f,t,t,t,,,,,,,,,,
+472,Moellerella,genus,LPSN,genus/moellerella,f,,f,f,t,t,t,,472,3478,3459,3464,,3465,,3466,3421
+761,Moellerella wisconsensis,species,LPSN,species/moellerella-wisconsensis,f,,f,f,t,t,t,761,472,3478,3459,3464,,3465,,3466,3421
 2702,Moesziomyces bullatus,species,MycoBank,317784,f,,f,f,f,f,f,,,,,,,,,,
 601,Mogibacterium,genus,LPSN,genus/mogibacterium,f,,f,f,f,f,f,,,,,,,,,,
 2186,Mogibacterium diversum,species,LPSN,species/mogibacterium-diversum,f,,f,f,f,f,f,,,,,,,,,,
@@ -1412,9 +1413,10 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 2569,Moraxella ovis,species,LPSN,species/moraxella-ovis,f,,f,f,f,f,f,,,,,,,,,,
 3467,Moraxellaceae,family,LPSN,/family/moraxellaceae,,,,,,,,,,3467,3468,3464,,3465,,3466,3421
 2369,Morbillivirus,genus,ICTV,202101612,f,,f,f,f,f,f,,,,,,,,,,
-665,Morganella,genus,LPSN,genus/morganella,f,,f,f,t,t,f,,,,,,,,,,
-66,Morganella morganii,species,LPSN,species/morganella-morganii,f,,f,f,t,t,f,,,,,,,,,,
-149,Morganella morganii sibonii,subspecies,LPSN,subspecies/morganella-morganii-sibonii,f,,f,f,t,t,f,,,,,,,,,,
+665,Morganella,genus,LPSN,genus/morganella,f,,f,f,t,t,f,,665,3478,3459,3464,,3465,,3466,3421
+66,Morganella morganii,species,LPSN,species/morganella-morganii,f,,f,f,t,t,f,66,665,3478,3459,3464,,3465,,3466,3421
+149,Morganella morganii sibonii,subspecies,LPSN,subspecies/morganella-morganii-sibonii,f,,f,f,t,t,f,66,665,3478,3459,3464,,3465,,3466,3421
+3478,Morganellaceae,family,LPSN,family/morganellaceae,,,,,,,,,,3478,3459,3464,,3465,,3466,3421
 288,Mortierella,genus,MycoBank,20345,f,,f,f,f,f,f,,,,,,,,,,
 2697,Mucor,genus,MycoBank,25484,f,,f,f,f,f,f,,,,,,,,,,
 1330,Mucor circinelloides,species,MycoBank,198947,f,,f,f,f,f,f,,,,,,,,,,
@@ -1811,10 +1813,10 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 3294,Phocaeicola vulgatus,species,LPSN,species/phocaeicola-vulgatus,f,,f,f,f,t,f,,,,,,,,,,
 45,Photobacterium,genus,LPSN,genus/photobacterium,f,,f,f,f,f,f,,,,,,,,,,
 1380,Photobacterium damselae damselae,subspecies,LPSN,subspecies/photobacterium-damselae-damselae,f,,f,f,f,f,f,,,,,,,,,,
-1208,Photorhabdus,genus,LPSN,genus/photorhabdus,f,,f,f,t,t,t,,,,,,,,,,
-287,Photorhabdus asymbiotica,species,LPSN,species/photorhabdus-asymbiotica,f,,f,f,t,t,t,,,,,,,,,,
-781,Photorhabdus luminescens,species,LPSN,species/photorhabdus-luminescens,f,,f,f,t,t,t,,,,,,,,,,
-265,Photorhabdus temperata,species,LPSN,species/photorhabdus-temperata,f,,f,f,t,t,t,,,,,,,,,,
+1208,Photorhabdus,genus,LPSN,genus/photorhabdus,f,,f,f,t,t,t,,1208,3478,3459,3464,,3465,,3466,3421
+287,Photorhabdus asymbiotica,species,LPSN,species/photorhabdus-asymbiotica,f,,f,f,t,t,t,,1208,3478,3459,3464,,3465,,3466,3421
+781,Photorhabdus luminescens,species,LPSN,species/photorhabdus-luminescens,f,,f,f,t,t,t,,1208,3478,3459,3464,,3465,,3466,3421
+265,Photorhabdus temperata,species,LPSN,species/photorhabdus-temperata,f,,f,f,t,t,t,,1208,3478,3459,3464,,3465,,3466,3421
 573,Pichia,genus,MycoBank,4095,f,,f,f,f,f,f,,,,,,,,,,
 3452,Pichia,genus,MycoBank,4095,,,,,,,,,3452,3453,3454,3425,3426,3427,3428,3429,3430
 3365,Pichia fermentans,species,MycoBank,252130,f,,f,f,f,f,f,,,,,,,,,,
@@ -1899,21 +1901,21 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 3316,Propioniferax innocua,species,LPSN,species/propioniferax-innocua,t,,f,f,f,f,f,,,,,,,,,,
 2512,Propionimicrobium,genus,LPSN,genus/propionimicrobium,f,,f,f,f,f,f,,,,,,,,,,
 2571,Propionimicrobium lymphophilum,species,LPSN,species/propionimicrobium-lymphophilum,f,,f,f,f,f,f,,,,,,,,,,
-2386,Proteus,genus,LPSN,genus/proteus,f,,f,f,t,t,f,,,,,,,,,,
-2731,Proteus faecis,species,LPSN,species/proteus-faecis,f,,f,f,t,t,f,,,,,,,,,,
-1671,Proteus hauseri,species,LPSN,species/proteus-hauseri,f,,f,f,t,t,f,,,,,,,,,,
-420,Proteus mirabilis,species,LPSN,species/proteus-mirabilis,f,,f,f,t,t,f,,,,,,,,,,
-1179,Proteus penneri,species,LPSN,species/proteus-penneri,f,,f,f,t,t,f,,,,,,,,,,
-1517,Proteus vulgaris,species,LPSN,species/proteus-vulgaris,f,,f,f,t,t,f,,,,,,,,,,
+2386,Proteus,genus,LPSN,genus/proteus,f,,f,f,t,t,f,,2386,3478,3459,3464,,3465,,3466,3421
+2731,Proteus faecis,species,LPSN,species/proteus-faecis,f,,f,f,t,t,f,2731,2386,3478,3459,3464,,3465,,3466,3421
+1671,Proteus hauseri,species,LPSN,species/proteus-hauseri,f,,f,f,t,t,f,1671,2386,3478,3459,3464,,3465,,3466,3421
+420,Proteus mirabilis,species,LPSN,species/proteus-mirabilis,f,,f,f,t,t,f,420,2386,3478,3459,3464,,3465,,3466,3421
+1179,Proteus penneri,species,LPSN,species/proteus-penneri,f,,f,f,t,t,f,1179,2386,3478,3459,3464,,3465,,3466,3421
+1517,Proteus vulgaris,species,LPSN,species/proteus-vulgaris,f,,f,f,t,t,f,1517,2386,3478,3459,3464,,3465,,3466,3421
 252,Prototheca,genus,MycoBank,22315,f,,f,f,f,f,f,,,,,,,,,,
 2478,Prototheca wickerhamii,species,MycoBank,304229,f,,f,f,f,f,f,,,,,,,,,,
 2411,Prototheca zopfii,species,MycoBank,169728,f,,f,f,f,f,f,,,,,,,,,,
-1876,Providencia,genus,LPSN,genus/providencia,f,,f,f,t,t,f,,,,,,,,,,
-2084,Providencia alcalifaciens,species,LPSN,species/providencia-alcalifaciens,f,,f,f,t,t,f,,,,,,,,,,
-2178,Providencia heimbachae,species,LPSN,species/providencia-heimbachae,f,,f,f,t,t,f,,,,,,,,,,
-516,Providencia rettgeri,species,LPSN,species/providencia-rettgeri,f,,f,f,t,t,f,,,,,,,,,,
-2120,Providencia rustigianii,species,LPSN,species/providencia-rustigianii,f,,f,f,t,t,f,,,,,,,,,,
-535,Providencia stuartii,species,LPSN,species/providencia-stuartii,f,,f,f,t,t,f,,,,,,,,,,
+1876,Providencia,genus,LPSN,genus/providencia,f,,f,f,t,t,f,,1876,3478,3459,3464,,3465,,3466,3421
+2084,Providencia alcalifaciens,species,LPSN,species/providencia-alcalifaciens,f,,f,f,t,t,f,2084,1876,3478,3459,3464,,3465,,3466,3421
+2178,Providencia heimbachae,species,LPSN,species/providencia-heimbachae,f,,f,f,t,t,f,2178,1876,3478,3459,3464,,3465,,3466,3421
+516,Providencia rettgeri,species,LPSN,species/providencia-rettgeri,f,,f,f,t,t,f,516,1876,3478,3459,3464,,3465,,3466,3421
+2120,Providencia rustigianii,species,LPSN,species/providencia-rustigianii,f,,f,f,t,t,f,2120,1876,3478,3459,3464,,3465,,3466,3421
+535,Providencia stuartii,species,LPSN,species/providencia-stuartii,f,,f,f,t,t,f,535,1876,3478,3459,3464,,3465,,3466,3421
 3183,Pseudalkalibacillus decolorationis,species,LPSN,species/pseudalkalibacillus-decolorationis,t,,f,f,f,f,f,,,,,,,,,,
 3008,Pseudalkalibacillus hwajinpoensis,species,LPSN,species/pseudalkalibacillus-hwajinpoensis,t,,f,f,f,f,f,,,,,,,,,,
 1533,Pseudallescheria,genus,MycoBank,4403,f,,f,f,f,f,f,,,,,,,,,,
@@ -2455,8 +2457,8 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 1804,Wolinella succinogenes,species,LPSN,species/wolinella-succinogenes,f,,f,f,f,f,f,,,,,,,,,,
 1508,Xanthomonas,genus,LPSN,genus/xanthomonas,f,,f,f,f,f,f,,,,,,,,,,
 3401,Xenoacremonium recifei,species,MycoBank,810272,f,,f,f,f,f,f,,,,,,,,,,
-1257,Xenorhabdus,genus,LPSN,genus/xenorhabdus,f,,f,f,t,t,t,,,,,,,,,,
-944,Xenorhabdus nematophila,species,LPSN,species/xenorhabdus-nematophila,f,,f,f,t,t,t,,,,,,,,,,
+1257,Xenorhabdus,genus,LPSN,genus/xenorhabdus,f,,f,f,t,t,t,,1257,3478,3459,3464,,3465,,3466,3421
+944,Xenorhabdus nematophila,species,LPSN,species/xenorhabdus-nematophila,f,,f,f,t,t,t,944,1257,3478,3459,3464,,3465,,3466,3421
 3377,Yarrowia lipolytica,species,MycoBank,108643,f,,f,f,f,f,f,,,,,,,,,,
 1757,Yellow fever virus,species,ICTV,202103121,f,,f,f,f,f,f,,,,,,,,,,
 431,Yersinia,genus,LPSN,genus/yersinia,f,,f,f,t,t,t,,,,,,,,,,
