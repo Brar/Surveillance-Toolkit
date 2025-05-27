@@ -6,8 +6,8 @@
 data |>
   neoipcr::get_usage_density_rate_table() |>
   dplyr::rename(
-    "Usage days"="days",
-    "Pooled mean"="mean",
+    "N"="n",
+    "Pooled"="pooled",
     "Q₁"="q1",
     "Q₂"="q2",
     "Q₃"="q3") |>
@@ -28,43 +28,43 @@ data |>
       "r" ~ "Reserve")) |>
   gt(rowname_col = "factor") |>
   fmt_number(decimals = 1) |>
-  fmt_number(columns = "Usage days", decimals = 0) |>
+  fmt_number(columns = "N", decimals = 0) |>
   tab_row_group(label = "Vascular catheter", rows = 1:2, id = "grp_vc") |>
   tab_row_group(label = "Ventilatory support", rows = 3:5, id = "grp_vs") |>
   tab_row_group(label = "Other", rows = 6:8, id = "grp_othr") |>
   tab_row_group(label = "Antibiotics", rows = c("Any antibiotic","Access","Watch","Reserve"), id = "grp_ab") |>
   row_group_order(groups = c("grp_vc", "grp_vs", "grp_ab", "grp_othr")) |>
   tab_spanner(
-    label = "Usage density rate",
-    columns = c("Pooled mean","Q₁","Q₂","Q₃"),
-    id = "usage_density_rate"
+    label = "Risk density rate",
+    columns = c("Pooled","Q₁","Q₂","Q₃"),
+    id = "risk_density_rate"
   ) |>
   tab_footnote(
     footnote = md(
       paste0(
         "$$\\text{",
-        "Usage density rate",
+        "Risk density rate",
         "} = \\frac{\\text{",
-        "Usage days",
+        "Days with risk/protective factor",
         "}}{\\text{",
         "Patient days",
         "}} \\times ",
         format(100, big.mark = locale_sep_mark),
         "$$"
       )),
-    locations = cells_column_spanners(spanners = "usage_density_rate")
+    locations = cells_column_spanners(spanners = "risk_density_rate")
   ) |>
   tab_footnote(
-    footnote = "Usage days: The aggregated number of days the risk/protective factor was present in all infants.",
-    locations = cells_column_labels(columns = "Usage days")) |>
+    footnote = "N: The aggregated number of days the risk/protective factor was present in all infants.",
+    locations = cells_column_labels(columns = "N")) |>
   tab_footnote(
-    footnote = "Pooled mean: The usage density rate calculated as usage days per 100 patient days calculated across all infants.",
-    locations = cells_column_labels(columns = "Pooled mean")) |>
+    footnote = "Pooled: The risk density rate calculated across all infants from all departments.",
+    locations = cells_column_labels(columns = "Pooled")) |>
   tab_footnote(
-    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the usage density rates of the partner departments",
+    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the risk density rates of the departments",
     locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃"))) |>
   tab_footnote(
-    footnote = "As cumulative treatment days for individual substances are recorded per patient, combination therapies using several substances on one day are counted as multiple usage days.",
+    footnote = "As cumulative treatment days for individual substances are recorded per patient, combination therapies using several substances on one day are counted as multiple days.",
     locations = gt::cells_stub(
       rows = c("Access","Watch","Reserve"))
   ) |>

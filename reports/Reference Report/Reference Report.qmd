@@ -140,8 +140,10 @@ On the other hand, surgically treated neonates often require more than one opera
 
 # Infectious Agents
 
-{{< include tables2/_tab-infectious-agent-detection-rate-per-inf-type.qmd >}}
-
 {{< include tables2/_tab-infectious-agent-detection-rate-per-agent.qmd >}}
+
+{{< include tables2/_tab-abr-infection-rate.qmd >}}
+
+{{< include tables2/_tab-infectious-agent-detection-rate-per-inf-type.qmd >}}
 
 {{< include tables2/_tab-resistance-test-rate.qmd >}}
