@@ -1,7 +1,7 @@
 ```{r}
-#| label: tab-usage-density-rates
+#| label: tbl-usage-density-rates
 #| tbl-cap: "Factors influencing the infants' risk of developing an infection or acquiring a drug resistant pathogen."
-#| tbl-cap-location: bottom
+#| tbl-cap-location: top
 
 data |>
   neoipcr::get_usage_density_rate_table() |>
@@ -29,6 +29,7 @@ data |>
   gt(rowname_col = "factor") |>
   fmt_number(decimals = 1) |>
   fmt_number(columns = "N", decimals = 0) |>
+  cols_width(starts_with("Q") ~ pct(7)) |>
   tab_row_group(label = "Vascular catheter", rows = 1:2, id = "grp_vc") |>
   tab_row_group(label = "Ventilatory support", rows = 3:5, id = "grp_vs") |>
   tab_row_group(label = "Other", rows = 6:8, id = "grp_othr") |>

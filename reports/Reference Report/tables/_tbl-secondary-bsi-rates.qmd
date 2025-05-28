@@ -1,7 +1,7 @@
 ```{r}
-#| label: tab-secondary-bsi-rates
+#| label: tbl-secondary-bsi-rates
 #| tbl-cap: "Secondary bloodstream infections"
-#| tbl-cap-location: bottom
+#| tbl-cap-location: top
 
 data$events |>
     dplyr::filter(event_type_key %in% c("nec","ssi","hap")) |>

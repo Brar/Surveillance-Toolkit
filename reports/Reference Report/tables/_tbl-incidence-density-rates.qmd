@@ -1,7 +1,7 @@
 ```{r}
-#| label: tab-incidence-density-rates
+#| label: tbl-incidence-density-rates
 #| tbl-cap: "Incidence density rates of nosocomial infections"
-#| tbl-cap-location: bottom
+#| tbl-cap-location: top
 
 data |>
   neoipcr::get_incidence_density_rate_table() |>
@@ -22,6 +22,7 @@ data |>
   gt(rowname_col = "Infection") |>
   fmt_number(decimals = 1) |>
   fmt_number(columns = "N", decimals = 0) |>
+  cols_width(starts_with("Q") ~ pct(7)) |>
   tab_row_group(label = "Sepsis/BSI/Pneumonia", rows = 1:3, id = "grp_si") |>
   tab_row_group(label = "Other", rows = 4, id = "grp_othr") |>
   row_group_order(groups = c("grp_si", "grp_othr")) |>

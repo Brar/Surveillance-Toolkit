@@ -1,29 +1,52 @@
 ```{r}
-#| label: tab-infectious-agent-detection-rate-per-inf-type
-#| tbl-cap: "Infections in which an infectious agent has been identified"
-#| tbl-cap-location: bottom
+#| label: tbl-infectious-agent-detection-rate-per-agent
+#| tbl-cap: "Infectious agents detected in nosocomial infections"
+#| tbl-cap-location: top
 
 data |>
-  neoipcr::get_infectious_agent_detection_rate_per_inf_type_table() |>
+  neoipcr::get_infectious_agent_detection_rate_per_agent_table() |>
   dplyr::rename(
     "N"="n",
     "Pooled"="pooled",
     "Q₁"="q1",
     "Q₂"="q2",
     "Q₃"="q3") |>
-  dplyr::mutate(
-    Infection = dplyr::case_match(
-      as.character(.data$inf),
-      "all" ~ "Total",
-      "bsi" ~ "Sepsis/BSI",
-      "nec" ~ "Necrotising Enterocolitis",
-      "ssi" ~ "Surgical site infection",
-      "hap" ~ "Pneumonia"),
-    .keep = "unused") |>
-  gt(rowname_col = "Infection") |>
+  gt(rowname_col = "group") |>
   sub_missing() |>
+  gt::tab_options(
+    table.font.size = 13
+  ) |>
   fmt_number(decimals = 1) |>
   fmt_number(columns = "N", decimals = 0) |>
+  cols_width(matches("group") ~ pct(40)) |>
+  cols_width(starts_with("Q") ~ pct(7)) |>
+  gt::tab_stub_indent(
+    rows = gt::everything(),
+    indent = gt::from_column(column = "level")
+  ) |>
+  tab_style(
+    style = cell_text(
+      weight = "bold"
+    ),
+    locations = cells_stub(
+      rows = taxon %in% c(
+        "none",
+        "domain",
+        "kingdom",
+        "order",
+        "genus",
+        "coag_type")
+    )
+  ) |>
+  tab_style(
+    style = cell_text(
+      style = "italic"
+      ),
+    locations = cells_stub(
+      rows = taxon == "species"
+    )
+  ) |>
+  cols_hide(columns = any_of(c("level","taxon"))) |>
   tab_spanner(
     label = "Infectious agent detection rate",
     columns = c("Pooled","Q₁","Q₂","Q₃"),
@@ -35,9 +58,9 @@ data |>
         "$$\\text{",
         "Infectious agent detection rate",
         "} = \\frac{\\text{",
-        "No of infections with agent",
+        "No of agents that were detected in infections",
         "}}{\\text{",
-        "No of infections",
+        "No of infections where an agent was detected",
         "}} \\times ",
         format(100, big.mark = locale_sep_mark),
         "$$"
@@ -45,7 +68,7 @@ data |>
     locations = cells_column_spanners(spanners = "infectious_agent_detection_rate")
   ) |>
   tab_footnote(
-    footnote = "N: The aggregated number of infections where at least one infectious agent was recorded.",
+    footnote = "N: The aggregated number of infectious agents in all infections.",
     locations = cells_column_labels(columns = "N")) |>
   tab_footnote(
     footnote = "Pooled: The infectious agent detection rate calculated across all infants from all departments.",
@@ -53,4 +76,5 @@ data |>
   tab_footnote(
     footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the infectious agent detection rates of the partner departments",
     locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃")))
+
 ```

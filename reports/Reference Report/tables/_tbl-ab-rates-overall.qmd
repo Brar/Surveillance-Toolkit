@@ -1,9 +1,0 @@
-```{r Overall antibiotic use rates table}
-total_ab_rates_overall |>
-  bind_rows(total_ab_rates_overall_quartiles) |>
-  select("ab_use_density","substance_use_density")|>
-  bind_cols(tibble(rate = c("Pooled mean","Q1","Median","Q3"))) |>
-  pivot_longer(c("ab_use_density","substance_use_density")) |>
-  pivot_wider(names_from = rate) |>
-  gt(rowname_col = "name")
-```

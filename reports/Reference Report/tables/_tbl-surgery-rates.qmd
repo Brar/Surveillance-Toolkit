@@ -1,7 +1,7 @@
 ```{r}
-#| label: tab-surgery-rates
+#| label: tbl-surgery-rates
 #| tbl-cap: "Surgical procedures by category"
-#| tbl-cap-location: bottom
+#| tbl-cap-location: top
 
 tmp <- data |>
   neoipcr::get_surgery_rate_table() |>
@@ -16,7 +16,8 @@ out <- tmp |>
   sub_missing() |>
   fmt_number(decimals = 1) |>
   fmt_number(columns = col_names[["n"]], decimals = 0) |>
-  cols_width(matches(pro_cat) ~ pct(35)) |>
+  cols_width(matches(pro_cat) ~ pct(50)) |>
+  cols_width(starts_with("Q") ~ pct(7)) |>
   tab_options(footnotes.font.size = pct(60)) |>
   tab_spanner(
     label = "Procedure rate",

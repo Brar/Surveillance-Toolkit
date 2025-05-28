@@ -1,7 +1,7 @@
 ```{r}
-#| label: tab-abr-infection-rate
+#| label: tbl-abr-infection-rate
 #| tbl-cap: "Nosocomial infections with resistant pathogens"
-#| tbl-cap-location: bottom
+#| tbl-cap-location: top
 
 data |>
   neoipcr::get_abr_infection_rate_table() |>
@@ -12,14 +12,13 @@ data |>
     "Q₂"="q2",
     "Q₃"="q3") |>
   dplyr::mutate(
-    abr = gt::md(
-      dplyr::case_match(
-        .data$abr,
-        "3gcr"~"3rd gen. cephalosporin resistance",
-        "car"~"Carbapenem resistance",
-        "cor"~"Colistin resistance",
-        "mrsa"~"Methicillin-resistant Staphylococcus aureus (MRSA)",
-        "vre"~"Vancomycin-resistant Enterococcus (VRE)")),
+    abr = dplyr::case_match(
+      .data$abr,
+      "3gcr"~"3rd gen. cephalosporin resistance",
+      "car"~"Carbapenem resistance",
+      "cor"~"Colistin resistance",
+      "mrsa"~"Methicillin-resistant Staphylococcus aureus (MRSA)",
+      "vre"~"Vancomycin-resistant Enterococcus (VRE)"),
     level = .data$level + 2) |>
   dplyr::group_by(.data$abr) |>
   gt(rowname_col = "group") |>
@@ -30,7 +29,7 @@ data |>
   fmt_number(decimals = 1) |>
   fmt_number(columns = "N", decimals = 0) |>
   cols_width(matches("group") ~ pct(40)) |>
-  cols_width(starts_with("Q") ~ pct(8)) |>
+  cols_width(starts_with("Q") ~ pct(7)) |>
   gt::tab_stub_indent(
     rows = gt::everything(),
     indent = gt::from_column(column = "level")
@@ -79,9 +78,9 @@ data |>
         "$$\\text{",
         "Resistant pathogen infection rate",
         "} = \\frac{\\text{",
-        "No of antibiotic resistant pathogens in infections",
+        "Number of antibiotic resistant pathogens in infections",
         "}}{\\text{",
-        "No of infections where a pathogen was detected",
+        "Number of infections where a pathogen was detected",
         "}} \\times ",
         format(100, big.mark = locale_sep_mark),
         "$$"
