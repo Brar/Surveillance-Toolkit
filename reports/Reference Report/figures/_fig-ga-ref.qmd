@@ -1,6 +1,6 @@
 ```{r}
 #| label: fig-ga-ref
-#| fig-cap: "A histogram in 1 week steps with density curve and a boxplot of the gestational ages of the patients contained in this analysis"
+#| fig-cap: "A histogram in 7 day steps with density curve (a) and a boxplot (b) of the gestational ages of the patients contained in this analysis. Vertical lines in the boxplot represent the 25%, 50% and 75% quantiles, the diamond represents the pooled arithmetic mean."
 
 p <- data$patients |>
   dplyr::semi_join(data$enrollments, join_by("patient_key")) |>
@@ -16,11 +16,14 @@ gaCombined <- p |>
   geom_density() +
   scale_x_continuous(breaks = week_breaks) +
   coord_cartesian(xlim = c(min_ga - 1, max_ga + 1)) +
-  theme(axis.title=element_blank(),
-        axis.text=element_blank(),
-        axis.ticks=element_blank(),
-        panel.grid.major.y=element_blank(),
-        panel.grid.minor.y=element_blank())
+  theme(
+    plot.tag = element_text(size = 9),
+    axis.title=element_blank(),
+    axis.text=element_blank(),
+    axis.ticks=element_blank(),
+    panel.grid.major.y=element_blank(),
+    panel.grid.minor.y=element_blank()) +
+  labs(tag = "a")
 
 gaBoxPlot <- p |>
   ggplot(aes(x=factor(0), y = decimal_gestational_age)) +
@@ -28,11 +31,14 @@ gaBoxPlot <- p |>
   stat_summary(fun = "mean", geom = "point", shape = 23, size = 3, fill = "white") +
   scale_y_continuous(breaks = week_breaks, labels = week_labels) +
   coord_flip(ylim = c(min_ga - 1, max_ga + 1)) +
-  theme(axis.title=element_blank(),
-        axis.text.y=element_blank(),
-        axis.ticks.y=element_blank(),
-        panel.grid.major.y=element_blank(),
-        panel.grid.minor.y=element_blank())
+  theme(
+    plot.tag = element_text(size = 9),
+    axis.title=element_blank(),
+    axis.text.y=element_blank(),
+    axis.ticks.y=element_blank(),
+    panel.grid.major.y=element_blank(),
+    panel.grid.minor.y=element_blank()) +
+  labs(tag = "b")
 
 gaCombined / gaBoxPlot
 ```

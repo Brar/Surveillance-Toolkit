@@ -1,6 +1,6 @@
 ```{r}
 #| label: tbl-infectious-agent-detection-rate-per-inf-type
-#| tbl-cap: "Infections in which an infectious agent has been identified"
+#| tbl-cap: "Infections in which an infectious agent has been identified, including secondary BSI following the infection."
 #| tbl-cap-location: top
 
 data |>
@@ -15,7 +15,7 @@ data |>
     Infection = dplyr::case_match(
       as.character(.data$inf),
       "all" ~ "Total",
-      "bsi" ~ "Sepsis/BSI",
+      "bsi" ~ "Primary sepsis/BSI",
       "nec" ~ "Necrotising Enterocolitis",
       "ssi" ~ "Surgical site infection",
       "hap" ~ "Pneumonia"),

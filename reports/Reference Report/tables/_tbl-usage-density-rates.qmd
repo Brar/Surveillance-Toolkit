@@ -65,7 +65,7 @@ data |>
     footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the risk density rates of the departments",
     locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃"))) |>
   tab_footnote(
-    footnote = "As cumulative treatment days for individual substances are recorded per patient, combination therapies using several substances on one day are counted as multiple days.",
+    footnote = md("WHO AWaRe group (see [aware.essentialmeds.org](https://aware.essentialmeds.org/)). As cumulative treatment days for individual substances are recorded per patient, combination therapies using several substances on one day are counted as multiple days."),
     locations = gt::cells_stub(
       rows = c("Access","Watch","Reserve"))
   ) |>

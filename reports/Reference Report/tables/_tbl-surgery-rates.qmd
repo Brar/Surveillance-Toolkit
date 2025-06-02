@@ -47,7 +47,7 @@ out <- tmp |>
     footnote = "N: The aggregated number surgical procedures performed in all infants.",
     locations = cells_column_labels(columns = col_names[["n"]])) |>
   tab_footnote(
-    footnote = "Pooled: The procedure rate calculated calculated across all infants from all departments.",
+    footnote = "Pooled: The procedure rate calculated across all infants from all departments.",
     locations = cells_column_labels(columns = col_names[["pooled"]])) |>
   tab_footnote(
     footnote = paste(paste(col_names[["q1"]],col_names[["q2"]],col_names[["q3"]], sep = ", "), ": The quartiles (25%, 50% and 75% quantiles) of the procedure rates of the partner departments."),

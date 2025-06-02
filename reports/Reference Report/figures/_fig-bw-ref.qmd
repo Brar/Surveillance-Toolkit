@@ -1,6 +1,6 @@
 ```{r}
 #| label: fig-bw-ref
-#| fig-cap: "A histogram in 50 g steps with density curve and a boxplot of the birth weights of the patients contained in this analysis"
+#| fig-cap: "A histogram in 50 g steps with density curve (a) and a boxplot (b) of the birth weights of the patients contained in this analysis. Vertical lines in the boxplot represent the 25%, 50% and 75% quantiles, the diamond represents the pooled arithmetic mean."
 
 label_bw <- function(x) paste(format(x, big.mark =" "), "g", sep = " ")
 breaks_bw <- function(x) pretty(x, as.integer((as.integer(x[2]) + 1 - as.integer(x[1])) / 100))
@@ -14,11 +14,14 @@ bwCombined <- data$patients |>
   geom_density() +
   scale_x_continuous(breaks = breaks_bw) +
   coord_cartesian(xlim = c(min_bw - 50, max_bw + 50)) +
-  theme(axis.title=element_blank(),
-        axis.text=element_blank(),
-        axis.ticks=element_blank(),
-        panel.grid.major.y=element_blank(),
-        panel.grid.minor.y=element_blank())
+  theme(
+    plot.tag = element_text(size = 9),
+    axis.title=element_blank(),
+    axis.text=element_blank(),
+    axis.ticks=element_blank(),
+    panel.grid.major.y=element_blank(),
+    panel.grid.minor.y=element_blank()) +
+  labs(tag = "a")
 
 bwBoxPlot <- data$patients |>
   ggplot(aes(x=factor(0), y = birth_weight)) +
@@ -26,12 +29,15 @@ bwBoxPlot <- data$patients |>
   stat_summary(fun = "mean", geom = "point", shape = 23, size = 3, fill = "white") +
   scale_y_continuous(breaks = breaks_bw, labels = label_bw) +
   coord_flip(ylim = c(min_bw - 50, max_bw + 50)) +
-  theme(axis.title=element_blank(),
-        axis.text.x=element_text(angle = 45, hjust = 1, vjust = 1),
-        axis.text.y=element_blank(),
-        axis.ticks.y=element_blank(),
-        panel.grid.major.y=element_blank(),
-        panel.grid.minor.y=element_blank())
+  theme(
+    plot.tag = element_text(size = 9),
+    axis.title=element_blank(),
+    axis.text.x=element_text(angle = 45, hjust = 1, vjust = 1),
+    axis.text.y=element_blank(),
+    axis.ticks.y=element_blank(),
+    panel.grid.major.y=element_blank(),
+    panel.grid.minor.y=element_blank()) +
+  labs(tag = "b")
 
 bwCombined / bwBoxPlot
 ```

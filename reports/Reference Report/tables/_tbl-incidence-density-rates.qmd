@@ -16,14 +16,14 @@ data |>
     Infection = dplyr::case_match(
       as.character(.data$Infection),
       "si" ~ "Severe infection",
-      "bsi" ~ "Sepsis/BSI",
+      "bsi" ~ "Primary sepsis/BSI",
       "hap" ~ "Pneumonia",
       "nec" ~ "Necrotising Enterocolitis")) |>
   gt(rowname_col = "Infection") |>
   fmt_number(decimals = 1) |>
   fmt_number(columns = "N", decimals = 0) |>
   cols_width(starts_with("Q") ~ pct(7)) |>
-  tab_row_group(label = "Sepsis/BSI/Pneumonia", rows = 1:3, id = "grp_si") |>
+  tab_row_group(label = "Primary sepsis/BSI/Pneumonia", rows = 1:3, id = "grp_si") |>
   tab_row_group(label = "Other", rows = 4, id = "grp_othr") |>
   row_group_order(groups = c("grp_si", "grp_othr")) |>
   tab_spanner(
@@ -56,7 +56,7 @@ data |>
     footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the incidence density rates of the partner departments",
     locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃"))) |>
   tab_footnote(
-    footnote = "Combines the outcomes Sepsis/BSI and Pneumonia",
+    footnote = "Combines the outcomes primary sepsis/BSI and pneumonia",
     locations = gt::cells_stub(rows = "Severe infection")) |>
   sub_missing()
 ```
