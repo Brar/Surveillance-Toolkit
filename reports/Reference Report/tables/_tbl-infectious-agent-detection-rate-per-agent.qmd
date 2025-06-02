@@ -3,7 +3,7 @@
 #| tbl-cap: "Infectious agents detected in nosocomial infections"
 #| tbl-cap-location: top
 
-data |>
+reference_data |>
   neoipcr::get_infectious_agent_detection_rate_per_agent_table() |>
   dplyr::rename(
     "N"="n",

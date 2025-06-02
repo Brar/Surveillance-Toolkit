@@ -27,4 +27,6 @@ format:
         \ifoot*{\includegraphics[width=1.37cm]{logos/eu-flag.png}}
         \cfoot*{\raggedright \hspace{1.5cm}This project has received funding from the European Union’s Horizon 2020 research and innovation\\ \hspace{1.5cm}programme under grant agreement No 965328.}
         \ofoot{\pagemark}
+  docx:
+    highlight-style: github
 number-sections: true

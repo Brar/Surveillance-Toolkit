@@ -92,7 +92,7 @@ This document is the reference report of the NeoIPC Surveillance. It contains in
 
 Number of partner departments contributing at least one patient record:
 
-:   `{r} format(nrow(data$metadata$departments), big.mark = locale_sep_mark)`
+:   `{r} format(length(unique(data$enrollments$department_key)), big.mark = locale_sep_mark)`
 
 Number of patient records:
 
@@ -126,7 +126,7 @@ Next to the inherent risk factors gestational age and birth weight there are als
 
 ## Surgery
 
-The patient population in neonatology departments is typically characterised by a low volume of surgical procedures. In this dataset, `{r} format(n_surgical_departments, big.mark = locale_sep_mark)` of the partner departments (`{r} format(round(n_surgical_departments / nrow(data$metadata$departments) * 100))`%) recorded surgical procedures during the surveillance period of included neonates.
+The patient population in neonatology departments is typically characterised by a low volume of surgical procedures. In this dataset, `{r} format(n_surgical_departments, big.mark = locale_sep_mark)` of the partner departments (`{r} format(round(n_surgical_departments / length(unique(data$enrollments$department_key)) * 100))`%) recorded surgical procedures during the surveillance period of included neonates.
 
 On the other hand, surgically treated neonates often require more than one operation, so that on average `{r} format(n_procedures_per_patient, digits = 2, nsmall = 1, scientific = FALSE)` operations have been performed for each surgical patient.
 
@@ -144,7 +144,7 @@ Nosocomial infections represent the primary endpoint of NeoIPC surveillance. In 
 
 ## Infectious Agents
 
-Epidemiology of the infectious agents causing nosocomial infections in neonatology is complex and there is a lot of potential for bias. While low diagnostic sensitivity (low blood volume) and specificity (contamination) are a general problem in the neonatal population, the lack of availability of some or all means of microbiological diagnostics or the lack of financial resources can have a strong effect on the detection rates in resource-constrained settings.
+Epidemiology of the infectious agents causing nosocomial infections in neonatology is complex and there is a lot of potential for bias. While low diagnostic sensitivity (low blood volume) and specificity (contamination) are a general problem in the neonatal population, the lack of availability of some or all means of microbiological diagnostics, or the lack of financial resources can have a strong effect on the detection rates in resource-constrained settings.
 
 <!-- When comparing data with the information on pathogens presented in @tbl-infectious-agent-detection-rate-per-agent and information on drug resistance in @tbl-abr-infection-rate, please also have a look at the infectious agent detection rates presented in @tbl-infectious-agent-detection-rate-per-inf-type and the antibiotic resistance test rates in @tbl-resistance-test-rate. -->
 

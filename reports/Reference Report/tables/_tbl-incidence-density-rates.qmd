@@ -3,7 +3,7 @@
 #| tbl-cap: "Incidence density rates of nosocomial infections"
 #| tbl-cap-location: top
 
-data |>
+reference_data |>
   neoipcr::get_incidence_density_rate_table() |>
   dplyr::rename(
     "Infection"="inf",

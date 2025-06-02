@@ -1,9 +1,9 @@
 ```{r}
 #| label: tbl-usage-density-rates
-#| tbl-cap: "Factors influencing the infants' risk of developing an infection or acquiring a drug resistant pathogen."
+#| tbl-cap: "Factors influencing the infants' risk of developing an infection or acquiring a drug-resistant pathogen."
 #| tbl-cap-location: top
 
-data |>
+reference_data |>
   neoipcr::get_usage_density_rate_table() |>
   dplyr::rename(
     "N"="n",

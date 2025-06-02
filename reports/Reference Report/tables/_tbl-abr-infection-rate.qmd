@@ -3,7 +3,7 @@
 #| tbl-cap: "Nosocomial infections with resistant pathogens"
 #| tbl-cap-location: top
 
-data |>
+reference_data |>
   neoipcr::get_abr_infection_rate_table() |>
   dplyr::rename(
     "N"="n",

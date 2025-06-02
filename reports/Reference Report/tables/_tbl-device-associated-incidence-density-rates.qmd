@@ -3,7 +3,7 @@
 #| tbl-cap: "Incidence densities of device-associated infections"
 #| tbl-cap-location: top
 
-data |>
+reference_data |>
   neoipcr::get_dev_ass_incidence_density_rate_table() |>
   dplyr::rename(
     "Device"="dev",

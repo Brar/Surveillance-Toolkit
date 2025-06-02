@@ -1,6 +1,6 @@
 ```{r}
 #| label: fig-ga-ref
-#| fig-cap: "A histogram in 7 day steps with density curve (a) and a boxplot (b) of the gestational ages of the patients contained in this analysis. Vertical lines in the boxplot represent the 25%, 50% and 75% quantiles, the diamond represents the pooled arithmetic mean."
+#| fig-cap: "A histogram in 7-day steps with density curve (a) and a boxplot (b) of the gestational ages of the patients contained in this analysis. Vertical lines in the boxplot represent the 25%, 50% and 75% quantiles, the diamond represents the pooled arithmetic mean."
 
 p <- data$patients |>
   dplyr::semi_join(data$enrollments, join_by("patient_key")) |>

@@ -3,7 +3,7 @@
 #| tbl-cap: "Surgical procedures by category"
 #| tbl-cap-location: top
 
-tmp <- data |>
+tmp <- reference_data |>
   neoipcr::get_surgery_rate_table() |>
   neoipcr::pretty_names()
 

@@ -3,7 +3,7 @@
 #| tbl-cap: "Infections in which an infectious agent has been identified, including secondary BSI following the infection."
 #| tbl-cap-location: top
 
-data |>
+reference_data |>
   neoipcr::get_infectious_agent_detection_rate_per_inf_type_table() |>
   dplyr::rename(
     "N"="n",

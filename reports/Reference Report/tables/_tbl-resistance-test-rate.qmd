@@ -3,7 +3,7 @@
 #| tbl-cap: "Antibiotic resistance diagnostics"
 #| tbl-cap-location: top
 
-data |>
+reference_data |>
     neoipcr::get_resistance_test_rate_table() |>
   dplyr::rename(
     "N"="n",

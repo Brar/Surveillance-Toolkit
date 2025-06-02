@@ -30,7 +30,7 @@ validation_exceptions <- read_csv("../../../validation-exceptions_ref.csv")
 
 dataset_options <- dhis2_dataset_options(
     include_country = "yes",
-    include_department = "yes",
+    include_department = "pseudonymised",
     surveillance_end_from = reportingPeriodFrom,
     surveillance_end_to = reportingPeriodTo,
     birth_weight_from = birthWeightFrom,
@@ -65,6 +65,17 @@ data <- import_dhis2(
   connection_options = connection_options,
   dataset_options = dataset_options
   )
+
+reference_data <- data |>
+  neoipcr::calculate_reference_data()
+
+data |>
+  jsonlite::serializeJSON() |>
+  readr::write_file(file = "_output/ReferenceData.json")
+
+reference_data |>
+  jsonlite::serializeJSON() |>
+  readr::write_file(file = "_output/ReferenceInformation.json")
 
 ichi_health_interventions <- read_csv("../../../Surveillance-Private/metadata/WHO/ICHI/Health interventions.csv", col_names = c("code","intervention","url"), col_types = "ccc")
 ichi_targets <- read_csv("../../../Surveillance-Private/metadata/WHO/ICHI/Targets.csv", col_names = c("code","target","url"), col_types = "ccc")
