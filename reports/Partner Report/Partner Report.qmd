@@ -1,0 +1,22 @@
+---
+lang: en
+title: "NeoIPC Partner Report"
+params:
+  reportingPeriodFrom: NULL
+  reportingPeriodTo: NULL
+  birthWeightFrom: NULL
+  birthWeightTo: NULL
+  gestationalAgeFrom: NULL
+  gestationalAgeTo: NULL
+  departmentFilter: NULL
+  defaultPatientFilter: true
+  token: NULL
+---
+
+{{< include _setup.qmd >}}
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+{{< include figures/_fig-bw.qmd >}}
