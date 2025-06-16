@@ -10,6 +10,7 @@ params:
   gestationalAgeTo: NULL
   departmentFilter: NULL
   defaultPatientFilter: true
+  referenceDataFile: NULL
   token: NULL
 ---
 
