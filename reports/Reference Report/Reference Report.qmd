@@ -88,9 +88,9 @@ if(!testUnitFilter || !defaultPatientFilter){
 
 # Introduction
 
-This document is the reference report of the NeoIPC Surveillance. It contains information about nosocomial infections, the causative infectious agents and associated risk and protective factors that has been collected by partners from multiple neonatology departments who share a passion for preventing infection in neonates. The following numbers present a short overview over the current data set:
+This document is a reference report on the NeoIPC Surveillance. It contains information relating to nosocomial infections, their causative infectious agents, and the associated risk and protective factors in high-risk neonates which was collected by partners from multiple neonatology departments participating in the NeoIPC Surveillance. The following numbers provide an overview of the current data set. If you are interested in the surveillance definitions, data collection methods and sheets, please refer to the [surveillance resources on the NeoIPC website](https://neoipc.org/surveillance/resources/).
 
-Number of partner departments contributing at least one patient record:
+Number of neonatology departments contributing at least one patient record:
 
 :   `{r} format(length(unique(data$enrollments$department_key)), big.mark = locale_sep_mark)`
 
@@ -112,27 +112,11 @@ Average surveillance period per patient:
 
 # Patient Population
 
-As the process, although supported by various tools, relies on the collection, interpretation and monitoring of information by qualified professionals, NeoIPC surveillance is currently being targeted at the most common nosocomial infections in high-risk neonates, in order to make it sustainable in a continuous manner in as many settings as possible. This means that patients with a birth weight below 1 500 g and/or a gestational age below 32 weeks at the time of birth are included into the surveillance database if they are admitted to a ward of participating neonatology department within the first 120 days of life. This results in the composition of the patient population that is shown in @fig-bw-ref and @fig-ga-ref.
+As the process, although supported by various tools, relies on the collection, interpretation and monitoring of information by qualified professionals, NeoIPC surveillance is currently being targeted at the most common nosocomial infections in high-risk neonates, in order to make it sustainable in a continuous manner in as many settings as possible. This means that patients with a birth weight below 1 500 g and/or a gestational age below 32 weeks at the time of birth are included into the surveillance database if they are admitted to a participating neonatology department within the first 120 days of life. This results in the composition of the patient population that is shown in @fig-bw-ref and @fig-ga-ref.
 
 {{< include figures/_fig-bw-ref.qmd >}}
 
 {{< include figures/_fig-ga-ref.qmd >}}
-
-# Risk and Protective Factors
-
-Next to the inherent risk factors gestational age and birth weight there are also a number of expositional factors that influence the risk of an infant to acquire a multi-drug-resistant pathogen or to develop an infection. @tbl-usage-density-rates shows the presence of these factors in the NeoIPC Surveillance population.
-
-{{< include tables/_tbl-usage-density-rates.qmd >}}
-
-## Surgery
-
-The patient population in neonatology departments is typically characterised by a low volume of surgical procedures. In this dataset, `{r} format(n_surgical_departments, big.mark = locale_sep_mark)` of the partner departments (`{r} format(round(n_surgical_departments / length(unique(data$enrollments$department_key)) * 100))`%) recorded surgical procedures during the surveillance period of included neonates.
-
-On the other hand, surgically treated neonates often require more than one operation, so that on average `{r} format(n_procedures_per_patient, digits = 2, nsmall = 1, scientific = FALSE)` operations have been performed for each surgical patient.
-
-While we currently don't calculate surgical site infection rates due to their low volume (n = `{r} format(nrow(data$ssiData), digits = 2, nsmall = 1, scientific = FALSE)` in this dataset), @tbl-surgery-rates gives an overview of the categories of procedures performed in neonates.
-
-{{< include tables/_tbl-surgery-rates.qmd >}}
 
 # Nosocomial infections
 
@@ -157,3 +141,19 @@ When comparing data with the information on pathogens presented in @tbl-infectio
 {{< include tables/_tbl-infectious-agent-detection-rate-per-inf-type.qmd >}}
 
 <!-- {{< include tables/_tbl-resistance-test-rate.qmd >}} -->
+
+# Risk and Protective Factors
+
+Next to the inherent risk factors gestational age and birth weight there are also a number of expositional factors that influence the risk of an infant to acquire a multi-drug-resistant pathogen or to develop an infection. @tbl-usage-density-rates shows the presence of these factors in the NeoIPC Surveillance population.
+
+{{< include tables/_tbl-usage-density-rates.qmd >}}
+
+## Surgery
+
+The patient population in neonatology departments is typically characterised by a low volume of surgical procedures. In this dataset, `{r} format(n_surgical_departments, big.mark = locale_sep_mark)` of the partner departments (`{r} format(round(n_surgical_departments / length(unique(data$enrollments$department_key)) * 100))`%) recorded surgical procedures during the surveillance period of included neonates.
+
+On the other hand, surgically treated neonates often require more than one operation, so that on average `{r} format(n_procedures_per_patient, digits = 2, nsmall = 1, scientific = FALSE)` operations have been performed for each surgical patient.
+
+While we currently don't calculate surgical site infection rates due to their low volume (n = `{r} format(nrow(data$ssiData), digits = 2, nsmall = 1, scientific = FALSE)` in this dataset), @tbl-surgery-rates gives an overview of the categories of procedures performed in neonates.
+
+{{< include tables/_tbl-surgery-rates.qmd >}}
