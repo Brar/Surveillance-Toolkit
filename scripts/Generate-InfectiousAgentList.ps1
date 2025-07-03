@@ -7,3 +7,12 @@ param(
 )
 
 $inf_agents = @{}
+
+$uri = $null
+if ([Uri]::TryCreate($BaseDirectory, [System.UriKind]::Absolute, [ref]$uri)) {
+    $iaUri = [Uri]::new($uri, 'NeoIPC-Pathogen-Concepts.csv').AbsoluteUri
+    $iaData = Invoke-WebRequest -Uri $iaUri | ConvertFrom-Csv
+} else {
+    $iaPath = Join-Path -Path $BaseDirectory -ChildPath 'NeoIPC-Pathogen-Concepts.csv'
+    $iaData = Import-Csv -Path $iaPath
+}
