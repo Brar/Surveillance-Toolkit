@@ -682,7 +682,7 @@ id,synonym,concept_source,concept_id,synonym_for
 68,Pseudomonas gladioli,LPSN,species/pseudomonas-gladioli,1427
 2406,Pseudomonas luteola,LPSN,species/pseudomonas-luteola,1254
 1099,Pseudomonas mallei,LPSN,species/pseudomonas-mallei,1150
-2033,Pseudomonas maltophilia,LPSN,species/pseudomonas-maltophilia,2385
+2033,Pseudomonas maltophilia,LPSN,species/pseudomonas-maltophilia,681
 2837,Pseudomonas nosocomialis,LPSN,species/pseudomonas-nosocomialis,2836
 2142,Pseudomonas paucimobilis,LPSN,species/pseudomonas-paucimobilis,529
 1088,Pseudomonas perfectomarina,LPSN,species/pseudomonas-perfectomarina,1561
@@ -787,7 +787,6 @@ id,synonym,concept_source,concept_id,synonym_for
 1216,Staphylococcus succinus casei,LPSN,subspecies/staphylococcus-succinus-casei,3330
 1282,Staphylococcus succinus succinus,LPSN,subspecies/staphylococcus-succinus-succinus,1026
 595,Staphylococcus vitulinus,LPSN,species/staphylococcus-vitulinus,2987
-942,Stenotrophomonas,LPSN,genus/stenotrophomonas,1508
 2385,Xanthomonas maltophilia,LPSN,species/xanthomonas-maltophilia,681
 2259,Stephanoascus ciferrii,MycoBank,324077,3371
 2171,Stomatococcus mucilaginosus,LPSN,species/stomatococcus-mucilaginosus,1242

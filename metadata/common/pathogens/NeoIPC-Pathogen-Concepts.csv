@@ -654,7 +654,7 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 2919,Corynebacterium fournieri,species,LPSN,species/corynebacterium-fournieri,t,,f,f,f,f,f,,,,,,,,,,
 2920,Corynebacterium freiburgense,species,LPSN,species/corynebacterium-freiburgense,t,,f,f,f,f,f,,,,,,,,,,
 163,Corynebacterium freneyi,species,LPSN,species/corynebacterium-freneyi,t,,f,f,f,f,f,,,,,,,,,,
-2941,Corynebacterium genitalium,species,LPSN,species/corynebacterium-genitalium-1,t,,f,f,f,f,f,,,,,,,,,,
+2941,Corynebacterium genitalium,species,LPSN,species/corynebacterium-genitalium,t,,f,f,f,f,f,,,,,,,,,,
 1756,Corynebacterium glaucum,species,LPSN,species/corynebacterium-glaucum,t,,f,f,f,f,f,,,,,,,,,,
 1620,Corynebacterium glucuronolyticum,species,LPSN,species/corynebacterium-glucuronolyticum,t,,f,f,f,f,f,,,,,,,,,,
 514,Corynebacterium glutamicum,species,LPSN,species/corynebacterium-glutamicum,t,,f,f,f,f,f,,,,,,,,,,
@@ -682,7 +682,7 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 898,Corynebacterium pilosum,species,LPSN,species/corynebacterium-pilosum,t,,f,f,f,f,f,,,,,,,,,,
 927,Corynebacterium propinquum,species,LPSN,species/corynebacterium-propinquum,t,,f,f,f,f,f,,,,,,,,,,
 2516,Corynebacterium pseudodiphtheriticum,species,LPSN,species/corynebacterium-pseudodiphtheriticum,t,,f,f,f,f,f,,,,,,,,,,
-2943,Corynebacterium pseudogenitalium,species,LPSN,species/corynebacterium-pseudogenitalium-1,t,,f,f,f,f,f,,,,,,,,,,
+2943,Corynebacterium pseudogenitalium,species,LPSN,species/corynebacterium-pseudogenitalium,t,,f,f,f,f,f,,,,,,,,,,
 214,Corynebacterium pseudotuberculosis,species,LPSN,species/corynebacterium-pseudotuberculosis,t,,f,f,f,f,f,,,,,,,,,,
 1605,Corynebacterium pyruviciproducens,species,LPSN,species/corynebacterium-pyruviciproducens,t,,f,f,f,f,f,,,,,,,,,,
 2096,Corynebacterium renale,species,LPSN,species/corynebacterium-renale,t,,f,f,f,f,f,,,,,,,,,,
@@ -746,8 +746,7 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 3283,Cutibacterium avidum,species,LPSN,species/cutibacterium-avidum,t,,f,f,f,f,f,,,,,,,,,,
 2996,Cutibacterium granulosum,species,LPSN,species/cutibacterium-granulosum,t,,f,f,f,f,f,,,,,,,,,,
 3456,Cyberlindnera,genus,MycoBank,534376,,,,,,,,,3456,3457,3458,3450,3426,3427,3428,3429,3430
-1132,Cyberlindnera fabianii,species,MycoBank,534382,f,,f,f,f,f,f,,,,,,,,,,
-3436,Cyberlindnera fabianii,species,MycoBank,534382,f,,f,f,f,f,f,3436,3456,3457,3458,3450,3426,3427,3428,3429,3430
+1132,Cyberlindnera fabianii,species,MycoBank,534382,f,,f,f,f,f,f,3436,3456,3457,3458,3450,3426,3427,3428,3429,3430
 3356,Cyberlindnera jadinii,species,MycoBank,534383,f,,f,f,f,f,f,,,,,,,,,,
 3369,Cystobasidium minutum,species,MycoBank,809340,f,,f,f,f,f,f,,,,,,,,,,
 3105,Cytobacillus firmus,species,LPSN,species/cytobacillus-firmus,t,,f,f,f,f,f,,,,,,,,,,
@@ -961,7 +960,7 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 1959,Fusobacterium naviforme,species,LPSN,species/fusobacterium-naviforme,f,,f,f,f,f,f,,,,,,,,,,
 504,Fusobacterium necrogenes,species,LPSN,species/fusobacterium-necrogenes,f,,f,f,f,f,f,,,,,,,,,,
 1165,Fusobacterium necrophorum,species,LPSN,species/fusobacterium-necrophorum,f,,f,f,f,f,f,,,,,,,,,,
-2945,Fusobacterium necrophorum fundiliforme,subspecies,LPSN,subspecies/fusobacterium-necrophorum-fundiliforme,f,,f,f,f,f,f,,,,,,,,,,
+2945,Fusobacterium necrophorum funduliforme,subspecies,LPSN,subspecies/fusobacterium-necrophorum-funduliforme,f,,f,f,f,f,f,,,,,,,,,,
 1404,Fusobacterium necrophorum necrophorum,subspecies,LPSN,subspecies/fusobacterium-necrophorum-necrophorum,f,,f,f,f,f,f,,,,,,,,,,
 4,Fusobacterium nucleatum,species,LPSN,species/fusobacterium-nucleatum,f,,f,f,f,f,f,,,,,,,,,,
 1988,Fusobacterium nucleatum nucleatum,subspecies,LPSN,subspecies/fusobacterium-nucleatum-nucleatum,f,,f,f,f,f,f,,,,,,,,,,
@@ -1047,7 +1046,7 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 10,Helicobacter acinonychis,species,LPSN,species/helicobacter-acinonychis,f,,f,f,f,f,f,,,,,,,,,,
 477,Helicobacter aurati,species,LPSN,species/helicobacter-aurati,f,,f,f,f,f,f,,,,,,,,,,
 353,Helicobacter bilis,species,LPSN,species/helicobacter-bilis,f,,f,f,f,f,f,,,,,,,,,,
-2946,Helicobacter bizzozeroni,species,LPSN,species/helicobacter-bizzozeroni,f,,f,f,f,f,f,,,,,,,,,,
+2946,Helicobacter bizzozeronii,species,LPSN,species/helicobacter-bizzozeronii,f,,f,f,f,f,f,,,,,,,,,,
 484,Helicobacter canadensis,species,LPSN,species/helicobacter-canadensis,f,,f,f,f,f,f,,,,,,,,,,
 2503,Helicobacter canis,species,LPSN,species/helicobacter-canis,f,,f,f,f,f,f,,,,,,,,,,
 653,Helicobacter cholecystus,species,LPSN,species/helicobacter-cholecystus,f,,f,f,f,f,f,,,,,,,,,,
@@ -1411,7 +1410,7 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 1499,Moraxella oblonga,species,LPSN,species/moraxella-oblonga,f,,f,f,f,f,f,,,,,,,,,,
 1036,Moraxella osloensis,species,LPSN,species/moraxella-osloensis,f,,f,f,f,f,f,,,,,,,,,,
 2569,Moraxella ovis,species,LPSN,species/moraxella-ovis,f,,f,f,f,f,f,,,,,,,,,,
-3467,Moraxellaceae,family,LPSN,/family/moraxellaceae,,,,,,,,,,3467,3468,3464,,3465,,3466,3421
+3467,Moraxellaceae,family,LPSN,family/moraxellaceae,,,,,,,,,,3467,3468,3464,,3465,,3466,3421
 2369,Morbillivirus,genus,ICTV,202101612,f,,f,f,f,f,f,,,,,,,,,,
 665,Morganella,genus,LPSN,genus/morganella,f,,f,f,t,t,f,,665,3478,3459,3464,,3465,,3466,3421
 66,Morganella morganii,species,LPSN,species/morganella-morganii,f,,f,f,t,t,f,66,665,3478,3459,3464,,3465,,3466,3421
@@ -1425,7 +1424,7 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 735,Mucor ramosissimus,species,MycoBank,276099,f,,f,f,f,f,f,,,,,,,,,,
 3337,Mumps orthorubulavirus,species,ICTV,202101635,f,,f,f,f,f,f,,,,,,,,,,
 1395,Mycobacterium,genus,LPSN,genus/mycobacterium,f,,f,f,f,f,f,,,,,,,,,,
-381,Mycobacterium abscessus,species,LPSN,species/mycobacterium-abscessus,f,,f,f,f,f,f,,,,,,,,,,
+381,Mycobacterium abscessus,species,LPSN,species/mycobacterium-abscessus-1,f,,f,f,f,f,f,,,,,,,,,,
 2877,Mycobacterium abscessus massiliense,subspecies,LPSN,subspecies/mycobacterium-abscessus-massiliense,f,,f,f,f,f,f,,,,,,,,,,
 825,Mycobacterium agri,species,LPSN,species/mycobacterium-agri,f,,f,f,f,f,f,,,,,,,,,,
 1188,Mycobacterium aichiense,species,LPSN,species/mycobacterium-aichiense,f,,f,f,f,f,f,,,,,,,,,,
@@ -1583,8 +1582,7 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 1308,Myroides,genus,LPSN,genus/myroides,f,,f,f,f,f,f,,,,,,,,,,
 1743,Myroides odoratus,species,LPSN,species/myroides-odoratus,f,,f,f,f,f,f,,,,,,,,,,
 3447,Nakaseomyces,genus,MycoBank,28811,,,,,,,,,3447,3448,3449,3450,3426,3427,3428,3429,3430
-3455,Nakaseomyces,genus,MycoBank,28811,,,,,,,,,3455,3448,3449,3450,3426,3427,3428,3429,3430
-3437,Nakaseomyces glabratus,species,MycoBank,843854,f,,f,f,f,f,f,3437,3455,3448,3449,3450,3426,3427,3428,3429,3430
+3437,Nakaseomyces glabratus,species,MycoBank,843854,f,,f,f,f,f,f,3437,3447,3448,3449,3450,3426,3427,3428,3429,3430
 3440,Nakaseomyces nivariensis,species,MycoBank,843855,f,,f,f,f,f,f,3440,3447,3448,3449,3450,3426,3427,3428,3429,3430
 2054,Nannizzia,genus,MycoBank,3420,f,,f,f,f,f,f,,,,,,,,,,
 1883,Necator,genus,MycoBank,9082,f,,f,f,f,f,f,,,,,,,,,,
@@ -1817,10 +1815,9 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 287,Photorhabdus asymbiotica,species,LPSN,species/photorhabdus-asymbiotica,f,,f,f,t,t,t,,1208,3478,3459,3464,,3465,,3466,3421
 781,Photorhabdus luminescens,species,LPSN,species/photorhabdus-luminescens,f,,f,f,t,t,t,,1208,3478,3459,3464,,3465,,3466,3421
 265,Photorhabdus temperata,species,LPSN,species/photorhabdus-temperata,f,,f,f,t,t,t,,1208,3478,3459,3464,,3465,,3466,3421
-573,Pichia,genus,MycoBank,4095,f,,f,f,f,f,f,,,,,,,,,,
-3452,Pichia,genus,MycoBank,4095,,,,,,,,,3452,3453,3454,3425,3426,3427,3428,3429,3430
+573,Pichia,genus,MycoBank,4095,f,,f,f,f,f,f,,573,3453,3454,3425,3426,3427,3428,3429,3430
 3365,Pichia fermentans,species,MycoBank,252130,f,,f,f,f,f,f,,,,,,,,,,
-3438,Pichia inconspicua,species,MycoBank,571647,f,,f,f,f,f,f,3438,3452,3453,3454,3425,3426,3427,3428,3429,3430
+3438,Pichia inconspicua,species,MycoBank,571647,f,,f,f,f,f,f,3438,573,3453,3454,3425,3426,3427,3428,3429,3430
 2597,Pichia kudriavzevii,species,MycoBank,337013,f,,f,f,f,f,f,,,,,,,,,,
 3453,Pichiaceae,family,MycoBank,847274,,,,,,,,,,3453,3454,3425,3426,3427,3428,3429,3430
 3454,Pichiales,order,MycoBank,847273,,,,,,,,,,,3454,3425,3426,3427,3428,3429,3430
@@ -2064,29 +2061,29 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 2504,Salmonella,genus,LPSN,genus/salmonella,f,,f,f,t,t,t,,,,,,,,,,
 2074,Salmonella bongori,species,LPSN,species/salmonella-bongori,f,,f,f,t,t,t,,,,,,,,,,
 40,Salmonella enterica,species,LPSN,species/salmonella-enterica,f,,f,f,t,t,t,,,,,,,,,,
-2732,Salmonella enterica arizonae,subspecies,LPSN,subspecies/salmonella-enterica-arizonae,f,,f,f,t,t,t,,,,,,,,,,
-2768,Salmonella enterica diarizonae,subspecies,LPSN,subspecies/salmonella-enterica-diarizonae,f,,f,f,t,t,t,,,,,,,,,,
-2733,Salmonella enterica enterica,subspecies,LPSN,subspecies/salmonella-enterica-enterica,f,,f,f,t,t,t,,,,,,,,,,
-2740,Salmonella enterica enterica Bareilly,serotype,NeoIPC,37,f,,f,f,t,t,t,,,,,,,,,,
-2734,Salmonella enterica enterica Choleraesuis,serotype,NeoIPC,33,f,,f,f,t,t,t,,,,,,,,,,
-2736,Salmonella enterica enterica Enteritidis,serotype,NeoIPC,34,f,,f,f,t,t,t,,,,,,,,,,
-2738,Salmonella enterica enterica Infantis,serotype,NeoIPC,35,f,,f,f,t,t,t,,,,,,,,,,
-2742,Salmonella enterica enterica Isangi,serotype,NeoIPC,39,f,,f,f,t,t,t,,,,,,,,,,
-2744,Salmonella enterica enterica Kottbus,serotype,NeoIPC,41,f,,f,f,t,t,t,,,,,,,,,,
-2746,Salmonella enterica enterica Livingstone,serotype,NeoIPC,43,f,,f,f,t,t,t,,,,,,,,,,
-2748,Salmonella enterica enterica Montevideo,serotype,NeoIPC,45,f,,f,f,t,t,t,,,,,,,,,,
-2750,Salmonella enterica enterica Newport,serotype,NeoIPC,47,f,,f,f,t,t,t,,,,,,,,,,
-2752,Salmonella enterica enterica Ohio,serotype,NeoIPC,49,f,,f,f,t,t,t,,,,,,,,,,
-2754,Salmonella enterica enterica Senftenberg,serotype,NeoIPC,51,f,,f,f,t,t,t,,,,,,,,,,
-2756,Salmonella enterica enterica Tennessee,serotype,NeoIPC,53,f,,f,f,t,t,t,,,,,,,,,,
-2764,Salmonella enterica enterica Typhi,serotype,NeoIPC,61,f,,f,f,t,t,t,,,,,,,,,,
-2766,Salmonella enterica enterica Typhimurium,serotype,NeoIPC,62,f,,f,f,t,t,t,,,,,,,,,,
-2758,Salmonella enterica enterica Urbana,serotype,NeoIPC,55,f,,f,f,t,t,t,,,,,,,,,,
-2760,Salmonella enterica enterica Virchow,serotype,NeoIPC,57,f,,f,f,t,t,t,,,,,,,,,,
-2762,Salmonella enterica enterica Worthington,serotype,NeoIPC,59,f,,f,f,t,t,t,,,,,,,,,,
-2771,Salmonella enterica houtenae,subspecies,LPSN,subspecies/salmonella-enterica-houtenae,f,,f,f,t,t,t,,,,,,,,,,
-2769,Salmonella enterica indica,subspecies,LPSN,subspecies/salmonella-enterica-indica,f,,f,f,t,t,t,,,,,,,,,,
-2770,Salmonella enterica salamae,subspecies,LPSN,subspecies/salmonella-enterica-salamae,f,,f,f,t,t,t,,,,,,,,,,
+2732,Salmonella enterica subsp. arizonae,subspecies,LPSN,subspecies/salmonella-enterica-arizonae,f,,f,f,t,t,t,,,,,,,,,,
+2768,Salmonella enterica subsp. diarizonae,subspecies,LPSN,subspecies/salmonella-enterica-diarizonae,f,,f,f,t,t,t,,,,,,,,,,
+2733,Salmonella enterica subsp. enterica,subspecies,LPSN,subspecies/salmonella-enterica-enterica,f,,f,f,t,t,t,,,,,,,,,,
+2740,Salmonella enterica subsp. enterica Bareilly,serotype,NeoIPC,37,f,,f,f,t,t,t,,,,,,,,,,
+2734,Salmonella enterica subsp. enterica Choleraesuis,serotype,NeoIPC,33,f,,f,f,t,t,t,,,,,,,,,,
+2736,Salmonella enterica subsp. enterica Enteritidis,serotype,NeoIPC,34,f,,f,f,t,t,t,,,,,,,,,,
+2738,Salmonella enterica subsp. enterica Infantis,serotype,NeoIPC,35,f,,f,f,t,t,t,,,,,,,,,,
+2742,Salmonella enterica subsp. enterica Isangi,serotype,NeoIPC,39,f,,f,f,t,t,t,,,,,,,,,,
+2744,Salmonella enterica subsp. enterica Kottbus,serotype,NeoIPC,41,f,,f,f,t,t,t,,,,,,,,,,
+2746,Salmonella enterica subsp. enterica Livingstone,serotype,NeoIPC,43,f,,f,f,t,t,t,,,,,,,,,,
+2748,Salmonella enterica subsp. enterica Montevideo,serotype,NeoIPC,45,f,,f,f,t,t,t,,,,,,,,,,
+2750,Salmonella enterica subsp. enterica Newport,serotype,NeoIPC,47,f,,f,f,t,t,t,,,,,,,,,,
+2752,Salmonella enterica subsp. enterica Ohio,serotype,NeoIPC,49,f,,f,f,t,t,t,,,,,,,,,,
+2754,Salmonella enterica subsp. enterica Senftenberg,serotype,NeoIPC,51,f,,f,f,t,t,t,,,,,,,,,,
+2756,Salmonella enterica subsp. enterica Tennessee,serotype,NeoIPC,53,f,,f,f,t,t,t,,,,,,,,,,
+2764,Salmonella enterica subsp. enterica Typhi,serotype,NeoIPC,61,f,,f,f,t,t,t,,,,,,,,,,
+2766,Salmonella enterica subsp. enterica Typhimurium,serotype,NeoIPC,62,f,,f,f,t,t,t,,,,,,,,,,
+2758,Salmonella enterica subsp. enterica Urbana,serotype,NeoIPC,55,f,,f,f,t,t,t,,,,,,,,,,
+2760,Salmonella enterica subsp. enterica Virchow,serotype,NeoIPC,57,f,,f,f,t,t,t,,,,,,,,,,
+2762,Salmonella enterica subsp. enterica Worthington,serotype,NeoIPC,59,f,,f,f,t,t,t,,,,,,,,,,
+2771,Salmonella enterica subsp. houtenae,subspecies,LPSN,subspecies/salmonella-enterica-houtenae,f,,f,f,t,t,t,,,,,,,,,,
+2769,Salmonella enterica subsp. indica,subspecies,LPSN,subspecies/salmonella-enterica-indica,f,,f,f,t,t,t,,,,,,,,,,
+2770,Salmonella enterica subsp. salamae,subspecies,LPSN,subspecies/salmonella-enterica-salamae,f,,f,f,t,t,t,,,,,,,,,,
 930,Sarcina,genus,LPSN,genus/sarcina,f,,f,f,f,f,f,,,,,,,,,,
 2459,Sarcina ventriculi,species,LPSN,species/sarcina-ventriculi,f,,f,f,f,f,f,,,,,,,,,,
 88,Sarcocystis,genus,MycoBank,584190,f,,f,f,f,f,f,,,,,,,,,,
@@ -2244,8 +2241,8 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 1416,Staphylococcus xylosus,species,LPSN,species/staphylococcus-xylosus,t,n,f,f,f,f,f,1416,481,3460,3417,3418,,3419,,3420,3421
 3350,Starmera stellimalicola,species,MycoBank,814380,f,,f,f,f,f,f,,,,,,,,,,
 144,Stemphylium,genus,MycoBank,10081,f,,f,f,f,f,f,,,,,,,,,,
-3475,Stenotrophomonas,genus,LPSN,genus/stenotrophomonas,f,,f,f,f,f,f,,3475,3476,3477,3464,,3465,,3466,3421
-681,Stenotrophomonas maltophilia,species,LPSN,species/stenotrophomonas-maltophilia,f,,f,f,f,f,f,681,3475,3476,3477,3464,,3465,,3466,3421
+942,Stenotrophomonas,genus,LPSN,genus/stenotrophomonas,f,,f,f,f,f,f,,942,3476,3477,3464,,3465,,3466,3421
+681,Stenotrophomonas maltophilia,species,LPSN,species/stenotrophomonas-maltophilia,f,,f,f,f,f,f,681,942,3476,3477,3464,,3465,,3466,3421
 364,Stephanoascus,genus,MycoBank,5209,f,,f,f,f,f,f,,,,,,,,,,
 231,Streptobacillus,genus,LPSN,genus/streptobacillus,f,,f,f,f,f,f,,,,,,,,,,
 566,Streptobacillus moniliformis,species,LPSN,species/streptobacillus-moniliformis,f,,f,f,f,f,f,,,,,,,,,,
