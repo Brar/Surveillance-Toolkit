@@ -1023,7 +1023,7 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 2248,Haemophilus ducreyi,species,LPSN,species/haemophilus-ducreyi,f,,f,f,t,t,t,,,,,,,,,,
 2467,Haemophilus haemolyticus,species,LPSN,species/haemophilus-haemolyticus,f,,f,f,t,t,t,,,,,,,,,,
 1704,Haemophilus influenzae,species,LPSN,species/haemophilus-influenzae,f,,f,f,t,t,t,,,,,,,,,,
-2849,Haemophilus massiliensi,species,LPSN,species/haemophilus-massiliensis,f,,f,f,t,t,t,,,,,,,,,,
+2849,Haemophilus massiliensis,species,LPSN,species/haemophilus-massiliensis,f,,f,f,t,t,t,,,,,,,,,,
 658,Haemophilus parahaemolyticus,species,LPSN,species/haemophilus-parahaemolyticus,f,,f,f,t,t,t,,,,,,,,,,
 2340,Haemophilus parainfluenzae,species,LPSN,species/haemophilus-parainfluenzae,f,,f,f,t,t,t,,,,,,,,,,
 2850,Haemophilus paraphrohaemolyticus,species,LPSN,species/haemophilus-paraphrohaemolyticus,f,,f,f,t,t,t,,,,,,,,,,
