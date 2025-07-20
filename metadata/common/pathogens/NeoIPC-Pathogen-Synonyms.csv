@@ -234,8 +234,8 @@ id,synonym,concept_source,concept_id,synonym_for
 1292,Bifidobacterium suis,LPSN,species/bifidobacterium-suis,3065
 1927,Bipolaris australiensis,MycoBank,112052,3402
 948,Bipolaris hawaiiensis,MycoBank,309555,3385
-2470,BK polyomavirus,ICTV,202104459,2642
-2691,Bocavirus,ICTV,202104241,2690
+2470,BK polyomavirus,ICTV,19991317,2642
+2691,Bocavirus,ICTV,20040344,2690
 2240,Botryodiplodia theobromae,MycoBank,157658,842
 496,Brachycladium spiciferum,MycoBank,221562,307
 2441,Branhamella catarrhalis,LPSN,species/branhamella-catarrhalis,770
@@ -251,7 +251,7 @@ id,synonym,concept_source,concept_id,synonym_for
 36,Brucella suis,LPSN,species/brucella-suis,556
 2396,Burkholderia fungorum,LPSN,species/burkholderia-fungorum,2524
 635,Burkholderia pickettii,LPSN,species/burkholderia-pickettii,954
-1636,California encephalitis virus,ICTV,202100103,3334
+1636,California encephalitis virus,ICTV,19990625,3334
 2119,Calymmatobacterium,LPSN,genus/calymmatobacterium,1223
 1914,Calymmatobacterium granulomatis,LPSN,species/calymmatobacterium-granulomatis,1760
 1349,Campylobacter butzleri,LPSN,species/campylobacter-butzleri,2349
@@ -337,7 +337,7 @@ id,synonym,concept_source,concept_id,synonym_for
 613,Clostridium sphenoides,LPSN,species/clostridium-sphenoides,3249
 2828,Clostridium ventriculi,LPSN,species/clostridium-ventriculi,2459
 1285,Clostridium villosum,LPSN,species/clostridium-villosum,371
-1725,Colorado tick fever virus,ICTV,202104928,3339
+1725,Colorado tick fever virus,ICTV,19991541,3339
 684,Comamonas acidovorans,LPSN,species/comamonas-acidovorans,2356
 1042,Corynebacterium camporealensis,LPSN,species/corynebacterium-camporealensis,3101
 1155,Corynebacterium equi,LPSN,species/corynebacterium-equi,1776
@@ -352,7 +352,7 @@ id,synonym,concept_source,concept_id,synonym_for
 2929,Corynebacterium tuscaniae,LPSN,species/corynebacterium-tuscaniae,1227
 677,Corynebacterium variabilis,LPSN,species/corynebacterium-variabilis,1821
 1548,Corynebacterium vitarumen,LPSN,species/corynebacterium-vitarumen,2372
-632,Crimean-Congo hemorrhagic fever virus,ICTV,202100070,3340
+632,Crimean-Congo hemorrhagic fever virus,ICTV,19990680,3340
 900,Cryptococcus aggregatus,MycoBank,456230,3441
 2460,Cryptococcus utilis,MycoBank,456262,3356
 2012,Curvularia spicifera,MycoBank,278597,307
@@ -365,8 +365,8 @@ id,synonym,concept_source,concept_id,synonym_for
 1618,Drechslera halodes,MycoBank,330196,1770
 82,Drechslera rostrata,MycoBank,330213,1770
 2471,Drechslera spicifera,MycoBank,313402,307
-2646,Eastern equine encephalitis virus North American,ICTV,202105088,905
-2648,Eastern equine encephalitis virus South American,ICTV,202105094,2647
+2646,North American eastern equine encephalitis virus,NeoIPC,86,905
+2648,South American eastern equine encephalitis virus,NeoIPC,87,2647
 1910,Edwardsiella anguillimortifera,LPSN,species/edwardsiella-anguillimortifera,2260
 2286,Enterobacter aerogenes,LPSN,species/enterobacter-aerogenes,333
 2281,Enterobacter agglomerans,LPSN,species/enterobacter-agglomerans,987
@@ -383,7 +383,7 @@ id,synonym,concept_source,concept_id,synonym_for
 2302,Enterococcus seriolicida,LPSN,species/enterococcus-seriolicida,374
 750,Enterococcus solitarius,LPSN,species/enterococcus-solitarius,2292
 706,Entomophthora coronata,MycoBank,262031,2265
-2116,Epstein-Barr virus,ICTV,202101486,3344
+2116,Epstein-Barr virus,ICTV,19710173,3344
 1948,Erwinia ananas,LPSN,species/erwinia-ananas,3086
 2587,Erwinia cancerogena,LPSN,species/erwinia-cancerogena,1417
 2390,Erwinia dissolvens,LPSN,species/erwinia-dissolvens,1130
@@ -464,38 +464,37 @@ id,synonym,concept_source,concept_id,synonym_for
 1650,Helminthosporium halodes,MycoBank,252515,1770
 1441,Helminthosporium rostratum,MycoBank,254456,1770
 1934,Helminthosporium spiciferum,MycoBank,298294,307
-1568,Hepatitis A virus,ICTV,202102003,3338
-2641,Hepatitis C virus,ICTV,202103127,2640
+1568,Hepatitis A virus,ICTV,19991254,3338
+2641,Hepatitis C virus,ICTV,19950941,2640
 2628,Hepatitis D virus,NeoIPC,17,3480
+2650,Hepatitis E virus,ICTV,19950816,2649
 2653,Hepatitis G virus,NeoIPC,21,2651
-2617,Herpes simplex virus type 1,ICTV,202101428,2616
-2619,Herpes simplex virus type 2,ICTV,202101429,2618
+2617,Herpes simplex virus type 1,NeoIPC,88,2616
+2619,Herpes simplex virus type 2,NeoIPC,89,2618
 822,Hormiscium dermatitidis,MycoBank,118937,212
 510,Hormodendrum dermatitidis,MycoBank,491663,212
 803,Hormonema,MycoBank,8562,3392
 2605,Human cytomegalovirus,NeoIPC,5,2604
-2650,Human hepatitis E virus,ICTV,202103665,2649
-2671,Human herpesvirus 6A,ICTV,202101475,2670
-2673,Human herpesvirus 6B,ICTV,202101476,2672
-2631,Human herpesvirus 8,NeoIPC,18,2629
-2662,Human parainfluenza virus 1,ICTV,202101622,2661
-2664,Human parainfluenza virus 2,ICTV,202101630,2663
-2666,Human parainfluenza virus 3,ICTV,202101623,2665
-2668,Human parainfluenza virus 4,ICTV,202101631,2667
-2613,Human parvovirus B19,ICTV,202104266,2612
-2652,Human pegivirus,ICTV,202103142,2651
-2643,Human polyomavirus 1,ICTV,202104459,2642
-2683,Human polyomavirus 2,ICTV,202104460,2682
-376,Human respiratory syncytial virus,ICTV,202101651,2603
+2671,Human herpesvirus 6A,ICTV,20115682,2670
+2673,Human herpesvirus 6B,ICTV,20115683,2672
+2631,Human herpesvirus 8,ICTV,20083108,2629
+2662,Human parainfluenza virus 1,ICTV,19950297,2661
+2664,Human parainfluenza virus 2,ICTV,19950309,2663
+2666,Human parainfluenza virus 3,ICTV,19950298,2665
+2668,Human parainfluenza virus 4,ICTV,19990434,2667
+2613,Human parvovirus B19,ICTV,20074140,2612
+2643,Human polyomavirus 1,ICTV,20153664,2642
+2683,Human polyomavirus 2,ICTV,20153670,2682
+376,Human respiratory syncytial virus,ICTV,19950318,2603
 2676,Human T-lymphotropic virus 1,NeoIPC,25,2675
 2678,Human T-lymphotropic virus 2,NeoIPC,26,2677
-2526,Influenza A virus,ICTV,202103956,2654
-710,Influenza B virus,ICTV,202103958,2655
-1420,Influenza C virus,ICTV,202103962,2656
-2657,Influenza D virus,ICTV,202103960,2658
-2684,JC polyomavirus,ICTV,202104460,2682
-2685,JC virus,ICTV,202104460,2682
-2630,Kaposi's sarcoma-associated herpesvirus,ICTV,202101510,2629
+2526,Influenza A virus,ICTV,19951376,2654
+710,Influenza B virus,ICTV,19951377,2655
+1420,Influenza C virus,ICTV,19951378,2656
+2657,Influenza D virus,ICTV,20165406,2658
+2684,JC polyomavirus,ICTV,19991321,2682
+2685,JC virus,ICTV,19760277,2682
+2630,Kaposi's sarcoma-associated herpesvirus,NeoIPC,91,2629
 951,Kingella indologenes,LPSN,species/kingella-indologenes,1278
 1832,Klebsiella ornithinolytica,LPSN,species/klebsiella-ornithinolytica,963
 926,Klebsiella ozaenae,LPSN,species/klebsiella-ozaenae,733
@@ -529,7 +528,7 @@ id,synonym,concept_source,concept_id,synonym_for
 1442,Lactobacillus salivarius,LPSN,species/lactobacillus-salivarius,3234
 703,Lactobacillus vaginalis,LPSN,species/lactobacillus-vaginalis,3199
 1353,Lactobacillus vitulinus,LPSN,species/lactobacillus-vitulinus,3001
-981,Lassa virus,ICTV,202102580,2669
+981,Lassa virus,ICTV,19790162,2669
 1519,Lecythophora,MycoBank,8721,3352
 1608,Lecythophora hoffmannii,MycoBank,108133,3354
 1957,Lecythophora mutabilis,MycoBank,108134,3368
@@ -540,10 +539,10 @@ id,synonym,concept_source,concept_id,synonym_for
 1471,Levinea amalonatica,LPSN,species/levinea-amalonatica,1302
 1283,Listeria denitrificans,LPSN,species/listeria-denitrificans,1559
 1385,Lucibacterium harveyi,LPSN,species/lucibacterium-harveyi,2261
-2070,Lymphocytic choriomeningitis virus,ICTV,202102586,3343
+2070,Lymphocytic choriomeningitis virus,ICTV,19710131,3343
 959,Macrosporium,MycoBank,8821,874
 513,Madurella mycetomi,MycoBank,119292,1627
-607,Measles virus,ICTV,202101616,3333
+607,Measles virus,ICTV,19750163,3333
 1590,Megamonas hypermegas,LPSN,species/megamonas-hypermegas,1476
 164,Methylobacterium zatmanii,LPSN,species/methylobacterium-zatmanii,3202
 508,Micrococcus halobius,LPSN,species/micrococcus-halobius,106
@@ -561,7 +560,7 @@ id,synonym,concept_source,concept_id,synonym_for
 872,Mortierella wolfii,MycoBank,334519,2962
 1428,Mucor javanicus,MycoBank,241505,1330
 990,Mucor pusillus,MycoBank,247701,1630
-1059,Mumps virus,ICTV,202101635,3337
+1059,Mumps virus,ICTV,19710227,3337
 1897,Mycobacterium africanum,LPSN,species/mycobacterium-africanum,1346
 2858,Mycobacterium bouchedurhonense,LPSN,species/mycobacterium-bouchedurhonense,2461
 1159,Mycobacterium bovis,LPSN,species/mycobacterium-bovis,1346
@@ -698,7 +697,7 @@ id,synonym,concept_source,concept_id,synonym_for
 977,Pullularia,MycoBank,9639,2492
 46,Pullularia pullulans,MycoBank,275660,2964
 349,Pyrenochaeta romeroi,MycoBank,338075,3345
-2404,Rabies virus,ICTV,202101733,3336
+2404,Rabies virus,ICTV,19710311,3336
 1969,Ralstonia gilardii,LPSN,species/ralstonia-gilardii,1536
 85,Ralstonia respiraculi,LPSN,species/ralstonia-respiraculi,2546
 298,Ramichloridium cerophilum,MycoBank,322315,3393
@@ -721,12 +720,12 @@ id,synonym,concept_source,concept_id,synonym_for
 695,Rhodotorula pilimanae,MycoBank,305282,3347
 313,Rickettsia tsutsugamushi,LPSN,species/rickettsia-tsutsugamushi,2166
 1178,Riemerella anatipestifer,LPSN,species/riemerella-anatipestifer,2974
-2021,Rift Valley fever virus,ICTV,202100163,3341
+2021,Rift Valley fever virus,ICTV,19990693,3341
 712,Rochalimaea elizabethae,LPSN,species/rochalimaea-elizabethae,2520
 1365,Rochalimaea henselae,LPSN,species/rochalimaea-henselae,1639
 2094,Rochalimaea quintana,LPSN,species/rochalimaea-quintana,2075
 413,Rochalimaea vinsonii,LPSN,species/rochalimaea-vinsonii,1535
-223,Rubella virus,ICTV,202105115,3342
+223,Rubella virus,ICTV,19750326,3342
 883,Ruminococcus hansenii,LPSN,species/ruminococcus-hansenii,168
 1087,Ruminococcus productus,LPSN,species/ruminococcus-productus,631
 2741,Salmonella Bareilly,NeoIPC,38,2740
@@ -760,7 +759,7 @@ id,synonym,concept_source,concept_id,synonym_for
 534,Serpulina,LPSN,genus/serpulina,128
 1847,Serpulina pilosicoli,LPSN,species/serpulina-pilosicoli,984
 1186,Serratia marinorubra,LPSN,species/serratia-marinorubra,768
-1979,Simian virus 40,ICTV,202104464,3335
+1979,Simian virus 40,ICTV,19951416,3335
 76,Simonsiella crassa,LPSN,species/simonsiella-crassa,1658
 65,Sphingobacterium heparinum,LPSN,species/sphingobacterium-heparinum,1048
 2088,Sphingobacterium mizutae,LPSN,species/sphingobacterium-mizutae,3281
@@ -768,7 +767,7 @@ id,synonym,concept_source,concept_id,synonym_for
 2204,Sporothrix cyanescens,MycoBank,323930,3389
 1105,Sporotrichum beurmannii,MycoBank,164415,1408
 856,Sporotrichum schenckii,MycoBank,203728,1408
-2687,St. Louis encephalitis virus,ICTV,202103112,2686
+2687,St. Louis encephalitis virus,ICTV,19710117,2686
 2006,Staphylococcus carnosus utilis,LPSN,subspecies/staphylococcus-carnosus-utilis,2223
 2556,Staphylococcus caseolyticus,LPSN,species/staphylococcus-caseolyticus,1692
 546,Staphylococcus cohnii cohnii,LPSN,subspecies/staphylococcus-cohnii-cohnii,815
@@ -836,7 +835,7 @@ id,synonym,concept_source,concept_id,synonym_for
 1601,Turicella,LPSN,genus/turicella,1968
 901,Turicella otitidis,LPSN,species/turicella-otitidis,3036
 1578,Ulocladium,MycoBank,10346,874
-876,Varicella-zoster virus,ICTV,202101454,2620
+876,Varicella zoster virus,NeoIPC,92,2620
 1169,Veillonella alcalescens,LPSN,species/veillonella-alcalescens,674
 5,Vibrio carchariae,LPSN,species/vibrio-carchariae,2261
 1954,Vibrio damsela,LPSN,species/vibrio-damsela,3221

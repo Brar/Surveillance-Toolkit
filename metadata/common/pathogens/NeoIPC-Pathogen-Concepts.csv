@@ -1105,6 +1105,7 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 2667,Human orthorubulavirus 4,species,ICTV,202101631,f,,f,f,f,f,f,,,,,,,,,,
 2611,Human papillomavirus,group,NeoIPC,9,f,,f,f,f,f,f,,,,,,,,,,
 2660,Human parainfluenza virus,group,NeoIPC,23,f,,f,f,f,f,f,,,,,,,,,,
+2652,Human pegivirus,group,NeoIPC,90,f,,f,f,f,f,f,,,,,,,,,,
 2661,Human respirovirus 1,species,ICTV,202101622,f,,f,f,f,f,f,,,,,,,,,,
 2665,Human respirovirus 3,species,ICTV,202101623,f,,f,f,f,f,f,,,,,,,,,,
 2610,Human rhinovirus,group,NeoIPC,8,f,,f,f,f,f,f,,,,,,,,,,
