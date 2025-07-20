@@ -2134,7 +2134,7 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 2337,Serratia quinivorans,species,LPSN,species/serratia-quinivorans,f,,f,f,t,t,f,2337,2393,3470,3459,3464,,3465,,3466,3421
 768,Serratia rubidaea,species,LPSN,species/serratia-rubidaea,f,,f,f,t,t,f,768,2393,3470,3459,3464,,3465,,3466,3421
 1047,Serratia ureilytica,species,LPSN,species/serratia-ureilytica,f,,f,f,t,t,f,1047,2393,3470,3459,3464,,3465,,3466,3421
-2607,Severe acute respiratory syndrome coronavirus 2,clade,ICTV,202101868,f,,f,f,f,f,f,,,,,,,,,,
+2607,Severe acute respiratory syndrome coronavirus 2,serotype,NeoIPC,93,f,,f,f,f,f,f,,,,,,,,,,
 2606,Severe acute respiratory syndrome-related coronavirus,species,ICTV,202101868,f,,f,f,f,f,f,,,,,,,,,,
 2596,Shewanella,genus,LPSN,genus/shewanella,f,,f,f,f,f,f,,,,,,,,,,
 1850,Shewanella algae,species,LPSN,species/shewanella-algae,f,,f,f,f,f,f,,,,,,,,,,

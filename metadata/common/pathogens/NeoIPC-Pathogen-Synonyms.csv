@@ -490,8 +490,8 @@ id,synonym,concept_source,concept_id,synonym_for
 2678,Human T-lymphotropic virus 2,NeoIPC,26,2677
 2526,Influenza A virus,ICTV,19951376,2654
 710,Influenza B virus,ICTV,19951377,2655
-1420,Influenza C virus,ICTV,19951378,2656
-2657,Influenza D virus,ICTV,20165406,2658
+1420,Influenza C virus,ICTV,19951378,2658
+2657,Influenza D virus,ICTV,20165406,2656
 2684,JC polyomavirus,ICTV,19991321,2682
 2685,JC virus,ICTV,19760277,2682
 2630,Kaposi's sarcoma-associated herpesvirus,NeoIPC,91,2629

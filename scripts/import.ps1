@@ -336,6 +336,14 @@ Class ConceptComparer:System.Collections.Generic.IComparer[System.Collections.Sp
             [int]$x1 = switch -Exact -CaseSensitive ($x.Name[0]) {A{0;break}B{1;break}G{2;break}D{3;break}E{4;break}}
             [int]$y1 = switch -Exact -CaseSensitive ($y.Name[0]) {A{0;break}B{1;break}G{2;break}D{3;break}E{4;break}}
             return [System.Collections.Generic.Comparer[int]]::Default.Compare($x1, $y1)
+        } elseif (
+            $x.Name -in @('Alphainfluenzavirus','Betainfluenzavirus','Gammainfluenzavirus','Deltainfluenzavirus') `
+            -and `
+            $y.Name -in @('Alphainfluenzavirus','Betainfluenzavirus','Gammainfluenzavirus','Deltainfluenzavirus'))
+        {
+            [int]$x1 = switch -Exact -CaseSensitive ($x.Name[0]) {A{0;break}B{1;break}G{2;break}D{3;break}}
+            [int]$y1 = switch -Exact -CaseSensitive ($y.Name[0]) {A{0;break}B{1;break}G{2;break}D{3;break}}
+            return [System.Collections.Generic.Comparer[int]]::Default.Compare($x1, $y1)
         } elseif ($x.Name.EndsWith('streptococci') -or $y.Name.EndsWith('streptococci')) {
             $x1 = $x.Name.EndsWith('streptococci')
             $y1 = $y.Name.EndsWith('streptococci')
@@ -744,9 +752,14 @@ $hIV = [ordered]@{
     Id = 2634
 }
 
-# Human parainfluenza virus
-# Human rhinovirus
-# Influenza virus
+$hInflV = [ordered]@{
+    Name = 'Influenza virus'
+    ConceptType = 'Group'
+    ConceptId = 22
+    ConceptSource = 'NeoIPC'
+    Id = 2659
+}
+
 # Severe acute respiratory syndrome coronavirus 2
 # SARS-CoV-2
 
@@ -1259,6 +1272,81 @@ function AddNeoIpcAgentToHierarchy {
             }
             break
         }
+        {$_ -eq 'Human parainfluenza virus'} {
+            $id = [int]$Agent.id
+            if (-not $cacheById.ContainsKey($id)) {
+                $output = [ordered]@{}
+                $output.Name = $Agent.concept
+                $output.ConceptType = 'Group'
+                $output.ConceptId = $_
+                $output.ConceptSource = 'NeoIPC'
+                $output.Id = $id
+                $parent = AddIctvAgentRecursive $ictvDataByTaxNodeId[202401586]
+                EnsureChildren $parent
+                $parent.Children.Add($output) | Out-Null
+                $cacheById[$id] = $output
+            }
+            break
+        }
+        {$_ -eq 'Human pegivirus'} {
+            $id = [int]$Agent.id
+            if (-not $cacheById.ContainsKey($id)) {
+                $output = [ordered]@{}
+                $output.Name = $Agent.concept
+                $output.ConceptType = 'Group'
+                $output.ConceptId = $_
+                $output.ConceptSource = 'NeoIPC'
+                $output.Id = $id
+                $parent = AddIctvAgentRecursive $ictvDataByTaxNodeId[202403139]
+                EnsureChildren $parent
+                $parent.Children.Add($output) | Out-Null
+                $cacheById[$id] = $output
+            }
+            break
+        }
+        {$_ -eq 'Human rhinovirus'} {
+            $id = [int]$Agent.id
+            if (-not $cacheById.ContainsKey($id)) {
+                $output = [ordered]@{}
+                $output.Name = $Agent.concept
+                $output.ConceptType = 'Group'
+                $output.ConceptId = $_
+                $output.ConceptSource = 'NeoIPC'
+                $output.Id = $id
+                $parent = AddIctvAgentRecursive $ictvDataByTaxNodeId[202401982]
+                EnsureChildren $parent
+                $parent.Children.Add($output) | Out-Null
+                $cacheById[$id] = $output
+            }
+            break
+        }
+        {$_ -eq 'Influenza virus'} {
+            $id = [int]$Agent.id
+            if (-not $cacheById.ContainsKey($id)) {
+                $output = $hInflV
+                $parent = AddIctvAgentRecursive $ictvDataByTaxNodeId[202403953]
+                EnsureChildren $parent
+                $parent.Children.Add($output) | Out-Null
+                $cacheById[$id] = $output
+            }
+            break
+        }
+        {$_ -eq 'Severe acute respiratory syndrome coronavirus 2'} {
+            $id = [int]$Agent.id
+            if (-not $cacheById.ContainsKey($id)) {
+                $output = [ordered]@{}
+                $output.Name = $Agent.concept
+                $output.ConceptType = 'Serotype'
+                $output.ConceptId = $_
+                $output.ConceptSource = 'NeoIPC'
+                $output.Id = $id
+                $parent = AddIctvAgentRecursive $ictvDataByTaxNodeId[202401868]
+                EnsureChildren $parent
+                $parent.Children.Add($output) | Out-Null
+                $cacheById[$id] = $output
+            }
+            break
+        }
         Default {
             Write-Warning "Unhandled NeoIPC concept '$($Agent.concept)'"
         }
@@ -1318,6 +1406,13 @@ function Update-IctvParent {
         'Lentivirus humimdef2'
     )) {
         $Parent = $hIV
+    } elseif ($IctvRow.name -in @(
+        'Alphainfluenzavirus'
+        'Betainfluenzavirus'
+        'Gammainfluenzavirus'
+        'Deltainfluenzavirus'
+    )) {
+        $Parent = $hInflV
     }
     return $Parent
 }
