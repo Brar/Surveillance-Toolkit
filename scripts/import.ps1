@@ -18,6 +18,18 @@ if ([Uri]::TryCreate($BaseDirectory, [System.UriKind]::Absolute, [ref]$uri)) {
     $synonymData = Import-Csv -Path (Join-Path -Path $BaseDirectory -ChildPath 'NeoIPC-Pathogen-Synonyms.csv')
 }
 
+$mycobankToken = Invoke-RestMethod `
+    -Uri https://webservices.bio-aware.com/cbsdatabase_new/connect/token `
+    -Method Post `
+    -Headers @{
+        'Referer' = 'https://webservices.bio-aware.com/cbsdatabase_new/mycobank'
+        'Content-Type' = 'application/x-www-form-urlencoded'
+        'Authorization' = 'Basic Q0JTOg=='
+        'Origin' = 'https://webservices.bio-aware.com'
+    } `
+    -Body "client_id=CBS&scope=mycobank&grant_type=password&username=$([System.Web.HttpUtility]::UrlEncode((Read-Host 'Enter Mycobank username')))&password=$([System.Web.HttpUtility]::UrlEncode((Read-Host 'Enter Mycobank password' -MaskInput)))" |
+    Select-Object -ExpandProperty access_token
+
 $lpsnRaw = Get-Content -LiteralPath ./metadata/common/pathogens/LPSN_data.json -Raw -Encoding utf8 | ConvertFrom-Json -AsHashtable -Depth 100
 
 $ById = [System.Collections.Generic.Dictionary[int,[System.Collections.Generic.OrderedDictionary[string,string]]]]::new()
@@ -324,6 +336,13 @@ Import-Csv C:/Users/Brar/dev/NeoIPC/ICTVdatabase/data/taxonomy_level.utf8.txt -D
     $row = $_
     $id = [int]$_.id
     $ictvLevels[$id] = $row
+}
+
+$mycoBankDataById = Get-Content -LiteralPath ./metadata/common/pathogens/MycoBank_data.json -Raw -Encoding utf8 | ConvertFrom-Json -AsHashtable -Depth 100
+$mycoBankDataByMycoBankNumber = [System.Collections.Generic.Dictionary[Int64,PSCustomObject]]::new()
+foreach ($row in $mycoBankDataById.Values) {
+    $concept_id = $row.mycobankNr
+    $mycoBankDataByMycoBankNumber[$concept_id] = [PSCustomObject]$row
 }
 
 Class ConceptComparer:System.Collections.Generic.IComparer[System.Collections.Specialized.OrderedDictionary] {
@@ -1637,6 +1656,41 @@ function AddIctvSynonym {
     }
 }
 
+function FetchMycoBankData {
+    param ($ConceptId, $ConceptName)
+    New-Variable -Name mycoBankRow
+    if ($mycoBankDataByMycoBankNumber.TryGetValue([Int64]$ConceptId, [ref]$mycoBankRow)) {
+        return $mycoBankRow
+    }
+
+    $filter = [System.Web.HttpUtility]::UrlEncode("name startWith '$ConceptName'")
+    $mycobankData = Invoke-RestMethod -Uri "https://webservices.bio-aware.com/cbsdatabase_new/mycobank/taxonnames?page=1&pageSize=1&filter=$filter" -Headers @{'Authorization' = "Bearer $mycobankToken"} |
+        Select-Object -ExpandProperty items
+
+    $mycoBankDataById["$($mycobankData.id)"] = $mycobankData
+    $mycoBankDataByMycoBankNumber[$mycobankData.mycobankNr] = $mycobankData
+
+    $mycoBankDataById | ConvertTo-Json -Depth 100 | Set-Content -Encoding utf8NoBOM -LiteralPath ./metadata/common/pathogens/MycoBank_data.json
+
+    return $mycobankData
+}
+
+function AddMycoBankAgentToHierarchy {
+    param ($Agent)
+    $mycoBankRow = FetchMycoBankData $Agent.concept_id $Agent.concept
+    $currentNameId = $mycoBankRow.synonymy.currentNameId
+    if ($mycoBankRow.id -ne $currentNameId) {
+        if (-not $mycoBankDataById.ContainsKey($currentNameId)) {
+            $currentMycobankData = Invoke-RestMethod -Uri "https://webservices.bio-aware.com/cbsdatabase_new/mycobank/taxonnames/$currentNameId" -Headers @{'Authorization' = "Bearer $mycobankToken"}
+        }
+    }
+
+}
+
+function AdMycoBankSynonym {
+    param ($Synonym)
+}
+
 function AddAgentToHierarchy {
     param ($Agent)
     switch ($Agent.concept_source) {
@@ -1652,7 +1706,10 @@ function AddAgentToHierarchy {
             AddIctvAgentToHierarchy $Agent
             break
         }
-        MycoBank { break }
+        MycoBank {
+            AddMycoBankAgentToHierarchy $Agent
+            break
+        }
         Default { break }
     }
 }
@@ -1672,7 +1729,10 @@ function AddSynonym {
             AddIctvSynonym $Synonym
             break
         }
-        MycoBank { break }
+        MycoBank {
+            AddMycoBankSynonym $Synonym
+            break
+        }
         Default { break }
     }
 }
