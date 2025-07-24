@@ -1664,7 +1664,7 @@ function FetchMycoBankData {
     }
 
     $filter = [System.Web.HttpUtility]::UrlEncode("name startWith '$ConceptName'")
-    $mycobankData = Invoke-RestMethod -Uri "https://webservices.bio-aware.com/cbsdatabase_new/mycobank/taxonnames?page=1&pageSize=1&filter=$filter" -Headers @{'Authorization' = "Bearer $mycobankToken"} |
+    $mycobankData = Invoke-RestMethod -Uri "https://webservices.bio-aware.com/cbsdatabase_new/mycobank/taxonnames?filter=$filter" -Headers @{'Authorization' = "Bearer $mycobankToken"} |
         Select-Object -ExpandProperty items
 
     $mycoBankDataById["$($mycobankData.id)"] = $mycobankData
