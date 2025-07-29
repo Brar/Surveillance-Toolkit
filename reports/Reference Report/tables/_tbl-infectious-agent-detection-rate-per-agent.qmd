@@ -5,6 +5,12 @@
 
 reference_data |>
   neoipcr::get_infectious_agent_detection_rate_per_agent_table() |>
+  dplyr::mutate(
+    group = dplyr::if_else(
+      stringr::str_detect(group, "spp."),
+      paste0("*", stringr::str_extract(group, "^(.+) spp\\.(.*)$", 1), "* spp.", stringr::str_extract(group, "^(.+) spp\\.(.*)$", 2)),
+      group
+      )) |>
   dplyr::rename(
     "N"="n",
     "Pooled"="pooled",
@@ -13,13 +19,19 @@ reference_data |>
     "Q₃"="q3") |>
   gt(rowname_col = "group") |>
   sub_missing() |>
+  gt::fmt_markdown(columns = c("group")) |>
   gt::tab_options(
-    table.font.size = 13
+#    latex.header_repeat = TRUE,
+    latex.use_longtable = TRUE,
+    table.width = pct(100),
+    table.font.size = 13,
+    footnotes.marks = "extended"
   ) |>
   fmt_number(decimals = 1) |>
   fmt_number(columns = "N", decimals = 0) |>
-  cols_width(matches("group") ~ pct(40)) |>
-  cols_width(starts_with("Q") ~ pct(7)) |>
+  cols_width(
+    matches("group") ~ pct(50),
+    starts_with("Q") ~ pct(7)) |>
   gt::tab_stub_indent(
     rows = gt::everything(),
     indent = gt::from_column(column = "level")
@@ -43,14 +55,26 @@ reference_data |>
       style = "italic"
       ),
     locations = cells_stub(
-      rows = taxon == "species"
-    )
+      rows = taxon %in% c(
+        "domain",
+        "kingdom",
+        "order",
+        "species")
+      )
   ) |>
   cols_hide(columns = any_of(c("level","taxon"))) |>
   tab_spanner(
     label = "Infectious agent detection rate",
     columns = c("Pooled","Q₁","Q₂","Q₃"),
     id = "infectious_agent_detection_rate"
+  ) |>
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = list(
+      cells_column_spanners(),
+      cells_column_labels(),
+      cells_row_groups()
+    )
   ) |>
   tab_footnote(
     footnote = md(
@@ -74,7 +98,7 @@ reference_data |>
     footnote = "Pooled: The infectious agent detection rate calculated across all infants from all departments.",
     locations = cells_column_labels(columns = "Pooled")) |>
   tab_footnote(
-    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the infectious agent detection rates of the partner departments",
+    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the infectious agent detection rates of the partner departments. These quartiles are only displayed when the number of departments contributing to the denominator is greater than or equal to five, and when the median number of expected agents detected in infections is greater than or equal to one according to the pooled infectious agent detection rate.",
     locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃")))
 
 ```

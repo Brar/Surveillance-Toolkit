@@ -19,11 +19,11 @@ params:
 
 `{r} translations$headerList$createdAt`:
 
-:   `{r} format(Sys.time(), format = "%x %X", tz = "UTC", usetz = TRUE)`
+:   `{r} format(data$metadata$system$date, format = "%x %X", tz = "UTC", usetz = TRUE)`
 
 `{r} translations$headerList$analysisPeriod`:
 
-:   `{r} paste(format(reportingPeriodFrom, format = "%x"), format(reportingPeriodTo, format = "%x"), sep = " - ")`
+:   `{r} paste(format(reportingPeriodFrom, format = "%x"), format(as_date(min(data$metadata$system$date, as_datetime(reportingPeriodTo))), format = "%x"), sep = " - ")`
 
 `{r} if(nrow(data$metadata$countries) > 1){translations$headerList$countries}else{translations$headerList$country}`:
 
@@ -110,6 +110,10 @@ Average surveillance period per patient:
 
 :   `{r} format(neoipcr:::get_risk_time(data)$patient_days / neoipcr:::get_risk_population(data)$n_patients, digits = 2, nsmall = 1, scientific = FALSE)` days
 
+::: {.content-visible when-format="pdf"}
+\FloatBarrier
+:::
+
 # Patient Population
 
 As the process, although supported by various tools, relies on the collection, interpretation and monitoring of information by qualified professionals, NeoIPC surveillance is currently being targeted at the most common nosocomial infections in high-risk neonates, in order to make it sustainable in a continuous manner in as many settings as possible. This means that patients with a birth weight below 1 500 g and/or a gestational age below 32 weeks at the time of birth are included into the surveillance database if they are admitted to a participating neonatology department within the first 120 days of life. This results in the composition of the patient population that is shown in @fig-bw-ref and @fig-ga-ref.
@@ -118,13 +122,23 @@ As the process, although supported by various tools, relies on the collection, i
 
 {{< include figures/_fig-ga-ref.qmd >}}
 
+::: {.content-visible when-format="pdf"}
+\pagebreak
+:::
+
 # Nosocomial infections
 
-Nosocomial infections represent the primary endpoint of NeoIPC surveillance. In @tbl-incidence-density-rates, the incidence densities of sepsis/BSI, pneumonia and necrotising enterocolitis, as well as the combined endpoint 'severe infection', are displayed. Device-associated infections can be found in @tbl-device-associated-incidence-density-rates.
+Nosocomial infections represent the primary endpoint of NeoIPC surveillance. In @tbl-incidence-density-rates, the incidence densities of sepsis/BSI, pneumonia and necrotising enterocolitis, as well as the combined endpoint 'severe infection', are displayed. Overall `{r} format(reference_data$incidence_density_rate_table |> dplyr::filter(inf == "si") |> dplyr::pull("n"), big.mark = locale_sep_mark)` severe infections were recorded in `{r} format(neoipcr:::get_risk_population(data)$n_patients, big.mark = locale_sep_mark)` infants resulting in an average number of `{r} format(((reference_data$incidence_density_rate_table |> dplyr::filter(inf == "si") |> dplyr::pull("n")) / (neoipcr:::get_risk_population(data)$n_patients)), digits = 2, nsmall = 1, scientific = FALSE)` infections per patient.
+
+Device-associated infections can be found in @tbl-device-associated-incidence-density-rates.
 
 {{< include tables/_tbl-incidence-density-rates.qmd >}}
 
 {{< include tables/_tbl-device-associated-incidence-density-rates.qmd >}}
+
+::: {.content-visible when-format="pdf"}
+\pagebreak
+:::
 
 ## Infectious Agents
 
@@ -142,18 +156,24 @@ When comparing data with the information on pathogens presented in @tbl-infectio
 
 <!-- {{< include tables/_tbl-resistance-test-rate.qmd >}} -->
 
+::: {.content-visible when-format="pdf"}
+\pagebreak
+:::
+
 # Risk and Protective Factors
 
 Next to the inherent risk factors gestational age and birth weight there are also a number of expositional factors that influence the risk of an infant to acquire a multi-drug-resistant pathogen or to develop an infection. @tbl-usage-density-rates shows the presence of these factors in the NeoIPC Surveillance population.
 
 {{< include tables/_tbl-usage-density-rates.qmd >}}
 
+::: {.content-visible when-format="pdf"}
+\pagebreak
+:::
+
 ## Surgery
 
-The patient population in neonatology departments is typically characterised by a low volume of surgical procedures. In this dataset, `{r} format(n_surgical_departments, big.mark = locale_sep_mark)` of the partner departments (`{r} format(round(n_surgical_departments / length(unique(data$enrollments$department_key)) * 100))`%) recorded surgical procedures during the surveillance period of included neonates.
+In this dataset, `{r} format(n_surgical_departments, big.mark = locale_sep_mark)` of the partner departments (`{r} format(round(n_surgical_departments / length(unique(data$enrollments$department_key)) * 100))`%) recorded surgical procedures performed on included neonates during the surveillance period. A total of `{r} format(n_procedures, big.mark = locale_sep_mark)` procedures were performed on `{r} format(n_patients, big.mark = locale_sep_mark)` infants, resulting in an average number of `{r} format(n_procedures_per_patient, digits = 2, nsmall = 1, scientific = FALSE)` operations per surgical patient.
 
-On the other hand, surgically treated neonates often require more than one operation, so that on average `{r} format(n_procedures_per_patient, digits = 2, nsmall = 1, scientific = FALSE)` operations have been performed for each surgical patient.
-
-While we currently don't calculate surgical site infection rates due to their low volume (n = `{r} format(nrow(data$ssiData), digits = 2, nsmall = 1, scientific = FALSE)` in this dataset), @tbl-surgery-rates gives an overview of the categories of procedures performed in neonates.
+Due to the low number of surgical site infections in this dataset (n = `{r} format(nrow(data$ssiData), digits = 2, nsmall = 1, scientific = FALSE)`) we are not currently calculating their infection rates, but @tbl-surgery-rates provides an overview of the categories of procedures performed on neonates.
 
 {{< include tables/_tbl-surgery-rates.qmd >}}

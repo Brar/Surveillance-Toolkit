@@ -8,6 +8,7 @@ format:
     classoption: [footsepline=true, plainfootsepline=true]
     papersize: a4paper
     fig-pos: 'H'
+    tbl-pos: 'H'
     colorlinks: true
     geometry:
       - top=30mm
@@ -15,9 +16,11 @@ format:
       - left=25mm
       - right=25mm
       - heightrounded
+    keep-tex: true
     include-in-header:
       text: |
         \usepackage{float}
+        \usepackage{placeins}
         \usepackage{graphicx}
         \usepackage{wrapfig}
         \usepackage{scrlayer-scrpage}

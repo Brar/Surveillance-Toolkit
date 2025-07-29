@@ -32,6 +32,10 @@ reference_data |>
     .before = 1) |>
   gt(rowname_col = "abr") |>
   sub_missing() |>
+  gt::tab_options(
+    table.font.size = 13,
+    footnotes.marks = "extended"
+  ) |>
   fmt_number(decimals = 1) |>
   fmt_number(columns = "N", decimals = 0) |>
   fmt_markdown(columns = "abr") |>
@@ -54,6 +58,14 @@ reference_data |>
     label = "Antibiotic resistance test rate",
     columns = c("Pooled","Q₁","Q₂","Q₃"),
     id = "antibiotic_resistance_test_rate"
+  ) |>
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = list(
+      cells_column_spanners(),
+      cells_column_labels(),
+      cells_row_groups()
+    )
   ) |>
   tab_footnote(
     footnote = md(

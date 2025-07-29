@@ -24,6 +24,10 @@ reference_data |>
   gt(rowname_col = "group") |>
   sub_missing() |>
   gt::tab_options(
+    table.font.size = 13,
+    footnotes.marks = "extended"
+  ) |>
+  gt::tab_options(
     table.font.size = 15
   ) |>
   fmt_number(decimals = 1) |>
@@ -72,6 +76,14 @@ reference_data |>
     columns = c("Pooled","Q₁","Q₂","Q₃"),
     id = "resistant_pathogen_infection_rate"
   ) |>
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = list(
+      cells_column_spanners(),
+      cells_column_labels(),
+      cells_row_groups()
+    )
+  ) |>
   tab_footnote(
     footnote = md(
       paste0(
@@ -94,6 +106,6 @@ reference_data |>
     footnote = "Pooled: The resistant pathogen infection rate calculated across all infants from all departments.",
     locations = cells_column_labels(columns = "Pooled")) |>
   tab_footnote(
-    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the resistant pathogen infection rates of the partner departments",
+    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the resistant pathogen infection rates of the partner departments.",
     locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃")))
 ```

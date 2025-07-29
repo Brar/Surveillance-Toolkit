@@ -21,9 +21,21 @@ reference_data |>
       "inv" ~ "INV",
       "niv" ~ "NIV")) |>
   gt(rowname_col = "Device") |>
+  sub_missing() |>
+  gt::tab_options(
+    latex.use_longtable = TRUE,
+    table.width = pct(100),
+    table.font.size = 13,
+    footnotes.marks = "extended"
+  ) |>
   fmt_number(decimals = 1) |>
   fmt_number(columns = "N", decimals = 0) |>
-  cols_width(starts_with("Q") ~ pct(7)) |>
+  cols_width(
+    stub() ~ pct(25),
+    N ~ pct(15),
+    Pooled ~ pct(15),
+    starts_with("Q") ~ pct(15)
+  ) |>
   tab_row_group(label = "Vascular catheter associated sepsis / bloodstream infection", rows = 1:2, id = "grp_vc") |>
   tab_row_group(label = "Ventilatory support associated pneumonia", rows = 3:5, id = "grp_vs") |>
   row_group_order(groups = c("grp_vc", "grp_vs")) |>
@@ -31,6 +43,14 @@ reference_data |>
     label = "Device-associated incidence density rate",
     columns = c("Pooled","Q₁","Q₂","Q₃"),
     id = "da_incidence_density_rate"
+  ) |>
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = list(
+      cells_column_spanners(),
+      cells_column_labels(),
+      cells_row_groups()
+    )
   ) |>
   tab_footnote(
     footnote = md(
@@ -54,7 +74,6 @@ reference_data |>
     footnote = "Pooled: The incidence density rate calculated across all infants from all departments.",
     locations = cells_column_labels(columns = "Pooled")) |>
   tab_footnote(
-    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the device-associated incidence density rates of the partner departments",
-    locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃"))) |>
-  sub_missing()
+    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the device-associated incidence density rates of the partner departments. These quartiles are only displayed when the number of departments contributing to the denominator is greater than or equal to five, and when the median number of expected infections is greater than or equal to one according to the pooled incidence density rate.",
+    locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃")))
 ```

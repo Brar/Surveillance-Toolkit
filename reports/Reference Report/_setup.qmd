@@ -91,18 +91,13 @@ if(file.exists(translation_file)) {
   }
 }
 
-n_surgical_departments <- data$enrollments |>
-  dplyr::semi_join(
-    data$events |>
-      dplyr::filter(event_type_key == "pro"),
-    dplyr::join_by(enrollment_key)) |>
-  dplyr::pull(department_key) |>
-  unique() |>
-  length()
-
-n_procedures_per_patient <- data$events |>
+surgery_summary <- data$events |>
   dplyr::filter(event_type_key == "pro") |>
-  dplyr::summarise(n_departments = n_distinct(department_key), n_patients = n_distinct(patient_key), n_procedures = n()) |>
-  dplyr::mutate(procedures_per_patient = n_procedures / n_patients) |>
-  dplyr::pull(procedures_per_patient)
+  dplyr::semi_join(data$enrollments, dplyr::join_by(enrollment_key)) |>
+  dplyr::summarise(n_departments = n_distinct(department_key), n_patients = n_distinct(patient_key), n_procedures = n())
+
+n_surgical_departments <- surgery_summary |> dplyr::pull("n_departments")
+n_patients <- surgery_summary |> dplyr::pull("n_patients")
+n_procedures <- surgery_summary |> dplyr::pull("n_procedures")
+n_procedures_per_patient <- n_procedures / n_patients
 ```

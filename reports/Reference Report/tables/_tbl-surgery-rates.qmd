@@ -11,14 +11,20 @@ col_names <- attr(tmp, "names.pretty")
 row_names <- attr(tmp, "row.names.pretty")
 pro_cat <- col_names[["pro_cat"]]
 
-out <- tmp |>
+tmp |>
   gt(rowname_col = pro_cat) |>
   sub_missing() |>
+  gt::tab_options(
+    latex.use_longtable = TRUE,
+    table.width = pct(100),
+    table.font.size = 13,
+    footnotes.marks = "extended"
+  ) |>
   fmt_number(decimals = 1) |>
   fmt_number(columns = col_names[["n"]], decimals = 0) |>
-  cols_width(matches(pro_cat) ~ pct(50)) |>
-  cols_width(starts_with("Q") ~ pct(7)) |>
-  tab_options(footnotes.font.size = pct(60)) |>
+  cols_width(
+    matches(pro_cat) ~ pct(50),
+    starts_with("Q") ~ pct(7)) |>
   tab_spanner(
     label = "Procedure rate",
     columns = c(
@@ -27,6 +33,14 @@ out <- tmp |>
       col_names[["q2"]],
       col_names[["q3"]]),
     id = "procedure_rate"
+  ) |>
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = list(
+      cells_column_spanners(),
+      cells_column_labels(),
+      cells_row_groups()
+    )
   ) |>
   tab_footnote(
     footnote = md(
@@ -50,8 +64,6 @@ out <- tmp |>
     footnote = "Pooled: The procedure rate calculated across all infants from all departments.",
     locations = cells_column_labels(columns = col_names[["pooled"]])) |>
   tab_footnote(
-    footnote = paste(paste(col_names[["q1"]],col_names[["q2"]],col_names[["q3"]], sep = ", "), ": The quartiles (25%, 50% and 75% quantiles) of the procedure rates of the partner departments."),
+    footnote = paste(paste(col_names[["q1"]],col_names[["q2"]],col_names[["q3"]], sep = ", "), ": The quartiles (25%, 50% and 75% quantiles) of the procedure rates of the partner departments. These quartiles are only displayed when the number of departments contributing to the denominator is greater than or equal to five, and when the median number of procedures is greater than or equal to one according to the pooled procedure rate."),
     locations = cells_column_labels(columns = c(col_names[["q1"]],col_names[["q2"]],col_names[["q3"]])))
-
-out
 ```
