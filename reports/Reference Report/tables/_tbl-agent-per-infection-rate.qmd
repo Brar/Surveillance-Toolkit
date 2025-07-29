@@ -1,5 +1,5 @@
 ```{r}
-#| label: tbl-infectious-agent-detection-rate-per-agent
+#| label: tbl-agent-per-infection-rate
 #| tbl-cap: "Infectious agents detected in nosocomial infections"
 #| tbl-cap-location: top
 
@@ -64,7 +64,7 @@ reference_data |>
   ) |>
   cols_hide(columns = any_of(c("level","taxon"))) |>
   tab_spanner(
-    label = "Infectious agent detection rate",
+    label = "Agent-per-Infection Rate",
     columns = c("Pooled","Q₁","Q₂","Q₃"),
     id = "infectious_agent_detection_rate"
   ) |>
@@ -80,11 +80,11 @@ reference_data |>
     footnote = md(
       paste0(
         "$$\\text{",
-        "Infectious agent detection rate",
+        "Agent-per-Infection Rate",
         "} = \\frac{\\text{",
-        "No of agents that were detected in infections",
+        "No of infectious agents that were detected in infections",
         "}}{\\text{",
-        "No of infections where an agent was detected",
+        "No of infections where an infectious agent was detected",
         "}} \\times ",
         format(100, big.mark = locale_sep_mark),
         "$$"
@@ -95,10 +95,10 @@ reference_data |>
     footnote = "N: The aggregated number of infectious agents in all infections.",
     locations = cells_column_labels(columns = "N")) |>
   tab_footnote(
-    footnote = "Pooled: The infectious agent detection rate calculated across all infants from all departments.",
+    footnote = "Pooled: The Agent-per-Infection Rate calculated across all infants from all departments.",
     locations = cells_column_labels(columns = "Pooled")) |>
   tab_footnote(
-    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the infectious agent detection rates of the partner departments. These quartiles are only displayed when the number of departments contributing to the denominator is greater than or equal to five, and when the median number of expected agents detected in infections is greater than or equal to one according to the pooled infectious agent detection rate.",
+    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the Agent-per-Infection Rates of the partner departments. These quartiles are only displayed when the number of departments contributing to the denominator is greater than or equal to five, and when the median number of expected agents detected in infections is greater than or equal to one according to the pooled Agent-per-Infection Rate.",
     locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃")))
 
 ```

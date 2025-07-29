@@ -1,5 +1,5 @@
 ```{r}
-#| label: tbl-surgery-rates
+#| label: tbl-surgical-procedure-rates
 #| tbl-cap: "Surgical procedures by category"
 #| tbl-cap-location: top
 
@@ -26,7 +26,7 @@ tmp |>
     matches(pro_cat) ~ pct(50),
     starts_with("Q") ~ pct(7)) |>
   tab_spanner(
-    label = "Procedure rate",
+    label = "Surgical Procedure Rate",
     columns = c(
       col_names[["pooled"]],
       col_names[["q1"]],
@@ -46,7 +46,7 @@ tmp |>
     footnote = md(
       paste0(
         "$$\\text{",
-        "Procedure rate",
+        "Surgical Procedure Rate",
         "} = \\frac{\\text{",
         "Number of procedures",
         "}}{\\text{",
@@ -61,9 +61,9 @@ tmp |>
     footnote = "N: The aggregated number surgical procedures performed in all infants.",
     locations = cells_column_labels(columns = col_names[["n"]])) |>
   tab_footnote(
-    footnote = "Pooled: The procedure rate calculated across all infants from all departments.",
+    footnote = "Pooled: The Surgical Procedure Rate calculated across all infants from all departments.",
     locations = cells_column_labels(columns = col_names[["pooled"]])) |>
   tab_footnote(
-    footnote = paste(paste(col_names[["q1"]],col_names[["q2"]],col_names[["q3"]], sep = ", "), ": The quartiles (25%, 50% and 75% quantiles) of the procedure rates of the partner departments. These quartiles are only displayed when the number of departments contributing to the denominator is greater than or equal to five, and when the median number of procedures is greater than or equal to one according to the pooled procedure rate."),
+    footnote = paste(paste(col_names[["q1"]],col_names[["q2"]],col_names[["q3"]], sep = ", "), ": The quartiles (25%, 50% and 75% quantiles) of the Surgical Procedure Rates of the partner departments. These quartiles are only displayed when the number of departments contributing to the denominator is greater than or equal to five, and when the median number of procedures is greater than or equal to one according to the pooled Surgical Procedure Rate."),
     locations = cells_column_labels(columns = c(col_names[["q1"]],col_names[["q2"]],col_names[["q3"]])))
 ```

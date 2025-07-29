@@ -1,5 +1,5 @@
 ```{r}
-#| label: tbl-infectious-agent-detection-rate-per-inf-type
+#| label: tbl-infectious-agent-detection-rate
 #| tbl-cap: "Infections in which an infectious agent has been identified, including secondary BSI following the infection."
 #| tbl-cap-location: top
 
@@ -37,7 +37,7 @@ reference_data |>
     starts_with("Q") ~ pct(15)
   ) |>
   tab_spanner(
-    label = "Infectious agent detection rate",
+    label = "Infectious Agent Detection Rate",
     columns = c("Pooled","Q₁","Q₂","Q₃"),
     id = "infectious_agent_detection_rate"
   ) |>
@@ -53,7 +53,7 @@ reference_data |>
     footnote = md(
       paste0(
         "$$\\text{",
-        "Infectious agent detection rate",
+        "Infectious Agent Detection Rate",
         "} = \\frac{\\text{",
         "No of infections with agent",
         "}}{\\text{",
@@ -68,9 +68,9 @@ reference_data |>
     footnote = "N: The aggregated number of infections where at least one infectious agent was recorded.",
     locations = cells_column_labels(columns = "N")) |>
   tab_footnote(
-    footnote = "Pooled: The infectious agent detection rate calculated across all infants from all departments.",
+    footnote = "Pooled: The Infectious Agent Detection Rate calculated across all infants from all departments.",
     locations = cells_column_labels(columns = "Pooled")) |>
   tab_footnote(
-    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the infectious agent detection rates of the partner departments. These quartiles are only displayed when the number of departments contributing to the denominator is greater than or equal to five, and when the median number of expected infections with an agents is greater than or equal to one according to the pooled infectious agent detection rate.",
+    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the Infectious Agent Detection Rates of the partner departments. These quartiles are only displayed when the number of departments contributing to the denominator is greater than or equal to five, and when the median number of expected infections with an agents is greater than or equal to one according to the pooled Infectious Agent Detection Rate.",
     locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃")))
 ```

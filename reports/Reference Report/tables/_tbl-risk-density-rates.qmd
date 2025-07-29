@@ -1,5 +1,5 @@
 ```{r}
-#| label: tbl-usage-density-rates
+#| label: tbl-risk-density-rates
 #| tbl-cap: "Factors influencing the infants' risk of developing an infection or acquiring a drug-resistant pathogen."
 #| tbl-cap-location: top
 
@@ -48,7 +48,7 @@ reference_data |>
   tab_row_group(label = "Antibiotics", rows = c("Any antibiotic","Access","Watch","Reserve"), id = "grp_ab") |>
   row_group_order(groups = c("grp_vc", "grp_vs", "grp_ab", "grp_othr")) |>
   tab_spanner(
-    label = "Risk density rate",
+    label = "Risk Density Rate",
     columns = c("Pooled","Q₁","Q₂","Q₃"),
     id = "risk_density_rate"
   ) |>
@@ -64,7 +64,7 @@ reference_data |>
     footnote = md(
       paste0(
         "$$\\text{",
-        "Risk density rate",
+        "Risk Density Rate",
         "} = \\frac{\\text{",
         "Days with risk/protective factor",
         "}}{\\text{",
@@ -79,10 +79,10 @@ reference_data |>
     footnote = "N: The aggregated number of days the risk/protective factor was present in all infants.",
     locations = cells_column_labels(columns = "N")) |>
   tab_footnote(
-    footnote = "Pooled: The risk density rate calculated across all infants from all departments.",
+    footnote = "Pooled: The Risk Density Rate calculated across all infants from all departments.",
     locations = cells_column_labels(columns = "Pooled")) |>
   tab_footnote(
-    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the risk density rates of the departments. These quartiles are only displayed when the number of departments contributing to the denominator is greater than or equal to five, and when the median number of device days is greater than or equal to one according to the pooled risk density rate.",
+    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the Risk Density Rates of the departments. These quartiles are only displayed when the number of departments contributing to the denominator is greater than or equal to five, and when the median number of device days is greater than or equal to one according to the pooled Risk Density Rate.",
     locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃"))) |>
   tab_footnote(
     footnote = md("WHO AWaRe group (see [aware.essentialmeds.org](https://aware.essentialmeds.org/)). As cumulative treatment days for individual substances are recorded per patient, combination therapies using several substances on one day are counted as multiple days."),

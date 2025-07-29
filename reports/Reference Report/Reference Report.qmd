@@ -144,15 +144,15 @@ Device-associated infections can be found in @tbl-device-associated-incidence-de
 
 Epidemiology of the infectious agents causing nosocomial infections in neonatology is complex and there is a lot of potential for bias. While low diagnostic sensitivity (low blood volume) and specificity (contamination) are a general problem in the neonatal population, the lack of availability of some or all means of microbiological diagnostics, or the lack of financial resources can have a strong effect on the detection rates in resource-constrained settings.
 
-<!-- When comparing data with the information on pathogens presented in @tbl-infectious-agent-detection-rate-per-agent and information on drug resistance in @tbl-abr-infection-rate, please also have a look at the infectious agent detection rates presented in @tbl-infectious-agent-detection-rate-per-inf-type and the antibiotic resistance test rates in @tbl-resistance-test-rate. -->
+<!-- When comparing data with the information on pathogens presented in @tbl-agent-per-infection-rate and information on drug resistance in @tbl-abr-infection-rate, please also have a look at the infectious agent detection rates presented in @tbl-infectious-agent-detection-rate and the antibiotic resistance test rates in @tbl-resistance-test-rate. -->
 
-When comparing data with the information on pathogens presented in @tbl-infectious-agent-detection-rate-per-agent, please also have a look at the infectious agent detection rates presented in @tbl-infectious-agent-detection-rate-per-inf-type.
+When comparing data with the information on pathogens presented in @tbl-agent-per-infection-rate, please also have a look at the infectious agent detection rates presented in @tbl-infectious-agent-detection-rate.
 
-{{< include tables/_tbl-infectious-agent-detection-rate-per-agent.qmd >}}
+{{< include tables/_tbl-agent-per-infection-rate.qmd >}}
 
 <!-- {{< include tables/_tbl-abr-infection-rate.qmd >}} -->
 
-{{< include tables/_tbl-infectious-agent-detection-rate-per-inf-type.qmd >}}
+{{< include tables/_tbl-infectious-agent-detection-rate.qmd >}}
 
 <!-- {{< include tables/_tbl-resistance-test-rate.qmd >}} -->
 
@@ -162,9 +162,9 @@ When comparing data with the information on pathogens presented in @tbl-infectio
 
 # Risk and Protective Factors
 
-Next to the inherent risk factors gestational age and birth weight there are also a number of expositional factors that influence the risk of an infant to acquire a multi-drug-resistant pathogen or to develop an infection. @tbl-usage-density-rates shows the presence of these factors in the NeoIPC Surveillance population.
+Next to the inherent risk factors gestational age and birth weight there are also a number of expositional factors that influence the risk of an infant to acquire a multi-drug-resistant pathogen or to develop an infection. @tbl-risk-density-rates shows the presence of these factors in the NeoIPC Surveillance population.
 
-{{< include tables/_tbl-usage-density-rates.qmd >}}
+{{< include tables/_tbl-risk-density-rates.qmd >}}
 
 ::: {.content-visible when-format="pdf"}
 \pagebreak
@@ -174,6 +174,6 @@ Next to the inherent risk factors gestational age and birth weight there are als
 
 In this dataset, `{r} format(n_surgical_departments, big.mark = locale_sep_mark)` of the partner departments (`{r} format(round(n_surgical_departments / length(unique(data$enrollments$department_key)) * 100))`%) recorded a total of `{r} format(n_procedures, big.mark = locale_sep_mark)` surgical procedures performed on `{r} format(n_patients, big.mark = locale_sep_mark)` neonates, resulting in an average number of `{r} format(n_procedures_per_patient, digits = 2, nsmall = 1, scientific = FALSE)` operations per surgical patient during the surveillance period.
 
-Due to the low number of surgical site infections in this dataset (n = `{r} format(nrow(data$ssiData), digits = 2, nsmall = 1, scientific = FALSE)`) we are not currently calculating their infection rates, but @tbl-surgery-rates provides an overview of the categories of procedures performed on neonates.
+Due to the low number of surgical site infections in this dataset (n = `{r} format(nrow(data$ssiData), digits = 2, nsmall = 1, scientific = FALSE)`) we are not currently calculating their infection rates, but @tbl-surgical-procedure-rates provides an overview of the categories of procedures performed on neonates.
 
-{{< include tables/_tbl-surgery-rates.qmd >}}
+{{< include tables/_tbl-surgical-procedure-rates.qmd >}}

@@ -1,6 +1,6 @@
 ```{r}
 #| label: tbl-incidence-density-rates
-#| tbl-cap: "Incidence density rates of nosocomial infections"
+#| tbl-cap: "Incidence Density Rates of nosocomial infections"
 #| tbl-cap-location: top
 
 reference_data |>
@@ -39,7 +39,7 @@ reference_data |>
   tab_row_group(label = "Other", rows = 4, id = "grp_othr") |>
   row_group_order(groups = c("grp_si", "grp_othr")) |>
   tab_spanner(
-    label = "Incidence density rate",
+    label = "Incidence Density Rate",
     columns = c("Pooled","Q₁","Q₂","Q₃"),
     id = "incidence_density_rate"
   ) |>
@@ -55,7 +55,7 @@ reference_data |>
     footnote = md(
       paste0(
         "$$\\text{",
-        "Incidence density rate",
+        "Incidence Density Rate",
         "} = \\frac{\\text{",
         "Number of infections",
         "}}{\\text{",
@@ -70,10 +70,10 @@ reference_data |>
     footnote = "N: The aggregated number of infections in all infants.",
     locations = cells_column_labels(columns = "N")) |>
   tab_footnote(
-    footnote = "Pooled: The incidence density rate calculated across all infants from all departments.",
+    footnote = "Pooled: The Incidence Density Rate calculated across all infants from all departments.",
     locations = cells_column_labels(columns = "Pooled")) |>
   tab_footnote(
-    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the incidence density rates of the partner departments. These quartiles are only displayed when the number of departments contributing to the denominator is greater than or equal to five, and when the median number of expected infections is greater than or equal to one according to the pooled incidence density rate.",
+    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the Incidence Density Rates of the partner departments. These quartiles are only displayed when the number of departments contributing to the denominator is greater than or equal to five, and when the median number of expected infections is greater than or equal to one according to the pooled Incidence Density Rate.",
     locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃"))) |>
   tab_footnote(
     footnote = "Combines the outcomes primary sepsis/BSI and pneumonia",

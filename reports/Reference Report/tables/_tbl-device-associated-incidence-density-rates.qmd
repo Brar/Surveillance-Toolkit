@@ -40,7 +40,7 @@ reference_data |>
   tab_row_group(label = "Ventilatory support associated pneumonia", rows = 3:5, id = "grp_vs") |>
   row_group_order(groups = c("grp_vc", "grp_vs")) |>
   tab_spanner(
-    label = "Device-associated incidence density rate",
+    label = "Device-Associated Incidence Density Rate",
     columns = c("Pooled","Q₁","Q₂","Q₃"),
     id = "da_incidence_density_rate"
   ) |>
@@ -56,7 +56,7 @@ reference_data |>
     footnote = md(
       paste0(
         "$$\\text{",
-        "Device-associated incidence density rate",
+        "Device-Associated Incidence Density Rate",
         "} = \\frac{\\text{",
         "Number of device-associated infections",
         "}}{\\text{",
@@ -74,6 +74,6 @@ reference_data |>
     footnote = "Pooled: The incidence density rate calculated across all infants from all departments.",
     locations = cells_column_labels(columns = "Pooled")) |>
   tab_footnote(
-    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the device-associated incidence density rates of the partner departments. These quartiles are only displayed when the number of departments contributing to the denominator is greater than or equal to five, and when the median number of expected infections is greater than or equal to one according to the pooled incidence density rate.",
+    footnote = "Q₁, Q₂, Q₃: The quartiles (25%, 50% and 75% quantiles) of the Device-Associated Incidence Density Rates of the partner departments. These quartiles are only displayed when the number of departments contributing to the denominator is greater than or equal to five, and when the median number of expected infections is greater than or equal to one according to the pooled Device-Associated Incidence Density Rate.",
     locations = cells_column_labels(columns = c("Q₁","Q₂","Q₃")))
 ```
