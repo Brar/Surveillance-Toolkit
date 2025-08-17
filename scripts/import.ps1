@@ -338,11 +338,12 @@ Import-Csv C:/Users/Brar/dev/NeoIPC/ICTVdatabase/data/taxonomy_level.utf8.txt -D
     $ictvLevels[$id] = $row
 }
 
+$ByMycoBankConceptId = [System.Collections.Generic.Dictionary[string,[System.Collections.Generic.OrderedDictionary[string,string]]]]::new()
 $mycoBankDataById = Get-Content -LiteralPath ./metadata/common/pathogens/MycoBank_data.json -Raw -Encoding utf8 | ConvertFrom-Json -AsHashtable -Depth 100
-$mycoBankDataByMycoBankNumber = [System.Collections.Generic.Dictionary[Int64,PSCustomObject]]::new()
+$mycoBankDataByMycoBankNumber = [System.Collections.Generic.Dictionary[Int64,System.Management.Automation.OrderedHashtable]]::new()
 foreach ($row in $mycoBankDataById.Values) {
     $concept_id = $row.mycobankNr
-    $mycoBankDataByMycoBankNumber[$concept_id] = [PSCustomObject]$row
+    $mycoBankDataByMycoBankNumber[$concept_id] = $row
 }
 
 Class ConceptComparer:System.Collections.Generic.IComparer[System.Collections.Specialized.OrderedDictionary] {
@@ -422,13 +423,33 @@ $bacteria = [ordered]@{
 
 $viruses = [ordered]@{
     Name = 'Viruses'
+    ConceptSource = 'NeoIPC'
     Children = [System.Collections.Generic.SortedSet[ordered]]::new($myConceptComparer)
 }
 $fungi = [ordered]@{
     Name = 'Fungi'
     ConceptType = 'Kingdom'
+    ConceptId = 455206
+    ConceptSource = 'MycoBank'
+    MycoBankNr = 90157
     Children = [System.Collections.Generic.SortedSet[ordered]]::new($myConceptComparer)
 }
+$protozoa = [ordered]@{
+    Name = 'Protozoa'
+    ConceptType = 'Kingdom'
+    ConceptId = 92339
+    ConceptSource = 'MycoBank'
+    MycoBankNr = 99001
+    Children = [System.Collections.Generic.SortedSet[ordered]]::new($myConceptComparer)
+}
+$eukaryota = [ordered]@{
+    Name = 'Eukaryota'
+    ConceptType = 'Domain'
+    ConceptSource = 'NeoIPC'
+    Children = [System.Collections.Generic.SortedSet[ordered]]::new($myConceptComparer)
+}
+$eukaryota.Children.Add($fungi) | Out-Null
+$eukaryota.Children.Add($protozoa) | Out-Null
 
 $data = [ordered]@{
     UrlTemplates = [ordered]@{
@@ -450,9 +471,9 @@ $data = [ordered]@{
             Carbapenems = $true
             Colistin = $true
         }
-        $bacteria
-        $fungi
         $viruses
+        $bacteria
+        $eukaryota
     )
 }
         if ($inputData.is_cc -eq 't') {
@@ -779,12 +800,6 @@ $hInflV = [ordered]@{
     Id = 2659
 }
 
-# Severe acute respiratory syndrome coronavirus 2
-# SARS-CoV-2
-
-# Acremonium alabamensis
-# Candida parapsilosis complex
-
 $lpsnCacheByRecordNumber = [System.Collections.Generic.Dictionary[Int64,ordered]]::new()
 $lpsnCacheByRecordNumber[[Int64]43123] = $bacteria
 $ictvCacheByTaxNodeId = [System.Collections.Generic.Dictionary[int,ordered]]::new()
@@ -828,6 +843,19 @@ $ictvCacheByTaxNodeId[[int]202100000] = $viruses
 $ictvCacheByTaxNodeId[[int]202200000] = $viruses
 $ictvCacheByTaxNodeId[[int]202300000] = $viruses
 $ictvCacheByTaxNodeId[[int]202400000] = $viruses
+$mycoBankCacheByMycoBankId = [System.Collections.Generic.Dictionary[Int64,ordered]]::new()
+$mycoBankCacheByMycoBankId[[Int64]455206] = $fungi
+$mycoBankCacheByMycoBankId[[Int64]92339] = $protozoa
+
+$candidaParapsilosisComplex = [ordered]@{
+    Name = 'Candida parapsilosis complex'
+    ConceptType = 'Group'
+    ConceptId = 30
+    ConceptSource = 'NeoIPC'
+    Id = 2701
+    Children = [System.Collections.Generic.SortedSet[ordered]]::new($myConceptComparer)
+}
+
 
 function EnsureChildren {
     param ([System.Collections.Specialized.OrderedDictionary]$Object, [switch]$Synonyms)
@@ -1003,8 +1031,7 @@ function Add-LpsnManualChildren {
     }
 }
 
-function New-LpsnOutput
-{
+function New-LpsnOutput {
     param ($LpsnRow, $Parent, $InputData)
     $output = [ordered]@{}
     $output.Name = $LpsnRow.full_name
@@ -1208,6 +1235,7 @@ function AddNeoIpcAgentToHierarchy {
             'Streptococcus salivarius group'
             'Streptococcus sanguinis group'
             'Viridans streptococci'
+            'Candida parapsilosis complex'
             )} {
             break
         }
@@ -1491,8 +1519,7 @@ function Add-IctvManualChildren {
     }
 }
 
-function New-IctvOutput
-{
+function New-IctvOutput {
     param ($IctvRow, $Parent, $InputData)
 
     $levelName = $ictvLevels[$IctvRow.level_id].name
@@ -1657,38 +1684,248 @@ function AddIctvSynonym {
 }
 
 function FetchMycoBankData {
-    param ($ConceptId, $ConceptName)
+    param ([Int64]$ConceptId, [string]$ConceptName, [int]$NeoIPCId)
     New-Variable -Name mycoBankRow
-    if ($mycoBankDataByMycoBankNumber.TryGetValue([Int64]$ConceptId, [ref]$mycoBankRow)) {
+    if ($mycoBankDataByMycoBankNumber.TryGetValue($ConceptId, [ref]$mycoBankRow)) {
         return $mycoBankRow
     }
 
-    $filter = [System.Web.HttpUtility]::UrlEncode("name startWith '$ConceptName'")
-    $mycobankData = Invoke-RestMethod -Uri "https://webservices.bio-aware.com/cbsdatabase_new/mycobank/taxonnames?filter=$filter" -Headers @{'Authorization' = "Bearer $mycobankToken"} |
-        Select-Object -ExpandProperty items
+    $filter = [System.Web.HttpUtility]::UrlEncode("name eq '$ConceptName'")
+    Start-Sleep -Seconds 2
+    $uri = "https://webservices.bio-aware.com/cbsdatabase_new/mycobank/taxonnames?filter=$filter"
+    Write-Debug "Invoking MycoBank HTTP request to $uri"
+    $m = Invoke-RestMethod -Uri $uri -Headers @{'Authorization' = "Bearer $mycobankToken"} |
+        Select-Object -ExpandProperty items |
+        Where-Object mycobankNr -EQ $ConceptId |
+        Select-Object @{n='neoIPCId';e={$NeoIPCId}},*
+    $mycobankData = [System.Management.Automation.OrderedHashtable]@{}
+    $m.psobject.properties | ForEach-Object { $mycobankData[$_.Name] = $_.Value }
 
-    $mycoBankDataById["$($mycobankData.id)"] = $mycobankData
-    $mycoBankDataByMycoBankNumber[$mycobankData.mycobankNr] = $mycobankData
+    $mycoBankDataById[$mycobankData.id.ToString()] = $mycobankData
+    $mycoBankDataByMycoBankNumber[[Int64]$mycobankData.mycobankNr] = $mycobankData
 
     $mycoBankDataById | ConvertTo-Json -Depth 100 | Set-Content -Encoding utf8NoBOM -LiteralPath ./metadata/common/pathogens/MycoBank_data.json
 
     return $mycobankData
 }
 
+function Update-MycoBankParent {
+    param ($Parent, $MycoBankRow, $InputData)
+
+    $parentMycoBankId = $mycoBankRow.classification[$mycoBankRow.classification.Count - 1]
+    if ($parentMycoBankId -eq 56219) {
+        if ($MycoBankRow.id -in @(106134, 414687, 414688)) { $Parent = $candidaParapsilosisComplex }
+    }
+
+    return $Parent
+}
+
+function MycoBankRankToConceptType {
+    param ([string]$Rank)
+    switch -Exact -CaseSensitive ($Rank) {
+        'subsp.' { return 'Subspecies' }
+        'sp.' { return 'Species' }
+        'gen.' { return 'Genus' }
+        'subgen.' { return 'Subgenus' }
+        'div.' { return 'Phylum' }
+        'subdiv.' { return 'Subphylum' }
+        'var.' { return 'Variety' }
+        'fam.' { return 'Family' }
+        'subfam.' { return 'Subfamily' }
+        'ordo' { return 'Order' }
+        'subordo' { return 'Suborder' }
+        'cl.' { return 'Class' }
+        'subcl.' { return 'Subclass' }
+        'regn.' { return 'Kingdom' }
+        'subregn.' { return 'Subkingdom' }
+        Default {
+            throw "Unknown MycoBank rank: '$Rank'"
+        }
+    }
+}
+
+function Add-MycoBankManualChildren {
+    param ($Output, $MycoBankRow, $InputData)
+
+    if ($Output.ConceptId -eq 56219) {
+        EnsureChildren $Output
+        $Output.Children.Add($candidaParapsilosisComplex) | Out-Null
+    }
+}
+
+function New-MycoBankOutput {
+    param ($MycoBankRow, $Parent, $InputData)
+    $output = [ordered]@{}
+    $output.Name = $MycoBankRow.name
+    $output.ConceptType = MycoBankRankToConceptType $MycoBankRow.rank
+    $output.ConceptId = $MycoBankRow.id
+    $output.ConceptSource = 'MycoBank'
+    if ($InputData -and $InputData.id) {
+        $output.Id = [int]$inputData.id
+    } elseif ($MycoBankRow.Contains('NewId')) {
+        $output.Id = $MycoBankRow.NewId
+    }
+    $output.MycoBankNr = $MycoBankRow.mycobankNr
+    if ($InputData) {
+        if ($inputData.is_cc -eq 't') {
+            $output.CommonCommensal = $true
+        }
+    }
+
+    $Parent = Update-MycoBankParent $Parent $MycoBankRow $InputData
+    if(-not $Parent.Contains('Children')) {
+        EnsureChildren $Parent
+        $Parent.Children.Add($output) | Out-Null
+        $mycoBankCacheByMycoBankId[$output.ConceptId] = $output
+        if ($output.Contains("Id")) {
+            $cacheById[$output.Id] = $output
+        }
+    } elseif (-not $mycoBankCacheByMycoBankId.ContainsKey($output.ConceptId)) {
+        $Parent.Children.Add($output) | Out-Null
+        $mycoBankCacheByMycoBankId[$output.ConceptId] = $output
+        if ($output.Contains("Id")) {
+            $cacheById[$output.Id] = $output
+        }
+    }
+    Write-Debug "Adding $($output.Name)"
+
+    Add-MycoBankManualChildren $output $MycoBankRow $InputData | Out-Null
+    return $output
+}
+
+function AddMycoBankAgentRecursive {
+    param ($MycoBankRow)
+    New-Variable -Name output
+    $parentMycoBankId = $mycoBankRow.classification[$mycoBankRow.classification.Count - 1].ToString()
+    if ($parentMycoBankId -ne '0' -and -not $mycoBankCacheByMycoBankId.ContainsKey($parentMycoBankId)) {
+        if (-not $mycoBankDataById.Contains($parentMycoBankId)){
+            Start-Sleep -Seconds 2
+            $uri = "https://webservices.bio-aware.com/cbsdatabase_new/mycobank/taxonnames/$parentMycoBankId"
+            Write-Debug "Invoking MycoBank HTTP request to $uri"
+            $m = Invoke-RestMethod -Uri $uri -Headers @{'Authorization' = "Bearer $mycobankToken"}
+            $mbr = [System.Management.Automation.OrderedHashtable]@{}
+            $m.psobject.properties | ForEach-Object { $mbr[$_.Name] = $_.Value }
+            $mycoBankDataById[$mbr.id.ToString()] = $mbr
+            $mycoBankDataByMycoBankNumber[$mbr.mycobankNr] = $mbr
+            $mycoBankDataById | ConvertTo-Json -Depth 100 | Set-Content -Encoding utf8NoBOM -LiteralPath ./metadata/common/pathogens/MycoBank_data.json
+        }
+        $p = AddMycoBankAgentRecursive $mycoBankDataById[$parentMycoBankId]
+        if ($null -eq $p) {
+            throw "Parent with id $parentMycoBankId is null."
+        }
+    } elseif ($mycoBankCacheByMycoBankId.TryGetValue($MycoBankRow.id, [ref]$output)) {
+        if ($MycoBankRow.Contains('NewId') -and -not $output.Contains('Id')) {
+            $output.Id = $MycoBankRow.NewId
+            $cacheById[$output.Id] = $output
+        }
+        return $output
+    } else {
+        $p = $mycoBankCacheByMycoBankId[$parentMycoBankId]
+        if ($null -eq $p) {
+            throw "Parent with id $parentMycoBankId is null."
+        }
+    }
+    $concept_id = $MycoBankRow.mycobankNr
+    New-Variable -Name inputData
+    if ($ByMycoBankConceptId.TryGetValue($concept_id, [ref]$inputData)) {
+        New-MycoBankOutput $MycoBankRow $p $inputData
+    }
+    else {
+        New-MycoBankOutput $MycoBankRow $p $null
+    }   
+}
+
 function AddMycoBankAgentToHierarchy {
     param ($Agent)
-    $mycoBankRow = FetchMycoBankData $Agent.concept_id $Agent.concept
+    try {
+        $mycoBankRow = FetchMycoBankData ([Int64]$($Agent.concept_id)) $Agent.concept ([int]$($Agent.id))
+    }
+    catch {
+        Write-Error "Invalid mycobankNr: '$($Agent.concept_id)'"
+    }
+
+    # Check if we're actually using the correct name
     $currentNameId = $mycoBankRow.synonymy.currentNameId
     if ($mycoBankRow.id -ne $currentNameId) {
-        if (-not $mycoBankDataById.ContainsKey($currentNameId)) {
-            $currentMycobankData = Invoke-RestMethod -Uri "https://webservices.bio-aware.com/cbsdatabase_new/mycobank/taxonnames/$currentNameId" -Headers @{'Authorization' = "Bearer $mycobankToken"}
+        if ($mycoBankDataById.ContainsKey($currentNameId)) {
+            $mycoBankRow = $mycoBankDataById[$currentNameId]
+        } else {
+            Start-Sleep -Seconds 2
+            $uri = "https://webservices.bio-aware.com/cbsdatabase_new/mycobank/taxonnames/$currentNameId"
+            Write-Debug "Invoking MycoBank HTTP request to $uri"
+            $m = Invoke-RestMethod -Uri $uri -Headers @{'Authorization' = "Bearer $mycobankToken"}
+            $mycoBankRow = [System.Management.Automation.OrderedHashtable]@{}
+            $m.psobject.properties | ForEach-Object { $mycoBankRow[$_.Name] = $_.Value }
+            $mycoBankDataById[$mycoBankRow.id.ToString()] = $mycoBankRow
+            $mycoBankDataByMycoBankNumber[$mycoBankRow.mycobankNr] = $mycoBankRow
+            $mycoBankDataById | ConvertTo-Json -Depth 100 | Set-Content -Encoding utf8NoBOM -LiteralPath ./metadata/common/pathogens/MycoBank_data.json
         }
+
+        # Do we have the correct name in our original data?
+        $concept_id = $mycoBankRow.mycobankNr
+        New-Variable -Name correctAgent
+        if ($ByMycoBankConceptId.TryGetValue($concept_id, [ref]$correctAgent)) {
+            $mycoBankRow.NewId = $correctAgent.id
+            # If we have the correct name as synonym we need to upgrade and add it
+            if ($correctAgent.ContainsKey('synonym')) {
+                $template = $ById[$correctAgent.synonym_for]
+                $correctAgent.concept = $correctAgent.synonym
+                $correctAgent.Remove('synonym') | Out-Null
+                $correctAgent.Remove('synonym_for') | Out-Null
+                foreach ($key in $template.Keys) {
+                    if ($key -notin @('id','concept','concept_source','concept_id')) {
+                        $correctAgent[$key] = $template[$key]
+                    }
+                }
+                AddMycoBankAgentRecursive $mycoBankRow | Out-Null
+            }
+        } else {
+            # We have a correct name that isn't in our original data yet
+            $mycoBankRow.NewId = ++$Script:maxId
+            AddMycoBankAgentRecursive $mycoBankRow | Out-Null
+        }
+        # Downgrade the incorrect name to synonym
+        $Agent.synonym = $Agent.concept
+        $Agent.synonym_for = $mycoBankRow.NewId
+        $Agent.Remove('concept') | Out-Null
+        foreach ($key in @($Agent.Keys)) {
+            if ($key -notin @('id','synonym','concept_source','concept_id','synonym_for')) {
+                $Agent.Remove($key) | Out-Null
+            }
+        }
+        $downgraded[[int]$Agent.id] = $mycoBankRow.NewId
+    }
+    else {
+        AddMycoBankAgentRecursive $mycoBankRow | Out-Null
     }
 
 }
 
-function AdMycoBankSynonym {
+function AddMycoBankSynonym {
     param ($Synonym)
+    $mycoBankNr = [Int64]$Synonym.concept_id
+    New-Variable -Name mycoBankRow
+    if (-not $mycoBankDataByMycoBankNumber.TryGetValue($mycoBankNr, [ref]$mycoBankRow)) {
+        $mycoBankRow = FetchMycoBankData -ConceptId $mycoBankNr -ConceptName $Synonym.synonym -NeoIPCId $Synonym.id
+    }
+
+    New-Variable -Name parentId
+    if (-not $downgraded.TryGetValue([int]$Synonym.synonym_for, [ref]$parentId)) {
+        $parentId = [int]$Synonym.synonym_for
+    }
+    New-Variable -Name parent
+    if ($cacheById.TryGetValue($parentId, [ref]$parent)) {
+        EnsureChildren $parent -Synonyms
+        $parent.Synonyms.Add([ordered]@{
+            Name = $mycoBankRow.name
+            ConceptId = $mycoBankRow.id
+            ConceptSource = 'MycoBank'
+            Id = [int]$Synonym.id
+            MycoBankNr = $mycoBankNr
+        }) | Out-Null
+    } else {
+        Write-Warning "Missing parent infectious agent with id $parentId for MycoBank synonym '$($Synonym.synonym)' with id $($Synonym.id)"
+    }
 }
 
 function AddAgentToHierarchy {
@@ -1770,6 +2007,14 @@ foreach ($iaRow in $infectiousAgentData) {
         Write-Error "Duplicate ICTV concept id '$($iaRow.concept_id)' in file 'NeoIPC-Pathogen-Concepts.csv' line $lineNo."
     }
     try {
+        if ($iaRow.concept_source -eq 'MycoBank') {
+            $ByMycoBankConceptId.Add($iaRow.concept_id, $newRow)
+        }
+    }
+    catch {
+        Write-Error "Duplicate MycoBank concept id '$($iaRow.concept_id)' in file 'NeoIPC-Pathogen-Concepts.csv' line $lineNo."
+    }
+    try {
         $ByName.Add($iaRow.concept, $newRow)
     }
     catch {
@@ -1797,6 +2042,22 @@ foreach ($sRow in $synonymData) {
     }
     catch {
         Write-Error "Duplicate LPSN concept id '$($sRow.concept_id)' in file 'NeoIPC-Pathogen-Concepts.csv' line $lineNo."
+    }
+    try {
+        if ($sRow.concept_source -eq 'ICTV') {
+            $ByIctvConceptId.Add($sRow.concept_id, $newRow)
+        }
+    }
+    catch {
+        Write-Error "Duplicate ICTV concept id '$($sRow.concept_id)' in file 'NeoIPC-Pathogen-Concepts.csv' line $lineNo."
+    }
+    try {
+        if ($sRow.concept_source -eq 'MycoBank') {
+            $ByMycoBankConceptId.Add($sRow.concept_id, $newRow)
+        }
+    }
+    catch {
+        Write-Error "Duplicate MycoBank concept id '$($sRow.concept_id)' in file 'NeoIPC-Pathogen-Concepts.csv' line $lineNo."
     }
     try {
         $ByName.Add($sRow.synonym, $newRow)
@@ -1845,4 +2106,4 @@ while ($more) {
     }
 }
 
-$data | ConvertTo-Yaml | Out-File -Encoding utf8NoBOM -LiteralPath ./metadata/common/pathogens/NeoIPC-Infectious-Agents.yml
+$data | ConvertTo-Yaml | Out-File -Encoding utf8NoBOM -LiteralPath ./metadata/common/pathogens/NeoIPC-Infectious-Agents.yaml

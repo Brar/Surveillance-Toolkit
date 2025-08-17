@@ -746,7 +746,7 @@ id,concept,concept_type,concept_source,concept_id,is_cc,coagulase,show_mrsa,show
 3283,Cutibacterium avidum,species,LPSN,species/cutibacterium-avidum,t,,f,f,f,f,f,,,,,,,,,,
 2996,Cutibacterium granulosum,species,LPSN,species/cutibacterium-granulosum,t,,f,f,f,f,f,,,,,,,,,,
 3456,Cyberlindnera,genus,MycoBank,534376,,,,,,,,,3456,3457,3458,3450,3426,3427,3428,3429,3430
-1132,Cyberlindnera fabianii,species,MycoBank,534382,f,,f,f,f,f,f,3436,3456,3457,3458,3450,3426,3427,3428,3429,3430
+1132,Cyberlindnera fabianii,species,MycoBank,534382,f,,f,f,f,f,f,1132,3456,3457,3458,3450,3426,3427,3428,3429,3430
 3356,Cyberlindnera jadinii,species,MycoBank,534383,f,,f,f,f,f,f,,,,,,,,,,
 3369,Cystobasidium minutum,species,MycoBank,809340,f,,f,f,f,f,f,,,,,,,,,,
 3105,Cytobacillus firmus,species,LPSN,species/cytobacillus-firmus,t,,f,f,f,f,f,,,,,,,,,,
