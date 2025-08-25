@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-08-23 14:44+0200\n"
+"POT-Creation-Date: 2025-08-25 12:27+0200\n"
 "PO-Revision-Date: 2025-08-20 19:53+0000\n"
 "Last-Translator: Brar Piening <brar@gmx.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/neoipc/neoipc-infectious-agents/de/>\n"
@@ -1487,6 +1487,12 @@ msgstr "Polyploviricotina"
 msgid "Negarnaviricota"
 msgstr "Negarnaviricota"
 
+#. type: Hash Value: Hierarchies Children Children Children Children Children Children Children Children Children Name
+#: metadata/common/infectious-agents/NeoIPC-Infectious-Agents.yaml:1
+#, no-wrap
+msgid "Human coronavirus"
+msgstr "Humane Coronaviren"
+
 #. type: Hash Value: Hierarchies Children Children Children Children Children Children Children Children Children ConceptType
 #: metadata/common/infectious-agents/NeoIPC-Infectious-Agents.yaml:1
 #, no-wrap
@@ -1540,12 +1546,6 @@ msgstr "Betacoronavirus"
 #, no-wrap
 msgid "Orthocoronavirinae"
 msgstr "Orthocoronavirinae"
-
-#. type: Hash Value: Hierarchies Children Children Children Children Children Children Children Children Synonyms Name
-#: metadata/common/infectious-agents/NeoIPC-Infectious-Agents.yaml:1
-#, no-wrap
-msgid "Human coronavirus"
-msgstr "Humane Coronaviren"
 
 #. type: Hash Value: Hierarchies Children Children Children Children Children Children Children Name
 #: metadata/common/infectious-agents/NeoIPC-Infectious-Agents.yaml:1
@@ -24110,7 +24110,7 @@ msgstr "3GCR: 3GCR\n"
 #: scripts/en/Convert-InfectiousAgentList-ContentStrings.psd1:12
 #, no-wrap
 msgid "Carbapenems: Carbapenems\n"
-msgstr "Carbapenems: Carbapenems\n"
+msgstr "Carbapenems: Carbapeneme\n"
 
 #. type: Plain text
 #: scripts/en/Convert-InfectiousAgentList-ContentStrings.psd1:14
@@ -24119,6 +24119,72 @@ msgid "Colistin: Colistin\n"
 msgstr "Colistin: Colistin\n"
 
 #. type: Plain text
-#: scripts/en/Convert-InfectiousAgentList-ContentStrings.psd1:15
+#: scripts/en/Convert-InfectiousAgentList-ContentStrings.psd1:16
+#, no-wrap
+msgid "Bacterium: Bacterium\n"
+msgstr "Bacterium: Bakterium\n"
+
+#. type: Plain text
+#: scripts/en/Convert-InfectiousAgentList-ContentStrings.psd1:18
+#, no-wrap
+msgid "Fungus: Fungus\n"
+msgstr "Fungus: Pilz\n"
+
+#. type: Plain text
+#: scripts/en/Convert-InfectiousAgentList-ContentStrings.psd1:20
+#, no-wrap
+msgid "Virus: Virus\n"
+msgstr "Virus: Virus\n"
+
+#. type: Plain text
+#: scripts/en/Convert-InfectiousAgentList-ContentStrings.psd1:22
+#, no-wrap
+msgid "Protozoon: Protozoon\n"
+msgstr "Protozoon: Protozoon\n"
+
+#. type: Plain text
+#: scripts/en/Convert-InfectiousAgentList-ContentStrings.psd1:24
+#, no-wrap
+msgid "Id: Id\n"
+msgstr "Id: Id\n"
+
+#. type: Plain text
+#: scripts/en/Convert-InfectiousAgentList-ContentStrings.psd1:26
+#, no-wrap
+msgid "Name: Name\n"
+msgstr "Name: Name\n"
+
+#. type: Plain text
+#: scripts/en/Convert-InfectiousAgentList-ContentStrings.psd1:28
+#, no-wrap
+msgid "Type: Type\n"
+msgstr "Type: Typ\n"
+
+#. type: Plain text
+#: scripts/en/Convert-InfectiousAgentList-ContentStrings.psd1:30
+#, no-wrap
+msgid "CommonCommensal: Common Commensal\n"
+msgstr "CommonCommensal: Gewöhnlicher Kommensale\n"
+
+#. type: Plain text
+#: scripts/en/Convert-InfectiousAgentList-ContentStrings.psd1:32
+#, no-wrap
+msgid "ParentId: Parent Id\n"
+msgstr "ParentId: Eltern Id\n"
+
+#. type: Plain text
+#: scripts/en/Convert-InfectiousAgentList-ContentStrings.psd1:34
+#, no-wrap
+msgid "RecordedResistances: Recorded Resistances\n"
+msgstr "RecordedResistances: Erfasste Resistenzen\n"
+
+#. type: Plain text
+#: scripts/en/Convert-InfectiousAgentList-ContentStrings.psd1:36
+#, no-wrap
+msgid "URL: URL\n"
+msgstr "URL: URL\n"
+
+#. type: Plain text
+#: scripts/en/Convert-InfectiousAgentList-ContentStrings.psd1:37
 msgid "'@"
 msgstr ""

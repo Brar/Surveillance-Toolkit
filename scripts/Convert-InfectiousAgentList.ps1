@@ -16,50 +16,89 @@ function AppendChildrenRecursive {
         [Parameter(Mandatory, Position = 1)]
         [System.Collections.IList]$Children,
         [Parameter(Position = 2)]
-        [System.Collections.Generic.List[PSCustomObject]]$Output
+        [System.Collections.Generic.List[PSCustomObject]]$Output,
+        [Parameter(Position = 3)]
+        [string]$Type
     )
 
     if (-not $Output) {
         $Output = [System.Collections.Generic.List[PSCustomObject]]::new()
     }
 
+    $resetType = $false
     foreach ($item in $Children) {
-        if ($item.Id) {
-            $newItem = [ordered]@{
-                Id = $item.Id
-                Name = $item.Name
-                Type = $item.ConceptType
-                Code = $item.ConceptCode
-                CommonCommensal = if($item.CommonCommensal){$ContentStrings.Yes}
-                Resistances = [System.Collections.Generic.List[string]]::new()
-                Url = ""
+        if ($resetType -or -not $Type) {
+            if ($item.ConceptSource -eq 'NeoIPC' -and $item.ConceptId -eq 1) {
+                $Type = $item.ConceptType
+                $resetType = $true
+            } elseif ($item.ConceptSource -eq 'NeoIPC' -and $item.ConceptId -eq 100) {
+                $Type = $ContentStrings.Virus
+                $resetType = $true
+            } elseif ($item.ConceptSource -eq 'LPSN' -and $item.ConceptId -eq 'domain/bacteria') {
+                $Type = $ContentStrings.Bacterium
+                $resetType = $true
+            } elseif ($item.ConceptSource -eq 'MycoBank' -and $item.ConceptId -eq 455206) {
+                $Type = $ContentStrings.Fungus
+                $resetType = $true
+            } elseif ($item.ConceptSource -eq 'MycoBank' -and $item.ConceptId -eq 92339) {
+                $Type = $ContentStrings.Protozoon
+                $resetType = $true
+            } else {
+                $Type = $null
             }
+        }
+        if ($item.Id) {
+            $newItem = [ordered]@{}
+            $newItem[$ContentStrings.Id] = $item.Id
+            $newItem[$ContentStrings.Name] = $item.Name
+            $newItem[$ContentStrings.Type] = $Type
+            $newItem[$ContentStrings.CommonCommensal] = if($item.CommonCommensal){$ContentStrings.Yes}
+            $newItem[$ContentStrings.ParentId] = ''
+
+            $r = [System.Collections.Generic.List[string]]::new()
             if ($item.MRSA) {
-                $newItem.Resistances.Add($ContentStrings.MRSA)
+                $r.Add($ContentStrings.MRSA)
             }
             if ($item.VRE) {
-                $newItem.Resistances.Add($ContentStrings.VRE)
+                $r.Add($ContentStrings.VRE)
             }
             if ($item['3GCR']) {
-                $newItem.Resistances.Add($ContentStrings['3GCR'])
+                $r.Add($ContentStrings['3GCR'])
             }
             if ($item.Carbapenems) {
-                $newItem.Resistances.Add($ContentStrings.Carbapenems)
+                $r.Add($ContentStrings.Carbapenems)
             }
             if ($item.Colistin) {
-                $newItem.Resistances.Add($ContentStrings.Colistin)
+                $r.Add($ContentStrings.Colistin)
+            }
+            $newItem[$ContentStrings.RecordedResistances] = $r |
+                Join-String -Separator ', '
+
+            switch ($item.ConceptSource) {
+                LPSN {
+                    $newItem[$ContentStrings.URL] = $data.UrlTemplates.LPSN -f $item.ConceptId
+                    break
+                }
+                MycoBank {
+                    $newItem[$ContentStrings.URL] = $data.UrlTemplates.MycoBank -f $item.ConceptId
+                    break
+                }
+                ICTV {
+                    $newItem[$ContentStrings.URL] = $data.UrlTemplates.ICTV -f $item.ConceptId
+                    break
+                }
             }
             $Output.Add([PSCustomObject]$newItem)
         }
         if ($item.Children) {
             if ($Output) {
-                $Output = AppendChildrenRecursive $item.Children $Output
+                $Output = AppendChildrenRecursive $item.Children $Output $Type
             } else {
-                $Output = AppendChildrenRecursive $item.Children
+                $Output = AppendChildrenRecursive -Children $item.Children -Type $Type
             }
         }
         if ($item.Synonyms) {
-            AppendSynonyms $Output $item.Synonyms $item
+            AppendSynonyms $Output $item.Synonyms $item $Type
         }
     }
 
@@ -72,10 +111,58 @@ function AppendSynonyms {
         [Parameter(Mandatory, Position = 1)]
         [System.Collections.Generic.List[PSCustomObject]]$Output,
         [Parameter(Mandatory, Position = 2)]
-        [System.Collections.IList]$ynonyms,
+        [System.Collections.IList]$Synonyms,
         [Parameter(Mandatory, Position = 3)]
-        [object]$parent
+        [object]$Parent,
+        [Parameter(Position = 4)]
+        [string]$Type
     )
+
+    foreach ($item in $Synonyms) {
+        if ($Parent.Id) {
+            $newItem = [ordered]@{}
+            $newItem[$ContentStrings.Id] = $item.Id
+            $newItem[$ContentStrings.Name] = $item.Name
+            $newItem[$ContentStrings.Type] = $Type
+            $newItem[$ContentStrings.CommonCommensal] = if($Parent.CommonCommensal){$ContentStrings.Yes}
+            $newItem[$ContentStrings.ParentId] = $Parent.Id
+
+            $r = [System.Collections.Generic.List[string]]::new()
+            if ($Parent.MRSA) {
+                $r.Add($ContentStrings.MRSA)
+            }
+            if ($Parent.VRE) {
+                $r.Add($ContentStrings.VRE)
+            }
+            if ($Parent['3GCR']) {
+                $r.Add($ContentStrings['3GCR'])
+            }
+            if ($Parent.Carbapenems) {
+                $r.Add($ContentStrings.Carbapenems)
+            }
+            if ($Parent.Colistin) {
+                $r.Add($ContentStrings.Colistin)
+            }
+            $newItem[$ContentStrings.RecordedResistances] = $r |
+                Join-String -Separator ', '
+
+            switch ($item.ConceptSource) {
+                LPSN {
+                    $newItem[$ContentStrings.URL] = $data.UrlTemplates.LPSN -f $item.ConceptId
+                    break
+                }
+                MycoBank {
+                    $newItem[$ContentStrings.URL] = $data.UrlTemplates.MycoBank -f $item.ConceptId
+                    break
+                }
+                ICTV {
+                    $newItem[$ContentStrings.URL] = $data.UrlTemplates.ICTV -f $item.ConceptId
+                    break
+                }
+            }
+            $Output.Add([PSCustomObject]$newItem)
+        }
+    }
 }
 
 data MessageStrings -SupportedCommand ConvertFrom-Yaml {
@@ -95,6 +182,17 @@ VRE: VRE
 3GCR: 3GCR
 Carbapenems: Carbapenems
 Colistin: Colistin
+Bacterium: Bacterium
+Fungus: Fungus
+Virus: Virus
+Protozoon: Protozoon
+Id: Id
+Name: Name
+Type: Type
+CommonCommensal: Common Commensal
+ParentId: Parent Id
+RecordedResistances: Recorded Resistances
+URL: URL
 '@
 }
 
@@ -102,8 +200,6 @@ $config_file = Resolve-Path "$InputDirectory/po4a.cfg" -Relative
 $po4aCmd = "po4a -q "
 if ($Force) {
     $po4aCmd += '-k 0 '
-} else {
-    $po4aCmd += '-k 75 '
 }
 $po4aCmd += $config_file
 
@@ -162,8 +258,10 @@ foreach ($iaList in $translationPaths) {
     if (Test-Path -LiteralPath $contentStringFile) {
         Import-LocalizedData -UICulture $culture -BindingVariable 'ContentStrings' -SupportedCommand ConvertFrom-Yaml -FileName 'Convert-InfectiousAgentList-ContentStrings' -ErrorAction Stop
     }
-    $data = Get-Content -LiteralPath $iaList.FilePath | ConvertFrom-Yaml
-    $output = AppendChildrenRecursive $data.Hierarchies | Sort-Object Name -Culture ([cultureinfo]::GetCultureInfo($iaList.Language))
+    $data = Get-Content -LiteralPath $iaList.FilePath |
+        ConvertFrom-Yaml
+    $output = AppendChildrenRecursive $data.Hierarchies |
+        Sort-Object Name -Culture ([cultureinfo]::GetCultureInfo($iaList.Language))
     $outputBasePath = Join-Path -Path $OutputDirectory -ChildPath "NeoIPC-Infectious-Agents.$($culture.Name)."
     switch ($OutputFormats) {
         'AsciiDoc' {
