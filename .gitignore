@@ -6,6 +6,8 @@
 reports/**/*.html
 reports/**/*.md
 reports/**/*_files/**
+scripts/**/Convert-InfectiousAgentList-ContentStrings.psd1
+!scripts/en/Convert-InfectiousAgentList-ContentStrings.psd1
 build
 artifacts
 doc/protocol/NeoIPC-Antibiotics*.adoc

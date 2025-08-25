@@ -193,6 +193,7 @@ CommonCommensal: Common Commensal
 ParentId: Parent Id
 RecordedResistances: Recorded Resistances
 URL: URL
+SynonymFor: synonym for
 '@
 }
 
@@ -260,12 +261,115 @@ foreach ($iaList in $translationPaths) {
     }
     $data = Get-Content -LiteralPath $iaList.FilePath |
         ConvertFrom-Yaml
+    $idNameDict = @{}
     $output = AppendChildrenRecursive $data.Hierarchies |
+        ForEach-Object {
+            $idNameDict[$_."$($ContentStrings.Id)"] = $_."$($ContentStrings.Name)"
+            $_
+        } |
         Sort-Object Name -Culture ([cultureinfo]::GetCultureInfo($iaList.Language))
     $outputBasePath = Join-Path -Path $OutputDirectory -ChildPath "NeoIPC-Infectious-Agents.$($culture.Name)."
     switch ($OutputFormats) {
         'AsciiDoc' {
             $outputPath = $outputBasePath + 'adoc'
+            @(
+                '= NeoIPC Infectious Agent List'
+                ''
+                'The following list contains the current taxonomic names and common synonyms of the infectious agent'
+                'species and genera as well as some diagnostic groups that can currently be recorded in the NeoIPC Surveillance.'
+                ''
+                'Originally derived from the NHSN Organism List <<nhsn-organism-list>>, it is regularly updated with current'
+                'information from the List of Prokaryotic names with Standing in Nomenclature <<lpsn>>,'
+                'the MycoBank database <<mycobank>> and the ICTV database <<ictv>>.'
+                ''
+                'We thank these organisations for generously publishing their data under a permissive licence, enabling its use in'
+                'the NeoIPC Surveillance.'
+                ''
+                '[.small,cols="5,3,3,3"]'
+                '|==='
+                "|$($ContentStrings.Name) |$($ContentStrings.Type) |$($ContentStrings.CommonCommensal) |$($ContentStrings.RecordedResistances)"
+                ''
+            ) | Out-File -LiteralPath $outputPath -Encoding utf8NoBOM
+
+            $output |
+                ForEach-Object {
+                    @(
+                        if ($_."$($ContentStrings.URL)") {
+                            "[[pathogen-concept-$($_."$($ContentStrings.Id)")]]$($_."$($ContentStrings.URL)")[$($_."$($ContentStrings.Name)"),window=_blank]"
+                        } else {
+                            "[[pathogen-concept-$($_."$($ContentStrings.Id)")]]$($_."$($ContentStrings.Name)")"
+                        }
+                        if ($_."$($ContentStrings.ParentId)") {
+                            "$($_."$($ContentStrings.Type)") ($($ContentStrings.SynonymFor) xref:pathogen-concept-$($_."$($ContentStrings.ParentId)")[$($idNameDict[$_."$($ContentStrings.ParentId)"])]))"
+                        } else {
+                            $_."$($ContentStrings.Type)"
+                        }
+                        "$($_."$($ContentStrings.CommonCommensal)")"
+                        "$($_."$($ContentStrings.RecordedResistances)")"
+                    ) | Join-String -Separator ' |' -OutputPrefix '|'
+                } |
+                Out-File -LiteralPath $outputPath -Encoding utf8NoBOM -Append
+                @(
+                    '|==='
+                    ''
+                    '[bibliography]'
+                    '== References'
+                    ''
+                    '* [[[nhsn-organism-list,NHSN]]]'
+                    '+'
+                    'https://www.cdc.gov/nhsn/xls/master-organism-com-commensals-lists.xlsx'
+                    '+'
+                    'Source: https://www.cdc.gov/nhsn/index.html[Centers for Disease Control and Prevention National Healthcare Safety Network (NHSN)]'
+                    '+'
+                    'Available on the NHSN website for no charge.'
+                    '+'
+                    'Reference to specific commercial products, manufacturers, companies, or trademarks does not constitute its'
+                    'endorsement or recommendation by the U.S. Government, Department of Health and Human Services, or Centers for'
+                    'Disease Control and Prevention.'
+                    '+'
+                    'Not subject to copyright but some https://www.cdc.gov/other/agencymaterials.html[requirements] must be followed.'
+                    ''
+                    '* [[[lpsn,LPSN]]]'
+                    '+'
+                    'https://lpsn.dsmz.de/'
+                    '+'
+                    'Parte, A.C., Sardà Carbasse, J., Meier-Kolthoff, J.P., Reimer, L.C. and Göker, M.'
+                    'List of Prokaryotic names with Standing in Nomenclature (LPSN) moves to the DSMZ.'
+                    '__International Journal of Systematic and Evolutionary Microbiology__,'
+                    '**Volume 70, Issue 11**, 23 July 2020, Pages 5607-5612;'
+                    'DOI: https://doi.org/10.1099/ijsem.0.004332[10.1099/ijsem.0.004332]'
+                    '+'
+                    'Licensed under the Creative Commons https://creativecommons.org/licenses/by-nc/4.0/[Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)] license.'
+                    ''
+                    '* [[[mycobank,MycoBank]]]'
+                    '+'
+                    'https://www.mycobank.org/'
+                    '+'
+                    'Vincent Robert, Duong Vu, Ammar Ben Hadj Amor, Nathalie van de Wiele, Carlo Brouwer, Bernard Jabas,'
+                    'Szaniszlo Szoke, Ahmed Dridi, Maher Triki, Samy ben Daoud, Oussema Chouchen, Lea Vaas, Arthur de Cock,'
+                    'Joost A. Stalpers, Dora Stalpers, Gerard J.M. Verkley, Marizeth Groenewald, Felipe Borges dos Santos,'
+                    'Gerrit Stegehuis, Wei Li, Linhuan Wu, Run Zhang, Juncai Ma, Miaomiao Zhou, Sergio Pérez Gorjón,'
+                    'Lily Eurwilaichitr, Supawadee Ingsriswang, Karen Hansen, Conrad Schoch, Barbara Robbertse, Laszlo Irinyi,'
+                    'Wieland Meyer, Gianluigi Cardinali, David L. Hawksworth, John W. Taylor, and Pedro W. Crous.'
+                    'MycoBank gearing up for new horizons.'
+                    '__IMA Fungus__,'
+                    '**Volume 4, No 2**, 17 December 2013, Pages 371–379;'
+                    'DOI: https://doi.org/10.5598/imafungus.2013.04.02.16[10.5598/imafungus.2013.04.02.16]'
+                    '+'
+                    'Licensed under the Creative Commons https://creativecommons.org/licenses/by-nc-nd/4.0/[Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)] license.'
+                    ''
+                    '* [[[ictv,ICTV]]]'
+                    '+'
+                    'International Committee on Taxonomy of Viruses (ICTV): https://ictv.global/taxonomy/'
+                    '+'
+                    'Lefkowitz EJ, Dempsey DM, Hendrickson RC, Orton RJ, Siddell SG, Smith DB.'
+                    'Virus taxonomy: the database of the International Committee on Taxonomy of Viruses (ICTV)'
+                    '__Nucleic Acids Research__,'
+                    '**Volume 46, Issue D1**, 4 January 2018, Pages D708–D717,'
+                    'DOI: https://doi.org/10.1093/nar/gkx932[10.1093/nar/gkx932]'
+                    '+'
+                    'Licensed under the Creative Commons http://creativecommons.org/licenses/by-sa/4.0/[Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)] license.'
+                ) | Out-File -LiteralPath $outputPath -Encoding utf8NoBOM -Append
             continue
         }
         'CSV' {

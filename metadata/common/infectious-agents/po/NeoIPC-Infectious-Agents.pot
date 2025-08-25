@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-08-25 12:27+0200\n"
+"POT-Creation-Date: 2025-08-25 15:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24184,6 +24184,12 @@ msgid "URL: URL\n"
 msgstr ""
 
 #. type: Plain text
-#: scripts/en/Convert-InfectiousAgentList-ContentStrings.psd1:37
+#: scripts/en/Convert-InfectiousAgentList-ContentStrings.psd1:38
+#, no-wrap
+msgid "SynonymFor: synonym for\n"
+msgstr ""
+
+#. type: Plain text
+#: scripts/en/Convert-InfectiousAgentList-ContentStrings.psd1:39
 msgid "'@"
 msgstr ""

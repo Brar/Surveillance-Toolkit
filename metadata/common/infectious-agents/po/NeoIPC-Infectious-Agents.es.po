@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-08-25 12:27+0200\n"
+"POT-Creation-Date: 2025-08-25 15:38+0200\n"
 "PO-Revision-Date: 2025-08-20 18:11+0000\n"
 "Last-Translator: Brar Piening <brar@gmx.de>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/neoipc/neoipc-infectious-agents/es/>\n"
@@ -24185,6 +24185,12 @@ msgid "URL: URL\n"
 msgstr "URL: LRU\n"
 
 #. type: Plain text
-#: scripts/en/Convert-InfectiousAgentList-ContentStrings.psd1:37
+#: scripts/en/Convert-InfectiousAgentList-ContentStrings.psd1:38
+#, no-wrap
+msgid "SynonymFor: synonym for\n"
+msgstr "SynonymFor: sinónimo de\n"
+
+#. type: Plain text
+#: scripts/en/Convert-InfectiousAgentList-ContentStrings.psd1:39
 msgid "'@"
 msgstr ""

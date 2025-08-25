@@ -34,4 +34,6 @@ RecordedResistances: Recorded Resistances
 
 URL: URL
 
+SynonymFor: synonym for
+
 '@
