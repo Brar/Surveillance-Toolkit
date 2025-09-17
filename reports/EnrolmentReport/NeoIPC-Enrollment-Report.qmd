@@ -1,5 +1,153 @@
 ---
 title: "NeoIPC Surveillance Enrolment Report"
-format: pdf
+lang: en
+params:
+  reportingPeriodFrom: NULL
+  reportingPeriodTo: NULL
+  reportingUnits: NULL
+  includeIneligiblePatients: FALSE
+  includePatientList: FALSE
 ---
 
+```{r Setup parameter defaults}
+if(!exists("params")) params <- list()
+reportingPeriodFrom <- lubridate::as_date(dplyr::coalesce(params$reportingPeriodFrom, "2024-01-01"))
+reportingPeriodTo <- lubridate::as_date(dplyr::coalesce(params$reportingPeriodTo, as.character(Sys.Date())))
+reportingUnits <- params$reportingUnits
+includeIneligiblePatients <- dplyr::coalesce(params$includeIneligiblePatients, FALSE)
+includePatientList <- dplyr::coalesce(params$includePatientList, FALSE)
+```
+
+```{r Import data from https://neoipc.charite.de}
+data <- neoipcr::import_dhis2(
+  connection_options = neoipcr::dhis2_connection_options(
+    token = '../../../token.txt'
+  ),
+  dataset_options = neoipcr::dhis2_dataset_options(
+    include_department = "yes",
+    include_patient_id = TRUE,
+    include_ineligible_patients = includeIneligiblePatients,
+    include_invalid_patients = TRUE,
+    include_incomplete = c("enrollments","events"),
+    trial_keys = "NeoDeco"))
+
+if (file.exists("mapping.csv"))
+  mapping <- readr::read_csv("mapping.csv", col_types = "cci")
+```
+
+```{r Filter data}
+if (!is.null(reportingUnits)) {
+  departments <- data$metadata$departments |>
+    dplyr::filter(code %in% reportingUnits) |>
+    dplyr::select(department_key, code)
+} else {
+  departments <- data$metadata$departments |>
+    dplyr::select(department_key, code)
+}
+
+enrollments <- data$enrollments |>
+  dplyr::semi_join(
+    departments,
+    dplyr::join_by(department_key)) |>
+  dplyr::filter(
+      enrolledAt >= reportingPeriodFrom &
+      enrolledAt < (reportingPeriodTo + lubridate::days(1)))
+
+patients <- data$patients |>
+  dplyr::semi_join(enrollments, dplyr::join_by(patient_key))
+
+surveillanceEnds <- data$events |>
+  dplyr::filter(event_type_key == 'end' & status == 'COMPLETED') |>
+  dplyr::semi_join(enrollments, dplyr::join_by(enrollment_key))
+```
+
+```{r List of patients}
+if (includePatientList) {
+  departments |>
+    dplyr::inner_join(patients, dplyr::join_by(department_key)) |>
+    dplyr::inner_join(enrollments, dplyr::join_by(patient_key)) |>
+    dplyr::left_join(surveillanceEnds, dplyr::join_by(enrollment_key)) |>
+    dplyr::mutate(
+      numeric_prefix = suppressWarnings(as.integer(stringr::str_extract(patient_id,"^(\\d+)?(.*?)(\\d*)$",1))),
+      core = stringr::str_extract(patient_id,"^(\\d+)?(.*?)(\\d*)$",2),
+      numeric_suffix = suppressWarnings(as.integer(stringr::str_extract(patient_id,"^(\\d+)?(.*?)(\\d*)$",3))),
+      sort_number = dplyr::coalesce(numeric_prefix, numeric_suffix)) |>
+    dplyr::arrange(code,sort_number,core,enrolledAt,occurredAt,status.x,patient_id) |>
+    dplyr::select(code,patient_id,status=status.x,enrolledAt,occurredAt) |>
+    dplyr::group_by(code,patient_id,status) |>
+    gt::gt()
+}
+```
+
+```{r List of enrolled patients per month}
+monthly <- departments |>
+  dplyr::inner_join(patients, dplyr::join_by(department_key)) |>
+  dplyr::inner_join(enrollments, dplyr::join_by(patient_key)) |>
+  dplyr::group_by(code,patient_key) |>
+  dplyr::summarise(enrolledAt = min(enrolledAt), .groups = "drop") |>
+  dplyr::inner_join(
+    enrollments |>
+      dplyr::select(patient_key, status), dplyr::join_by(patient_key)) |>
+  dplyr::mutate(
+    enrollment_month = stringr::str_sub(as.character(enrolledAt), 1, 7),
+    status = tolower(status)) |>
+  dplyr::group_by(code,enrollment_month,status) |>
+  dplyr::summarise(n = dplyr::n_distinct(patient_key), .groups = "drop")
+
+if(exists("mapping"))
+  monthly <- monthly |>
+  dplyr::left_join(
+    mapping |>
+      dplyr::select(code, neoDecoSiteCode),
+    dplyr::join_by(code)) |>
+  dplyr::mutate(code = neoDecoSiteCode, .keep = "unused")
+
+monthly <- monthly |>
+  tidyr::pivot_wider(names_from = c(code,status), values_from = n, names_sort = TRUE) |>
+  dplyr::full_join(
+    tibble::tibble(month = seq(as.Date("2024-01-01"), Sys.Date(), "months")) |>
+      dplyr::mutate(
+        enrollment_month = stringr::str_sub(as.character(month), 1, 7),
+        .keep = "unused"),
+    dplyr::join_by(enrollment_month)) |>
+  dplyr::mutate(dplyr::across(!enrollment_month, ~tidyr::replace_na(.x, 0))) |>
+  dplyr::arrange(enrollment_month)
+
+monthly |>
+  readr::write_excel_csv2("NeoIPC Surveillance Enrolled Patients per Month.csv")
+```
+
+```{r List of enrollments per month}
+monthly <- departments |>
+  dplyr::inner_join(patients, dplyr::join_by(department_key)) |>
+  dplyr::inner_join(enrollments, dplyr::join_by(patient_key)) |>
+  dplyr::mutate(
+    enrollment_month = stringr::str_sub(as.character(enrolledAt), 1, 7),
+    status = tolower(status)) |>
+  dplyr::arrange(code,enrollment_month,status,patient_id) |>
+  dplyr::select(code,enrollment_month,status,patient_id) |>
+  dplyr::group_by(code,enrollment_month,status) |>
+  dplyr::summarise(n = dplyr::n(), .groups = "drop")
+
+if(exists("mapping"))
+  monthly <- monthly |>
+  dplyr::left_join(
+    mapping |>
+      dplyr::select(code, neoDecoSiteCode),
+    dplyr::join_by(code)) |>
+  dplyr::mutate(code = neoDecoSiteCode, .keep = "unused")
+
+monthly <- monthly |>
+  tidyr::pivot_wider(names_from = c(code,status), values_from = n, names_sort = TRUE) |>
+  dplyr::full_join(
+    tibble::tibble(month = seq(as.Date("2024-01-01"), Sys.Date(), "months")) |>
+      dplyr::mutate(
+        enrollment_month = stringr::str_sub(as.character(month), 1, 7),
+        .keep = "unused"),
+    dplyr::join_by(enrollment_month)) |>
+  dplyr::arrange(enrollment_month) |>
+  dplyr::mutate(dplyr::across(!enrollment_month, ~tidyr::replace_na(.x, 0)))
+
+monthly |>
+  readr::write_excel_csv2("NeoIPC Surveillance Enrollments per Month.csv")
+```

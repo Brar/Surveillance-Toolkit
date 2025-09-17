@@ -1,0 +1,6 @@
+/.quarto/
+*.xlsx
+*.csv
+*.tex
+*.aux
+*.log

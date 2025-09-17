@@ -1,0 +1,15 @@
+project:
+  output-dir: _output
+date-meta: now
+echo: false
+execute:
+  keep-md: true
+  error: true
+filters: ["../filters/pandoc-quotes.lua"]
+format:
+  html:
+    link-external-icon: true
+    link-external-newwindow: true
+#  pdf:
+#    keep-tex: true
+#    number-sections: true
