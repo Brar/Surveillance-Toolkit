@@ -1,0 +1,68 @@
+```{r General setup and parameter preparation}
+#| message: false
+#| warning: false
+#| include: false
+pak::pak("Brar/neoipcr@TowardsReferenceReport")
+# library(tidyverse, warn.conflicts = FALSE, quietly = TRUE)
+# library(smplot2, warn.conflicts = FALSE, quietly = TRUE)
+# library(scales, warn.conflicts = FALSE, quietly = TRUE)
+library(patchwork, warn.conflicts = FALSE, quietly = TRUE)
+# library(gt, warn.conflicts = FALSE, quietly = TRUE)
+# library(neoipcr, warn.conflicts = FALSE, quietly = TRUE)
+
+if(!exists("params")) params <- list()
+reportingPeriodFrom <- lubridate::as_date(dplyr::coalesce(params[["reportingPeriodFrom"]], "2024-01-01"))
+reportingPeriodTo <- lubridate::as_date(dplyr::coalesce(params[["reportingPeriodTo"]], as.character(Sys.Date())))
+birthWeightFrom <- dplyr::coalesce(params[["birthWeightFrom"]], 0L)
+birthWeightTo <- dplyr::coalesce(params[["birthWeightTo"]], 2147483647L)
+gestationWeeksFrom <- dplyr::coalesce(params[["gestationWeeksFrom"]], 0L)
+gestationWeeksTo <- dplyr::coalesce(params[["gestationWeeksTo"]], 2147483647L)
+token <- dplyr::coalesce(params$token, Sys.getenv("NEOIPC_DHIS2_TOKEN", unset = NA))
+session_id <- dplyr::coalesce(params[["session_id"]], Sys.getenv("NEOIPC_DHIS2_SESSION_ID", unset = NA))
+connection_options <- if(is.na(session_id))
+  neoipcr::dhis2_connection_options(token = token) else
+    neoipcr::dhis2_connection_options(session_id = session_id)
+reportingCountries = params[["reportingCountries"]]
+hospitalFilter = params[["hospitalFilter"]]
+defaultPatientFilter = dplyr::coalesce(params[["defaultPatientFilter"]], TRUE)
+testUnitFilter = dplyr::coalesce(params[["testUnitFilter"]], TRUE)
+validation_exceptions <- readr::read_csv("../../../validation-exceptions_ref.csv")
+
+dataset_options <- neoipcr::dhis2_dataset_options(
+    include_country = "yes",
+    include_department = "yes",
+    surveillance_end_from = reportingPeriodFrom,
+    surveillance_end_to = reportingPeriodTo,
+    birth_weight_from = birthWeightFrom,
+    birth_weight_to = birthWeightTo,
+    gestational_age_from = gestationWeeksFrom,
+    gestational_age_to = gestationWeeksTo,
+    country_filter = reportingCountries,
+    include_invalid_patients = validation_exceptions)
+
+language <- dplyr::coalesce(params$language, "en")
+default_countries <- list(
+  en = "GB",
+  de = "DE"
+)
+country <- dplyr::coalesce(params$country, default_countries[[language]], NA_character_)
+codepage <- dplyr::coalesce(params$codepage, "UTF-8")
+locale <- paste0(language, (if(is.na(country)) NULL else paste0("_", country)), ".", codepage)
+gt_locale <- paste0(language, (if(is.na(country)) NULL else paste0("-", country)))
+options(`gt.locale` = gt_locale)
+`_locales` <- (gt::info_locales(begins_with = substr(gt_locale,1,1)))$`_data`
+locale_sep_mark <- `_locales`$group[`_locales`$locale == gt_locale]
+invisible(Sys.setlocale(category = "LC_ALL", locale = locale))
+invisible(Sys.setLanguage(locale))
+translation_file <- paste0("translations/", stringr::str_extract(locale, "^([^.]+)"),".json")
+rm(gt_locale, `_locales`)
+```
+
+```{r Importing data}
+#| include: false
+
+data <- neoipcr::import_dhis2(
+  connection_options = connection_options,
+  dataset_options = dataset_options
+  )
+```
