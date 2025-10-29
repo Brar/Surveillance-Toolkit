@@ -59,6 +59,9 @@ foreach ($site in $depts) {
     if (-not $skipRest -and -not $isError) {
         Write-Host "done." -ForegroundColor Green
     }
+    else {
+        Remove-Item -Path '*.rmarkdown','*.md','*.pdf','*.tex','*.aux','*.log' -Force
+    }
 }
 
 Set-Location -LiteralPath $wd
