@@ -11,9 +11,10 @@ Param(
 
 $token = Get-Content -LiteralPath "$PSScriptRoot/../../../token.txt" -Raw -Encoding utf8NoBOM
 
-$depts = (curl -sH "Authorization: ApiToken $token" `
-'https://neoipc.charite.de/api/organisationUnitGroups.json?paging=false&filter=code:eq:NEO_DEPARTMENT&fields=organisationUnits%5Bcode%5D' |
-ConvertFrom-Json -Depth 10).organisationUnitGroups[0].organisationUnits.code | Where-Object -FilterScript { $_ -match $SiteCodeFilter } | Sort-Object
+$depts = (
+    Invoke-RestMethod -Method Get -Headers @{'Authorization' = "ApiToken $token" } -Uri `
+    'https://neoipc.charite.de/api/organisationUnitGroups.json?paging=false&filter=code:eq:NEO_DEPARTMENT&fields=organisationUnits%5Bcode%5D'
+    ).organisationUnitGroups[0].organisationUnits.code | Where-Object -FilterScript { $_ -match $SiteCodeFilter } | Sort-Object
 
 $wd = Get-Location
 Set-Location -LiteralPath $PSScriptRoot
