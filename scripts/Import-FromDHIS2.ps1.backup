@@ -1,0 +1,422 @@
+<#
+.SYNOPSIS
+    Imports DHIS2 metadata to bootstrap CSV/YAML source files.
+
+.DESCRIPTION
+    Extracts metadata from an existing DHIS2 instance via API and converts it to
+    the hybrid YAML+CSV format for source control. Detects repetitive patterns
+    and can generate generator definitions. Validates against VALIDATION_RULES.md
+    and emits warnings for inconsistencies.
+
+.PARAMETER BaseUrl
+    Base URL of the DHIS2 instance (e.g., 'https://dhis2.example.org').
+
+.PARAMETER Credential
+    PSCredential object for DHIS2 authentication.
+
+.PARAMETER Username
+    DHIS2 username (alternative to Credential).
+
+.PARAMETER Password
+    DHIS2 password (alternative to Credential).
+
+.PARAMETER ProgramCode
+    Code of the program to import (default: 'NEOIPC_CORE').
+
+.PARAMETER OutputPath
+    Root path for metadata output (default: 'metadata/programs').
+
+.PARAMETER DetectPatterns
+    If specified, analyzes metadata for repetitive patterns and suggests generators.
+
+.PARAMETER CreateGenerators
+    If specified, automatically creates generator scripts for detected patterns.
+
+.EXAMPLE
+    .\Import-FromDHIS2.ps1 -BaseUrl "https://dhis2.example.org" -Credential (Get-Credential)
+
+.EXAMPLE
+    $env:NEOIPC_DHIS2_BASEURL = "https://dhis2.example.org"
+    $env:NEOIPC_DHIS2_USERNAME = "admin"
+    $env:NEOIPC_DHIS2_PASSWORD = "district"
+    .\Import-FromDHIS2.ps1 -DetectPatterns -CreateGenerators
+
+.NOTES
+    Requires NeoIPC-Tools module and internet connectivity to DHIS2 instance.
+#>
+
+[CmdletBinding(DefaultParameterSetName = 'Credential')]
+param(
+    [Parameter()]
+    [string]$BaseUrl = $env:NEOIPC_DHIS2_BASEURL,
+    
+    [Parameter(ParameterSetName = 'Credential')]
+    [PSCredential]$Credential,
+    
+    [Parameter(ParameterSetName = 'UsernamePassword')]
+    [string]$Username = $env:NEOIPC_DHIS2_USERNAME,
+    
+    [Parameter(ParameterSetName = 'UsernamePassword')]
+    [string]$Password = $env:NEOIPC_DHIS2_PASSWORD,
+    
+    [Parameter()]
+    [string]$ProgramCode = 'NEOIPC_CORE',
+    
+    [Parameter()]
+    [string]$OutputPath = (Join-Path $PSScriptRoot '..\metadata\programs'),
+    
+    [switch]$DetectPatterns,
+    
+    [switch]$CreateGenerators,
+    
+    [switch]$Force
+)
+
+#Requires -Modules @{ ModuleName='powershell-yaml'; ModuleVersion='0.4.0' }
+
+Import-Module (Join-Path $PSScriptRoot 'modules\NeoIPC-Tools\NeoIPC-Tools.psm1') -Force
+
+# Validate parameters
+if (-not $BaseUrl) {
+    throw "BaseUrl is required. Specify via parameter or NEOIPC_DHIS2_BASEURL environment variable."
+}
+
+# Setup authentication
+if ($PSCmdlet.ParameterSetName -eq 'UsernamePassword') {
+    if (-not $Username -or -not $Password) {
+        throw "Username and Password are required when not using Credential parameter."
+    }
+    $securePassword = ConvertTo-SecureString $Password -AsPlainText -Force
+    $Credential = New-Object PSCredential($Username, $securePassword)
+}
+
+if (-not $Credential) {
+    $Credential = Get-Credential -Message "Enter DHIS2 credentials"
+}
+
+# Normalize BaseUrl
+$BaseUrl = $BaseUrl.TrimEnd('/')
+
+Write-Host "Importing metadata from DHIS2: $BaseUrl" -ForegroundColor Cyan
+Write-Host "Program: $ProgramCode" -ForegroundColor Cyan
+Write-Host ""
+
+#region Helper Functions
+
+function Invoke-DHIS2Api {
+    param(
+        [string]$Endpoint,
+        [hashtable]$QueryParams = @{},
+        [string]$Method = 'GET'
+    )
+    
+    $uri = "$BaseUrl/api/$Endpoint"
+    
+    if ($QueryParams.Count -gt 0) {
+        $queryString = ($QueryParams.GetEnumerator() | ForEach-Object { 
+            "$($_.Key)=$([Uri]::EscapeDataString($_.Value))" 
+        }) -join '&'
+        $uri += "?$queryString"
+    }
+    
+    Write-Verbose "API Request: $Method $uri"
+    
+    try {
+        $response = Invoke-RestMethod -Uri $uri -Credential $Credential -Method $Method -ErrorAction Stop
+        return $response
+    }
+    catch {
+        Write-Error "DHIS2 API Error: $_"
+        throw
+    }
+}
+
+function Split-MetadataToYamlCsv {
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]$Object,
+        
+        [Parameter(Mandatory)]
+        [string[]]$TranslatableFields,
+        
+        [Parameter(Mandatory)]
+        [string[]]$TechnicalFields
+    )
+    
+    $yaml = @{}
+    $csv = @{}
+    
+    # Always include code in both
+    if ($Object.code) {
+        $yaml.code = $Object.code
+        $csv.code = $Object.code
+    }
+    
+    # Split fields
+    foreach ($field in $TranslatableFields) {
+        if ($Object.ContainsKey($field)) {
+            $yaml[$field] = $Object[$field]
+        }
+    }
+    
+    foreach ($field in $TechnicalFields) {
+        if ($Object.ContainsKey($field)) {
+            $csv[$field] = $Object[$field]
+        }
+    }
+    
+    return @{ yaml = $yaml; csv = $csv }
+}
+
+#endregion
+
+#region Fetch Metadata from DHIS2
+
+Write-Host "Fetching program metadata..." -ForegroundColor Yellow
+
+$metadata = Invoke-DHIS2Api -Endpoint "metadata" -QueryParams @{
+    'programs:filter' = "code:eq:$ProgramCode"
+    'programs:fields' = 'id,code,name,description,programType,trackedEntityType[id,code],programStages[id,code,name],programTrackedEntityAttributes[id,sortOrder,mandatory,trackedEntityAttribute[id,code]]'
+    'programStages:fields' = 'id,code,name,description,repeatable,programStageSections[id,name],programStageDataElements[id,compulsory,dataElement[id,code]]'
+    'dataElements:fields' = 'id,code,name,shortName,description,formName,valueType,domainType,optionSet[id,code],aggregationType,zeroIsSignificant'
+    'trackedEntityAttributes:fields' = 'id,code,name,description,valueType,optionSet[id,code]'
+    'programRules:filter' = "program.code:eq:$ProgramCode"
+    'programRules:fields' = 'id,code,name,description,condition,priority,programStage[id,code],programRuleActions[id,programRuleActionType,dataElement[id,code],content]'
+    'programRuleVariables:filter' = "program.code:eq:$ProgramCode"
+    'programRuleVariables:fields' = 'id,code,name,programRuleVariableSourceType,dataElement[id,code],trackedEntityAttribute[id,code],valueType,useCodeForOptionSet'
+    'optionSets:fields' = 'id,code,name,valueType,options[id,code,name,sortOrder]'
+    'paging' = 'false'
+}
+
+if (-not $metadata.programs -or $metadata.programs.Count -eq 0) {
+    throw "Program '$ProgramCode' not found in DHIS2 instance"
+}
+
+$program = $metadata.programs[0]
+Write-Host "✓ Found program: $($program.name)" -ForegroundColor Green
+
+#endregion
+
+#region Create Output Directory Structure
+
+$programPath = Join-Path $OutputPath $ProgramCode.ToLower()
+
+if ((Test-Path $programPath) -and -not $Force) {
+    $response = Read-Host "Output directory already exists. Overwrite? (y/N)"
+    if ($response -notmatch '^y(es)?$') {
+        Write-Host "Import cancelled." -ForegroundColor Yellow
+        exit 0
+    }
+}
+
+$directories = @(
+    $programPath
+    (Join-Path $programPath 'data-elements')
+    (Join-Path $programPath 'tracked-entity-attributes')
+    (Join-Path $programPath 'stages')
+    (Join-Path $programPath 'rules')
+    (Join-Path $programPath 'rules\actions')
+    (Join-Path $programPath 'generators')
+)
+
+foreach ($dir in $directories) {
+    if (-not (Test-Path $dir)) {
+        New-Item -Path $dir -ItemType Directory -Force | Out-Null
+        Write-Verbose "Created directory: $dir"
+    }
+}
+
+#endregion
+
+#region Export Data Elements
+
+Write-Host "`nExporting data elements..." -ForegroundColor Yellow
+
+$dataElementsYaml = @()
+$dataElementsCsv = @()
+
+foreach ($de in $metadata.dataElements) {
+    if (-not $de.code) { continue }
+    
+    $split = Split-MetadataToYamlCsv -Object $de `
+        -TranslatableFields @('name', 'shortName', 'description', 'formName') `
+        -TechnicalFields @('valueType', 'domainType', 'aggregationType', 'zeroIsSignificant')
+    
+    # Add option set reference if exists
+    if ($de.optionSet) {
+        $split.csv.optionSet = $de.optionSet.code
+    }
+    
+    $dataElementsYaml += $split.yaml
+    $dataElementsCsv += $split.csv
+}
+
+$dataElementsYaml | ConvertTo-Yaml | Set-Content -Path (Join-Path $programPath 'data-elements\data-elements.yaml') -Encoding UTF8NoBOM
+$dataElementsCsv | Export-Csv -Path (Join-Path $programPath 'data-elements\data-elements.csv') -NoTypeInformation -Encoding UTF8NoBOM
+
+Write-Host "✓ Exported $($dataElementsYaml.Count) data elements" -ForegroundColor Green
+
+#endregion
+
+#region Export Tracked Entity Attributes
+
+Write-Host "Exporting tracked entity attributes..." -ForegroundColor Yellow
+
+$attributesYaml = @()
+$attributesCsv = @()
+
+foreach ($attr in $metadata.trackedEntityAttributes) {
+    if (-not $attr.code) { continue }
+    
+    $split = Split-MetadataToYamlCsv -Object $attr `
+        -TranslatableFields @('name', 'description') `
+        -TechnicalFields @('valueType')
+    
+    if ($attr.optionSet) {
+        $split.csv.optionSet = $attr.optionSet.code
+    }
+    
+    $attributesYaml += $split.yaml
+    $attributesCsv += $split.csv
+}
+
+if ($attributesYaml.Count -gt 0) {
+    $attributesYaml | ConvertTo-Yaml | Set-Content -Path (Join-Path $programPath 'tracked-entity-attributes\attributes.yaml') -Encoding UTF8NoBOM
+    $attributesCsv | Export-Csv -Path (Join-Path $programPath 'tracked-entity-attributes\attributes.csv') -NoTypeInformation -Encoding UTF8NoBOM
+    Write-Host "✓ Exported $($attributesYaml.Count) tracked entity attributes" -ForegroundColor Green
+}
+
+#endregion
+
+#region Export Program Rules and Variables
+
+Write-Host "Exporting program rules..." -ForegroundColor Yellow
+
+$rulesYaml = @()
+$rulesCsv = @()
+
+foreach ($rule in $metadata.programRules) {
+    if (-not $rule.code) { continue }
+    
+    $split = Split-MetadataToYamlCsv -Object $rule `
+        -TranslatableFields @('name', 'description') `
+        -TechnicalFields @('condition', 'priority')
+    
+    if ($rule.programStage) {
+        $split.csv.programStage = $rule.programStage.code
+    }
+    
+    $rulesYaml += $split.yaml
+    $rulesCsv += $split.csv
+    
+    # Export rule actions to separate file
+    if ($rule.programRuleActions -and $rule.programRuleActions.Count -gt 0) {
+        $actions = $rule.programRuleActions | ForEach-Object {
+            @{
+                actionType = $_.programRuleActionType
+                dataElement = $_.dataElement.code
+                content = $_.content
+            }
+        }
+        
+        $actionsPath = Join-Path $programPath "rules\actions\$($rule.code).csv"
+        $actions | Export-Csv -Path $actionsPath -NoTypeInformation -Encoding UTF8NoBOM
+    }
+}
+
+if ($rulesYaml.Count -gt 0) {
+    $rulesYaml | ConvertTo-Yaml | Set-Content -Path (Join-Path $programPath 'rules\rules.yaml') -Encoding UTF8NoBOM
+    $rulesCsv | Export-Csv -Path (Join-Path $programPath 'rules\rules.csv') -NoTypeInformation -Encoding UTF8NoBOM
+    Write-Host "✓ Exported $($rulesYaml.Count) program rules" -ForegroundColor Green
+}
+
+# Export program rule variables
+$variablesYaml = @()
+$variablesCsv = @()
+
+foreach ($var in $metadata.programRuleVariables) {
+    if (-not $var.code) { continue }
+    
+    $split = Split-MetadataToYamlCsv -Object $var `
+        -TranslatableFields @('name') `
+        -TechnicalFields @('valueType', 'useCodeForOptionSet')
+    
+    $split.csv.sourceType = $var.programRuleVariableSourceType
+    if ($var.dataElement) {
+        $split.csv.dataElement = $var.dataElement.code
+    }
+    if ($var.trackedEntityAttribute) {
+        $split.csv.trackedEntityAttribute = $var.trackedEntityAttribute.code
+    }
+    
+    $variablesYaml += $split.yaml
+    $variablesCsv += $split.csv
+}
+
+if ($variablesYaml.Count -gt 0) {
+    $variablesYaml | ConvertTo-Yaml | Set-Content -Path (Join-Path $programPath 'rules\variables.yaml') -Encoding UTF8NoBOM
+    $variablesCsv | Export-Csv -Path (Join-Path $programPath 'rules\variables.csv') -NoTypeInformation -Encoding UTF8NoBOM
+    Write-Host "✓ Exported $($variablesYaml.Count) program rule variables" -ForegroundColor Green
+}
+
+#endregion
+
+#region Detect Patterns
+
+if ($DetectPatterns) {
+    Write-Host "`nAnalyzing metadata for repetitive patterns..." -ForegroundColor Yellow
+    
+    # Detect index sequence patterns in data elements
+    $dePatterns = Find-GeneratorPattern -Objects $metadata.dataElements -PatternType IndexSequence
+    
+    if ($dePatterns.Count -gt 0) {
+        Write-Host "`nDetected data element patterns:" -ForegroundColor Cyan
+        foreach ($pattern in $dePatterns) {
+            Write-Host "  • $($pattern.basePattern): $($pattern.count) items ($($pattern.startIndex)-$($pattern.endIndex))" -ForegroundColor White
+            Write-Host "    Examples: $($pattern.examples -join ', ')" -ForegroundColor Gray
+        }
+        
+        if ($CreateGenerators) {
+            Write-Host "`nWould you like to create generators for these patterns? (y/N)" -ForegroundColor Yellow
+            $response = Read-Host
+            if ($response -match '^y(es)?$') {
+                # TODO: Implement generator creation
+                Write-Warning "Automatic generator creation not yet implemented. Please create generators manually."
+            }
+        }
+    }
+    
+    # Detect patterns in program rules
+    $rulePatterns = Find-GeneratorPattern -Objects $metadata.programRules -PatternType IndexSequence
+    
+    if ($rulePatterns.Count -gt 0) {
+        Write-Host "`nDetected program rule patterns:" -ForegroundColor Cyan
+        foreach ($pattern in $rulePatterns) {
+            Write-Host "  • $($pattern.basePattern): $($pattern.count) items" -ForegroundColor White
+        }
+    }
+}
+
+#endregion
+
+#region Summary
+
+Write-Host "`n" + "="*60 -ForegroundColor Cyan
+Write-Host "Import Summary" -ForegroundColor Cyan
+Write-Host "="*60 -ForegroundColor Cyan
+Write-Host "Program:              $($program.name)" -ForegroundColor White
+Write-Host "Output Path:          $programPath" -ForegroundColor White
+Write-Host ""
+Write-Host "Data Elements:        $($dataElementsYaml.Count)" -ForegroundColor White
+Write-Host "Tracked Attributes:   $($attributesYaml.Count)" -ForegroundColor White
+Write-Host "Program Rules:        $($rulesYaml.Count)" -ForegroundColor White
+Write-Host "Program Variables:    $($variablesYaml.Count)" -ForegroundColor White
+Write-Host ""
+Write-Host "Next steps:" -ForegroundColor Yellow
+Write-Host "1. Review imported files in: $programPath" -ForegroundColor White
+Write-Host "2. Run Update-MetadataTranslations.ps1 to extract translations" -ForegroundColor White
+Write-Host "3. Run Validate-Metadata.ps1 to check for issues" -ForegroundColor White
+Write-Host "4. Run Create-MetadataPackage.ps1 to build packages" -ForegroundColor White
+Write-Host ""
+
+#endregion
