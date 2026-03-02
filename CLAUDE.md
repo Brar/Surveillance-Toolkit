@@ -121,21 +121,19 @@ The Validation Report will be the first deliverable to receive full localization
 
 ## Internationalization (i18n)
 
-### Language Tiers
+### Languages
 
-**Tier 1 — Active participant languages** (top priority):
+**Participant languages** (top priority — casual languages of current NeoIPC participants):
 - **en** (English) — source language (UK, South Africa, Nepal, Switzerland)
 - **de** (German) — Germany, Switzerland
 - **es** (Spanish) — Spain
 - **it** (Italian) — Italy, Switzerland
 - **el** (Greek) — Greece
 - **et** (Estonian) — Estonia
-
-**Tier 2 — Participant languages requiring assessment:**
 - **ne** (Nepali) — Nepal
 - **fr** (French) — Switzerland
 
-**Tier 3 — Native speaker access available:**
+**Additional languages with native speaker access:**
 - **tr** (Turkish) — team member is a native speaker
 - **he** (Hebrew) — friend is a native speaker; first RTL language (important for identifying RTL-specific issues)
 
