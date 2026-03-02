@@ -85,7 +85,7 @@ NeoIPC has participants from: Estonia, Germany, Greece, Italy, Nepal, South Afri
 ├── metadata/                      # Surveillance metadata
 │   ├── common/
 │   │   ├── antibiotics/           # Antibiotic data with ATC codes and AWaRe class
-│   │   ├── infectious-agents/     # Infectious agent taxonomy (YAML + CSV, 970K+)
+│   │   ├── infectious-agents/     # Infectious agent taxonomy (YAML is primary; CSV files are mostly legacy)
 │   │   ├── organisation_units/    # Country and NUTS region data
 │   │   ├── optionSets.csv         # DHIS2 option sets (legacy)
 │   │   └── options.csv            # DHIS2 options (legacy)
