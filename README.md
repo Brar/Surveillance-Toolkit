@@ -1,2 +1,2 @@
 # Surveillance-Toolkit
-This repository contains the surveilllance toolkit of the NeoIPC Project
+This repository contains the surveillance toolkit of the NeoIPC Project

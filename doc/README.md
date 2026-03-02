@@ -33,7 +33,7 @@ choco install ruby nodejs.install pandoc rsvg-convert
 #### LintHTML
 
 LintHTML is a Node.js package with a command line to lint HTML.
-Install it (globally) via the following coomand. 
+Install it (globally) via the following command. 
 
 ```console
 npm install -g @linthtml/linthtml
