@@ -7,10 +7,11 @@ This is the **NeoIPC Surveillance Toolkit** — a comprehensive toolkit for heal
 The toolkit includes:
 
 - **Validation Report** (active focus) — Quarto/R-based per-site data quality reports generated from the NeoIPC DHIS2 instance
-- **Reference Report** (planned) — epidemiological benchmark reporting across participating sites
-- **Partner Certificate** (planned, not yet in repo) — recognition documents for participating sites
+- **Partner Report** — Quarto/R-based per-site performance reports with analytics and outlier detection
+- **Partner Certificate** — participation certificates for partner hospitals
+- **Reference Report** — epidemiological benchmark reporting across participating sites
 - **Core Protocol** (on hold) — multi-language clinical protocol documentation (HTML, PDF, DOCX) from AsciiDoc sources
-- **Surveillance metadata** — structured data for antibiotics, pathogens, and organisation units (CSV/YAML)
+- **Surveillance metadata** — structured data for antibiotics, infectious agents, and organisation units (CSV/YAML)
 
 ### Current Participants
 
@@ -29,8 +30,8 @@ NeoIPC has participants from: Estonia, Germany, Greece, Italy, Nepal, South Afri
 
 ```
 ├── reports/                       # Quarto-based reports (R) — ACTIVE FOCUS
-│   ├── Validation Report/         # Data validation reports (en, de)
-│   │   ├── Validation Report.qmd  # Main Quarto document (orchestrator)
+│   ├── Validation-Report/         # Data validation reports (en, de)
+│   │   ├── Validation-Report.qmd  # Main Quarto document (orchestrator)
 │   │   ├── build-reports.ps1      # PowerShell build script
 │   │   ├── _quarto.yml            # Shared Quarto config
 │   │   ├── _quarto-{lang}.yml     # Language-specific Quarto profiles
@@ -42,14 +43,49 @@ NeoIPC has participants from: Estonia, Germany, Greece, Italy, Nepal, South Afri
 │   │   ├── en/                    # English strings, problem details, solutions
 │   │   ├── de/                    # German strings, problem details, solutions
 │   │   └── img/                   # Screenshots and diagrams
-│   ├── Reference Report/          # Reference reports (stub — translations only)
-│   │   └── translations/          # en.json, de.json (329 keys each)
-│   └── filters/                   # Pandoc Lua filters
-│       └── pandoc-quotes.lua      # Typographic quotation marks (language-aware)
+│   ├── Partner-Report/            # Per-site performance reports
+│   │   ├── Partner-Report.qmd     # Main Quarto document (English source)
+│   │   ├── Partner-Report.de.qmd  # German (po4a-generated)
+│   │   ├── build-partner-reports.ps1
+│   │   ├── _quarto.yml, _quarto-en.yml, _quarto-full.yml, _quarto-minimal.yml
+│   │   ├── _setup.qmd, _header.qmd, _content.qmd, _brand.yml
+│   │   ├── content/, figures/, tables/   # Report content sections
+│   │   └── translations.tex       # LaTeX translation strings
+│   ├── Partner-Certificate/       # Participation certificates
+│   │   ├── Partner-Certificate.qmd       # English source
+│   │   ├── Partner-Certificate.{de,it}.qmd  # Localized (po4a-generated)
+│   │   ├── _quarto.yml, _quarto-en.yml
+│   │   └── _setup.qmd, _content.qmd, title.tex, before-body.tex
+│   ├── Reference-Report/          # Epidemiological benchmark reports
+│   │   ├── Reference-Report.qmd   # English source
+│   │   ├── Reference-Report.{de,es,et,gr,it}.qmd  # Localized (po4a-generated)
+│   │   ├── _quarto.yml, _quarto-en.yml, _quarto-minimal.yml
+│   │   ├── _setup.qmd, _header.qmd, _content.qmd, _brand.yml
+│   │   ├── content/, figures/, tables/
+│   │   ├── Generate-ReferenceData.R, getReferenceData.R
+│   │   └── translations.tex
+│   ├── common/                    # Shared report infrastructure
+│   │   ├── _language.yml          # Multilingual UI strings
+│   │   ├── helpers.R              # Shared R utilities
+│   │   ├── getDataset.R           # Data access patterns
+│   │   └── reference.docx, reference.pptx  # Output templates
+│   ├── common.yaml                # Master configuration for all reports
+│   ├── logos/                     # Shared branding assets
+│   ├── filters/                   # Pandoc Lua filters
+│   │   └── pandoc-quotes.lua      # Typographic quotation marks (language-aware)
+│   ├── .gitignore
+│   └── .lintr                     # R linting config
+├── po/                            # Centralized translation (po4a)
+│   ├── documentation.po4a.cfg     # Protocol AsciiDoc translations
+│   ├── glossary.po4a.cfg          # Glossary translations
+│   ├── infectious_agents.po4a.cfg # Infectious agent YAML/AsciiDoc translations
+│   ├── reports.po4a.cfg           # All report translations (YAML, markdown, LaTeX)
+│   ├── *.pot                      # POT templates (generated)
+│   └── *.{lang}.po                # PO files per language
 ├── metadata/                      # Surveillance metadata
 │   ├── common/
 │   │   ├── antibiotics/           # Antibiotic data with ATC codes and AWaRe class
-│   │   ├── pathogens/             # Pathogen concepts and synonyms (186K+ records)
+│   │   ├── infectious-agents/     # Infectious agent taxonomy (YAML + CSV, 970K+)
 │   │   ├── organisation_units/    # Country and NUTS region data
 │   │   ├── optionSets.csv         # DHIS2 option sets (legacy)
 │   │   └── options.csv            # DHIS2 options (legacy)
@@ -59,65 +95,89 @@ NeoIPC has participants from: Estonia, Germany, Greece, Italy, Nepal, South Afri
 │   │   ├── NeoIPC-Core-Protocol.adoc
 │   │   ├── definitions/           # Clinical definition includes
 │   │   ├── img/                   # SVG images and diagrams
-│   │   ├── po4a/                  # Translation PO/POT files
 │   │   ├── resx/                  # .NET resource files (TO BE REMOVED — see i18n)
 │   │   └── xslt/                  # XSLT transforms
 │   ├── locale/                    # Locale attribute files (attributes-{lang}.adoc)
 │   └── NeoIPC.theme.yml           # Asciidoctor PDF theme
 ├── scripts/                       # Build and utility scripts (PowerShell)
+│   ├── Build-PartnerReports.ps1   # Batch partner report generation
+│   ├── Build-ReferenceReport.ps1  # Reference report generation
+│   ├── Convert-InfectiousAgentList.ps1  # YAML→AsciiDoc/CSV/PDF conversion
+│   ├── New-PartnerCertificate.ps1 # Single certificate generation
+│   ├── Test-PoPlaceholders.ps1    # Translation placeholder validation
+│   ├── Update-Po4aYamlKeys.ps1    # Translation config management
+│   ├── Update-Translation.ps1     # Translation management
 │   ├── Make-NeoIPC-Core-Protocol.ps1    # Protocol build script (on hold)
 │   ├── Create-MetadataPackage.ps1       # DHIS2 metadata packaging (legacy)
 │   ├── ConvertFrom-JsonMetadata.ps1     # DHIS2 JSON→CSV (legacy)
-│   ├── Update-Translation.ps1           # Translation management
 │   └── modules/
 │       └── NeoIPC-Tools/                # PowerShell utility module (needs rework)
+├── docs/                          # Design documentation
+│   ├── Infctious_agent_ontology_design.md
+│   └── unit-test-infectious-agent-detection-rates.md
+├── common/logos/                   # Brand assets (CC/BY license logos)
+├── tools/po4a                     # po4a as git submodule
+├── glossary.yaml                  # Centralized multilingual glossary
 ├── .github/workflows/build.yml    # GitHub Actions CI/CD
-├── po4a.cfg                       # Translation config (po4a)
+├── .gitmodules                    # Git submodule config (po4a)
 └── artifacts/                     # Build output directory (gitignored)
 ```
 
-## Validation Report
+## Reports
 
-### Overview
+### Validation Report
 
-The Validation Report is a Quarto/R-based report that validates surveillance data quality per participating site. It connects to the NeoIPC DHIS2 instance, runs 42 validation rules, and produces a PDF report with problems, explanations, and solutions — all localized.
+The Validation Report validates surveillance data quality per participating site. It connects to the NeoIPC DHIS2 instance, runs 42 validation rules, and produces a PDF report with problems, explanations, and solutions — all localized.
 
 **Architecture:** 42 validation problems → 20 problem details → 15 solutions (many-to-many mapping defined in `_mapping.qmd`).
 
-### Building
-
 ```powershell
-# From the "reports/Validation Report/" directory
+# From reports/Validation-Report/
 ./build-reports.ps1                          # All departments, English
 ./build-reports.ps1 -Language de             # German
 ./build-reports.ps1 -SiteCodeFilter 'DE_.*'  # Filter by site code regex
 ```
 
-The script reads a DHIS2 API token from `../../../token.txt`, fetches the department list, and renders one PDF per department.
+### Partner Report
 
-**Output:** `_output/YYYY-MM-DD_HHmmss_NeoIPC-Surveillance-Validation-Report_[SITE].[LANG].pdf`
+Per-site performance reports with analytics, outlier detection, and comparative metrics. Supports multiple output profiles (default, full, minimal).
 
-### Dependencies
+```powershell
+# From repo root
+./scripts/Build-PartnerReports.ps1
+```
+
+### Partner Certificate
+
+Participation certificates for partner hospitals. Can pull data from DHIS2 or accept manual parameters. Currently supports en, de, it.
+
+```powershell
+./scripts/New-PartnerCertificate.ps1
+```
+
+### Reference Report
+
+Epidemiological benchmark reporting across participating sites. Country-level filtering with selective element inclusion.
+
+```powershell
+./scripts/Build-ReferenceReport.ps1
+```
+
+### Shared Infrastructure
+
+- `reports/common.yaml` — master configuration for all reports
+- `reports/common/_language.yml` — multilingual UI strings shared across reports
+- `reports/common/helpers.R` — shared R utilities
+- `reports/common/getDataset.R` — data access patterns
+- `reports/filters/pandoc-quotes.lua` — language-aware typographic quotation marks
+
+### Report Dependencies
 
 - **R 4.x+** with packages: tidyverse, pak
 - **neoipcr** — custom package from GitHub (`Brar/neoipcr@initial_tests`), installed automatically
 - **Quarto** (with bundled Pandoc)
-- **PowerShell 7+** for the build script
-- **DHIS2 API token** in `token.txt`
-
-### Current Localization (en, de)
-
-Language-specific content lives in `en/` and `de/` subdirectories:
-- `_strings.qmd` — all 42 problem descriptions + UI strings
-- `_problem_detail_NNNN.qmd` — 21 problem detail pages
-- `_solution_NNNN.qmd` — 16 solution pages
-- `_problems_intro.qmd`, `_problem_details_intro.qmd`, `_solutions_intro.qmd`
-
-Quarto profiles (`_quarto-en.yml`, `_quarto-de.yml`) configure language, title, author, and metadata per language.
-
-### Localization Plan
-
-The Validation Report will be the first deliverable to receive full localization via the new i18n infrastructure (see below). The approach is hybrid: po4a for prose content, Quarto's built-in features for format-level strings (dates, figure labels, section numbering).
+- **PowerShell 7+** for build scripts
+- **DHIS2 API token** in `token.txt` (relative to repo root)
 
 ## Internationalization (i18n)
 
@@ -140,8 +200,19 @@ The Validation Report will be the first deliverable to receive full localization
 ### Translation Toolchain
 
 - **Weblate** (free account) — web-based translation management with good PO file support
-- **po4a** — converts between source formats and PO/POT files (configured in `po4a.cfg`)
+- **po4a** (bundled as git submodule in `tools/po4a`) — converts between source formats and PO/POT files
 - **Flow:** Source files → po4a → POT template → Weblate → PO files per language → po4a → localized output
+
+### Modular po4a Configuration
+
+Translation configs are in the `po/` directory, organized by component:
+
+| Config file | Scope | Formats |
+|-------------|-------|---------|
+| `po/reports.po4a.cfg` | All reports (Partner, Reference, Certificate, Validation) | YAML, markdown (text), LaTeX |
+| `po/documentation.po4a.cfg` | Protocol AsciiDoc files | AsciiDoc |
+| `po/infectious_agents.po4a.cfg` | Infectious agent taxonomy | YAML, AsciiDoc |
+| `po/glossary.po4a.cfg` | Centralized glossary | YAML |
 
 ### Supported Localization Formats
 
@@ -151,8 +222,8 @@ All localizable content must use formats with good po4a support:
 |--------|-------------|----------|
 | AsciiDoc | `asciidoc` | Protocol documents, clinical definitions |
 | Text (markdown flavour) | `text -o markdown` | Quarto report prose (.qmd content sections) |
-| LaTeX | `latex` | Small amount of LaTeX content |
-| YAML | `yaml` | Localizable metadata (replacing CSV translations) |
+| LaTeX | `latex` | Small amount of LaTeX content (translations.tex) |
+| YAML | `yaml` | Report config, glossary, localizable metadata |
 
 ### Formats Being Removed
 
@@ -161,14 +232,14 @@ All localizable content must use formats with good po4a support:
 
 ### Current Translation State
 
-| Language | Protocol PO | Protocol locale | Report content | Metadata |
-|----------|-------------|-----------------|----------------|----------|
-| **en** | source | complete | complete | source |
-| **de** | ~57% | complete | complete | complete |
-| **es** | ~59% | complete | — | complete |
-| **it** | — | complete | — | — |
-| **tr** | — | incomplete | — | — |
-| **el–he** | — | — | — | — |
+| Language | Reports PO | Protocol PO | Infectious agents PO | Glossary PO |
+|----------|-----------|-------------|---------------------|-------------|
+| **en** | source | source | source | source |
+| **de** | yes | yes | yes | yes |
+| **es** | yes | yes | yes | — |
+| **it** | yes | — | — | — |
+| **et** | yes | — | — | — |
+| **gr** | yes | — | — | — |
 
 ## Code Conventions
 
@@ -205,7 +276,7 @@ All localizable content must use formats with good po4a support:
 
 - UTF-8 encoding (BOM optional for Excel compatibility in CSV)
 - RFC 4180 compliant CSV format for structured data
-- YAML for localizable content (po4a-compatible)
+- YAML for localizable content and hierarchical data (po4a-compatible)
 - Standardized columns: `id`, `code`, `name`
 - Pipe-delimited (`|`) for structured sub-lists within CSV fields
 
@@ -225,9 +296,10 @@ See `doc/README.md` for full installation instructions.
 The following files are generated by builds and listed in `.gitignore`:
 
 - `artifacts/` — all protocol build output
-- `reports/Validation Report/_output/` — generated report PDFs/HTML
+- `reports/*/_output/` — generated report PDFs/HTML
+- `reports/*/Reference-Report.{lang}.qmd` etc. — po4a-generated localized .qmd files
 - `doc/protocol/NeoIPC-Antibiotics*.adoc` — generated antibiotic lists
-- `doc/protocol/NeoIPC-Infectious-Agents*.adoc` — generated pathogen lists
+- `doc/protocol/NeoIPC-Infectious-Agents*.adoc` — generated infectious agent lists
 - `doc/protocol/NeoIPC-Core-Protocol*.xml` — DocBook intermediates
 - `doc/protocol/img/NeoIPC-Core-Decision-Flow*.svg` — generated SVGs
 - `doc/protocol/img/NeoIPC-Core-Master-Data-Collection-Sheet*.svg`
@@ -239,5 +311,5 @@ The following files are generated by builds and listed in `.gitignore`:
 - **NeoIPC-Tools module manifest** (`scripts/modules/NeoIPC-Tools/NeoIPC-Tools.psd1`): comment says "AsciiDocTools" instead of "NeoIPC-Tools"; exports `Get-Properties` but the function is actually `Get-ObjectProperties`
 - **Protocol build `-Clean`** doesn't remove generated SVGs (TODO in script)
 - **German .resx** for data collection sheet only has 2 of 14 entries translated
-- **Italian and Turkish** have locale attribute files but no actual translations yet
 - **`transform-svg.xslt`** appears unused by the build pipeline
+- **`docs/` typo**: `Infctious_agent_ontology_design.md` (missing 'e' in Infectious)
