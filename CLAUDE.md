@@ -174,10 +174,10 @@ Epidemiological benchmark reporting across participating sites. Country-level fi
 ### Report Dependencies
 
 - **R 4.x+** with packages: tidyverse, pak
-- **neoipcr** — custom package from GitHub (`Brar/neoipcr@initial_tests`), installed automatically
+- **neoipcr** — custom R package from GitHub (`Brar/neoipcr`). The Validation Report currently uses the legacy `initial_tests` branch, but the plan is to port it to the newer integrated validation in more recent neoipcr branches (WIP).
 - **Quarto** (with bundled Pandoc)
 - **PowerShell 7+** for build scripts
-- **DHIS2 API token** in `token.txt` (relative to repo root)
+- **DHIS2 authentication** — configured via neoipcr (supports multiple authentication methods)
 
 ## Internationalization (i18n)
 
