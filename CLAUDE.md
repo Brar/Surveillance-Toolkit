@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This is the **NeoIPC Surveillance Toolkit** — a comprehensive toolkit for healthcare-associated infection (HAI) surveillance in neonatology, focused on Very Low Birth Weight (VLBW) and Very Preterm (VPT) infants. It is maintained by The NeoIPC Project Consortium under the MIT license.
+This is the **NeoIPC Surveillance Toolkit** — a comprehensive toolkit for healthcare-associated infection (HAI) surveillance in neonatology, focused on Very Low Birth Weight (VLBW) and Very Preterm (VPT) infants. It is maintained by The NeoIPC Project Consortium. Code is MIT-licensed. Documentation and certain metadata files may be subject to different licensing terms — see individual files for details.
 
 The toolkit includes:
 
