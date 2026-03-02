@@ -194,8 +194,8 @@ Epidemiological benchmark reporting across participating sites. Country-level fi
 - **fr** (French) — Switzerland
 
 **Additional languages with native speaker access:**
-- **tr** (Turkish) — team member is a native speaker
-- **he** (Hebrew) — friend is a native speaker; first RTL language (important for identifying RTL-specific issues)
+- **tr** (Turkish)
+- **he** (Hebrew) — first RTL language (important for identifying RTL-specific issues)
 
 ### Translation Toolchain
 
