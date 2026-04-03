@@ -219,5 +219,23 @@ if (any(tbl_data$n < sparse_threshold, na.rm = TRUE)) {
         rows = tbl_data$n < sparse_threshold))
 }
 
+# Total row deduplication footnote
+gt_tbl <- gt_tbl |>
+  gt::tab_footnote(
+    footnote = sR$`tbl-abr-infection-rate`$total_dedup_footnote,
+    locations = gt::cells_stub(
+      rows = tbl_data$group == "Total"))
+
+# Resistance category overlap source note
+gt_tbl <- gt_tbl |>
+  gt::tab_source_note(
+    source_note = sR$`tbl-abr-infection-rate`$resistance_overlap_footnote)
+
+# n.o.s. definition source note
+if (any(tbl_data$taxon == "species_nos", na.rm = TRUE)) {
+  gt_tbl <- gt_tbl |>
+    gt::tab_source_note(source_note = sR$nos_footnote)
+}
+
 gt_tbl
 ```

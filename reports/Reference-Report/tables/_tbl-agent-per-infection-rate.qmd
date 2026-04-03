@@ -197,5 +197,11 @@ if (any(tbl_data$n < sparse_threshold, na.rm = TRUE)) {
         rows = tbl_data$n < sparse_threshold))
 }
 
+# n.o.s. definition source note
+if (any(tbl_data$taxon == "species_nos", na.rm = TRUE)) {
+  gt_tbl <- gt_tbl |>
+    gt::tab_source_note(source_note = sR$nos_footnote)
+}
+
 gt_tbl
 ```

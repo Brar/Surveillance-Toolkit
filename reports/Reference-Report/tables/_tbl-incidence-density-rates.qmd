@@ -118,6 +118,11 @@ gt_tbl <- gt_tbl |>
     rows = tidyselect::any_of(sR$necrotising_enterocolitis_sc),
     id = "grp_othr") |>
   row_group_order(groups = c("grp_si", "grp_othr")) |>
+  gt::tab_stub_indent(
+    rows = tidyselect::any_of(c(
+      sR$primary_sepsis_bsi_sc,
+      sR$pneumonia_sc)),
+    indent = 2) |>
   tab_spanner(
     label = sR$`tbl-incidence-density-rates`$incidence_density_rate,
     columns = tidyselect::any_of(

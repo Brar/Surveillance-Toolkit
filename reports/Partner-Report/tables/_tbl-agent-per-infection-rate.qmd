@@ -282,6 +282,12 @@ if (!is.null(benchmark_data$infectious_agent_detection_rate_per_agent_table) &&
           rows = tbl_data$n_own < sparse_threshold))
   }
 
+  # n.o.s. definition source note
+  if (any(tbl_data$taxon == "species_nos", na.rm = TRUE)) {
+    tbl <- tbl |>
+      gt::tab_source_note(source_note = sR$nos_footnote)
+  }
+
   tbl
 } else {
   no_data_table()

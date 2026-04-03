@@ -111,6 +111,11 @@ if (!is.null(benchmark_data$incidence_density_rate_table) &&
       rows = tidyselect::any_of(sR$necrotising_enterocolitis_sc),
       id = "grp_othr") |>
     row_group_order(groups = c("grp_si", "grp_othr")) |>
+    gt::tab_stub_indent(
+      rows = tidyselect::any_of(c(
+        sR$primary_sepsis_bsi_sc,
+        sR$pneumonia_sc)),
+      indent = 2) |>
     tab_spanner(
       label = sR$`tbl-incidence-density-rates`$incidence_density_rate,
       columns = tidyselect::any_of(
@@ -249,6 +254,14 @@ if (!is.null(benchmark_data$incidence_density_rate_table) &&
           columns = sR$table_headers$n,
           rows = tbl_data$n_own < sparse_threshold))
   }
+
+  # SI definition footnote
+  tbl <- tbl |>
+    gt::tab_footnote(
+      footnote = sprintf(
+        sR$`tbl-incidence-density-rates`$si_footnote,
+        sR$si),
+      locations = gt::cells_stub(rows = sR$si))
 
   tbl
 } else {
