@@ -107,19 +107,40 @@ options(`gt.locale` = locale_gt)
 sR <- get_string_resources(localeObj)
 
 # ── Confidence interval display ─────────────────────────────────────
-# Supported values: "all" (or TRUE), "none" (or FALSE), "rate",
-# "rate_pooled", "auto".  Default: "all" (Reference Report shows everything).
+# Composable CI components: "pooled", "quartiles".
+# Pass individually or combined (comma-separated).
+# Convenience values: "all" (= pooled,quartiles), "none" (= empty).
+# Default: "all" (Reference Report shows everything).
 ci_config <- params$includeConfidenceIntervals
 if (is.null(ci_config)) ci_config <- "all"
-if (identical(ci_config, TRUE) || identical(ci_config, "true"))   ci_config <- "all"
-if (identical(ci_config, FALSE) || identical(ci_config, "false")) ci_config <- "none"
 
-# Granular flags — Reference Report has no "own" rate column, so
-# include_rate_ci controls the pooled rate CI (the only rate column).
-include_rate_ci     <- ci_config != "none"
-include_pooled_ci   <- FALSE  # no separate pooled column in Reference Report
-include_quartile_ci <- ci_config %in% c("all", "auto")
-auto_quartile_ci    <- identical(ci_config, "auto")
+# Expand convenience values and split comma-separated components
+ci_components <- if (identical(ci_config, "all")) {
+  c("pooled", "quartiles")
+} else if (identical(ci_config, "none")) {
+  character(0)
+} else {
+  trimws(unlist(strsplit(as.character(ci_config), ",")))
+}
+
+# Granular flags — Reference Report has no separate "own" rate column.
+# The only rate column IS the pooled rate, controlled by include_pooled_ci.
+include_pooled_ci   <- "pooled" %in% ci_components
+include_quartile_ci <- "quartiles" %in% ci_components
+
+# CI display patterns for cols_merge().  Tables set wrap_ci (TRUE/FALSE)
+# to select between wrapped (CI on its own line) and inline display.
+# The default is TRUE when multiple CI columns compete for space.
+ci_pattern_inline <- "{1} ({2}\u2013{3})"
+ci_pattern_wrap   <- if (knitr::is_latex_output()) {
+  "{1} \\newline({2}\u2013{3})"
+} else {
+  "{1}<br>({2}\u2013{3})"
+}
+# Wrapping is needed when many CI columns compete for space.
+# In practice this means quartile CIs are shown (4 CI columns at ~16% each).
+wrap_ci_default   <- include_quartile_ci && include_pooled_ci
+ci_pattern         <- if (wrap_ci_default) ci_pattern_wrap else ci_pattern_inline
 
 # ── Adaptive column widths ─────────────────────────────────────────
 # Reference Report layout: stub | N | Pooled(CI) | Q1(CI) | Q2(CI) | Q3(CI)
@@ -127,7 +148,7 @@ auto_quartile_ci    <- identical(ci_config, "auto")
 compute_col_widths <- function(tbl_data, stub_min = 25,
                                base_font_size = 11L,
                                bare_w = 15, n_w = 8) {
-  pooled_has_ci <- include_rate_ci &&
+  pooled_has_ci <- include_pooled_ci &&
     "ci_lower" %in% names(tbl_data) && any(!is.na(tbl_data$ci_lower))
   q_has_ci <- include_quartile_ci &&
     "q1_ci_lower" %in% names(tbl_data) && any(!is.na(tbl_data$q1_ci_lower))

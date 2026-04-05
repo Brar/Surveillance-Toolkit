@@ -47,7 +47,7 @@ if (!is.null(benchmark_data$infectious_agent_detection_rate_per_agent_table) &&
   check_outlier_interpretation <- has_reference
 
   tbl_data <- benchmark_data$infectious_agent_detection_rate_per_agent_table
-  cw <- compute_col_widths(tbl_data, stub_min = 30, has_reference = has_reference, base_font_size = 9)
+  cw <- compute_col_widths(tbl_data, stub_min = 32, has_reference = has_reference, base_font_size = 9)
 
   tbl <- tbl_data |>
     dplyr::select(-tidyselect::any_of(c("n_ref", ".ontology_path"))) |>
@@ -142,20 +142,22 @@ if (!is.null(benchmark_data$infectious_agent_detection_rate_per_agent_table) &&
       footnote = sprintf(
         sR$`tbl-agent-per-infection-rate`$n_footnote,
         sR$table_headers$n),
-      locations = cells_column_labels(columns = sR$table_headers$n)
+      locations = cells_column_labels(columns = sR$table_headers$n),
+      placement = "right"
     ) |>
     tab_footnote(
       footnote = sprintf(
         sR$`tbl-agent-per-infection-rate`$rate_footnote,
         sR$table_headers$rate),
-      locations = cells_column_labels(columns = sR$table_headers$rate)
+      locations = cells_column_labels(columns = sR$table_headers$rate),
+      placement = "right"
     )
 
   if (include_rate_ci && "ci_lower_own" %in% colnames(tbl$`_data`)) {
     tbl <- tbl |>
       gt::cols_merge(
         columns = c(sR$table_headers$rate, "ci_lower_own", "ci_upper_own"),
-        pattern = "{1} ({2}\u2013{3})",
+        pattern = ci_pattern,
         rows = !is.na(tbl_data$pooled_own)
       )
   }
@@ -163,29 +165,27 @@ if (!is.null(benchmark_data$infectious_agent_detection_rate_per_agent_table) &&
     tbl <- tbl |>
       gt::cols_merge(
         columns = c(sR$table_headers$pooled, "ci_lower_ref", "ci_upper_ref"),
-        pattern = "{1} ({2}\u2013{3})",
+        pattern = ci_pattern,
         rows = !is.na(tbl_data$pooled_ref)
       )
   }
   if ("q1_ci_lower_ref" %in% colnames(tbl$`_data`)) {
     if (include_quartile_ci) {
       has_boot <- !is.na(tbl$`_data`[["q1_ci_lower_ref"]])
-      if (auto_quartile_ci)
-        has_boot <- has_boot & !is.na(tbl$`_data`[[sR$table_headers$q1]])
       tbl <- tbl |>
         gt::cols_merge(
           columns = c(sR$table_headers$q1, "q1_ci_lower_ref", "q1_ci_upper_ref"),
-          pattern = "{1} ({2}\u2013{3})",
+          pattern = ci_pattern,
           rows = has_boot
         ) |>
         gt::cols_merge(
           columns = c(sR$table_headers$q2, "q2_ci_lower_ref", "q2_ci_upper_ref"),
-          pattern = "{1} ({2}\u2013{3})",
+          pattern = ci_pattern,
           rows = has_boot
         ) |>
         gt::cols_merge(
           columns = c(sR$table_headers$q3, "q3_ci_lower_ref", "q3_ci_upper_ref"),
-          pattern = "{1} ({2}\u2013{3})",
+          pattern = ci_pattern,
           rows = has_boot
         )
     } else {
@@ -237,7 +237,8 @@ if (!is.null(benchmark_data$infectious_agent_detection_rate_per_agent_table) &&
         footnote = sprintf(
           sR$`tbl-agent-per-infection-rate`$pooled_footnote,
           sR$table_headers$pooled),
-        locations = cells_column_labels(columns = sR$table_headers$pooled))
+        locations = cells_column_labels(columns = sR$table_headers$pooled),
+        placement = "right")
   } else {
     tbl <- tbl |>
       cols_width(
@@ -269,7 +270,8 @@ if (!is.null(benchmark_data$infectious_agent_detection_rate_per_agent_table) &&
           format_integer(100),
           "$$"
         )),
-      locations = cells_column_spanners(spanners = "infectious_agent_detection_rate")
+      locations = cells_column_spanners(spanners = "infectious_agent_detection_rate"),
+      placement = "right"
     )
 
   if (any(tbl_data$n_own < sparse_threshold, na.rm = TRUE)) {
@@ -279,7 +281,8 @@ if (!is.null(benchmark_data$infectious_agent_detection_rate_per_agent_table) &&
         footnote = sparse_note,
         locations = cells_body(
           columns = sR$table_headers$n,
-          rows = tbl_data$n_own < sparse_threshold))
+          rows = tbl_data$n_own < sparse_threshold),
+        placement = "right")
   }
 
   # n.o.s. definition source note

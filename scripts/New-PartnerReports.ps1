@@ -110,8 +110,8 @@ param(
     $HideIntroductionTexts,
 
     [Parameter()]
-    [ValidateSet('all', 'none', 'rate', 'rate_pooled', 'auto')]
-    [string]
+    [ValidateSet('all', 'none', 'rate', 'pooled', 'quartiles')]
+    [string[]]
     $ConfidenceIntervals,
 
     [Parameter()]
@@ -466,7 +466,7 @@ if (inherits(x, 'neoipcr_bnch_ds')) {
 
                 if ($resolvedReferenceDataFile) { $qmdParams['referenceDataFile'] = $resolvedReferenceDataFile }
                 if ($HideIntroductionTexts.IsPresent) { $qmdParams['includeIntroductionTexts'] = 'false' }
-                if ($ConfidenceIntervals) { $qmdParams['includeConfidenceIntervals'] = $ConfidenceIntervals }
+                if ($ConfidenceIntervals) { $qmdParams['includeConfidenceIntervals'] = $ConfidenceIntervals -join ',' }
                 if ($HideMethodsTexts.IsPresent) { $qmdParams['includeMethodsTexts'] = 'false' }
                 if ($SparseDataThreshold) { $qmdParams['sparseDataThreshold'] = $SparseDataThreshold }
                 if ($HideOutlierInterpretation.IsPresent) { $qmdParams['includeOutlierInterpretation'] = 'false' }

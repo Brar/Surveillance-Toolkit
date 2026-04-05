@@ -1483,17 +1483,39 @@ show_section_risk        <- params$includeRiskDensityRateTable ||
 sparse_threshold <- as.integer(params$sparseDataThreshold %||% 16L)
 
 # ── Confidence interval display ─────────────────────────────────────
-# Supported values: "all" (or TRUE), "none" (or FALSE), "rate",
-# "rate_pooled", "auto".  Default: "rate".
+# Composable CI components: "rate", "pooled", "quartiles".
+# Pass individually or combined (comma-separated).
+# Convenience values: "all" (= rate,pooled,quartiles), "none" (= empty).
+# Default: "rate" (Partner Report shows own-rate CI only).
 ci_config <- params$includeConfidenceIntervals
 if (is.null(ci_config)) ci_config <- "rate"
-if (identical(ci_config, TRUE) || identical(ci_config, "true"))   ci_config <- "all"
-if (identical(ci_config, FALSE) || identical(ci_config, "false")) ci_config <- "none"
 
-include_rate_ci     <- ci_config != "none"
-include_pooled_ci   <- ci_config %in% c("all", "rate_pooled", "auto")
-include_quartile_ci <- ci_config %in% c("all", "auto")
-auto_quartile_ci    <- identical(ci_config, "auto")
+# Expand convenience values and split comma-separated components
+ci_components <- if (identical(ci_config, "all")) {
+  c("rate", "pooled", "quartiles")
+} else if (identical(ci_config, "none")) {
+  character(0)
+} else {
+  trimws(unlist(strsplit(as.character(ci_config), ",")))
+}
+
+include_rate_ci     <- "rate" %in% ci_components
+include_pooled_ci   <- "pooled" %in% ci_components
+include_quartile_ci <- "quartiles" %in% ci_components
+
+# CI display patterns for cols_merge().  Tables set wrap_ci (TRUE/FALSE)
+# to select between wrapped (CI on its own line) and inline display.
+# The default is TRUE when multiple CI columns compete for space.
+ci_pattern_inline <- "{1} ({2}\u2013{3})"
+ci_pattern_wrap   <- if (knitr::is_latex_output()) {
+  "{1} \\newline({2}\u2013{3})"
+} else {
+  "{1}<br>({2}\u2013{3})"
+}
+# Wrapping is needed when many CI columns compete for space.
+# In practice this means quartile CIs are shown (4 CI columns at ~16% each).
+wrap_ci_default   <- include_quartile_ci && (include_rate_ci || include_pooled_ci)
+ci_pattern         <- if (wrap_ci_default) ci_pattern_wrap else ci_pattern_inline
 
 # Compute adaptive column widths and font size for benchmark tables.
 # Bare-number columns get a fixed width; CI-annotated columns share the

@@ -61,7 +61,8 @@ param(
     [ValidateRange(1, 100)]
     [int]$SparseDataThreshold,
     [Parameter()]
-    [switch]$HideConfidenceIntervals,
+    [ValidateSet('all', 'none', 'pooled', 'quartiles')]
+    [string[]]$ConfidenceIntervals,
     [Parameter()]
     [switch]$JsonReport,
     [Parameter()]
@@ -255,7 +256,9 @@ $commonParams.defaultPatientFilter = (-not $IncludeNonCorePatients)
 if ($HideIntroductionTexts.IsPresent) { $commonParams['includeIntroductionTexts'] = 'false' }
 if ($HideMethodsTexts.IsPresent) { $commonParams['includeMethodsTexts'] = 'false' }
 if ($SparseDataThreshold) { $commonParams['sparseDataThreshold'] = $SparseDataThreshold }
-if ($HideConfidenceIntervals.IsPresent) { $commonParams['includeConfidenceIntervals'] = 'false' }
+if ($ConfidenceIntervals) {
+    $commonParams['includeConfidenceIntervals'] = $ConfidenceIntervals -join ','
+}
 
 # Map user-friendly element names to internal Quarto metadata keys.
 # Each element can map to multiple keys (e.g. a section includes its text,
