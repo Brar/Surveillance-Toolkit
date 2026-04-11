@@ -49,6 +49,10 @@ if (!is.null(benchmark_data$infectious_agent_detection_rate_per_agent_table) &&
   tbl_data <- benchmark_data$infectious_agent_detection_rate_per_agent_table
   cw <- compute_col_widths(tbl_data, stub_min = 32, has_reference = has_reference, base_font_size = 9)
 
+  # Reset to the default CI pattern in case an earlier sibling table mutated
+  # the shared `ci_pattern` to inline.
+  ci_pattern <- ci_pattern_default
+
   tbl <- tbl_data |>
     dplyr::select(-tidyselect::any_of(c("n_ref", ".ontology_path"))) |>
     dplyr::mutate(

@@ -80,6 +80,8 @@ param(
     [Parameter(ParameterSetName='Online')]
     [string]$Dhis2Path = $null,
 
+    # Elements to enable on top of the QMD defaults. Each listed element
+    # has its visibility flag(s) forced to true.
     [Parameter()]
     [ValidateSet(
         'PatientPopulation',
@@ -93,13 +95,19 @@ param(
         'DeviceAssociatedRates',
         'AgentPerInfectionRates',
         'AntibioticResistanceRates',
+        'OrganismResistanceRates',
         'InfectiousAgentDetectionRates',
         'ResistanceTestRates',
         'RiskDensityRates',
         'SurgicalProcedureRates',
         'SecondaryBloodstreamInfectionRates'
     )]
-    [string[]]$IncludeElements = @(
+    [string[]]$EnableElements = @(),
+    # Elements to disable on top of the QMD defaults. Each listed element
+    # has its visibility flag(s) forced to false. If an element appears in
+    # both -EnableElements and -DisableElements, -DisableElements wins.
+    [Parameter()]
+    [ValidateSet(
         'PatientPopulation',
         'NosocomialInfections',
         'InfectiousAgents',
@@ -111,16 +119,14 @@ param(
         'DeviceAssociatedRates',
         'AgentPerInfectionRates',
         'AntibioticResistanceRates',
+        'OrganismResistanceRates',
         'InfectiousAgentDetectionRates',
         'ResistanceTestRates',
         'RiskDensityRates',
         'SurgicalProcedureRates',
         'SecondaryBloodstreamInfectionRates'
-    ),
-    # Elements to remove from the default IncludeElements list.
-    # Processed after IncludeElements: the effective set is IncludeElements minus ExcludeElements.
-    [Parameter()]
-    [string[]]$ExcludeElements = @()
+    )]
+    [string[]]$DisableElements = @()
 )
 
 Import-Module (Join-Path $PSScriptRoot 'modules' 'NeoIPC-Tools') -Force -Verbose:$false
@@ -234,6 +240,13 @@ if ($isDataFileMode) {
 
 $authForEnv = if (-not $isDataFileMode) { Resolve-NeoipcAuth -Token $Token } else { @{ AuthType = 'None' } }
 
+# $PSBoundParameters is per-invocation; inside the Invoke-WithNeoipcAuth
+# scriptblock it refers to the scriptblock's own (empty) parameter dictionary,
+# not this script's. Snapshot common-parameter flags here so the scriptblock
+# can read them via lexical closure.
+$debugRequested   = $PSBoundParameters.ContainsKey('Debug')
+$verboseRequested = $PSBoundParameters.ContainsKey('Verbose')
+
 Invoke-WithNeoipcAuth -Auth $authForEnv -ExtraEnvVars @{ 'LC_ALL' = $null; 'NEOIPC_BACKUP_PASSWORD' = $null } -ScriptBlock {
 
 if (-not $isDataFileMode -and $BackupDataset -and [string]::IsNullOrWhiteSpace($env:NEOIPC_BACKUP_PASSWORD)) {
@@ -283,6 +296,7 @@ $elementMapping = @{
     'DeviceAssociatedRates'             = @('includeDeviceAssociatedIncidenceDensityTable')
     'AgentPerInfectionRates'            = @('includeAgentPerInfectionRateTable')
     'AntibioticResistanceRates'         = @('includeResistantPathogenInfectionRateTable')
+    'OrganismResistanceRates'           = @('includeOrganismResistanceRateTable')
     'InfectiousAgentDetectionRates'     = @('includeInfectiousAgentDetectionRateTable')
     'ResistanceTestRates'               = @('includeAntibioticResistanceTestRateTable')
     'RiskDensityRates'                  = @('includeRiskDensityRateTable')
@@ -290,28 +304,18 @@ $elementMapping = @{
     'SecondaryBloodstreamInfectionRates' = @('includeSecondaryBsiRateTable')
 }
 
-# Apply exclusions: remove ExcludeElements from the effective IncludeElements list
-if ($ExcludeElements.Count -gt 0) {
-    $IncludeElements = @($IncludeElements | Where-Object { $_ -notin $ExcludeElements })
-}
-
-# Convert user-friendly array to Quarto boolean parameters.
-# Collect all metadata keys that should be true, then set everything else false.
-# Header is always included (unconditional in _content.qmd)
-
-$enabledKeys = [System.Collections.Generic.HashSet[string]]::new()
-foreach ($element in $IncludeElements) {
-    if ($elementMapping.ContainsKey($element)) {
-        foreach ($key in $elementMapping[$element]) {
-            [void]$enabledKeys.Add($key)
-        }
+# Apply per-element overrides on top of QMD defaults.
+# -EnableElements forces listed elements ON; -DisableElements forces them OFF.
+# Elements in neither list keep their QMD defaults (no -P flag emitted).
+# If an element appears in both lists, -DisableElements wins (disables run second).
+foreach ($element in $EnableElements) {
+    foreach ($key in $elementMapping[$element]) {
+        $commonParams[$key] = $true
     }
 }
-foreach ($mapping in $elementMapping.GetEnumerator()) {
-    foreach ($key in $mapping.Value) {
-        if ($key -ne 'includeHeader') {
-            $commonParams[$key] = $enabledKeys.Contains($key)
-        }
+foreach ($element in $DisableElements) {
+    foreach ($key in $elementMapping[$element]) {
+        $commonParams[$key] = $false
     }
 }
 
@@ -333,8 +337,8 @@ try {
             Write-Verbose "Generating reference data JSON: $jsonPath"
             $rArgs = @('--vanilla', (Join-Path $reportDir 'Generate-ReferenceData.R'), '--file', $jsonPath)
             if ($Quiet) { $rArgs += @('--quiet') }
-            if ($PSBoundParameters.Debug) { $rArgs += @('--debug') }
-            if ($PSBoundParameters.Verbose) { $rArgs += @('--verbose') }
+            if ($debugRequested) { $rArgs += @('--debug') }
+            if ($verboseRequested) { $rArgs += @('--verbose') }
             foreach ($kvp in $commonParams.GetEnumerator()) {
                 if ($null -ne $kvp.Value -and '' -ne $kvp.Value) {
                     $rArgs += @("--$($kvp.Key)", "$($kvp.Value)")
@@ -364,10 +368,10 @@ try {
 
     $quartoArgsCommon = @()
     if ($Quiet) {$quartoArgsCommon += '--quiet' }
-    if ($PSBoundParameters.Debug) {
+    if ($debugRequested) {
         $quartoArgsCommon += '--debug'
         $quartoArgsCommon += @('--log-level', 'debug')
-    } elseif ($PSBoundParameters.Verbose) {
+    } elseif ($verboseRequested) {
         $quartoArgsCommon += '--verbose'
         $quartoArgsCommon += @('--log-level', 'info')
     } else {

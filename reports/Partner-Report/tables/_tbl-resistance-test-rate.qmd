@@ -54,6 +54,11 @@ if (!is.null(benchmark_data$resistance_test_rate_table) &&
   tbl_data <- benchmark_data$resistance_test_rate_table
   cw <- compute_col_widths(tbl_data, stub_min = 25, has_reference = has_reference, base_font_size = 9)
 
+  # Opt back in to the default CI pattern: earlier sibling tables mutate the
+  # shared `ci_pattern` to inline, which would otherwise overflow this table's
+  # narrow rate columns when both pooled and quartile CIs are shown.
+  ci_pattern <- ci_pattern_default
+
   tbl <- tbl_data |>
     dplyr::select(-tidyselect::any_of("n_ref")) |>
     dplyr::rowwise() |>

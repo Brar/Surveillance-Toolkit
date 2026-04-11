@@ -690,6 +690,10 @@ tbl-abr-infection-rate:
     under-detection of resistant organisms cannot be excluded.
   rate_footnote: "%s: The Antibiotic-Resistant Infection Rate for your department (percentage of infections with resistant pathogens)."
 
+tbl-organism-resistance-rate:
+  n_footnote: "%s: The number of resistant detections of this organism in your department's infants."
+  rate_footnote: "%s: The organism-specific resistance rate for your department (percentage of tested detections that are resistant)."
+
 tbl-agent-per-infection-rate:
   n_footnote: "%s: The aggregated number of infections with this infectious agent detected in your department's infants."
   rate_footnote: "%s: The percentage of infections in your department where this infectious agent was detected."

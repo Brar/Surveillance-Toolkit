@@ -273,6 +273,20 @@ include_localised("_infectious-agents.Rmd")
 
 ```{r}
 #| output: asis
+.show(params$includeOrganismResistanceRateTable)
+```
+
+{{< include tables/_tbl-organism-resistance-rate.qmd >}}
+
+{{< pagebreak >}}
+
+```{r}
+#| output: asis
+.end()
+```
+
+```{r}
+#| output: asis
 if (show_section_diagnostics)
   cat('::: {.content-visible when-meta="alwaysTrue"}\n\n###',
       sR$headings$diagnostics, '\n\n:::\n')

@@ -29,6 +29,7 @@ params:
   includeRiskDensityRateTable: true
   includeSurgicalProcedureRateTable: true
   includeResistantPathogenInfectionRateTable: false
+  includeOrganismResistanceRateTable: false
   includeAntibioticResistanceTestRateTable: false
   includeSecondaryBsiRateTable: false
   sparseDataThreshold: 16

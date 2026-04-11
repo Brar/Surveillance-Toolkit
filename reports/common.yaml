@@ -45,6 +45,7 @@ headings:
   introduction: Introduction
   nosocomial_infections: Nosocomial Infections
   patient_population: Patient Population
+  organism_resistance: Organism-Specific Resistance Rates
   resistant_pathogens: Resistant Pathogens
   risk_and_protective_factors: Risk and Protective Factors
   secondary_bsi: Secondary Bloodstream Infections
@@ -106,6 +107,15 @@ tbl-abr-infection-rate:
   rate_name: "Resistant pathogen infection rate"
   rate_numerator: "Number of antibiotic resistant pathogens in infections"
   tbl-cap: "Nosocomial infections with resistant pathogens"
+tbl-organism-resistance-rate:
+  n_footnote: "%s: The aggregated number of resistant detections of the organism."
+  no_data: "No organism-specific resistance data available for this report settings."
+  pooled_footnote: "%s: The organism-specific resistance rate calculated across all infants from all departments."
+  quartile_footnote: "%s, %s, %s: The quartiles (%s, %s and %s quantiles) of the organism-specific resistance rates of the partner departments. Q₂ represents the median. These quartiles are only displayed when the number of departments contributing to the denominator is greater than or equal to five, and when the median number of tested detections is greater than or equal to one."
+  rate_denominator: "Number of tested detections of the organism"
+  rate_name: "Organism-specific resistance rate"
+  rate_numerator: "Number of resistant detections of the organism"
+  tbl-cap: "Organism-specific resistance rates"
 tbl-agent-per-infection-rate:
   n_footnote: "%s: The aggregated number of infectious agents in all infections."
   no_data: "No infectious agent data available for this report settings."
@@ -284,6 +294,13 @@ methods:
   resistant_pathogens_ast_ref: >-
     Resistance testing completeness is reported separately in the
     antimicrobial susceptibility testing section.
+  organism_resistance: >-
+    This section reports organism-specific resistance rates — the proportion
+    of each detected organism that carries a given resistance marker. Unlike
+    the resistant pathogen infection rate, which uses infections as the
+    denominator, this metric uses organism-level detections: for example,
+    the proportion of all tested Klebsiella pneumoniae detections that are
+    carbapenem-resistant.
   infectious_agent_detection: >-
     The infectious agent detection rate measures the proportion of infections in
     which at least one infectious agent was identified. Higher detection rates

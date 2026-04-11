@@ -163,6 +163,8 @@ param(
     [string]
     $Dhis2Path = $null,
 
+    # Elements to enable on top of the QMD defaults. Each listed element
+    # has its visibility flag forced to true.
     [Parameter()]
     [ValidateSet(
         'BirthWeightDistribution',
@@ -171,29 +173,33 @@ param(
         'DeviceAssociatedRates',
         'AgentPerInfectionRates',
         'AntibioticResistanceRates',
+        'OrganismResistanceRates',
         'InfectiousAgentDetectionRates',
         'ResistanceTestRates',
         'RiskDensityRates',
         'SurgicalProcedureRates',
         'SecondaryBloodstreamInfectionRates'
     )]
-    [string[]]$IncludeElements = @(
+    [string[]]$EnableElements = @(),
+    # Elements to disable on top of the QMD defaults. Each listed element
+    # has its visibility flag forced to false. If an element appears in
+    # both -EnableElements and -DisableElements, -DisableElements wins.
+    [Parameter()]
+    [ValidateSet(
         'BirthWeightDistribution',
         'GestationalAgeDistribution',
         'IncidenceDensityRates',
         'DeviceAssociatedRates',
         'AgentPerInfectionRates',
         'AntibioticResistanceRates',
+        'OrganismResistanceRates',
         'InfectiousAgentDetectionRates',
         'ResistanceTestRates',
         'RiskDensityRates',
         'SurgicalProcedureRates',
         'SecondaryBloodstreamInfectionRates'
-    ),
-    # Elements to remove from the default IncludeElements list.
-    # Processed after IncludeElements: the effective set is IncludeElements minus ExcludeElements.
-    [Parameter()]
-    [string[]]$ExcludeElements = @()
+    )]
+    [string[]]$DisableElements = @()
 )
 
 Import-Module (Join-Path $PSScriptRoot 'modules' 'NeoIPC-Tools') -Force -Verbose:$false
@@ -217,6 +223,7 @@ $elementMapping = @{
     'DeviceAssociatedRates' = 'includeDeviceAssociatedIncidenceDensityTable'
     'AgentPerInfectionRates' = 'includeAgentPerInfectionRateTable'
     'AntibioticResistanceRates' = 'includeResistantPathogenInfectionRateTable'
+    'OrganismResistanceRates' = 'includeOrganismResistanceRateTable'
     'InfectiousAgentDetectionRates' = 'includeInfectiousAgentDetectionRateTable'
     'ResistanceTestRates' = 'includeAntibioticResistanceTestRateTable'
     'RiskDensityRates' = 'includeRiskDensityRateTable'
@@ -472,13 +479,15 @@ if (inherits(x, 'neoipcr_bnch_ds')) {
                 if ($HideOutlierInterpretation.IsPresent) { $qmdParams['includeOutlierInterpretation'] = 'false' }
                 if ($DebugReport) { $qmdParams['debug'] = 'true' }
 
-                # Apply exclusions
-                $effectiveElements = @($IncludeElements | Where-Object { $_ -notin $ExcludeElements })
-
-                # Convert user-friendly element names to Quarto boolean parameters
-                foreach ($mapping in $elementMapping.GetEnumerator()) {
-                    $includeValue = $effectiveElements -contains $mapping.Key
-                    $qmdParams[$mapping.Value] = if ($includeValue) { 'true' } else { 'false' }
+                # Apply per-element overrides on top of QMD defaults.
+                # -EnableElements forces listed elements ON; -DisableElements forces them OFF.
+                # Elements in neither list keep their QMD defaults (no -P flag emitted).
+                # If an element appears in both lists, -DisableElements wins (disables run second).
+                foreach ($element in $EnableElements) {
+                    $qmdParams[$elementMapping[$element]] = 'true'
+                }
+                foreach ($element in $DisableElements) {
+                    $qmdParams[$elementMapping[$element]] = 'false'
                 }
 
                 $paramPairs = Build-QmdParamPairs -Values $qmdParams

@@ -1448,6 +1448,8 @@ ref_dev_ass_table <- if (params$includeDeviceAssociatedIncidenceDensityTable)
   " (@tbl-device-associated-incidence-density-rates)" else ""
 ref_abr_table <- if (params$includeResistantPathogenInfectionRateTable)
   " (@tbl-abr-infection-rate)" else ""
+ref_org_rr_table <- if (params$includeOrganismResistanceRateTable)
+  " (@tbl-organism-resistance-rate)" else ""
 ref_ast_table <- if (params$includeAntibioticResistanceTestRateTable)
   " (@tbl-resistance-test-rate)" else ""
 
@@ -1456,7 +1458,8 @@ ref_ast_table <- if (params$includeAntibioticResistanceTestRateTable)
 # (or a child section) will be rendered. Computed bottom-up.
 show_section_surgical    <- params$includeSurgicalProcedureRateTable
 show_section_infectious  <- params$includeAgentPerInfectionRateTable ||
-  params$includeResistantPathogenInfectionRateTable
+  params$includeResistantPathogenInfectionRateTable ||
+  params$includeOrganismResistanceRateTable
 show_section_diagnostics <- params$includeInfectiousAgentDetectionRateTable ||
   params$includeAntibioticResistanceTestRateTable
 show_section_nosocomial  <- params$includeIncidenceDensityTable ||
@@ -1514,8 +1517,12 @@ ci_pattern_wrap   <- if (knitr::is_latex_output()) {
 }
 # Wrapping is needed when many CI columns compete for space.
 # In practice this means quartile CIs are shown (4 CI columns at ~16% each).
-wrap_ci_default   <- include_quartile_ci && (include_rate_ci || include_pooled_ci)
-ci_pattern         <- if (wrap_ci_default) ci_pattern_wrap else ci_pattern_inline
+wrap_ci_default    <- include_quartile_ci && (include_rate_ci || include_pooled_ci)
+# `ci_pattern_default` is the stable default. Per-table overrides assign to
+# `ci_pattern`, which is shared across chunks; tables that want the default
+# back must opt in explicitly via `ci_pattern <- ci_pattern_default`.
+ci_pattern_default <- if (wrap_ci_default) ci_pattern_wrap else ci_pattern_inline
+ci_pattern         <- ci_pattern_default
 
 # Compute adaptive column widths and font size for benchmark tables.
 # Bare-number columns get a fixed width; CI-annotated columns share the
