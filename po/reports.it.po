@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NeoIPC Surveillance Reports 0.9\n"
 "Report-Msgid-Bugs-To: NeoIPC-Support@charite.de\n"
-"POT-Creation-Date: 2026-04-10 20:04+0200\n"
+"POT-Creation-Date: 2026-04-12 11:59+0200\n"
 "PO-Revision-Date: 2026-01-26 22:19+0100\n"
 "Last-Translator: Brar Piening <brar.piening@charite.de>\n"
 "Language-Team: none\n"
@@ -271,6 +271,13 @@ msgstr "Questa è un'analisi speciale che"
 msgid "Sum of patient days"
 msgstr "Somma dei giorni di degenza:\n"
 
+#. type: Hash Value: headings antibiotic_utilisation
+#: reports/common.yaml:1
+#, fuzzy, no-wrap
+#| msgid "Antibiotics"
+msgid "Antibiotic Utilisation"
+msgstr "Antibiotici"
+
 #. type: Hash Value: headings antimicrobial_susceptibility_testing
 #: reports/common.yaml:1
 #, no-wrap
@@ -371,6 +378,12 @@ msgstr "Procedure chirurgiche per categoria"
 #: reports/common.yaml:1
 #, no-wrap
 msgid "The agent-per-infection rate measures how frequently specific pathogens are detected relative to the number of infections in which any infectious agent was identified. Values above 100% are expected and indicate polymicrobial infections. Diagnostic challenges specific to neonates — including low blood volume reducing culture sensitivity and elevated contamination risk — may influence detection patterns."
+msgstr ""
+
+#. type: Hash Value: methods antibiotic_utilisation
+#: reports/common.yaml:1
+#, no-wrap
+msgid "Antibiotic utilisation is reported per individual substance, grouped by ATC pharmacological subgroup. The exposure density rate measures substance-days per 100 patient-days. Antibiotic days are counted from the first dose to the last dose of a therapy inclusive. Each substance is counted separately; a patient receiving two antibiotics on the same day contributes one day to each substance's tally. Because of combination therapy, the sum of individual substance rates can exceed the total antibiotic exposure rate shown in the risk and protective factors table."
 msgstr ""
 
 #. type: Hash Value: methods ci_quartile_auto_note
@@ -695,6 +708,59 @@ msgstr "Numero di agenti infettivi rilevati nelle infezioni"
 #, no-wrap
 msgid "Infectious agents detected in nosocomial infections"
 msgstr "Agenti infettivi rilevati nelle infezioni nosocomiali"
+
+#. type: Hash Value: tbl-antibiotic-utilisation atc_footnote
+#: reports/common.yaml:1
+#, no-wrap
+msgid "ATC: Anatomical Therapeutic Chemical classification (WHO). Substances are grouped by pharmacological subgroup (ATC 5th level). See %s for details."
+msgstr ""
+
+#. type: Hash Value: tbl-antibiotic-utilisation exposure_density_rate
+#: reports/common.yaml:1
+#, fuzzy, no-wrap
+#| msgid "Risk Density Rate"
+msgid "Antibiotic Exposure Density Rate"
+msgstr "Tasso di densità di rischio"
+
+#. type: Hash Value: tbl-antibiotic-utilisation n_footnote
+#: reports/common.yaml:1
+#, fuzzy, no-wrap
+#| msgid "%s: The aggregated number of device-associated infections in all infants."
+msgid "%s: The aggregated number of substance-days recorded across all infants."
+msgstr "%s: Numero complessivo di infezioni associate al dispositivo in tutti i neonati."
+
+#. type: Hash Value: tbl-antibiotic-utilisation no_data
+#: reports/common.yaml:1
+#, fuzzy, no-wrap
+#| msgid "No of infections with agent"
+msgid "No antibiotic utilisation data available for this report settings."
+msgstr "Numero di infezioni con agente"
+
+#. type: Hash Value: tbl-antibiotic-utilisation pooled_footnote
+#: reports/common.yaml:1
+#, fuzzy, no-wrap
+#| msgid "%s: The Risk Density Rate calculated across all infants from all departments in the reference data."
+msgid "%s: The Antibiotic Exposure Density Rate calculated across all infants from all departments in the reference data."
+msgstr "%s: tasso di densità di rischio calcolato su tutti i neonati di tutti i reparti nei dati di riferimento."
+
+#. type: Hash Value: tbl-antibiotic-utilisation quartile_footnote
+#: reports/common.yaml:1
+#, fuzzy, no-wrap
+#| msgid "%s, %s, %s: The quartiles (%s, %s and %s quantiles) of the Risk Density Rates of the departments in the reference data. These quartiles are only displayed when the number of departments contributing to the denominator is greater than or equal to five, and when the median number of device days is greater than or equal to one according to the pooled Risk Density Rate."
+msgid "%s, %s, %s: The quartiles (%s, %s and %s quantiles) of the Antibiotic Exposure Density Rates of the departments in the reference data. Q₂ represents the median. These quartiles are only displayed when the number of departments contributing to the denominator is greater than or equal to five, and when the median number of substance-days is greater than or equal to one according to the pooled rate."
+msgstr "%s, %s, %s: I quartili (quantili %s, %s e %s) dei tassi di densità di rischio dei reparti nei dati di riferimento. Questi quartili vengono visualizzati solo quando il numero di reparti che contribuiscono al denominatore è maggiore o uguale a cinque e quando il numero mediano di giorni di utilizzo del dispositivo è maggiore o uguale a uno secondo il tasso di densità di rischio aggregato."
+
+#. type: Hash Value: tbl-antibiotic-utilisation substance_days
+#: reports/common.yaml:1
+#, no-wrap
+msgid "Substance-days"
+msgstr ""
+
+#. type: Hash Value: tbl-antibiotic-utilisation tbl-cap
+#: reports/common.yaml:1
+#, no-wrap
+msgid "Antibiotic utilisation by pharmacological subgroup and substance"
+msgstr ""
 
 #. type: Hash Value: tbl-device-associated-incidence-density-rates cvc
 #: reports/common.yaml:1
@@ -2478,6 +2544,20 @@ msgstr "%s: Numero complessivo di giorni in cui il fattore di rischio/protezione
 msgid "%s: The percentage of infections in your department where this infectious agent was detected."
 msgstr "Numero di infezioni in cui è stato rilevato un agente infettivo"
 
+#. type: Hash Value: tbl-antibiotic-utilisation n_footnote
+#: reports/Partner-Report/content/_sR.yaml:1
+#, fuzzy, no-wrap
+#| msgid "%s: The aggregated number surgical procedures performed in all infants."
+msgid "%s: The aggregated number of substance-days recorded in your department's infants."
+msgstr "%s: numero complessivo di interventi chirurgici eseguiti su tutti i neonati."
+
+#. type: Hash Value: tbl-antibiotic-utilisation rate_footnote
+#: reports/Partner-Report/content/_sR.yaml:1
+#, fuzzy, no-wrap
+#| msgid "%s: The Risk Density Rate calculated for your department's infants.\n"
+msgid "%s: The Antibiotic Exposure Density Rate calculated for your department's infants."
+msgstr "%s: tasso di densità di rischio calcolato per i neonati del proprio reparto.\n"
+
 #. type: Hash Value: tbl-device-associated-incidence-density-rates n_footnote
 #: reports/Partner-Report/content/_sR.yaml:1
 #, fuzzy, no-wrap
@@ -2710,6 +2790,12 @@ msgid "Antimicrobial susceptibility testing (AST) is fundamental to both individ
 msgstr ""
 
 #. type: Plain text
+#: reports/Partner-Report/content/_tbl-intro-antibiotic-utilisation.Rmd:1
+#, no-wrap
+msgid "@tbl-antibiotic-utilisation details antibiotic exposure at the level of individual substances, grouped by ATC pharmacological subgroup. Bold rows show the aggregated rate for each subgroup; indented rows show the rate for each substance within that subgroup. Comparing substance-level patterns with the reference data can help identify opportunities for antibiotic stewardship.\n"
+msgstr ""
+
+#. type: Plain text
 #: reports/Partner-Report/content/_tbl-intro-risk-density.Rmd:1
 #, no-wrap
 msgid "@tbl-risk-density-rates shows the utilization density of key interventions including invasive devices, ventilatory support, antibiotics, and protective measures such as human milk feeding, kangaroo care, and probiotics. Benchmarking these utilization rates helps identify opportunities to reduce unnecessary device use while optimizing evidence-based protective interventions.\n"
@@ -2719,6 +2805,13 @@ msgstr ""
 #: reports/Partner-Report/content/_tbl-intro-surgical-procedure.Rmd:1
 #, no-wrap
 msgid "@tbl-surgical-procedure-rates presents rates of various surgical procedures performed in your department, normalized per 100 patients. Understanding your surgical case mix is essential for interpreting infection rates and implementing appropriate surgical site infection prevention protocols. Comparison with reference data helps contextualize your department's surgical workload and associated infection risks.\n"
+msgstr ""
+
+#. type: Plain text
+#: reports/Partner-Report/content/_methods-antibiotic-utilisation.Rmd:1
+#: reports/Reference-Report/content/_methods-antibiotic-utilisation.Rmd:1
+#, no-wrap
+msgid "`r sR$methods$antibiotic_utilisation`\n"
 msgstr ""
 
 #. type: Plain text
@@ -3220,6 +3313,13 @@ msgstr "Il presente rapporto presenta dati provenienti da unità neonatali di un
 #| msgid "Risk and Protective Factors"
 msgid "Presence of Risk and Protective Factors"
 msgstr "Fattori di rischio e di protezione"
+
+#. type: Hash Value: tbl-antibiotic-utilisation n_footnote
+#: reports/Reference-Report/content/_sR.yaml:1
+#, fuzzy, no-wrap
+#| msgid "%s: The aggregated number of infections in all infants."
+msgid "%s: The aggregated number of substance-days recorded in all infants."
+msgstr "%s: Numero complessivo di infezioni in tutti i neonati."
 
 #. type: Hash Value: tbl-risk-density-rates n_footnote
 #: reports/Reference-Report/content/_sR.yaml:1
@@ -4946,9 +5046,6 @@ msgstr ""
 
 #~ msgid "PVC"
 #~ msgstr "PVC"
-
-#~ msgid "Antibiotics"
-#~ msgstr "Antibiotici"
 
 #~ msgid "Kangaroo care"
 #~ msgstr "Cura del canguro"

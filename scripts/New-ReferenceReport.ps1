@@ -98,6 +98,7 @@ param(
         'OrganismResistanceRates',
         'InfectiousAgentDetectionRates',
         'ResistanceTestRates',
+        'AntibioticUtilisationRates',
         'RiskDensityRates',
         'SurgicalProcedureRates',
         'SecondaryBloodstreamInfectionRates'
@@ -122,6 +123,7 @@ param(
         'OrganismResistanceRates',
         'InfectiousAgentDetectionRates',
         'ResistanceTestRates',
+        'AntibioticUtilisationRates',
         'RiskDensityRates',
         'SurgicalProcedureRates',
         'SecondaryBloodstreamInfectionRates'
@@ -299,6 +301,7 @@ $elementMapping = @{
     'OrganismResistanceRates'           = @('includeOrganismResistanceRateTable')
     'InfectiousAgentDetectionRates'     = @('includeInfectiousAgentDetectionRateTable')
     'ResistanceTestRates'               = @('includeAntibioticResistanceTestRateTable')
+    'AntibioticUtilisationRates'        = @('includeAntibioticUtilisationTable')
     'RiskDensityRates'                  = @('includeRiskDensityRateTable')
     'SurgicalProcedureRates'            = @('includeSurgicalProcedureRateTable')
     'SecondaryBloodstreamInfectionRates' = @('includeSecondaryBsiRateTable')

@@ -35,6 +35,7 @@ gramm_abbreviation: "g"
 header:
   department: Department
 headings:
+  antibiotic_utilisation: Antibiotic Utilisation
   antimicrobial_susceptibility_testing: Antimicrobial Susceptibility Testing
   detection_of_infectious_agents: Detection of Infectious Agents
   device_associated_infections: Device-Associated Infections
@@ -107,6 +108,28 @@ tbl-abr-infection-rate:
   rate_name: "Resistant pathogen infection rate"
   rate_numerator: "Number of antibiotic resistant pathogens in infections"
   tbl-cap: "Nosocomial infections with resistant pathogens"
+tbl-antibiotic-utilisation:
+  aware_column_footnote: >-
+    WHO AWaRe classification (Access, Watch, Reserve). See %s.
+  atc_footnote: >-
+    ATC: Anatomical Therapeutic Chemical classification (WHO). Substances are
+    grouped by pharmacological subgroup (ATC 5th level). See %s for details.
+  exposure_density_rate: "Antibiotic Exposure Density Rate"
+  n_footnote: >-
+    %s: The aggregated number of substance-days recorded across all infants.
+  no_data: "No antibiotic utilisation data available for this report settings."
+  pooled_footnote: >-
+    %s: The Antibiotic Exposure Density Rate calculated across all infants from
+    all departments in the reference data.
+  quartile_footnote: >-
+    %s, %s, %s: The quartiles (%s, %s and %s quantiles) of the Antibiotic
+    Exposure Density Rates of the departments in the reference data. Q₂
+    represents the median. These quartiles are only displayed when the number of
+    departments contributing to the denominator is greater than or equal to five,
+    and when the median number of substance-days is greater than or equal to one
+    according to the pooled rate.
+  substance_days: "Substance-days"
+  tbl-cap: "Antibiotic utilisation by pharmacological subgroup and substance"
 tbl-organism-resistance-rate:
   n_footnote: "%s: The aggregated number of resistant detections of the organism."
   no_data: "No organism-specific resistance data available for this report settings."
@@ -259,6 +282,15 @@ methods:
     The figures show both the frequency distribution (histogram with density
     curve) and summary statistics (boxplot with quartiles and pooled arithmetic
     mean).
+  antibiotic_utilisation: >-
+    Antibiotic utilisation is reported per individual substance, grouped by ATC
+    pharmacological subgroup. The exposure density rate measures substance-days
+    per 100 patient-days. Antibiotic days are counted from the first dose to the
+    last dose of a therapy inclusive. Each substance is counted separately; a
+    patient receiving two antibiotics on the same day contributes one day to each
+    substance's tally. Because of combination therapy, the sum of individual
+    substance rates can exceed the total antibiotic exposure rate shown in the
+    risk and protective factors table.
   incidence_density: >-
     Incidence density rates are calculated per 1,000 patient-days, allowing
     comparison between departments with different patient volumes and lengths of

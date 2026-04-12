@@ -287,6 +287,7 @@ show_section_nosocomial  <- params$includeIncidenceDensityTable ||
   params$includeSecondaryBsiRateTable ||
   show_section_infectious || show_section_diagnostics
 show_section_risk        <- params$includeRiskDensityRateTable ||
+  params$includeAntibioticUtilisationTable ||
   show_section_surgical
 
 # ── Conditional block helpers ────────────────────────────────────

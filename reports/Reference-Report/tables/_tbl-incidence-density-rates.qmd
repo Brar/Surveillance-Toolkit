@@ -177,7 +177,7 @@ gt_tbl <- gt_tbl |>
     placement = "right")
 
 # Sparse-data footnote for N < sparse_threshold
-if (any(tbl_data$n < sparse_threshold, na.rm = TRUE)) {
+if (any(!is.na(tbl_data$pooled) & tbl_data$n < sparse_threshold, na.rm = TRUE)) {
   fn_text <- if (include_pooled_ci) sR$sparse_data_footnote else sR$sparse_data_footnote_no_ci
   fn_text <- glue::glue(fn_text, threshold = sparse_threshold)
   gt_tbl <- gt_tbl |>
@@ -185,7 +185,7 @@ if (any(tbl_data$n < sparse_threshold, na.rm = TRUE)) {
       footnote = fn_text,
       locations = cells_body(
         columns = sR$table_headers$n,
-        rows = tbl_data$n < sparse_threshold),
+        rows = !is.na(tbl_data$pooled) & tbl_data$n < sparse_threshold),
       placement = "right")
 }
 

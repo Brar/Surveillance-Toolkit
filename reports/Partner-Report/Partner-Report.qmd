@@ -27,6 +27,7 @@ params:
   includeAgentPerInfectionRateTable: true
   includeInfectiousAgentDetectionRateTable: true
   includeRiskDensityRateTable: true
+  includeAntibioticUtilisationTable: false
   includeSurgicalProcedureRateTable: true
   includeResistantPathogenInfectionRateTable: false
   includeOrganismResistanceRateTable: false
