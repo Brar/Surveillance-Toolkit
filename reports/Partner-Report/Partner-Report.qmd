@@ -19,7 +19,7 @@ params:
   includeConfidenceIntervals: "rate"
   includeIntroductionTexts: true
   includeMethodsTexts: true
-  includeOutlierInterpretation: true
+  includeOutlierInterpretation: false
   includeBirthWeightFigure: true
   includeGestationalAgeFigure: true
   includeIncidenceDensityTable: true
