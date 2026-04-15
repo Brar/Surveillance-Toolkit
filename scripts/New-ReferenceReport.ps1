@@ -22,7 +22,7 @@ param(
     [Parameter()]
     [string[]]$OutputLocales = @('en'),
     [Parameter()]
-    [string]$OutputDir = "${PSScriptRoot}/../reports/Reference-Report/_output",
+    [string]$OutputDir = $null,
     [Parameter(ParameterSetName='Online')]
     [string]$ReportingPeriodFrom,
     [Parameter(ParameterSetName='Online')]
@@ -149,13 +149,16 @@ if ($Quiet) {
 $scriptTimestamp = (Get-Date -AsUTC).ToString("yyyy-MM-dd_HHmmss'Z'")
 $repoRoot = Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '..')
 $reportDirPath = Resolve-Path -LiteralPath (Join-Path $repoRoot 'reports/Reference-Report')
-$outputDirPath = Resolve-Path -LiteralPath $OutputDir -ErrorAction SilentlyContinue
+
+# Resolve OutputDir (relative to caller's CWD); fall back to the report's _output
+$effectiveOutputDir = if ($OutputDir) { $OutputDir } else { Join-Path $reportDirPath '_output' }
+$outputDirPath = Resolve-Path -LiteralPath $effectiveOutputDir -ErrorAction SilentlyContinue
 if (-not $outputDirPath) {
     # Resolve to absolute path without requiring the directory to exist.
     # New-Item respects -WhatIf and won't create it during dry runs, so
     # Resolve-Path would fail. The directory is created on first write by
     # Set-Content / ConvertTo-Json inside the build report function.
-    $outputDirPath = [System.IO.Path]::GetFullPath($OutputDir)
+    $outputDirPath = [System.IO.Path]::GetFullPath($effectiveOutputDir)
 } else {
     $outputDirPath = $outputDirPath.Path
 }

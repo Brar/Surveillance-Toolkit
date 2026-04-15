@@ -55,6 +55,9 @@ param(
     [switch]$JsonReport,
 
     [Parameter()]
+    [string]$OutputDir = $null,
+
+    [Parameter()]
     [string]$Dhis2Scheme = $null,
 
     [Parameter()]
@@ -72,7 +75,21 @@ $auth = Resolve-NeoipcAuth -Token $Token
 
 $currentDir = Get-Location
 $reportDirPath = Resolve-Path -LiteralPath "$PSScriptRoot/../reports/Partner-Certificate/"
-$outputDirPath = Join-Path $reportDirPath '_output'
+
+# Resolve OutputDir BEFORE changing directory (it's relative to the caller's CWD)
+if ($OutputDir) {
+    $outputDirPath = Resolve-Path -LiteralPath $OutputDir -ErrorAction SilentlyContinue
+    if (-not $outputDirPath) {
+        New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null
+        $outputDirPath = Resolve-Path -LiteralPath $OutputDir
+    }
+    $outputDirPath = $outputDirPath.Path
+    $outputDirExplicit = $true
+} else {
+    $outputDirPath = Join-Path $reportDirPath '_output'
+    $outputDirExplicit = $false
+}
+
 $localeParts = Split-NeoipcLocale -Locale $OutputLocale
 $quartoFile = Resolve-NeoipcLocaleQmd -ReportDir $reportDirPath -BaseName 'Partner-Certificate' -Locale $OutputLocale
 $SignatureImagePath = Resolve-Path -LiteralPath $SignatureImagePath.FullName -Relative -RelativeBasePath $reportDirPath
@@ -114,6 +131,7 @@ try {
 
             $outFile = "$([datetime]::Now.ToString('yyyy-MM-dd_HHmmss'))_NeoIPC-Surveillance-Partner-Certificate_${siteCode}.${OutputLocale}.pdf"
             $quartoArgs = @('render', $quartoFile, '-P', "signatory:$Signatory", '-P', "signatureImagePath:$SignatureImagePath", '-P', "departmentCode:$siteCode", '-o', $outFile)
+            if ($outputDirExplicit) { $quartoArgs += @('--output-dir', $outputDirPath) }
             if ($Dhis2Scheme) { $quartoArgs += @('-P', "dhis2Scheme:$Dhis2Scheme") }
             if ($Dhis2Hostname) { $quartoArgs += @('-P', "dhis2Hostname:$Dhis2Hostname") }
             if ($Dhis2Port) { $quartoArgs += @('-P', "dhis2Port:$Dhis2Port") }
@@ -136,6 +154,7 @@ try {
 
         $outFile = "$([datetime]::Now.ToString('yyyy-MM-dd_HHmmss'))_NeoIPC-Surveillance-Partner-Certificate_${HospitalName}.${OutputLocale}.pdf"
         $quartoArgs = @('render', $quartoFile, '-P', "signatory:$Signatory", '-P', "signatureImagePath:$SignatureImagePath", '-P', "startYear:$StartYear", '-P', "endYear:$EndYear", '-P', "nPatients:$NumberOfPatients", '-P', "hospitalName:$HospitalName", '-o', $outFile)
+        if ($outputDirExplicit) { $quartoArgs += @('--output-dir', $outputDirPath) }
         if ($Dhis2Scheme) { $quartoArgs += @('-P', "dhis2Scheme:$Dhis2Scheme") }
         if ($Dhis2Hostname) { $quartoArgs += @('-P', "dhis2Hostname:$Dhis2Hostname") }
         if ($Dhis2Port) { $quartoArgs += @('-P', "dhis2Port:$Dhis2Port") }

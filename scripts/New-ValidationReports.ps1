@@ -11,6 +11,9 @@ With -Combined, it renders a single report covering all departments (no departme
 
 .EXAMPLE
     .\New-ValidationReports.ps1 -Combined -OutputLocale 'en' -Token $myToken -JsonReport
+
+.EXAMPLE
+    .\New-ValidationReports.ps1 -Combined -OutputDir ./data/local -ValidationExceptionFile ../NeoIPC/validation-exceptions_ref.csv -JsonReport
 #>
 [CmdletBinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'PerSite')]
 param(
@@ -59,6 +62,9 @@ param(
     [string]$ValidationExceptionFile,
 
     [Parameter()]
+    [string]$OutputDir = $null,
+
+    [Parameter()]
     [switch]$JsonReport,
 
     [Parameter()]
@@ -79,9 +85,33 @@ Import-Module (Join-Path $PSScriptRoot 'modules' 'NeoIPC-Tools') -Force -Verbose
 $auth = Resolve-NeoipcAuth -Token $Token
 
 $reportDirPath = Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '..' 'reports' 'Validation-Report')
-$outputDirPath = Join-Path $reportDirPath '_output'
+
+# Resolve OutputDir BEFORE changing directory (it's relative to the caller's CWD)
+if ($OutputDir) {
+    $outputDirPath = Resolve-Path -LiteralPath $OutputDir -ErrorAction SilentlyContinue
+    if (-not $outputDirPath) {
+        New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null
+        $outputDirPath = Resolve-Path -LiteralPath $OutputDir
+    }
+    $outputDirPath = $outputDirPath.Path
+    $outputDirExplicit = $true
+} else {
+    $outputDirPath = Join-Path $reportDirPath '_output'
+    $outputDirExplicit = $false
+}
 
 $isCombined = $PSCmdlet.ParameterSetName -eq 'Combined'
+
+# Resolve ValidationExceptionFile BEFORE changing directory (it's relative to the caller's CWD)
+$validationExceptionPath = $null
+if ($ValidationExceptionFile) {
+    $resolvedPath = Resolve-Path -LiteralPath $ValidationExceptionFile -ErrorAction SilentlyContinue
+    if ($resolvedPath) {
+        $validationExceptionPath = $resolvedPath.Path
+    } else {
+        Write-Warning "Validation exception file not found: '$ValidationExceptionFile'"
+    }
+}
 
 if (-not $isCombined) {
     $deptArgs = @{ Auth = $auth; SiteCodeFilter = $SiteCodeFilter }
@@ -130,9 +160,10 @@ try {
         Write-Progress -Activity 'Validation Report Build' -Status 'Rendering combined report' -PercentComplete $pct
 
         $outFile = "${scriptTimestamp}_NeoIPC-Surveillance-Validation-Report.${OutputLocale}.pdf"
-        $quartoArgs = @('render', $qmdFile, '--profile', $language, '-o', $outFile)
-        if ($ValidationExceptionFile) {
-            $quartoArgs += @('-P', "validationExceptionFile:$ValidationExceptionFile")
+        $quartoArgs = @('render', $qmdFile, '--profile', $language, '--to', 'pdf', '-o', $outFile)
+        if ($outputDirExplicit) { $quartoArgs += @('--output-dir', $outputDirPath) }
+        if ($validationExceptionPath) {
+            $quartoArgs += @('-P', "validationExceptionFile:$validationExceptionPath")
         }
         if ($Dhis2Scheme) { $quartoArgs += @('-P', "dhis2Scheme:$Dhis2Scheme") }
         if ($Dhis2Hostname) { $quartoArgs += @('-P', "dhis2Hostname:$Dhis2Hostname") }
@@ -156,9 +187,10 @@ try {
             Write-Progress -Activity 'Validation Report Build' -Status "Rendering report for $siteCode" -PercentComplete $pct
 
             $outFile = "$([datetime]::Now.ToString('yyyy-MM-dd_HHmmss'))_NeoIPC-Surveillance-Validation-Report_${siteCode}.${OutputLocale}.pdf"
-            $quartoArgs = @('render', $qmdFile, '--profile', $language, '-P', "departmentFilter:$($siteCode)", '-o', $outFile)
-            if ($ValidationExceptionFile) {
-                $quartoArgs += @('-P', "validationExceptionFile:$ValidationExceptionFile")
+            $quartoArgs = @('render', $qmdFile, '--profile', $language, '--to', 'pdf', '-P', "departmentFilter:$($siteCode)", '-o', $outFile)
+            if ($outputDirExplicit) { $quartoArgs += @('--output-dir', $outputDirPath) }
+            if ($validationExceptionPath) {
+                $quartoArgs += @('-P', "validationExceptionFile:$validationExceptionPath")
             }
             if ($Dhis2Scheme) { $quartoArgs += @('-P', "dhis2Scheme:$Dhis2Scheme") }
             if ($Dhis2Hostname) { $quartoArgs += @('-P', "dhis2Hostname:$Dhis2Hostname") }

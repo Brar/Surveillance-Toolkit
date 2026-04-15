@@ -50,6 +50,9 @@ param(
     [switch]$JsonReport,
 
     [Parameter()]
+    [string]$OutputDir = $null,
+
+    [Parameter()]
     [string]$Dhis2Scheme = $null,
 
     [Parameter()]
@@ -67,7 +70,20 @@ $auth = Resolve-NeoipcAuth -Token $Token
 
 $currentDir = Get-Location
 $reportDirPath = Resolve-Path -LiteralPath "$PSScriptRoot/../reports/Patient-Data-Report/"
-$outputDirPath = Join-Path $reportDirPath '_output'
+
+# Resolve OutputDir BEFORE changing directory (it's relative to the caller's CWD)
+if ($OutputDir) {
+    $outputDirPath = Resolve-Path -LiteralPath $OutputDir -ErrorAction SilentlyContinue
+    if (-not $outputDirPath) {
+        New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null
+        $outputDirPath = Resolve-Path -LiteralPath $OutputDir
+    }
+    $outputDirPath = $outputDirPath.Path
+    $outputDirExplicit = $true
+} else {
+    $outputDirPath = Join-Path $reportDirPath '_output'
+    $outputDirExplicit = $false
+}
 
 Invoke-WithNeoipcAuth -Auth $auth -ExtraEnvVars @{ 'LC_ALL' = $null } -ScriptBlock {
 
@@ -92,13 +108,14 @@ try {
 
     if ($OutputFormat -eq 'json') {
         $outFile = "${scriptTimestamp}_NeoIPC-Surveillance-Patient-Data-Report_${PatientId}.json"
+        $outFilePath = Join-Path $outputDirPath $outFile
 
         if ($PSCmdlet.ShouldProcess($outFile, "Generate patient data JSON for $PatientId")) {
             Write-Host "Generating patient data JSON for $PatientId..."
             $rArgs = @('--vanilla', 'Generate-PatientData.R',
                 '--patient-id', $PatientId,
                 '--department', $DepartmentCode,
-                '--output', $outFile)
+                '--output', $outFilePath)
             if ($Dhis2Scheme) { $rArgs += @('--scheme', $Dhis2Scheme) }
             if ($Dhis2Hostname) { $rArgs += @('--host', $Dhis2Hostname) }
             if ($Dhis2Port) { $rArgs += @('--port', $Dhis2Port) }
@@ -107,7 +124,7 @@ try {
             if ($rResult.Status -eq 'Error') {
                 $errors += "Generate-PatientData.R failed (exit code $($rResult.ExitCode))."
             } else {
-                $outputFiles += (Join-Path $outputDirPath $outFile)
+                $outputFiles += $outFilePath
             }
         }
     } else {
@@ -122,6 +139,7 @@ try {
                 '-P', "patientId:$PatientId",
                 '-P', "departmentCode:$DepartmentCode",
                 '-o', $outFile)
+            if ($outputDirExplicit) { $quartoArgs += @('--output-dir', $outputDirPath) }
             if ($Dhis2Scheme) { $quartoArgs += @('-P', "dhis2Scheme:$Dhis2Scheme") }
             if ($Dhis2Hostname) { $quartoArgs += @('-P', "dhis2Hostname:$Dhis2Hostname") }
             if ($Dhis2Port) { $quartoArgs += @('-P', "dhis2Port:$Dhis2Port") }

@@ -117,6 +117,7 @@ function Invoke-QuartoRender {
     $skipRest = $false
     $isError = $false
     $inBacktrace = $false
+    $pendingErrorLine = $null
 
     Write-Debug "Quarto command: quarto $($Arguments -join ' ')"
 
@@ -134,6 +135,11 @@ function Invoke-QuartoRender {
             }
             elseif ($s -match '^Backtrace:') {
                 $inBacktrace = $true
+                if ($pendingErrorLine) {
+                    $errorLines.Add($pendingErrorLine) | Out-Null
+                    Write-Host $pendingErrorLine -ForegroundColor Red
+                    $pendingErrorLine = $null
+                }
             }
             elseif ($inBacktrace) {
                 # Silently collect backtrace lines (available in Messages)
@@ -142,14 +148,21 @@ function Invoke-QuartoRender {
                 # skip blank lines in error block
             }
             else {
+                if ($pendingErrorLine) {
+                    $errorLines.Add($pendingErrorLine) | Out-Null
+                    Write-Host $pendingErrorLine -ForegroundColor Red
+                    $pendingErrorLine = $null
+                }
                 $errorLines.Add($s) | Out-Null
                 Write-Host $s -ForegroundColor Red
             }
         }
-        elseif ($s -match '^(Error)|(Fehler)') {
+        elseif ($s -match '^(Error|Fehler|! )') {
+            # ^Error / ^Fehler — R / knitr / Quarto wrapper errors.
+            # ^! ...  — LaTeX-style errors (e.g. "! Undefined control sequence").
+            # -match is case-insensitive, so ERROR / error also match.
             $isError = $true
-            $errorLines.Add($s) | Out-Null
-            Write-Host $s -ForegroundColor Red
+            $pendingErrorLine = $s
         }
         elseif ($s -match "^(`e\[39m)?(`e\[33m)?WARNING") {
             $s | Write-Warning
@@ -157,6 +170,11 @@ function Invoke-QuartoRender {
         else {
             $s | Write-Verbose
         }
+    }
+
+    if ($pendingErrorLine -and -not $skipRest) {
+        $errorLines.Add($pendingErrorLine) | Out-Null
+        Write-Host $pendingErrorLine -ForegroundColor Red
     }
 
     $exitCode = $LASTEXITCODE
@@ -168,6 +186,17 @@ function Invoke-QuartoRender {
         $status = 'Error'
         if ($exitCode -ne 0) {
             $messages.Add("Quarto exit code $exitCode") | Out-Null
+        }
+        # Safety net: if the process failed but nothing got classified as an
+        # error above (regex didn't match), the user sees nothing useful.
+        # Dump the tail of the captured output so at least some diagnostic
+        # text reaches the console.
+        if ($errorLines.Count -eq 0) {
+            $tailCount = [math]::Min(40, $messages.Count)
+            Write-Host "Quarto render failed (exit code $exitCode) but no recognised error line was captured. Last $tailCount lines of output:" -ForegroundColor Red
+            $messages | Select-Object -Last $tailCount | ForEach-Object {
+                if ($_ -ne '') { Write-Host "  $_" -ForegroundColor Red }
+            }
         }
     }
     else {
@@ -242,7 +271,10 @@ function Invoke-Rscript {
                 Write-Host $s -ForegroundColor Red
             }
         }
-        elseif ($s -match '^(Error)|(Fehler)') {
+        elseif ($s -match '^(Error|Fehler|! )') {
+            # ^Error / ^Fehler — R / rlang errors.
+            # ^! ...  — LaTeX-style errors (rare in Rscript but possible via knitr).
+            # -match is case-insensitive, so ERROR / error also match.
             $isError = $true
             $errorLines.Add($s) | Out-Null
             Write-Host $s -ForegroundColor Red
@@ -261,6 +293,17 @@ function Invoke-Rscript {
         $status = 'Error'
         if ($exitCode -ne 0 -and -not $isError) {
             $messages.Add("$Description exit code $exitCode") | Out-Null
+        }
+        # Safety net: if the process failed but nothing got classified as an
+        # error above (regex didn't match), the user sees nothing useful.
+        # Dump the tail of the captured output so at least some diagnostic
+        # text reaches the console.
+        if ($errorLines.Count -eq 0) {
+            $tailCount = [math]::Min(40, $messages.Count)
+            Write-Host "$Description failed (exit code $exitCode) but no recognised error line was captured. Last $tailCount lines of output:" -ForegroundColor Red
+            $messages | Select-Object -Last $tailCount | ForEach-Object {
+                if ($_ -ne '') { Write-Host "  $_" -ForegroundColor Red }
+            }
         }
     }
     else {
