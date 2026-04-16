@@ -47,11 +47,11 @@ breaks_wk <- function(x) {
 
 #' Detect if reference dataset contains countries from different World Bank classes
 #' @param ref_countries Tibble with reference countries (name, wb_class)
-#' @param include_wb_class Whether WB class is included ("no", "pseudonymised", "yes")
+#' @param include_wb_class Whether WB class is included ("no", "pseudo", "full")
 #' @return List with has_mixed (logical) and class_names (character) or NULL
 detect_mixed_wb_classes <- function(ref_countries, include_wb_class) {
-  # Only detect when include_wb_class = "yes"
-  if (include_wb_class != "yes" ||
+  # Only detect when include_wb_class = "full"
+  if (include_wb_class != "full" ||
       is.null(ref_countries)) {
     return(NULL)
   }

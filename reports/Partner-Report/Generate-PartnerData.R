@@ -164,10 +164,15 @@ datasetOptions <- neoipcr::dhis2_dataset_options(
   gestational_age_to = gestationWeeksTo,
   include_ineligible_patients = includeNonCorePatients,
   include_invalid_patients = getValidationExceptions(validationExceptionFile),
-  include_world_bank_class = "yes",
-  include_country = "yes",
-  include_hospital = "yes",
-  include_department = "yes",
+  include_world_bank_class = "full",
+  include_country = "full",
+  include_hospital = "full",
+  include_department = "full",
+  include_patient = "full",
+  patient_columns = c("id", "sex", "birth_weight", "gestational_age",
+                       "delivery_mode", "siblings"),
+  include_enrollment = "full",
+  include_event = "full",
   include_test_data = TRUE
 )
 

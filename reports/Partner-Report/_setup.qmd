@@ -1348,14 +1348,14 @@ interpret_distribution <- function(figure_data, metric_type, sR) {
 #' Detect if own and reference data have different World Bank classes (Partner Report)
 #' @param own_countries Tibble with own countries (name, wb_class)
 #' @param ref_countries Tibble with reference countries (name, wb_class)
-#' @param include_wb_class Whether WB class is included ("no", "pseudonymised", "yes")
+#' @param include_wb_class Whether WB class is included ("no", "pseudo", "full")
 #' @return List with has_mismatch (logical) and details (character) or NULL
 detect_wb_class_mismatch <- function(own_countries, ref_countries, include_wb_class) {
   # ToDo: Refactor to detect availability of World Bank class from data instead of relying
   #       on include_wb_class and look if removing get_localised_world_bank_class_names
   #       makse sense
-  # Only detect mismatches when include_wb_class = "yes"
-  if (include_wb_class != "yes" ||
+  # Only detect mismatches when include_wb_class = "full"
+  if (include_wb_class != "full" ||
       is.null(own_countries) ||
       is.null(ref_countries)) {
     return(NULL)
@@ -1653,14 +1653,15 @@ if (!is.null(params$partnerDataFile)) {
         gestational_age_to = typedParams$gestationWeeksTo,
         include_ineligible_patients = typedParams$includeNonCorePatients,
         include_invalid_patients = typedParams$includeInvalidPatients,
-        include_world_bank_class = "yes",
-        include_country = "yes",
-        include_hospital = "yes",
-        include_department = "yes",
-        # For now test data is data from special test departments in DHIS.
-        # It does not hurt to include it because we'll typically also have
-        # a department filter which will remove these departments again if
-        # we're not interested in them
+        include_world_bank_class = "full",
+        include_country = "full",
+        include_hospital = "full",
+        include_department = "full",
+        include_patient = "full",
+        patient_columns = c("id", "sex", "birth_weight", "gestational_age",
+                             "delivery_mode", "siblings"),
+        include_enrollment = "full",
+        include_event = "full",
         include_test_data = TRUE
         ))) |>
     neoipcr::calculate_department_data()
