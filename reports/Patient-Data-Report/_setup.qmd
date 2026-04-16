@@ -86,11 +86,10 @@ if (patient_found) {
   pathogens <- ds$infectiousAgentFindings |>
     dplyr::semi_join(events, dplyr::join_by(event_key))
 
-  event_details <- if (!is.null(ds$eventDetails))
-    ds$eventDetails |>
-      dplyr::semi_join(events, dplyr::join_by(event_key))
-  else
-    tibble::tibble(event_key = character())
+  # `ds$eventDetails` was merged into `ds$events` in the neoipcr
+  # schema arc (phase-b-event-details). Entity-level timestamps
+  # (`createdAt`, `updatedAt`) and user-attribution fields now live on
+  # `events` directly; downstream code reads them off `events`.
 
   department <- ds$metadata$departments |>
     dplyr::filter(department_key == patient$department_key)
