@@ -118,6 +118,7 @@ if ($ValidationExceptionFile) {
 
 if (-not $isCombined) {
     $deptArgs = @{ Auth = $auth; SiteCodeFilter = $SiteCodeFilter }
+    if (-not $IncludeTestData) { $deptArgs.ExcludeTestUnits = $true }
     if ($Dhis2Scheme) { $deptArgs.Scheme = $Dhis2Scheme }
     if ($Dhis2Hostname) { $deptArgs.Hostname = $Dhis2Hostname }
     if ($Dhis2Port) { $deptArgs.Port = $Dhis2Port }
