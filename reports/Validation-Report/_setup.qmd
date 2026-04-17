@@ -42,7 +42,7 @@ dataset_options <- neoipcr::dhis2_dataset_options(
   include_event = "full",
   include_dhis2_ids = c("departments","patients","enrollments","events"),
   include_incomplete = c("enrollments","events"),
-  include_test_data = TRUE,
+  include_test_data = isTRUE(params$includeTestData),
   include_ineligible_patients = TRUE,
   include_unenrolled_patients = TRUE,
   include_invalid_patients = TRUE,

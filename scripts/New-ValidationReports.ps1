@@ -62,6 +62,9 @@ param(
     [string]$ValidationExceptionFile,
 
     [Parameter()]
+    [switch]$IncludeTestData,
+
+    [Parameter()]
     [string]$OutputDir = $null,
 
     [Parameter()]
@@ -162,6 +165,9 @@ try {
         $outFile = "${scriptTimestamp}_NeoIPC-Surveillance-Validation-Report.${OutputLocale}.pdf"
         $quartoArgs = @('render', $qmdFile, '--profile', $language, '--to', 'pdf', '-o', $outFile)
         if ($outputDirExplicit) { $quartoArgs += @('--output-dir', $outputDirPath) }
+        if ($IncludeTestData) {
+            $quartoArgs += @('-P', 'includeTestData:true')
+        }
         if ($validationExceptionPath) {
             $quartoArgs += @('-P', "validationExceptionFile:$validationExceptionPath")
         }
@@ -189,6 +195,9 @@ try {
             $outFile = "$([datetime]::Now.ToString('yyyy-MM-dd_HHmmss'))_NeoIPC-Surveillance-Validation-Report_${siteCode}.${OutputLocale}.pdf"
             $quartoArgs = @('render', $qmdFile, '--profile', $language, '--to', 'pdf', '-P', "departmentFilter:$($siteCode)", '-o', $outFile)
             if ($outputDirExplicit) { $quartoArgs += @('--output-dir', $outputDirPath) }
+            if ($IncludeTestData) {
+                $quartoArgs += @('-P', 'includeTestData:true')
+            }
             if ($validationExceptionPath) {
                 $quartoArgs += @('-P', "validationExceptionFile:$validationExceptionPath")
             }
