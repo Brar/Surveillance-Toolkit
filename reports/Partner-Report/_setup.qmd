@@ -1662,7 +1662,7 @@ if (!is.null(params$partnerDataFile)) {
                              "delivery_mode", "siblings"),
         include_enrollment = "full",
         include_event = "full",
-        include_test_data = TRUE
+        include_test_data = isTRUE(params$includeTestData)
         ))) |>
     neoipcr::calculate_department_data()
 

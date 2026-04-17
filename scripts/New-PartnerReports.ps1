@@ -105,6 +105,14 @@ param(
     [switch]
     $IncludeNonCorePatients,
 
+    [Parameter(ParameterSetName='Online')]
+    [string]
+    $ValidationExceptionFile,
+
+    [Parameter(ParameterSetName='Online')]
+    [switch]
+    $IncludeTestData,
+
     [Parameter()]
     [switch]
     $HideIntroductionTexts,
@@ -276,6 +284,16 @@ if ($OutputDir) {
     $outputDirPath = $outputDirPath.Path
 }
 
+# Resolve ValidationExceptionFile BEFORE changing directory (relative to caller's CWD)
+$resolvedValidationExceptionFile = $null
+if ($ValidationExceptionFile) {
+    $absolutePath = Resolve-Path -LiteralPath $ValidationExceptionFile -ErrorAction SilentlyContinue
+    if (-not $absolutePath) {
+        throw "Validation exception file not found: $ValidationExceptionFile"
+    }
+    $resolvedValidationExceptionFile = Resolve-Path -LiteralPath $absolutePath.Path -Relative -RelativeBasePath $reportDirPath
+}
+
 # In DataFile mode no DHIS2 auth is needed, but we still scope LC_ALL.
 # Pass a dummy auth hashtable that clears env vars without setting new ones.
 $authForEnv = if ($isDataFileMode) { @{ AuthType = 'None' } } else { Resolve-NeoipcAuth -Token $Token }
@@ -394,6 +412,11 @@ if (inherits(x, 'neoipcr_bnch_ds')) {
                 if ($GestationWeeksFrom -ne $null) { $rArgs += @('--gestationWeeksFrom', $GestationWeeksFrom) }
                 if ($GestationWeeksTo -ne $null) { $rArgs += @('--gestationWeeksTo', $GestationWeeksTo) }
                 if ($IncludeNonCorePatients.IsPresent) { $rArgs += '--includeNonCorePatients' }
+                if ($IncludeTestData.IsPresent) { $rArgs += '--includeTestData' }
+                if ($resolvedValidationExceptionFile) {
+                    $absVefForR = Join-Path $reportDirPath $resolvedValidationExceptionFile
+                    $rArgs += @('--validationExceptionFile', $absVefForR)
+                }
                 if ($Dhis2Scheme) { $rArgs += @('--scheme', $Dhis2Scheme) }
                 if ($Dhis2Hostname) { $rArgs += @('--host', $Dhis2Hostname) }
                 if ($Dhis2Port) { $rArgs += @('--port', $Dhis2Port) }
@@ -468,6 +491,8 @@ if (inherits(x, 'neoipcr_bnch_ds')) {
                     if ($GestationWeeksFrom -ne $null) { $qmdParams['gestationWeeksFrom'] = $GestationWeeksFrom }
                     if ($GestationWeeksTo -ne $null) { $qmdParams['gestationWeeksTo'] = $GestationWeeksTo }
                     if ($IncludeNonCorePatients.IsPresent) { $qmdParams['includeNonCorePatients'] = 'true' }
+                    if ($IncludeTestData.IsPresent) { $qmdParams['includeTestData'] = 'true' }
+                    if ($resolvedValidationExceptionFile) { $qmdParams['validationExceptionFile'] = $resolvedValidationExceptionFile }
                     if ($Dhis2Scheme) { $qmdParams['dhis2Scheme'] = $Dhis2Scheme }
                     if ($Dhis2Hostname) { $qmdParams['dhis2Hostname'] = $Dhis2Hostname }
                     if ($Dhis2Port) { $qmdParams['dhis2Port'] = $Dhis2Port }
