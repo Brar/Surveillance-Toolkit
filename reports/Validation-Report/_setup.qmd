@@ -86,6 +86,17 @@ if (!is.null(params$validationExceptionFile) &&
     col_types = "iccDcD",
     show_col_types = FALSE)
 
+  expected_cols <- c("RULE_ID", "DEPARTMENT_CODE", "NEOIPC_PATIENT_ID",
+                     "ENROLMENT_DATE", "EVENT_TYPE", "EVENT_DATE")
+  actual_cols <- names(raw_exceptions)
+  if (!identical(actual_cols, expected_cols)) {
+    rlang::abort(c(
+      sprintf("Validation exception file has unexpected columns: '%s'",
+              params$validationExceptionFile),
+      i = paste("Expected:", paste(expected_cols, collapse = ", ")),
+      i = paste("Got:",      paste(actual_cols, collapse = ", "))))
+  }
+
   if (nrow(raw_exceptions) > 0) {
     # Map DEPARTMENT_CODE → department_key
     with_dept <- raw_exceptions |>
