@@ -20,14 +20,23 @@ if (nrow(problems) > 0) {
   # Resolve display identifiers from the keys carried by `problems`.
   # Kept distinct so downstream code can group/iterate on them. The raw
   # `context` list-column rides along for the formatter.
+  # Under the schema contract's inheritance rule, patients does NOT
+
+  # carry `hospital_key` directly when `include_department = "full"`
+  # (departments already has it via pre-join). Join through departments
+  # to reach hospital_key, then join hospitals for the site code.
   patient_lookup <- data$patients |>
     dplyr::left_join(
       data$metadata$departments |>
-        dplyr::select("department_key",
-          "department_code" = "code",
-          "department_name" = "displayShortName",
-          "department_orgunit" = "orgUnit"),
+        dplyr::select(tidyselect::any_of(c(
+          "department_key",
+          "code", "displayShortName", "orgUnit",
+          "hospital_key"))),
       dplyr::join_by("department_key")) |>
+    dplyr::rename(
+      department_code    = "code",
+      department_name    = "displayShortName",
+      department_orgunit = "orgUnit") |>
     dplyr::left_join(
       data$metadata$hospitals |>
         dplyr::select("hospital_key", "site_code" = "code"),
