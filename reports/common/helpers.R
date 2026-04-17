@@ -300,6 +300,8 @@ format_dataset_resources <- function(metadata, counts, sR) {
       if (!is.data.frame(countries_data)) {
         countries_data <- tibble::tibble(name = countries_data)
       }
+      # format_countries expects `name` (the raw, locale-independent
+      # DHIS2 org unit name) as the lookup key into sR$countryNames.
       format_countries(countries_data)
     },
     birthweightFilter = format_range_filter(
