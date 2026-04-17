@@ -7,13 +7,13 @@ This script fetches the department/site list from DHIS2, filters by a regex, and
 With -Combined, it renders a single report covering all departments (no departmentFilter).
 
 .EXAMPLE
-    .\New-ValidationReports.ps1 -SiteCodeFilter 'NEO_AT.*' -OutputLocale 'de' -Token $myToken -Verbose
+    .\New-ValidationReport.ps1 -SiteCodeFilter 'NEO_AT.*' -OutputLocale 'de' -Token $myToken -Verbose
 
 .EXAMPLE
-    .\New-ValidationReports.ps1 -Combined -OutputLocale 'en' -Token $myToken -JsonReport
+    .\New-ValidationReport.ps1 -Combined -OutputLocale 'en' -Token $myToken -JsonReport
 
 .EXAMPLE
-    .\New-ValidationReports.ps1 -Combined -OutputDir ./data/local -ValidationExceptionFile ../NeoIPC/validation-exceptions_ref.csv -JsonReport
+    .\New-ValidationReport.ps1 -Combined -OutputDir ./data/local -ValidationExceptionFile ../NeoIPC/validation-exceptions_ref.csv -JsonReport
 #>
 [CmdletBinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'PerSite')]
 param(
