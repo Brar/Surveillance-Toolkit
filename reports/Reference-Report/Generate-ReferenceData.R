@@ -359,4 +359,13 @@ if (is.null(referenceDataFile)) {
   }
   writeLines(json, referenceDataFile, useBytes = TRUE)
   logInfo("Reference data written to: ", referenceDataFile)
+
+  # Plain-JSON metadata sidecar for non-R consumers (e.g. the
+  # NeoIPC.Reporting service indexing uploaded reference datasets by
+  # the filter set that shaped them). The dataset itself stays in
+  # jsonlite::serializeJSON's R-wrapped format until the full
+  # plain-JSON neoipcr interchange format lands.
+  sidecarPath <- paste0(referenceDataFile, ".meta.json")
+  neoipcr::write_json(referenceData$metadata, file = sidecarPath, pretty = TRUE)
+  logVerbose("Reference data metadata sidecar written to: ", sidecarPath)
 }
