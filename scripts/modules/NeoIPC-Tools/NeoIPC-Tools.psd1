@@ -59,6 +59,8 @@
         'Read-PatientInfo'
         'Read-EnrolmentInfo'
         'Read-EventInfo'
+        # InfectiousAgents
+        'Find-NextFreeInfectiousAgentId'
     )
 
     # Cmdlets to export from this module

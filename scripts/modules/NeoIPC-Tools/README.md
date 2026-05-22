@@ -250,3 +250,4 @@ complete from the cached lists.
 | PAT | `Read-DHIS2PersonalAccessToken`, `Remove-DHIS2PersonalAccessToken`, `Clear-DHIS2PersonalAccessTokens` |
 | User | `Read-UserInfo` |
 | Quarto | `Invoke-WithNeoipcAuth`, `Invoke-QuartoRender`, `Invoke-Rscript`, `Build-QmdParamPairs`, `Write-NeoipcBuildReport`, `Test-QuartoInstallation`, `Split-NeoipcLocale`, `Resolve-NeoipcLocaleQmd` |
+| InfectiousAgents | `Find-NextFreeInfectiousAgentId` |
