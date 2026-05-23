@@ -7,7 +7,7 @@ Single entry point for every tab-completion cache the NeoIPC-Tools module
 reads. Caches are partitioned by server URL so different DHIS2 instances
 maintain separate state.
 
-Cache files (under `data/local/<server-key>/`):
+Cache files (under `data/<server-key>/`):
 
 - `site-codes.txt`  — NEOIPC department codes for `-OrgUnitCode` completers.
 - `de-codes.txt`    — data-element codes for `Read-EventInfo -DataElementCode`.
@@ -69,7 +69,7 @@ if ($Dhis2Port)     { $connArgs.Port     = $Dhis2Port }
 if ($Dhis2Path)     { $connArgs.Path     = $Dhis2Path }
 
 $serverKey = Get-NeoipcServerKey -Scheme $Dhis2Scheme -Hostname $Dhis2Hostname -Port $Dhis2Port -Path $Dhis2Path
-$cacheDir = Join-Path $PSScriptRoot '..' 'data' 'local' $serverKey
+$cacheDir = Join-Path $PSScriptRoot '..' 'data' $serverKey
 if (-not (Test-Path -LiteralPath $cacheDir)) {
     New-Item -ItemType Directory -Path $cacheDir -Force | Out-Null
 }
