@@ -31,9 +31,10 @@
     The report builders' department step is checked by parsing the scripts: every key a script puts into the hashtable
     it splats into Get-NeoIPCDepartments must be a parameter Get-NeoIPCDepartments declares. Running every builder
     instead would need Quarto, R, and their whole environment mocked, while parsing reaches all of them at once.
-    Build-PartnerCertificate.ps1, whose department step decides what it renders, is also run, with the module's
-    import, the authentication, the department list, and the render mocked: once given -Dhis2Path, and once with no
-    department matching.
+    Build-PartnerCertificate.ps1 and Build-ValidationReport.ps1, whose department steps decide what they render,
+    are also run, with the module's import, the authentication, the department list, and the render mocked: the
+    former once given -Dhis2Path, and once with no department matching; the latter with no department matching,
+    which must warn, report the build cancelled, and exit 1.
 
 .EXAMPLE
     Invoke-Pester -Path scripts/modules/NeoIPC-Tools/Tests/OrgUnits.Tests.ps1
@@ -508,6 +509,140 @@ InModuleScope 'NeoIPC-Tools' {
                     Should -Invoke Invoke-QuartoRender -Times 0 -Exactly
                     @(Get-Message $hostLines) | Should -Contain 'Build status: cancelled'
                 }
+
+                It 'writes no host line for a build run with -Quiet' {
+                    $global:LASTEXITCODE = 0
+                    $hostLines = & $script:Certificate 'A. Signatory' $script:Signature -DepartmentCode '^DEPT_A1$' `
+                        -Dhis2Hostname $script:Host1 -Quiet -OutputDir (Join-Path $TestDrive 'out') -WarningAction SilentlyContinue 6>&1
+                    @(Get-Message $hostLines | Where-Object { $_ }) | Should -BeNullOrEmpty
+                }
+
+                It 'gives the reason of a render that fails on the error stream, and no host line, with -Quiet' {
+                    Mock Invoke-QuartoRender { [pscustomobject]@{ Status = 'Error'; ExitCode = 1; Messages = @() } }
+                    $global:LASTEXITCODE = 0
+                    $errorRecords = @()
+                    $hostLines = & $script:Certificate 'A. Signatory' $script:Signature -DepartmentCode '^DEPT_A1$' `
+                        -Dhis2Hostname $script:Host1 -Quiet -OutputDir (Join-Path $TestDrive 'out') `
+                        -ErrorAction SilentlyContinue -ErrorVariable errorRecords -WarningAction SilentlyContinue 6>&1
+                    @(Get-Message $hostLines | Where-Object { $_ }) | Should -BeNullOrEmpty
+                    $messages = @($errorRecords | ForEach-Object { $_.Exception.Message })
+                    $messages | Should -Contain 'Quarto render failed for DEPT_A1 (exit code 1).'
+                    $messages | Should -Contain 'Build status: failed'
+                    $LASTEXITCODE | Should -Be 1
+                }
+
+                It 'keeps the generating notice and the success summary on the console without -Quiet' {
+                    $global:LASTEXITCODE = 0
+                    $hostLines = & $script:Certificate 'A. Signatory' $script:Signature -DepartmentCode '^DEPT_A1$' `
+                        -Dhis2Hostname $script:Host1 -OutputDir (Join-Path $TestDrive 'out') -WarningAction SilentlyContinue 6>&1
+                    @(Get-Message $hostLines) | Should -Contain 'Generating partner certificate for DEPT_A1...'
+                    @(Get-Message $hostLines) | Should -Contain 'Build status: success'
+                }
+            }
+
+            Context 'Build-ValidationReport.ps1, run with its import, authentication, department list, and render mocked' {
+                BeforeEach {
+                    $script:ValidationReport = Join-Path $script:RepoRoot 'scripts' 'Build-ValidationReport.ps1'
+                    Mock Import-Module { }
+                    Mock Resolve-NeoIPCAuth { @{ AuthType = 'None' } }
+                    Mock Get-NeoIPCDepartments { @() }
+                    Mock Invoke-QuartoRender { [pscustomobject]@{ Status = 'Success'; ExitCode = 0; Messages = @() } }
+                }
+
+                It 'warns, renders nothing, reports the build as cancelled, and ends with exit code 1 when no department matches' {
+                    $global:LASTEXITCODE = 0
+                    $hostLines = & $script:ValidationReport -SiteCodeFilter 'NOPE' -Dhis2Hostname $script:Host1 `
+                        -OutputDir (Join-Path $TestDrive 'out') -WarningVariable warnings -WarningAction SilentlyContinue 6>&1
+                    Should -Invoke Get-NeoIPCDepartments -Times 1 -Exactly -ParameterFilter { $SiteCodeFilter -eq 'NOPE' -and $ExcludeTestUnits }
+                    Get-Message $warnings | Should -BeLike "*No sites matched filter 'NOPE'*"
+                    Should -Invoke Invoke-QuartoRender -Times 0 -Exactly
+                    @(Get-Message $hostLines) | Should -Contain 'Build status: cancelled'
+                    $LASTEXITCODE | Should -Be 1
+                }
+
+                It 'writes the requested JSON report to the default output directory when the build cancels there' {
+                    $defaultOut = Join-Path $script:RepoRoot 'reports' 'Validation-Report' '_output'
+                    $existed = Test-Path -LiteralPath $defaultOut -PathType Container
+                    $before = @(Get-ChildItem -LiteralPath $defaultOut -Filter '*.json' -File -ErrorAction SilentlyContinue | ForEach-Object Name)
+                    $created = @()
+                    try {
+                        $global:LASTEXITCODE = 0
+                        $hostLines = & $script:ValidationReport -SiteCodeFilter 'NOPE' -Dhis2Hostname $script:Host1 -JsonReport `
+                            -WarningVariable warnings -WarningAction SilentlyContinue 6>&1
+                        $created = @(if (Test-Path -LiteralPath $defaultOut -PathType Container) {
+                                Get-ChildItem -LiteralPath $defaultOut -Filter '*_NeoIPC-Surveillance-Validation-Report-Build.json' -File |
+                                    Where-Object Name -notin $before | ForEach-Object FullName
+                            })
+                        Get-Message $warnings | Should -BeLike "*No sites matched filter 'NOPE'*"
+                        Should -Invoke Invoke-QuartoRender -Times 0 -Exactly
+                        @(Get-Message $hostLines) | Should -Contain 'Build status: cancelled'
+                        $LASTEXITCODE | Should -Be 1
+                        $created.Count | Should -Be 1 -Because '-JsonReport must deliver the build report even when the default directory does not exist yet'
+                        (Get-Content -LiteralPath $created[0] -Raw | ConvertFrom-Json).status | Should -BeExactly 'cancelled'
+                    }
+                    finally {
+                        foreach ($createdPath in $created) { Remove-Item -LiteralPath $createdPath -Force -ErrorAction SilentlyContinue }
+                        if (-not $existed -and (Test-Path -LiteralPath $defaultOut -PathType Container)) {
+                            Remove-Item -LiteralPath $defaultOut -Recurse -Force -ErrorAction SilentlyContinue
+                        }
+                    }
+                }
+
+                # -Quiet silences everything that is not at least a warning; the host is the
+                # bulk of what that leaves out, so the build's lines have to be gone and its
+                # reason of a failure still has to reach the caller. On the error stream.
+                It 'writes no host line for a build run with -Quiet' {
+                    Mock Get-NeoIPCDepartments { 'DEPT_A1' }
+                    $global:LASTEXITCODE = 0
+                    $hostLines = & $script:ValidationReport -SiteCodeFilter '^DEPT_A1$' -Dhis2Hostname $script:Host1 -Quiet `
+                        -OutputDir (Join-Path $TestDrive 'out') -WarningAction SilentlyContinue 6>&1
+                    @(Get-Message $hostLines | Where-Object { $_ }) | Should -BeNullOrEmpty
+                }
+
+                It 'keeps the warning of a build that cancels, even with -Quiet, and no host line with it' {
+                    $global:LASTEXITCODE = 0
+                    $hostLines = & $script:ValidationReport -SiteCodeFilter 'NOPE' -Dhis2Hostname $script:Host1 -Quiet `
+                        -OutputDir (Join-Path $TestDrive 'out') -WarningVariable warnings -WarningAction SilentlyContinue 6>&1
+                    Get-Message $warnings | Should -BeLike "*No sites matched filter 'NOPE'*"
+                    @(Get-Message $hostLines | Where-Object { $_ }) | Should -BeNullOrEmpty
+                    $LASTEXITCODE | Should -Be 1
+                }
+
+                It 'keeps the generating notice and the success summary on the console without -Quiet' {
+                    Mock Get-NeoIPCDepartments { 'DEPT_A1' }
+                    $global:LASTEXITCODE = 0
+                    $hostLines = & $script:ValidationReport -SiteCodeFilter '^DEPT_A1$' -Dhis2Hostname $script:Host1 `
+                        -OutputDir (Join-Path $TestDrive 'out') -WarningAction SilentlyContinue 6>&1
+                    @(Get-Message $hostLines) | Should -Contain 'Generating validation report for DEPT_A1...'
+                    @(Get-Message $hostLines) | Should -Contain 'Build status: success'
+                }
+
+                It 'gives the reason of a render that fails on the error stream without -Quiet' {
+                    Mock Get-NeoIPCDepartments { 'DEPT_A1' }
+                    Mock Invoke-QuartoRender { [pscustomobject]@{ Status = 'Error'; ExitCode = 1; Messages = @() } }
+                    $global:LASTEXITCODE = 0
+                    $errorRecords = @()
+                    $null = & $script:ValidationReport -SiteCodeFilter '^DEPT_A1$' -Dhis2Hostname $script:Host1 `
+                        -OutputDir (Join-Path $TestDrive 'out') -ErrorAction SilentlyContinue -ErrorVariable errorRecords -WarningAction SilentlyContinue 6>&1
+                    $messages = @($errorRecords | ForEach-Object { $_.Exception.Message })
+                    $messages | Should -Contain 'Quarto render failed for DEPT_A1.'
+                    $messages | Should -Contain 'Build status: failed'
+                    $LASTEXITCODE | Should -Be 1
+                }
+
+                It 'gives the reason of a render that fails on the error stream, and no host line, with -Quiet' {
+                    Mock Get-NeoIPCDepartments { 'DEPT_A1' }
+                    Mock Invoke-QuartoRender { [pscustomobject]@{ Status = 'Error'; ExitCode = 1; Messages = @() } }
+                    $global:LASTEXITCODE = 0
+                    $errorRecords = @()
+                    $hostLines = & $script:ValidationReport -SiteCodeFilter '^DEPT_A1$' -Dhis2Hostname $script:Host1 -Quiet `
+                        -OutputDir (Join-Path $TestDrive 'out') -ErrorAction SilentlyContinue -ErrorVariable errorRecords -WarningAction SilentlyContinue 6>&1
+                    @(Get-Message $hostLines | Where-Object { $_ }) | Should -BeNullOrEmpty
+                    $messages = @($errorRecords | ForEach-Object { $_.Exception.Message })
+                    $messages | Should -Contain 'Quarto render failed for DEPT_A1.'
+                    $messages | Should -Contain 'Build status: failed'
+                    $LASTEXITCODE | Should -Be 1
+                }
             }
 
             It 'Update-NeoIPCCache.ps1 describes every parameter, and that its host falls back to the production instance' {
@@ -525,6 +660,112 @@ InModuleScope 'NeoIPC-Tools' {
                 $help = Get-Help (Join-Path $script:RepoRoot 'scripts' $Name) -Full
                 $text = @($help.parameters.parameter | Where-Object { $_.name -eq 'Dhis2Path' } | ForEach-Object { $_.description.Text }) -join ' '
                 $text | Should -BeLike '*/api*'
+            }
+        }
+
+        Describe 'The report builders'' -Quiet, run with their import, authentication, and render mocked' {
+            BeforeAll {
+                $script:PatientDataReport = Join-Path $script:RepoRoot 'scripts' 'Build-PatientDataReport.ps1'
+                $script:ReferenceReport = Join-Path $script:RepoRoot 'scripts' 'Build-ReferenceReport.ps1'
+                $script:PartnerReport = Join-Path $script:RepoRoot 'scripts' 'Build-PartnerReport.ps1'
+                # Build-ReferenceReport.ps1 resolves quarto and Rscript itself before
+                # it delegates the render, and Build-PartnerReport.ps1 runs quarto inline.
+                # Global stubs let those commands resolve wherever the tests run, and
+                # shadow the real executables, so no case can run the real toolchain by
+                # accident; each case mocks the behaviour.
+                function global:quarto { param([Parameter(ValueFromRemainingArguments)] $Arguments) }
+                function global:Rscript { param([Parameter(ValueFromRemainingArguments)] $Arguments) }
+            }
+            AfterAll {
+                Remove-Item -Path 'Function:\quarto', 'Function:\Rscript' -ErrorAction SilentlyContinue
+            }
+            BeforeEach {
+                Mock Import-Module { }
+                Mock Resolve-NeoIPCAuth { @{ AuthType = 'None' } }
+            }
+
+            Context 'Build-PatientDataReport.ps1' {
+                It 'writes no host line for a build run with -Quiet' {
+                    Mock Invoke-QuartoRender { [pscustomobject]@{ Status = 'Success'; ExitCode = 0; Messages = @() } }
+                    $global:LASTEXITCODE = 0
+                    $hostLines = & $script:PatientDataReport 'P-001' 'DEPT_A1' -Dhis2Hostname $script:Host1 -Quiet `
+                        -OutputDir (Join-Path $TestDrive 'out') -WarningAction SilentlyContinue 6>&1
+                    @(Get-Message $hostLines | Where-Object { $_ }) | Should -BeNullOrEmpty
+                }
+
+                It 'gives the reason of a render that fails on the error stream, and no host line, with -Quiet' {
+                    Mock Invoke-QuartoRender { [pscustomobject]@{ Status = 'Error'; ExitCode = 1; Messages = @() } }
+                    $global:LASTEXITCODE = 0
+                    $errorRecords = @()
+                    $hostLines = & $script:PatientDataReport 'P-001' 'DEPT_A1' -Dhis2Hostname $script:Host1 -Quiet `
+                        -OutputDir (Join-Path $TestDrive 'out') -ErrorAction SilentlyContinue -ErrorVariable errorRecords -WarningAction SilentlyContinue 6>&1
+                    @(Get-Message $hostLines | Where-Object { $_ }) | Should -BeNullOrEmpty
+                    $messages = @($errorRecords | ForEach-Object { $_.Exception.Message })
+                    $messages | Should -Contain 'Quarto render failed for P-001 (exit code 1).'
+                    $messages | Should -Contain 'Build status: failed'
+                    $LASTEXITCODE | Should -Be 1
+                }
+            }
+
+            Context 'Build-ReferenceReport.ps1' {
+                It 'writes no host line for a build run with -Quiet' {
+                    Mock Invoke-Rscript { [pscustomobject]@{ Status = 'Success'; ExitCode = 0; Messages = @(); ErrorLines = @() } }
+                    Mock Invoke-QuartoRender { [pscustomobject]@{ Status = 'Success'; ExitCode = 0; Messages = @() } }
+                    $global:LASTEXITCODE = 0
+                    $hostLines = & $script:ReferenceReport -Dhis2Hostname $script:Host1 -Quiet `
+                        -OutputDir (Join-Path $TestDrive 'out') -WarningAction SilentlyContinue 6>&1
+                    @(Get-Message $hostLines | Where-Object { $_ }) | Should -BeNullOrEmpty
+                }
+
+                It 'gives the reason of a render that fails on the error stream, and no host line, with -Quiet' {
+                    Mock Invoke-Rscript { [pscustomobject]@{ Status = 'Success'; ExitCode = 0; Messages = @(); ErrorLines = @() } }
+                    Mock Invoke-QuartoRender { [pscustomobject]@{ Status = 'Error'; ExitCode = 1; Messages = @('ERROR [reference-report] the render failed') } }
+                    $global:LASTEXITCODE = 0
+                    $errorRecords = @()
+                    $hostLines = & $script:ReferenceReport -Dhis2Hostname $script:Host1 -Quiet `
+                        -OutputDir (Join-Path $TestDrive 'out') -ErrorAction SilentlyContinue -ErrorVariable errorRecords -WarningAction SilentlyContinue 6>&1
+                    @(Get-Message $hostLines | Where-Object { $_ }) | Should -BeNullOrEmpty
+                    $messages = @($errorRecords | ForEach-Object { $_.Exception.Message })
+                    $messages | Should -Contain 'Quarto render failed for en/pdf.'
+                    $messages | Should -Contain 'Build status: failed'
+                    $LASTEXITCODE | Should -Be 1
+                }
+            }
+
+            Context 'Build-PartnerReport.ps1' {
+                BeforeEach {
+                    Mock Get-NeoIPCDepartments { 'DEPT_A1' }
+                    Mock Test-QuartoInstallation { }
+                    Mock Invoke-Rscript { [pscustomobject]@{ Status = 'Success'; ExitCode = 0; Messages = @(); ErrorLines = @() } }
+                }
+
+                It 'writes no host line for a build run with -Quiet' {
+                    Mock quarto { $global:LASTEXITCODE = 0 }
+                    $global:LASTEXITCODE = 0
+                    $hostLines = & $script:PartnerReport '^DEPT_A1$' -Dhis2Hostname $script:Host1 -Quiet `
+                        -OutputDir (Join-Path $TestDrive 'out') -WarningAction SilentlyContinue 6>&1
+                    @(Get-Message $hostLines | Where-Object { $_ }) | Should -BeNullOrEmpty
+                }
+
+                It 'gives the reason of a render that fails on the error stream, and no host line, with -Quiet' {
+                    # The builder runs quarto inline, so the stand-in is the quarto command;
+                    # the stub in the Describe's BeforeAll lets the mock bind wherever the
+                    # suite runs. The builder's reasons are non-terminating errors by
+                    # contract, so the call pins the preference and observes the records
+                    # whatever the runner's session set ErrorActionPreference to — the
+                    # build-metadata step's pwsh shell sets Stop.
+                    Mock quarto { $global:LASTEXITCODE = 1; 'ERROR [partner-report] the data read failed' }
+                    $global:LASTEXITCODE = 0
+                    $errorRecords = @()
+                    $hostLines = & $script:PartnerReport '^DEPT_A1$' -Dhis2Hostname $script:Host1 -Quiet `
+                        -OutputDir (Join-Path $TestDrive 'out') -ErrorAction SilentlyContinue -ErrorVariable errorRecords -WarningAction SilentlyContinue 6>&1
+                    @(Get-Message $hostLines | Where-Object { $_ }) | Should -BeNullOrEmpty
+                    $messages = @($errorRecords | ForEach-Object { $_.Exception.Message })
+                    $messages | Should -Contain 'ERROR [partner-report] the data read failed'
+                    $messages | Should -Contain 'Quarto returned exit code 1 for site DEPT_A1 (lang: en, format: pdf).'
+                    $messages | Should -Contain 'Build status: failed'
+                    $LASTEXITCODE | Should -Be 1
+                }
             }
         }
     }

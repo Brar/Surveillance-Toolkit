@@ -16,8 +16,66 @@
 .PARAMETER PatientId
     The NeoIPC patient identifier whose records the report covers.
 
+.PARAMETER DepartmentCode
+    Code of the department the patient is under surveillance in; the records are read for that department.
+    Tab-completion offers the department codes of the instance being built against.
+
+.PARAMETER OutputFormat
+    pdf, html, or json, by default pdf. The json format does not render: it exports the patient's records
+    through the data generation script instead.
+
+.PARAMETER OutputLocale
+    Language the report renders in, by default English. The localized Quarto file is looked up by the
+    locale's language and falls back to the base one; a locale with a territory subtag (de_AT) additionally
+    sets the render child's LC_ALL to that locale's UTF-8 form. The json export carries no report text and
+    ignores this. Tab-completion lists the locales the report ships.
+
+.PARAMETER Token
+    DHIS2 personal access token, or the path of a file whose first line holds one. When empty, the
+    environment variable NEOIPC_DHIS2_TOKEN is read instead; with no token at all, the build prompts for a
+    DHIS2 username and password.
+
+.PARAMETER Quiet
+    Silences the build down to warnings: no line reaches the console, not the notices of what
+    the build is generating, not the build summary the report writer prints — the verbose,
+    debug, and information streams and the progress bar go quiet, and the R and Quarto children
+    run with their quiet flags. Warnings and errors stay visible: a build that fails gives its
+    reason on the error stream. Takes precedence over -Verbose and -Debug.
+
+.PARAMETER JsonReport
+    Writes the build report as a JSON file into the output directory, named with the build's UTC start time.
+    Without it, the build reports itself on the console only.
+
+.PARAMETER OutputDir
+    Directory the report and the build report are written to. A relative path resolves against the caller's
+    current location, and the directory is created when it does not exist yet. Defaults to the report's
+    _output directory.
+
+.PARAMETER Dhis2Scheme
+    http or https for the DHIS2 requests of the build, by default https. The choice reaches the report's R
+    child directly.
+
+.PARAMETER Dhis2Hostname
+    The DHIS2 instance the build reads from: the given host, else the NEOIPC_DHIS2_HOST environment variable,
+    else the NeoIPC production host.
+
+.PARAMETER Dhis2Port
+    Port of the DHIS2 instance, for one served on a non-default port. Defaults to the scheme's own port.
+
+.PARAMETER Dhis2Path
+    The API base path the report's R code reads the data from, and the last part of the key that keeps each
+    instance's tab-completion cache apart.
+
+.PARAMETER WhatIf
+    Shows what the build would export or render for the patient without doing it; the build finishes and
+    reports itself as if nothing had been produced.
+
+.PARAMETER Confirm
+    Asks before generating: -Confirm asks, -Confirm:$false answers. Without either the build does not ask, as
+    its confirm impact is Medium.
+
 .EXAMPLE
-    ./scripts/Build-PatientDataReport.ps1 'NEOIPC-000123' -OutputFormats pdf,json
+    ./scripts/Build-PatientDataReport.ps1 'NEOIPC-000123' -DepartmentCode 'NEO_DE_01' -OutputFormat html
 #>
 
 [CmdletBinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'Render')]
@@ -129,13 +187,18 @@ $logLevel =
     elseif ($verboseRequested) { 'verbose' }
     else { 'normal' }
 
-# -Quiet also silences the wrapper's own progress/verbose/info streams so the
-# whole pipeline is quiet, not just the logger channel.
+# -Quiet silences everything below a warning. SilentlyContinue does not: it leaves
+# Write-Host lines on screen, this script's own as well as the module functions'. Ignore
+# silences the script's own, the build scriptblock below included; a module function's
+# lines need -InformationAction Ignore at the call, which the render and report calls take
+# from $moduleInformationAction.
+$moduleInformationAction = 'SilentlyContinue'
 if ($Quiet) {
-    $VerbosePreference     = 'SilentlyContinue'
-    $DebugPreference       = 'SilentlyContinue'
-    $InformationPreference = 'SilentlyContinue'
-    $ProgressPreference    = 'SilentlyContinue'
+    $VerbosePreference       = 'SilentlyContinue'
+    $DebugPreference         = 'SilentlyContinue'
+    $InformationPreference   = 'Ignore'
+    $ProgressPreference      = 'SilentlyContinue'
+    $moduleInformationAction = 'Ignore'
 }
 
 # Native verbosity flags for the child processes, derived from the same level.
@@ -195,9 +258,11 @@ try {
             if ($Dhis2Port) { $rArgs += @('--port', $Dhis2Port) }
             if ($Dhis2Path) { $rArgs += @('--path', $Dhis2Path) }
             $rArgs += $rscriptVerbosityArgs
-            $rResult = Invoke-Rscript -Arguments $rArgs -Description "Generate-PatientData.R"
+            $rResult = Invoke-Rscript -Arguments $rArgs -Description "Generate-PatientData.R" -InformationAction $moduleInformationAction
             if ($rResult.Status -eq 'Error') {
-                $errors += "Generate-PatientData.R failed (exit code $($rResult.ExitCode))."
+                $errMsg = "Generate-PatientData.R failed (exit code $($rResult.ExitCode))."
+                Write-Error $errMsg
+                $errors += $errMsg
             } else {
                 $outputFiles += $outFilePath
             }
@@ -220,9 +285,11 @@ try {
             if ($Dhis2Port) { $quartoArgs += @('-P', "dhis2Port:$Dhis2Port") }
             if ($Dhis2Path) { $quartoArgs += @('-P', "dhis2Path:$Dhis2Path") }
             $quartoArgs += $quartoVerbosityArgs
-            $result = Invoke-QuartoRender -Arguments $quartoArgs -Description "patient data report for $PatientId"
+            $result = Invoke-QuartoRender -Arguments $quartoArgs -Description "patient data report for $PatientId" -InformationAction $moduleInformationAction
             if ($result.Status -eq 'Error') {
-                $errors += "Quarto render failed for $PatientId (exit code $($result.ExitCode))."
+                $errMsg = "Quarto render failed for $PatientId (exit code $($result.ExitCode))."
+                Write-Error $errMsg
+                $errors += $errMsg
             } else {
                 $outputFiles += (Join-Path $outputDirPath $outFileName)
             }
@@ -233,6 +300,7 @@ try {
 }
 catch {
     $errors += $_.Exception.Message
+    Write-Error $_.Exception.Message
 }
 finally {
     Set-Location -LiteralPath $currentDir
@@ -253,7 +321,8 @@ finally {
         -OutputLocales @($OutputLocale) -OutputFormats @($OutputFormat) `
         -GeneratedDataFile $generatedDataFile `
         -ParameterHash $paramSnapshot.hash -Parameters $paramSnapshot.source `
-        -ExtraFields ([ordered]@{ patientId = $PatientId; departmentCode = $DepartmentCode })
+        -ExtraFields ([ordered]@{ patientId = $PatientId; departmentCode = $DepartmentCode }) `
+        -InformationAction $moduleInformationAction
 
     if ($status -ne 'success') {
         exit 1
