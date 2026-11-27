@@ -9,7 +9,7 @@
 
 .DESCRIPTION
     No CI job renders a report, so the code between the string resources and the rendered text is
-    exercised nowhere else. Nine parts:
+    exercised nowhere else. Ten parts:
 
     - The YAML handlers every string resource is read with (string_resource_handlers() in
       reports/common/helpers.R). A translated label such as Yes reaches the catalogue unquoted, and
@@ -49,7 +49,14 @@
     - The gt formatters of both summary tables: the dash and the note for a missing count, the font
       size and the column widths, the column groups, and the validation summary's column of
       warnings, with the note on data built before warnings were counted apart. CI's R has no gt, so
-      this part runs only where gt is installed and is skipped elsewhere; the parts above need no gt.
+      this part runs only where gt is installed and is skipped elsewhere; the parts above it need no gt.
+    - The Validation Report's day-of-onset sentences and the two problem details they cite: that the
+      stay rules name no admission type and keep the third-day boundary in the one sentence the header
+      and the NeoIPC app show, that the first-three-days-of-life sentences name the admission form as
+      where their day comes from, that the stay detail names whose cut-off the report applies to every
+      admission, and that the early-onset detail states the Protocol's own 72-hour boundary, counts
+      from the admission rather than reading the stored day, confines the derivation to the admissions
+      which record a day of life, and offers no advice to correct that value for any other stay.
 
     The report's other setup checks call neoipcr, which no CI runner installs, and are not covered here.
 
@@ -1210,5 +1217,91 @@ cat(identical(notes_on(mixed, "removed_1"), absent),
     sep = "|")
 '@
         Invoke-SummaryTableSnippet $body | Should -BeExactly 'TRUE|TRUE|TRUE'
+    }
+}
+
+Describe 'The Validation Report''s day-of-onset texts' -Skip:(-not $env:CI -and -not (Get-Command Rscript -ErrorAction SilentlyContinue)) {
+
+    BeforeAll {
+        # The sentences of the six onset rules, each prefixed with its rule id and the kind of sentence,
+        # the groups separated by a marker. The stay rules (30, 34 and 38) judge every admission and
+        # derive the day of the stay from the dates; the early-onset rules (29, 33 and 37) derive the
+        # day of life and never read the one stored on the infection form. No Rscript run is free, so
+        # one run prints all twelve sentences; the marker separates them because a run's line breaks
+        # reach the caller as whatever the platform writes.
+        $body = @'
+for (id in c("29", "33", "37")) {
+  cat(id, "D", sR$problems[[id]]$description, "%%@%%", sep = "\t")
+  cat(id, "S", sR$problems[[id]]$summary, "%%@%%", sep = "\t")
+}
+for (id in c("30", "34", "38")) {
+  cat(id, "D", sR$problems[[id]]$description, "%%@%%", sep = "\t")
+  cat(id, "S", sR$problems[[id]]$summary, "%%@%%", sep = "\t")
+}
+'@
+        $sentences = @{}
+        foreach ($chunk in ((Invoke-ValidationReportSnippet $body) -split '%%@%%')) {
+            $parts = ($chunk.Trim()) -split "`t", 3
+            if ($parts.Count -eq 3) {
+                $sentences["$($parts[0])$($parts[1])"] = ($parts[2] -replace '\s+', ' ').Trim()
+            }
+        }
+    }
+
+    It 'states the stay rule for every admission, naming no admission type: <Rule>' -ForEach @(
+        @{ Rule = '30'; Text = 'the sepsis rule' }
+        @{ Rule = '34'; Text = 'the pneumonia rule' }
+        @{ Rule = '38'; Text = 'the necrotizing enterocolitis rule' }
+    ) {
+        $text = $sentences["${Rule}D"]
+        $text | Should -Not -BeNullOrEmpty -Because 'the catalogue carries a sentence for the rule'
+        ($text -replace '\s+', ' ') | Should -Not -Match 'admitted|referr' -Because (
+            "$Text flags an infection before the third day of any stay, so its sentence has no reason " +
+            'to name an admission type or a referral, and naming one would narrow the rule')
+        $sentences["${Rule}S"] | Should -Match 'before the third day of the stay' -Because (
+            "$Text is the one sentence the report's header and the NeoIPC app show for the rule, and a " +
+            'summary naming another boundary would contradict the finding beside it')
+    }
+
+    It 'names where it takes the day of life, in each first-three-days-of-life sentence: <Rule>' -ForEach @(
+        @{ Rule = '29'; Text = 'the sepsis rule' }
+        @{ Rule = '33'; Text = 'the pneumonia rule' }
+        @{ Rule = '37'; Text = 'the necrotizing enterocolitis rule' }
+    ) {
+        $text = ($sentences["${Rule}D"] -replace '\s+', ' ')
+        $text | Should -Not -BeNullOrEmpty -Because 'the catalogue carries a sentence for the rule'
+        $text | Should -Match 'admission form' -Because (
+            "$Text judges a day of life the report derives rather than the one stored on the infection " +
+            'form, and the sentence has to say where it comes from')
+        $sentences["${Rule}S"] | Should -Match 'within the first three days of life' -Because (
+            "$Text is the one sentence the report's header and the NeoIPC app show for the rule, and a " +
+            'summary naming another boundary would contradict the finding beside it')
+    }
+
+    It 'states the stay rule for every admission in its problem detail' {
+        $detail = (Get-Content -LiteralPath (Join-Path $repoRoot 'reports' 'Validation-Report' 'en' '_problem_detail_0020.Rmd') -Raw) -replace '\s+', ' '
+        $detail | Should -Match 'to every admission' -Because (
+            'the stay rule judges every admission, and the detail a finding cites has to say so')
+        $detail | Should -Match 'transferred or readmitted' -Because (
+            'the day-of-stay cut-off stands in the Protocol for a transferred or readmitted infant, ' +
+            'and the detail has to say whose cut-off the report applies to every admission')
+    }
+
+    It 'states the early-onset detail in the Protocol''s own terms and its own derivation' {
+        $detail = (Get-Content -LiteralPath (Join-Path $repoRoot 'reports' 'Validation-Report' 'en' '_problem_detail_0019.Rmd') -Raw) -replace '\s+', ' '
+        $detail | Should -Match 'within 72 hours after birth' -Because (
+            'the Protocol sets the early-onset boundary as a 72-hour window after birth, which the ' +
+            'day-of-life filter only approximates')
+        $detail | Should -Match 'counts the days from the admission to the date of the infection' -Because (
+            'the detail has to tell the partner how the report arrives at the day of life it judged, ' +
+            'and that it counts from the admission rather than reading the stored value')
+        $detail | Should -Match 'records as a transfer or readmission after the day of birth' -Because (
+            'only such an admission contributes a recorded day of life to the derivation')
+        $detail | Should -Not -Match 'if[^.]*wrong[^.]*correct it' -Because (
+            'correcting the admission form''s recorded day of life changes the derived day only for the ' +
+            'admissions that record one, and unqualified advice sends a partner to edit a value that ' +
+            'settles nothing for any other stay')
+        $detail | Should -Not -Match 'We have planned|will in any case be done' -Because (
+            'checked-in prose describes what is, not what the project intends to offer')
     }
 }
