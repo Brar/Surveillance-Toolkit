@@ -1,0 +1,119 @@
+#Requires -Version 7.6
+#requires -Module Pester
+
+<#
+.SYNOPSIS
+    Pester gate holding the five reports to the tagging-capable document class and to the PDF
+    standard each report's own packages can honestly produce.
+
+.DESCRIPTION
+    PDF/UA-2 requires tagged structure, which only some classes and packages produce: the LaTeX
+    Tagging Project's status table (https://latex3.github.io/tagging-project/tagging-status/)
+    records scrartcl as incompatible with tagging — it emits every heading as ordinary paragraph
+    text — and article as compatible, together with fancyhdr, float, placeins, geometry,
+    graphicx, fontspec and the table packages the reports draw. Declaring ua-2 while the class
+    cannot tag asserts a conformance the file does not have, so the declaration belongs to the
+    same change as the class: this gate reads it with powershell-yaml from the master
+    configuration, where Quarto resolves it into \DocumentMetadata.
+
+    The Partner Certificate lays its single page out with the textpos package, which that table
+    records as currently incompatible: under tagging its structure would be wrong. The
+    Certificate therefore migrates to article and fancyhdr like the others but declares archival
+    a-4 alone.
+
+    What this holds:
+      1. each report's `_quarto.yml` sets `documentclass: article` and declares its standard
+         under `format: pdf:` — all five article, the Partner, Patient Data, Reference and
+         Validation Reports `[a-4, ua-2]`, the Partner Certificate `[a-4]`;
+      2. no checked-in profile or local override sets `documentclass` or `pdf-standard` for a
+         report, since Quarto merges profiles into the master's configuration (mergeProfiles in
+         quarto-cli's src/project/project-profile.ts) and a language profile generated from
+         `_quarto-en.yml` inherits whatever its source holds;
+       3. nothing under `reports/` but `CHANGELOG.md` names KOMA-Script or its machinery — the
+          classes, `scrlayer-scrpage` and its layer and font commands, its `footsepline` class
+          option, `wrapfig` (incompatible with tagging and used nowhere), the `\ihead` / `\ifoot`
+          / `\ofoot` / `\cfoot` / `\pagemark` furniture — no checked-in source loads the class,
+          its page furniture, or wrapfig.
+
+    What this cannot see is whether a rendered PDF carries the tag tree the declaration asserts;
+    scripts/Test-ReportPdfTagging.ps1 inspects rendered files for that.
+
+.EXAMPLE
+    Invoke-Pester -Path scripts/modules/NeoIPC-Tools/Tests/ReportPdfStandards.Tests.ps1
+#>
+
+BeforeDiscovery {
+    $reports = @(
+        @{ Name = 'Partner-Certificate'; PdfStandard = @('a-4') }
+        @{ Name = 'Partner-Report'; PdfStandard = @('a-4', 'ua-2') }
+        @{ Name = 'Patient-Data-Report'; PdfStandard = @('a-4', 'ua-2') }
+        @{ Name = 'Reference-Report'; PdfStandard = @('a-4', 'ua-2') }
+        @{ Name = 'Validation-Report'; PdfStandard = @('a-4', 'ua-2') }
+    )
+}
+
+BeforeAll {
+    Import-Module powershell-yaml -ErrorAction Stop
+    $reportsDir = (Resolve-Path (Join-Path $PSScriptRoot '..' '..' '..' '..' 'reports')).Path
+}
+
+Describe 'The <Name> declares the tagging-capable class and an honest PDF standard' -ForEach $reports {
+    It 'sets documentclass: article in its _quarto.yml' {
+        $config = Get-Content -Raw -LiteralPath (Join-Path (Join-Path $reportsDir $Name) '_quarto.yml') |
+            ConvertFrom-Yaml
+        $config.format.pdf.documentclass | Should -Be 'article'
+    }
+
+    It 'declares pdf-standard <PdfStandard> in its _quarto.yml' {
+        $config = Get-Content -Raw -LiteralPath (Join-Path (Join-Path $reportsDir $Name) '_quarto.yml') |
+            ConvertFrom-Yaml
+        @($config.format.pdf.'pdf-standard') | Should -Be $PdfStandard
+    }
+
+    It 'sets papersize: a4, the value the template turns into the a4paper class option' {
+        # Quarto's template emits `$papersize$paper`, so `a4paper` reaches the class as
+        # `a4paperpaper`: KOMA-Script ignores the unknown option and renders A4 from its
+        # own default, article ignores it and renders US letter.
+        $config = Get-Content -Raw -LiteralPath (Join-Path (Join-Path $reportsDir $Name) '_quarto.yml') |
+            ConvertFrom-Yaml
+        $config.format.pdf.papersize | Should -Be 'a4'
+    }
+
+    It 'leaves documentclass and pdf-standard to the master in every checked-in profile' {
+        $reportDir = Join-Path $reportsDir $Name
+        $offenders = foreach ($file in Get-ChildItem -LiteralPath $reportDir -File |
+                Where-Object Name -Match '^_quarto-.+\.ya?ml$|^_quarto\.ya?ml\.local$') {
+            $config = Get-Content -Raw -LiteralPath $file.FullName | ConvertFrom-Yaml
+            if ($config.format.pdf -is [System.Collections.IDictionary]) {
+                foreach ($key in 'documentclass', 'pdf-standard') {
+                    if ($config.format.pdf.Contains($key)) { "$($file.Name): $key" }
+                }
+            }
+        }
+        $offenders | Should -BeNullOrEmpty
+    }
+}
+
+Describe 'Nothing under reports/ names KOMA-Script or its machinery' {
+    It 'holds every source free of the class, its page furniture, and wrapfig' {
+        # Plain-text patterns matched case-insensitively. CHANGELOG.md names the old class in
+        # its history and is not rewritten, so it stays out of the scan.
+        $needles = @(
+            'scrartcl', 'scrbook', 'scrreprt', 'scrlayer', 'scrheadings', 'scrbase',
+            'koma-script', 'komascript', 'komafont', 'KOMA',
+            'footsepline', 'wrapfig',
+            '\ModifyLayer', '\ihead', '\ifoot', '\ofoot', '\cfoot', '\pagemark'
+        )
+        $sources = Get-ChildItem -LiteralPath $reportsDir -Recurse -Include `
+            '*.qmd', '*.Rmd', '*.R', '*.tex', '*.lua', '*.yml', '*.yaml', '*.json', '*.md' |
+            Where-Object FullName -NotMatch '[\\/]_output[\\/]'
+        $hits = foreach ($needle in $needles) {
+            $sources | Select-String -SimpleMatch -Pattern $needle |
+                Where-Object { -not $_.Path.EndsWith([System.IO.Path]::DirectorySeparatorChar + 'CHANGELOG.md') } |
+                ForEach-Object {
+                    "$needle at $([System.IO.Path]::GetRelativePath($reportsDir, $_.Path)):$($_.LineNumber)"
+                }
+        }
+        $hits | Should -BeNullOrEmpty
+    }
+}

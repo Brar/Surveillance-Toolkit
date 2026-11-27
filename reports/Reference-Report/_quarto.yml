@@ -21,19 +21,20 @@ format:
   pdf:
     template-partials:
       - before-body.tex
-    documentclass: scrartcl
+    documentclass: article
     # LuaLaTeX pinned: `pdf-standard` reaches LaTeX as \DocumentMetadata, which
     # needs LuaLaTeX. Pinning it here keeps every render path on one engine (the
     # .NET service injects the same value on its own path).
     pdf-engine: lualatex
-    # Archival only. PDF/UA-2 is deliberately NOT declared: it requires tagged
-    # structure, and KOMA-Script does not support LaTeX tagging — under
-    # `documentclass: scrartcl` it warns "Activated tagging detected but not
-    # supported!" and emits headings as ordinary paragraph text (no Sect /
-    # section / subsection structure elements), so declaring ua-2 would assert a
-    # conformance the file does not have. Re-declare it only once the reports
-    # move to a tagging-capable class.
-    pdf-standard: [a-4]
+    # ua-2 declared alongside archival a-4: ua-2 requires tagged structure, which
+    # Quarto turns on with tagging=on for it. The article class is recorded as
+    # compatible with LaTeX tagging in the LaTeX Tagging Project's status table
+    # (https://latex3.github.io/tagging-project/tagging-status/), as are the
+    # packages named in this configuration; scripts/Test-ReportPdfTagging.ps1
+    # checks a rendered file's structure tree against the declaration. A package
+    # that table records as incompatible — textpos, in the Partner Certificate —
+    # keeps ua-2 out of the report that loads it.
+    pdf-standard: [a-4, ua-2]
     # PDF/A-4 requires every font to be embedded. R's pdf() device, which
     # Quarto's `fig-format: pdf` selects, writes a figure's text in the standard
     # Helvetica without embedding it; the Cairo device embeds the fonts it uses.
@@ -55,8 +56,7 @@ format:
     mainfont: "EB Garamond"
     monofont: "EB Garamond"
     fontsize: 10pt
-    classoption: [footsepline=true, plainfootsepline=true]
-    papersize: a4paper
+    papersize: a4
     fig-pos: 'H'
     tbl-pos: 'H'
     colorlinks: true
@@ -74,17 +74,34 @@ format:
         \floatplacement{figure}{H}
         \floatplacement{table}{H}
         \usepackage{graphicx}
-        \usepackage{wrapfig}
-        \usepackage{scrlayer-scrpage}
-        \ModifyLayer[addvoffset=-.6ex]{scrheadings.foot.above.line}
-        \ModifyLayer[addvoffset=-.6ex]{plain.scrheadings.foot.above.line}
-        \ihead{\includegraphics[width=4cm]{../logos/LOGO_NEOIPC_2.png}}
-        \ifoot*{\includegraphics[width=1.37cm]{../logos/eu-flag.png}}
-        \ofoot*{\pagemark}
+        \usepackage{fancyhdr}
+        \pagestyle{fancy}
+        \fancyhf{}
+        \fancyhead[L]{\includegraphics[width=4cm]{../logos/LOGO_NEOIPC_2.png}}
+        \fancyfoot[L]{\includegraphics[width=1.37cm]{../logos/eu-flag.png}}
+        \fancyfoot[R]{\thepage}
         \newcommand{\FooterText}{}
-        \cfoot*{%
+        \fancyfoot[C]{%
           \raggedright
           \hspace{1.6cm}\parbox{0.8\textwidth}{\FooterText}
+        }
+        % The 4 cm header logo is 50 pt tall, and \headheight below it makes
+        % fancyhdr warn and clip the image.
+        \setlength{\headheight}{51pt}
+        % The reports carry a rule above the footer on every page including the
+        % title page: \footrulewidth draws it on both page styles, the plain
+        % (title) page mirrors the fancy footer, and with \headrule emptied the
+        % header carries no rule.
+        \renewcommand{\footrulewidth}{0.4pt}
+        \renewcommand{\headrule}{}
+        \fancypagestyle{plain}{%
+          \fancyhf{}
+          \fancyfoot[L]{\includegraphics[width=1.37cm]{../logos/eu-flag.png}}
+          \fancyfoot[R]{\thepage}
+          \fancyfoot[C]{%
+            \raggedright
+            \hspace{1.6cm}\parbox{0.8\textwidth}{\FooterText}
+          }
         }
   docx:
     highlight-style: github
