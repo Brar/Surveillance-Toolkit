@@ -33,8 +33,9 @@ $script:NeoIPCAntimicrobialOptionSetUid = 'JE7ECBWKhWD'
 # The 2 antibiotic optionGroupSets — likewise structural singletons. Codes are fixed (neoipcr/the reports filter on
 # ATC5 / WHO_AWARE). Content (name/description) AND the DHIS2 UID (the Uid field) are canonical here; the option-set
 # reference, dataDimension and sharing are taken from the export when one is supplied. The long WHO_AWARE description
-# is assembled with explicit `\n` joins so it is independent of this file's newline encoding (it must match the
-# deployed value exactly — gate-verified).
+# is assembled with explicit `\n` joins so it is independent of this file's newline encoding. A content edit here
+# diverges from the deployed value until the next deploy: the classified-diff gate classifies it as
+# GroupSetNormalisation and does not fail, so reviewing it against the deployed export is the operator's step.
 $script:NeoIPCAntibioticGroupSet = [ordered]@{
     ATC5      = [ordered]@{ Uid = 'D1N8iz0Grqv'; Name = 'ATC-5 Groups'; Description = '' }
     WHO_AWARE = [ordered]@{ Uid = 'pvQ5WMrK25p'; Name = 'AWaRe Groups'; Description = (@(
