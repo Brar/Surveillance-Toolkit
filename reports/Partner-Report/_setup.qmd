@@ -1833,31 +1833,21 @@ extract_counts <- function(bm, suffix) {
       NULL
     }
   }
-  pull_excluding <- function(tbl, filter_col, exclude_val, value_col) {
-    col_name <- paste0(value_col, suffix)
-    if (!is.null(tbl) && col_name %in% names(tbl)) {
-      sum(tbl[[col_name]][tbl[[filter_col]] != exclude_val], na.rm = TRUE)
-    } else {
-      NULL
-    }
-  }
   list(
     n_departments = pull_col(bm$n_departments, "n"),
     n_patients = pull_col(bm$n_patients, "total"),
     n_enrollments = pull_col(bm$n_enrollments, "total"),
     n_patient_days = pull_col(bm$n_patient_days, "total"),
+    # NEOIPC-PERMANENT(dataset-format): see the marker in common/helpers.R; a
+    # stored dataset outlives every release, and its opening gets no clause.
     n_patients_with_severe_infection = pull_col(
       bm$n_patients_with_severe_infection, "n"),
     n_severe_infections = pull_filtered(
       bm$incidence_density_rate_table, "inf", "si", "n"),
     n_infectious_agents = pull_filtered(
       bm$infectious_agent_detection_rate_per_agent_table, "group", "Total", "n"),
-    # Infections with an agent recorded. The infection-type rows of the
-    # per-infection-type table partition the microbiologically confirmed
-    # infections, so their sum is that count.
-    n_infections_with_agent = pull_excluding(
-      bm$infectious_agent_detection_rate_per_inf_type_table,
-      "inf", exclude_val = "all", "n")
+    n_infections_with_agent = pull_filtered(
+      bm$infectious_agent_detection_rate_per_inf_type_table, "inf", "all", "n")
   )
 }
 
@@ -1885,27 +1875,41 @@ dR <- list(
 
 # The per-infection-type infectious-agent figures the section text gives: a
 # pooled share would follow the department's mix of infection types rather
-# than what it tests, so the text gives the shares per type. A type missing
-# from either table is absent from the result, and the text must then omit
-# its clause.
+# than what it tests, so the text gives the shares per type from the
+# per-infection-type table, which counts the tested infections of each type
+# beside its infections with an agent; the table has no NEC row. A type
+# missing from the table is absent from the result, and its clause too.
 agent_type_fields <- function(suffix) {
   detection <- benchmark_data$infectious_agent_detection_rate_per_inf_type_table
-  infections <- benchmark_data$n_infections
-  n_col <- paste0("n", suffix)
-  total_col <- paste0("total", suffix)
   pick <- function(tbl, col, key_col, type) {
-    if (is.null(tbl) || !col %in% names(tbl)) return(NULL)
-    v <- tbl[[col]][tbl[[key_col]] == type]
+    col_name <- paste0(col, suffix)
+    if (is.null(tbl) || !col_name %in% names(tbl)) return(NULL)
+    v <- tbl[[col_name]][tbl[[key_col]] == type]
     if (length(v) == 1L) v else NULL
   }
-  types <- c("bsi", "hap", "nec", "ssi")
-  with_agent <- stats::setNames(lapply(
-    types, \(t) pick(detection, n_col, "inf", t)), types)
-  totals <- stats::setNames(lapply(
-    types, \(t) pick(infections, total_col, "inf_type", t)), types)
-  format_agent_type_fields(with_agent, totals, sR)
+  types <- c("bsi", "hap", "ssi")
+  type_list <- function(col) {
+    stats::setNames(lapply(types, \(t) pick(detection, col, "inf", t)), types)
+  }
+  format_agent_type_fields(
+    type_list("n"), type_list("tested"), type_list("total"), sR)
 }
 dR$own <- c(dR$own, list(agentTypes = agent_type_fields("_own")))
+dR$own <- c(dR$own, list(agentTypeClauses = agent_type_clauses(
+  dR$own$agentTypes, sR)))
+
+# The clause the section's opening adds after the severe infections: the
+# patients with at least one among the department's patients. A dataset
+# calculated before the slot carries nothing to fill it, and the opening then
+# ends at the infections.
+# NEOIPC-PERMANENT(dataset-format): see the marker in common/helpers.R; a
+# stored dataset outlives every release and gets no clause.
+nosocomial_patients_clause <- if (length(dR$own$numberOfPatientsWithSevereInfection) == 1L &&
+                                  length(dR$own$numberOfPatients) == 1L)
+  interpolate_translation(
+    sR$nosocomial_patients_clause,
+    infected_count = dR$own$numberOfPatientsWithSevereInfection,
+    patient_count = dR$own$numberOfPatients) else ""
 
 # The reference data's severe-infection figures, a sentence the nosocomial
 # infections introduction adds when the report carries reference data. A

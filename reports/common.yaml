@@ -10,6 +10,21 @@
 # Language: en
 
 3gcr_label: "3^rd^ gen. cephalosporin resistance (3GCR)"
+agent-type-clauses:
+  # Translators:
+  # The sentences opening the infectious-agent section of the Partner and
+  # Reference Reports. {total} is the infections of the type, {tested} those
+  # whose test searched for an infectious agent, {tested_share} their share of
+  # the {total}, {count} the infections with an infectious agent recorded and
+  # {share} their share of the {tested}. The pneumonia clause and the
+  # surgical-site-infection clause join one sentence over a semicolon, the
+  # latter beginning in mid-sentence; {ssi_alone} is the same clause opening a
+  # sentence of its own where no pneumonia clause precedes it. The code joins
+  # the sentences and closes the text with the final full stop.
+  bsi: "Of the {total} episodes of primary sepsis/BSI, {count} ({share}) had an infectious agent recorded"
+  hap: "Of the {total} pneumonias, {tested} ({tested_share}) were tested microbiologically, and the test recorded an infectious agent in {count} ({share}) of them"
+  ssi: "of the {total} SSIs, {tested} ({tested_share}) were tested, and the test recorded one in {count} ({share})"
+  ssi_alone: "Of the {total} SSIs, {tested} ({tested_share}) were tested, and the test recorded one in {count} ({share})"
 carbr_label: "Carbapenem resistance (CARBR)"
 colr_label: "Colistin resistance (COLR)"
 countryNames:
@@ -100,6 +115,7 @@ patient_days: "Patient days"
 percent_symbol: "%"
 si: "Severe infection"
 surgical_procedures: "Surgical Procedures"
+nosocomial_patients_clause: ", and {infected_count} of {patient_count} patients had at least one"
 nos_footnote: "n.o.s. = not otherwise specified; isolates identified to genus but not species level."
 sparse_data_footnote: "Fewer than {threshold} events; interpret rate and confidence interval with caution."
 sparse_data_footnote_no_ci: "Fewer than {threshold} events; interpret rate with caution."
@@ -196,12 +212,13 @@ tbl-incidence-density-rates:
   n_footnote: "{column}: The aggregated number of infections in all infants."
   n_inf: "Number of infections"
   nec_kinds_footnote: >-
-    Surgical NEC has bowel necrosis or pneumatosis intestinalis found at surgery
-    or on pathology, or a pneumoperitoneum on imaging, which stands in for the
-    intestinal perforation the form does not record. It is thus wider than the
-    surgical criteria of the NeoIPC Core Protocol's definition of NEC, which
-    counts a pneumoperitoneum on imaging as a radiological sign. Medical NEC, a
-    term the protocol does not use, is the rest. Together they make up NEC.
+    Surgical NEC has extensive bowel necrosis (> 2 cm of bowel affected) or
+    pneumatosis intestinalis found at surgery or on pathology, or a
+    pneumoperitoneum on imaging, which stands in for the intestinal
+    perforation the form does not record. It is thus wider than the surgical
+    criteria of the NeoIPC Core Protocol's definition of NEC, which counts a
+    pneumoperitoneum on imaging as a radiological sign. Medical NEC, a term
+    the protocol does not use, is the rest. Together they make up NEC.
   nec_medical: "Medical NEC"
   nec_surgical: "Surgical NEC"
   no_data: "No infection data available for these report settings."
@@ -218,10 +235,13 @@ tbl-infectious-agent-detection-rate:
   tbl-cap: "Infections in which an infectious agent has been identified, including secondary BSI following the infection."
 tbl-patients-exposed:
   abbreviations_footnote: "Abbreviations: CI, confidence interval; CVC, central venous catheter; INV, invasive ventilation; NIV, non-invasive ventilation; PVC, peripheral venous catheter."
+  mean: "Mean"
   mean_days: "Mean days per exposed patient"
   no_data: "No exposure data available for these report settings."
   patients_exposed: "Patients exposed (%)"
+  percent: "%"
   tbl-cap: "Patients Exposed to Risk and Protective Factors and Their Days of Exposure"
+  total_days: "Total days"
 tbl-reconciliation-summary:
   tbl-cap: "Records the NeoIPC coordinating centre reconciled"
   reconciliations:

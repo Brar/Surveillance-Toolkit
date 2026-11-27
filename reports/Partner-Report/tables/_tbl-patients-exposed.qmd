@@ -21,12 +21,18 @@ if (!is.null(benchmark_data$patients_exposed_table)) {
       values_from = -c("factor", "measure"),
       names_glue = "{.value}_{measure}") |>
     dplyr::select(-tidyselect::starts_with("quartile_departments")) |>
+    # The mean days come without intervals: the dataset carries none for the
+    # mean, whose bootstrap would count a department's exposed patients as
+    # independent of one another.
+    dplyr::select(-tidyselect::any_of(as.vector(outer(
+      c("ci_lower_", "ci_upper_", paste0(rep(c("q1_", "q2_", "q3_"), each = 2),
+                                         rep(c("ci_lower_", "ci_upper_"), 3))),
+      c("own", "ref"), function(ci, ds) paste0(ci, ds, "_mean_days"))))) |>
     dplyr::select(-tidyselect::any_of(c(
       "n_ref_patients_exposed", "n_ref_mean_days")))
 
   own_ci_cols <- c(
-    "ci_lower_own_patients_exposed", "ci_upper_own_patients_exposed",
-    "ci_lower_own_mean_days", "ci_upper_own_mean_days")
+    "ci_lower_own_patients_exposed", "ci_upper_own_patients_exposed")
 
   tbl_data <- pe_wide |>
     dplyr::rename(
@@ -35,9 +41,7 @@ if (!is.null(benchmark_data$patients_exposed_table)) {
       ci_lower_rate_exp = "ci_lower_own_patients_exposed",
       ci_upper_rate_exp = "ci_upper_own_patients_exposed",
       count_days = "n_own_mean_days",
-      rate_days = "pooled_own_mean_days",
-      ci_lower_rate_days = "ci_lower_own_mean_days",
-      ci_upper_rate_days = "ci_upper_own_mean_days")
+      rate_days = "pooled_own_mean_days")
 
   if (has_reference) {
     tbl_data <- tbl_data |>
@@ -55,30 +59,21 @@ if (!is.null(benchmark_data$patients_exposed_table)) {
         q3_ci_lower_exp = "q3_ci_lower_ref_patients_exposed",
         q3_ci_upper_exp = "q3_ci_upper_ref_patients_exposed",
         pooled_days = "pooled_ref_mean_days",
-        ci_lower_pooled_days = "ci_lower_ref_mean_days",
-        ci_upper_pooled_days = "ci_upper_ref_mean_days",
         q1_days = "q1_ref_mean_days",
         q2_days = "q2_ref_mean_days",
-        q3_days = "q3_ref_mean_days",
-        q1_ci_lower_days = "q1_ci_lower_ref_mean_days",
-        q1_ci_upper_days = "q1_ci_upper_ref_mean_days",
-        q2_ci_lower_days = "q2_ci_lower_ref_mean_days",
-        q2_ci_upper_days = "q2_ci_upper_ref_mean_days",
-        q3_ci_lower_days = "q3_ci_lower_ref_mean_days",
-        q3_ci_upper_days = "q3_ci_upper_ref_mean_days")
+        q3_days = "q3_ref_mean_days")
   }
 
   cols_to_drop <- character(0)
   if (!include_rate_ci) cols_to_drop <- c(cols_to_drop, own_ci_cols)
   if (!has_reference || !include_pooled_ci)
     cols_to_drop <- c(cols_to_drop,
-      paste0("ci_lower_pooled_", c("exp", "days")),
-      paste0("ci_upper_pooled_", c("exp", "days")))
+      "ci_lower_pooled_exp", "ci_upper_pooled_exp")
   if (!has_reference || !include_quartile_ci)
     cols_to_drop <- c(cols_to_drop, as.vector(outer(
       paste0(rep(c("q1_", "q2_", "q3_"), each = 2),
              rep(c("ci_lower_", "ci_upper_"), 3)),
-      c("exp", "days"), paste0)))
+      "exp", paste0)))
   cols_to_drop <- cols_to_drop[cols_to_drop %in% names(tbl_data)]
   if (length(cols_to_drop) > 0)
     tbl_data <- tbl_data |> dplyr::select(-tidyselect::all_of(cols_to_drop))
@@ -116,20 +111,27 @@ if (!is.null(benchmark_data$patients_exposed_table)) {
     fmt_integer(
       columns = tidyselect::all_of(c("count_exp", "count_days")),
       sep_mark = sR$digit_group_separator,
-      min_sep_threshold = 2) |>
-    cols_label(
-      count_exp = sR$table_headers$count,
-      rate_exp = sR$table_headers$rate,
-      pooled_exp = sR$table_headers$pooled,
-      q1_exp = sR$table_headers$q1,
-      q2_exp = sR$table_headers$q2,
-      q3_exp = sR$table_headers$q3,
-      count_days = sR$table_headers$count,
-      rate_days = sR$table_headers$rate,
-      pooled_days = sR$table_headers$pooled,
-      q1_days = sR$table_headers$q1,
-      q2_days = sR$table_headers$q2,
-      q3_days = sR$table_headers$q3) |>
+      min_sep_threshold = 2)
+
+  # Only the columns the table carries get labels: without reference data the
+  # reference columns are absent, and gt refuses to label one of them.
+  labels <- c(
+    count_exp = sR$table_headers$count,
+    rate_exp = sR$`tbl-patients-exposed`$percent,
+    pooled_exp = sR$table_headers$pooled,
+    q1_exp = sR$table_headers$q1,
+    q2_exp = sR$table_headers$q2,
+    q3_exp = sR$table_headers$q3,
+    count_days = sR$`tbl-patients-exposed`$total_days,
+    rate_days = sR$`tbl-patients-exposed`$mean,
+    pooled_days = sR$table_headers$pooled,
+    q1_days = sR$table_headers$q1,
+    q2_days = sR$table_headers$q2,
+    q3_days = sR$table_headers$q3)
+  labels <- labels[names(labels) %in% names(tbl_data)]
+
+  tbl <- tbl |>
+    cols_label(!!!labels) |>
     tab_spanner(
       label = sR$`tbl-patients-exposed`$patients_exposed,
       columns = tidyselect::any_of(c(
@@ -155,11 +157,7 @@ if (!is.null(benchmark_data$patients_exposed_table)) {
       gt::cols_merge(
         columns = c(rate_exp, ci_lower_rate_exp, ci_upper_rate_exp),
         pattern = ci_pattern,
-        rows = !is.na(tbl_data$rate_exp)) |>
-      gt::cols_merge(
-        columns = c(rate_days, ci_lower_rate_days, ci_upper_rate_days),
-        pattern = ci_pattern,
-        rows = !is.na(tbl_data$rate_days))
+        rows = !is.na(tbl_data$rate_exp))
   }
   if (has_reference && include_pooled_ci &&
       "ci_lower_pooled_exp" %in% colnames(tbl$`_data`)) {
@@ -167,11 +165,7 @@ if (!is.null(benchmark_data$patients_exposed_table)) {
       gt::cols_merge(
         columns = c(pooled_exp, ci_lower_pooled_exp, ci_upper_pooled_exp),
         pattern = ci_pattern,
-        rows = !is.na(tbl_data$pooled_exp)) |>
-      gt::cols_merge(
-        columns = c(pooled_days, ci_lower_pooled_days, ci_upper_pooled_days),
-        pattern = ci_pattern,
-        rows = !is.na(tbl_data$pooled_days))
+        rows = !is.na(tbl_data$pooled_exp))
   }
   if (has_reference && include_quartile_ci &&
       "q1_ci_lower_exp" %in% colnames(tbl$`_data`)) {
@@ -182,12 +176,6 @@ if (!is.null(benchmark_data$patients_exposed_table)) {
       gt::cols_merge(columns = c(q2_exp, q2_ci_lower_exp, q2_ci_upper_exp),
                      pattern = ci_pattern, rows = has_boot) |>
       gt::cols_merge(columns = c(q3_exp, q3_ci_lower_exp, q3_ci_upper_exp),
-                     pattern = ci_pattern, rows = has_boot) |>
-      gt::cols_merge(columns = c(q1_days, q1_ci_lower_days, q1_ci_upper_days),
-                     pattern = ci_pattern, rows = has_boot) |>
-      gt::cols_merge(columns = c(q2_days, q2_ci_lower_days, q2_ci_upper_days),
-                     pattern = ci_pattern, rows = has_boot) |>
-      gt::cols_merge(columns = c(q3_days, q3_ci_lower_days, q3_ci_upper_days),
                      pattern = ci_pattern, rows = has_boot)
   }
 

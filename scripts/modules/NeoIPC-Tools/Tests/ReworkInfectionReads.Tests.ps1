@@ -21,7 +21,9 @@
       bsi_commensal, bsi_clinical, nec_surgical, nec_medical) and the column carrying the count the
       recognized-pathogen footnote shows, so the reports and the package cannot drift from one
       another silently; a recoded key that the dataset never carries drops its row from the table
-      without a word, which is the failure this half exists to catch.
+      without a word, which is the failure this half exists to catch. It matches only the reports'
+      own literals, so a rename on the package side escapes it and surfaces only in a real render:
+      the dataset names it holds stand agreed with the package change that computes them.
     - The BEHAVIOURAL half executes the shared helpers under R and is skipped where Rscript is
       absent, as the interpolation gate's half is; on CI its presence assertion makes an absent R
       a failure, not a silence.
@@ -64,7 +66,7 @@ BeforeAll {
     # as "file:text" pairs the pattern searches.
     function Get-AllReportSources {
         Get-ChildItem -LiteralPath $reportsDir -Recurse -File -Include '*.qmd', '*.Rmd', '*.R', '*.yaml' |
-            Where-Object { $_.FullName -notmatch '\\content\.[a-z]' } |
+            Where-Object { $_.FullName -notmatch '[\\/]+content\.[a-z]' } |
             ForEach-Object {
                 [pscustomobject]@{
                     Path = [IO.Path]::GetRelativePath($repoRoot, $_.FullName)
@@ -107,11 +109,14 @@ sR <- list(headerList = list(allBirthweights = "all", allGestationalAges = "all"
            not_available = "n/a", unit_separator = " ", percent_symbol = "%",
            digit_group_separator = " ")
 out <- format_dataset_resources(list(), counts, sR)
+without <- format_dataset_resources(
+  list(), counts[names(counts) != "n_patients_with_severe_infection"], sR)
 ok <- identical(out$numberOfPatientsWithSevereInfection, "25") &&
-      is.null(out$averageSevereInfectionsPerPatient)
+      is.null(out$averageSevereInfectionsPerPatient) &&
+      is.null(without$numberOfPatientsWithSevereInfection)
 cat(if (ok) "PASS" else "FAIL", "\n")
 '@
-            $out | Should -MatchExactly '\bPASS\b' -Because 'the opening gives counts, and the mean of infections per patient has no time base'
+            $out | Should -MatchExactly '\bPASS\b' -Because 'the opening gives counts, the mean of infections per patient has no time base, and a dataset without the slot leaves the field out'
         }
     }
 
@@ -121,12 +126,20 @@ cat(if (ok) "PASS" else "FAIL", "\n")
             Find-ReportSourceMatching 'averageSevereInfectionsPerPatient' | Should -BeNullOrEmpty -Because 'the mean per patient leaves with the counts sentence that replaces it'
         }
 
-        It 'both openings state the patients with at least one severe infection' {
+        It 'both openings add the patients clause only when the dataset has the count' {
             foreach ($file in 'Reference-Report/content/_nosocomial_infections.Rmd',
                               'Partner-Report/content/_nosocomial_infections.Rmd') {
                 $text = Get-ReportSource $file
-                $text | Should -Match 'had at least one' -Because "$file opens with the counts the template sets"
-                $text | Should -Match 'numberOfPatientsWithSevereInfection' -Because "$file reads the patients-with-at-least-one figure"
+                $text | Should -Match 'were recorded`r nosocomial_patients_clause`\.' -Because "$file ends the opening at the infections when the clause has no figure"
+            }
+            $common = Get-EnglishStringLayer 'common.yaml'
+            $common.nosocomial_patients_clause | Should -Match 'had at least one' -Because 'the clause names what the slot counts'
+            (Get-StringPlaceholders $common.nosocomial_patients_clause) |
+                Sort-Object | Should -Be @('infected_count', 'patient_count') -Because 'the clause gives the patients and their denominator'
+            foreach ($file in 'Reference-Report/_setup.qmd', 'Partner-Report/_setup.qmd') {
+                $text = Get-ReportSource $file
+                $text | Should -Match 'n_patients_with_severe_infection' -Because "$file reads the slot"
+                $text | Should -Match 'NEOIPC-PERMANENT\(dataset-format\)' -Because "$file marks the stored-dataset path the clause guard walks"
             }
         }
 
@@ -148,6 +161,10 @@ Describe 'The sepsis and NEC kinds are rows of the incidence-density table' {
                 'Reference-Report/tables/_tbl-incidence-density-rates.qmd' = '"n_agent_unclassified"'
                 'Partner-Report/tables/_tbl-incidence-density-rates.qmd' = '"n_agent_unclassified_own"'
             }
+            $dropPatterns = @{
+                'Reference-Report/tables/_tbl-incidence-density-rates.qmd' = 'any_of\("n_agent_unclassified"\)'
+                'Partner-Report/tables/_tbl-incidence-density-rates.qmd' = 'any_of\(c\("n_ref", "n_agent_unclassified_own"\)\)'
+            }
             foreach ($file in $countColumns.Keys | Sort-Object) {
                 $text = Get-ReportSource $file
                 foreach ($key in 'bsi_recognized', 'bsi_commensal', 'bsi_clinical',
@@ -157,6 +174,7 @@ Describe 'The sepsis and NEC kinds are rows of the incidence-density table' {
                     $text | Should -Match ('"' + $key + '"\s*~') -Because "$file recodes the $key row to its label"
                 }
                 $text | Should -Match $countColumns[$file] -Because "$file reads the count column the dataset carries"
+                $text | Should -Match $dropPatterns[$file] -Because "$file keeps the footnote's count out of the printed columns"
             }
         }
     }
@@ -207,6 +225,46 @@ Describe 'The exposed patients and their days are a table of their own' {
             $block.mean_days | Should -Not -BeNullOrEmpty
             $block.no_data | Should -Not -BeNullOrEmpty
             $block.abbreviations_footnote | Should -Not -BeNullOrEmpty
+            $block.percent | Should -Not -BeNullOrEmpty -Because 'the share columns are headed for the percentage they hold'
+            $block.mean | Should -Not -BeNullOrEmpty -Because 'the mean days column is headed for the mean it holds'
+            $block.total_days | Should -Not -BeNullOrEmpty -Because 'the days count column is headed for the days it sums'
+        }
+
+        It 'the mean days print without intervals the dataset does not carry' {
+            foreach ($file in 'Reference-Report/tables/_tbl-patients-exposed.qmd',
+                              'Partner-Report/tables/_tbl-patients-exposed.qmd') {
+                $text = Get-ReportSource $file
+                # The intervals may be named only to be dropped: no rename may
+                # give one a column of the table, and no merge may sit one
+                # beside a mean.
+                $text | Should -Not -Match '=\s*"[a-z0-9_]*ci_[a-z_]*mean_days"' -Because "$file carries no mean-days interval into the table"
+                $text | Should -Not -Match 'c\((rate|pooled|q[1-3])_days, [^)\r\n]*ci_' -Because "$file merges no interval beside a mean"
+                $text | Should -Not -Match 'ci_lower_rate_days|ci_lower_pooled_days' -Because "$file leaves the means no interval columns"
+            }
+        }
+
+        It 'the reference table prints its no-data note when the dataset lacks the table' {
+            $text = Get-ReportSource 'Reference-Report/tables/_tbl-patients-exposed.qmd'
+            $text | Should -Match 'tryCatch' -Because 'a dataset saved before the table aborts the getter, and the note must stand where the table cannot'
+            $text | Should -Match 'NEOIPC-PERMANENT\(dataset-format\)' -Because 'a stored reference dataset outlives every release'
+            $text | Should -Match 'no_data_table\(sR\$`tbl-patients-exposed`\$no_data\)'
+        }
+
+        It 'the Partner labels stand only for columns the table has' {
+            $text = Get-ReportSource 'Partner-Report/tables/_tbl-patients-exposed.qmd'
+            $text | Should -Match 'names\(labels\) %in% names\(tbl_data\)' -Because 'without reference data the reference columns are absent, and gt refuses to label one'
+            $text | Should -Match 'cols_label\(!!!labels\)'
+        }
+
+        It 'both table files head the columns for what they hold' {
+            foreach ($file in 'Reference-Report/tables/_tbl-patients-exposed.qmd',
+                              'Partner-Report/tables/_tbl-patients-exposed.qmd') {
+                $text = Get-ReportSource $file
+                $text | Should -Match 'tbl-patients-exposed`\$total_days' -Because "$file heads the days-count column for the days it sums"
+            }
+            $partner = Get-ReportSource 'Partner-Report/tables/_tbl-patients-exposed.qmd'
+            $partner | Should -Match 'tbl-patients-exposed`\$percent' -Because 'the share column is headed for the percentage it holds, not a rate'
+            $partner | Should -Match 'tbl-patients-exposed`\$mean' -Because 'the mean days column is headed for the mean it holds, not a rate'
         }
 
         It 'both table files label all eight factors' {
@@ -249,21 +307,54 @@ cat(if (is.null(out$infectiousAgentDetectionRate)) "PASS" else "FAIL", "\n")
             $out | Should -MatchExactly '\bPASS\b' -Because 'the pooled share depends on each department''s mix of infection types'
         }
 
-        It 'the per-type counts and shares format from the type rows' {
+        It 'the per-type fields give both shares and drop what has no infections' {
             $out = Invoke-RSnippet -Guard @('format_agent_type_fields') -Body @'
-sR <- list(digit_group_separator = " ", percent_symbol = "%", not_available = "n/a")
+sR <- list(digit_group_separator = " ", percent_symbol = "%",
+           unit_separator = " ", not_available = "n/a")
 fields <- format_agent_type_fields(
-  with_agent = list(bsi = 10L, hap = 8L, nec = 2L, ssi = 4L),
-  totals = list(bsi = 50L, hap = 40L, nec = 20L, ssi = 0L), sR = sR)
+  with_agent = list(bsi = 10L, hap = 8L, ssi = 0L),
+  tested = list(bsi = 50L, hap = 20L, ssi = 0L),
+  totals = list(bsi = 50L, hap = 40L, ssi = 5L), sR = sR)
 dropped <- format_agent_type_fields(
-  with_agent = list(bsi = 10L, hap = NULL),
-  totals = list(bsi = 50L, hap = 40L), sR = sR)
-ok <- identical(fields$bsi$count, "10") && identical(fields$bsi$total, "50") &&
-      identical(fields$bsi$share, "20.0%") && identical(fields$nec$share, "10.0%") &&
-      identical(fields$ssi$share, "n/a") && is.null(dropped$hap)
+  with_agent = list(bsi = 10L, hap = NULL, ssi = 1L),
+  tested = list(bsi = 50L, hap = 20L, ssi = 1L),
+  totals = list(bsi = 50L, hap = 40L, ssi = 0L), sR = sR)
+ok <- identical(fields$bsi$share, "20.0 %") &&
+      identical(fields$hap$tested_share, "50.0 %") &&
+      identical(fields$hap$share, "40.0 %") &&
+      identical(fields$ssi$share, "n/a") &&
+      is.null(dropped$hap) && is.null(dropped$ssi)
 cat(if (ok) "PASS" else "FAIL", "\n")
 '@
-            $out | Should -MatchExactly '\bPASS\b' -Because 'the types replace the pooled share, and their shares format from the per-type rows'
+            $out | Should -MatchExactly '\bPASS\b' -Because 'the text gives the share of the tested and the share tested with the resources'' separator before the sign, a type without infections its total no clause, and a type never tested no share among the tested'
+        }
+
+        It 'the clauses join as the template has them and leave out absent types' {
+            $out = Invoke-RSnippet -Guard @('format_agent_type_fields', 'agent_type_clauses') -Body @'
+sR <- list(percent_symbol = "%", unit_separator = "", not_available = "n/a",
+           digit_group_separator = " ",
+           `agent-type-clauses` = list(
+             bsi = "Of the {total} episodes of primary sepsis/BSI, {count} ({share}) had an infectious agent recorded",
+             hap = "Of the {total} pneumonias, {tested} ({tested_share}) were tested microbiologically, and the test recorded an infectious agent in {count} ({share}) of them",
+             ssi = "of the {total} SSIs, {tested} ({tested_share}) were tested, and the test recorded one in {count} ({share})",
+             ssi_alone = "Of the {total} SSIs, {tested} ({tested_share}) were tested, and the test recorded one in {count} ({share})"))
+fields <- format_agent_type_fields(
+  with_agent = list(hap = 8L, ssi = 1L),
+  tested = list(hap = 20L, ssi = 2L),
+  totals = list(hap = 40L, ssi = 5L), sR = sR)
+joined <- agent_type_clauses(fields, sR)
+tailed <- agent_type_clauses(fields, sR, tail = " (@tbl-agent-per-infection-rate)")
+alone <- agent_type_clauses(list(ssi = fields$ssi), sR)
+none <- agent_type_clauses(list(), sR)
+ok <- startsWith(joined, "Of the 40 pneumonias") &&
+      grepl("; of the 5 SSIs", joined, fixed = TRUE) &&
+      grepl("\\.$", joined) && !grepl(";;", joined) &&
+      grepl("\\(@tbl-agent-per-infection-rate\\)\\.$", tailed) &&
+      startsWith(alone, "Of the 5 SSIs") &&
+      identical(none, "")
+cat(if (ok) "PASS" else "FAIL", "\n")
+'@
+            $out | Should -MatchExactly '\bPASS\b' -Because 'pneumonia and SSI join one sentence over a semicolon, the SSI clause opens its own sentence alone, the table reference closes the text, and absent types leave no sentence'
         }
     }
 
@@ -273,10 +364,11 @@ cat(if (ok) "PASS" else "FAIL", "\n")
             Find-ReportSourceMatching '\$(infectiousAgentDetectionRate|overallNumberOfInfections)\b' | Should -BeNullOrEmpty -Because 'the section quotes the types once the pooled rate is gone; the include parameter of the detection table keeps its name'
         }
 
-        It 'neither setup reads the all row of the per-type table' {
-            foreach ($file in 'Reference-Report/_setup.qmd', 'Partner-Report/_setup.qmd') {
-                (Get-ReportSource $file) | Should -Not -Match '(?m)\binf\s*==\s*"all"|("inf",\s*"all")' -Because "$file must not read the row that the December datasets drop"
-            }
+        It 'both setups read the tested counts of the per-infection-type table' {
+            Get-ReportSource 'Reference-Report/_setup.qmd' |
+                Should -Match '_list\("tested"\)' -Because 'the reference gives the share of the tested from the table that counts them'
+            Get-ReportSource 'Partner-Report/_setup.qmd' |
+                Should -Match '_list\("tested"\)' -Because 'the department gives the share of the tested from the table that counts them'
         }
 
         It 'the outlier registry has no all metric for the per-type table' {
@@ -294,11 +386,22 @@ cat(if (ok) "PASS" else "FAIL", "\n")
             $sR.outlier.agent_detection_per_inf_type_interpretation_some_below | Should -Not -Match 'athogen'
         }
 
-        It 'both infectious-agent texts quote the recorded share per type' {
+        It 'the clause strings carry the template figures' {
+            $common = Get-EnglishStringLayer 'common.yaml'
+            $block = $common.'agent-type-clauses'
+            foreach ($key in 'bsi', 'hap', 'ssi', 'ssi_alone') {
+                $block.$key | Should -Not -BeNullOrEmpty -Because "common.yaml carries the $key clause"
+            }
+            $block.bsi | Should -Match 'had an infectious agent recorded'
+            $block.hap | Should -Match 'were tested microbiologically'
+            $block.hap | Should -Match '\{tested_share\}' -Because 'the text gives the share tested beside the share of the tested'
+        }
+
+        It 'both infectious-agent texts quote the types through the assembled clauses' {
             foreach ($file in 'Reference-Report/content/_infectious_agents.Rmd',
                               'Partner-Report/content/_infectious-agents.Rmd') {
                 $text = Get-ReportSource $file
-                $text | Should -Match 'had an infectious agent recorded' -Because "$file quotes the types"
+                $text | Should -Match 'agentTypeClauses' -Because "$file quotes the types through the assembled clauses"
                 $text | Should -Not -Match '\$infectiousAgentDetectionRate\b'
             }
         }

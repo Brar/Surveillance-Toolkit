@@ -63,7 +63,8 @@ if (!is.null(benchmark_data$incidence_density_rate_table) &&
   ci_pattern <- ci_pattern_inline
 
   tbl <- tbl_data |>
-    dplyr::select(-tidyselect::any_of("n_ref")) |>
+    # The footnote below reads it from tbl_data; the table does not print it.
+    dplyr::select(-tidyselect::any_of(c("n_ref", "n_agent_unclassified_own"))) |>
     dplyr::rename(
       !!sR$table_headers$count := "n_own",
       !!sR$table_headers$rate := "pooled_own",

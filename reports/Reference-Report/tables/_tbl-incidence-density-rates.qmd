@@ -52,7 +52,9 @@ tbl <- tbl_data |>
       "hap" ~ sR$pneumonia_sc,
       "nec" ~ sR$necrotizing_enterocolitis_sc,
       "nec_surgical" ~ kinds_labels$nec_surgical,
-      "nec_medical" ~ kinds_labels$nec_medical))
+      "nec_medical" ~ kinds_labels$nec_medical)) |>
+  # The footnote below reads it from tbl_data; the table does not print it.
+  dplyr::select(-tidyselect::any_of("n_agent_unclassified"))
 
 cw <- compute_col_widths(tbl_data, stub_min = 25)
 
