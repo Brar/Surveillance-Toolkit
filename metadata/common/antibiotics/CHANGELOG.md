@@ -35,10 +35,12 @@ it as the GitHub Release body, so a release cannot be cut for a version this fil
 - The three AWaRe group `description`s are re-summarized to the 2025 definitions, and the
   `WHO_AWARE` option-group-set description repeats the same summaries. Access is no
   longer described as narrow-spectrum — the 2025 classification gives it activity against a wide
-  range of commonly encountered susceptible pathogens, with lower resistance potential; Watch
+  range of commonly encountered susceptible infectious agents, with lower resistance potential; Watch
   carries the resistance-potential and stewardship-monitoring emphasis, Reserve the last-resort
-  restriction for multidrug-resistant infections. No locale had translated these three strings,
-  so the catalogues regenerate with the new source strings and empty translations.
+  restriction on use against multidrug-resistant infectious agents. No locale had translated these
+  three strings, so the catalogues regenerate with the new source strings and empty translations.
+- The two non-J01 ATC groups take the ATC/DDD index's own level-4 names, so every group name is now
+  the index's verbatim: `J04AB` becomes "Antibiotics" and `P01AB` "Nitroimidazole derivatives".
 - The attribution names the 2025 edition (doi:10.2471/B09489) in place of the 2021 publication
   (WHO/MHP/HPS/EML/2021.04), and records the ATC codes and group names as following the 2026
   ATC/DDD index.

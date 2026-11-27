@@ -103,9 +103,9 @@ both consequences above reversed.
   ([ATC/DDD copyright & disclaimer](https://atcddd.fhi.no/copyright_disclaimer/)). Reproduced here for NeoIPC's
   **non-commercial** infection-surveillance use, with attribution; the ATC classification is reproduced unchanged
   (translations are added localizations, not alterations of the classification): every ATC code carried here exists
-  in the 2026 index under the group recorded beside it, and 32 of the 34 group names are that index's level-4 names
-  verbatim — the two non-J01 groups (`J04AB`, `P01AB`) carry longer descriptive labels of NeoIPC's own in place of
-  the index's terse ones. To keep WHO ATC *codes* out of the public translation files, the translation catalogue is
+  in the 2026 index under the group recorded beside it, and all 34 group names are that index's level-4 names
+  verbatim — including the index's own terse `J04AB` "Antibiotics" and `P01AB` "Nitroimidazole derivatives". To keep
+  WHO ATC *codes* out of the public translation files, the translation catalogue is
   keyed by the English **name**, never the ATC code.
 - **WHO AWaRe** — The selection and use of essential medicines, 2025: WHO AWaRe (access, watch, reserve)
   classification of antibiotics for evaluation and monitoring of use. Geneva: World Health
