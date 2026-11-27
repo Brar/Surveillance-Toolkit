@@ -253,14 +253,16 @@ ref_counts <- list(
   n_patients = reference_data$n_patients$total,
   n_enrollments = reference_data$n_enrollments$total,
   n_patient_days = reference_data$n_patient_days$total,
+  n_patients_with_severe_infection = reference_data$n_patients_with_severe_infection,
   n_severe_infections = reference_data$incidence_density_rate_table |>
     dplyr::filter(inf == "si") |> dplyr::pull("n"),
   n_infectious_agents = reference_data$infectious_agent_detection_rate_per_agent_table |>
     dplyr::filter(group == "Total") |> dplyr::pull("n"),
+  # Infections with an agent recorded. The infection-type rows of the
+  # per-infection-type table partition the microbiologically confirmed
+  # infections, so their sum is that count.
   n_infections_with_agent = reference_data$infectious_agent_detection_rate_per_inf_type_table |>
-    dplyr::filter(inf == "all") |> dplyr::pull("n"),
-  n_infections_overall = reference_data$n_infections |>
-    dplyr::filter(inf_type == "overall") |> dplyr::pull("total"),
+    dplyr::filter(inf != "all") |> dplyr::pull("n") |> sum(na.rm = TRUE),
   n_surgical_departments = reference_data$n_surgical_departments,
   n_surgical_patients = reference_data$n_surgical_patients |> dplyr::pull("total"),
   # Use the table's Overall row to match the displayed N (excludes "not_surgery")
@@ -279,10 +281,26 @@ dR <- c(
 )
 
 # ── Conditional cross-references ──────────────────────────────────
-dR$refDetectionTable <- if (params$includeInfectiousAgentDetectionRateTable)
-  " (@tbl-infectious-agent-detection-rate)" else ""
 dR$refAgentPerInfTable <- if (params$includeAgentPerInfectionRateTable)
   " (@tbl-agent-per-infection-rate)" else ""
+
+# The per-infection-type infectious-agent figures the section text gives: a
+# pooled share would follow the cohort's mix of infection types rather than
+# what the departments test. A type missing from either table is absent from
+# the result, so a text printing a type must also omit its clause then.
+agent_type_pick <- function(tbl, col, key_col, type) {
+  if (is.null(tbl) || !col %in% names(tbl)) return(NULL)
+  v <- tbl[[col]][tbl[[key_col]] == type]
+  if (length(v) == 1L) v else NULL
+}
+agent_types <- c("bsi", "hap", "nec", "ssi")
+dR$agentTypes <- format_agent_type_fields(
+  stats::setNames(lapply(agent_types, \(t) agent_type_pick(
+    reference_data$infectious_agent_detection_rate_per_inf_type_table,
+    "n", "inf", t)), agent_types),
+  stats::setNames(lapply(agent_types, \(t) agent_type_pick(
+    reference_data$n_infections, "total", "inf_type", t)), agent_types),
+  sR)
 
 # ── Section visibility flags ─────────────────────────────────────
 show_section_surgical    <- params$includeSurgicalProcedureRateTable

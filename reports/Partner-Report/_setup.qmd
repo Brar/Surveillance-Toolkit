@@ -716,10 +716,6 @@ interpret_agent_detection_per_inf_type <- function(state_map, sR, registry = NUL
   })
   cs <- cs[!is.na(cs)]
   if (length(cs) == 0) return(character(0))
-  if (all(cs == "low"))
-    return(Filter(Negate(is.null), interp(sR, "agent_detection_per_inf_type_interpretation_all_below")))
-  if (all(cs == "high"))
-    return(Filter(Negate(is.null), interp(sR, "agent_detection_per_inf_type_interpretation_all_above")))
   parts <- character(0)
   if (any(cs == "high"))
     parts <- c(parts, interp(sR, "agent_detection_per_inf_type_interpretation_some_above"))
@@ -818,8 +814,7 @@ outlier_groupings <- list(
   ),
   infectious_agent_detection_rate_per_inf_type_table = list(
     agent_detection_per_inf_type = list(
-      metrics = c("all", "bsi", "hap", "nec", "ssi"),
-      total_metric = "all",
+      metrics = c("bsi", "hap", "nec", "ssi"),
       template_prefix = "agent_detection_per_inf_type",
       interpret = interpret_agent_detection_per_inf_type
     )
@@ -1162,7 +1157,6 @@ localize_metric_name <- function(metric_id, sR, table_name = NULL) {
     bsi = "primary_sepsis_bsi_sc",
     hap = "pneumonia_sc",
     probiotic = "probiotics",
-    all = "total",
     a = "access",
     w = "watch",
     r = "reserve"
@@ -1839,19 +1833,31 @@ extract_counts <- function(bm, suffix) {
       NULL
     }
   }
+  pull_excluding <- function(tbl, filter_col, exclude_val, value_col) {
+    col_name <- paste0(value_col, suffix)
+    if (!is.null(tbl) && col_name %in% names(tbl)) {
+      sum(tbl[[col_name]][tbl[[filter_col]] != exclude_val], na.rm = TRUE)
+    } else {
+      NULL
+    }
+  }
   list(
     n_departments = pull_col(bm$n_departments, "n"),
     n_patients = pull_col(bm$n_patients, "total"),
     n_enrollments = pull_col(bm$n_enrollments, "total"),
     n_patient_days = pull_col(bm$n_patient_days, "total"),
+    n_patients_with_severe_infection = pull_col(
+      bm$n_patients_with_severe_infection, "n"),
     n_severe_infections = pull_filtered(
       bm$incidence_density_rate_table, "inf", "si", "n"),
     n_infectious_agents = pull_filtered(
       bm$infectious_agent_detection_rate_per_agent_table, "group", "Total", "n"),
-    n_infections_with_agent = pull_filtered(
-      bm$infectious_agent_detection_rate_per_inf_type_table, "inf", "all", "n"),
-    n_infections_overall = pull_filtered(
-      bm$n_infections, "inf_type", "overall", "total")
+    # Infections with an agent recorded. The infection-type rows of the
+    # per-infection-type table partition the microbiologically confirmed
+    # infections, so their sum is that count.
+    n_infections_with_agent = pull_excluding(
+      bm$infectious_agent_detection_rate_per_inf_type_table,
+      "inf", exclude_val = "all", "n")
   )
 }
 
@@ -1877,20 +1883,44 @@ dR <- list(
   }
 )
 
+# The per-infection-type infectious-agent figures the section text gives: a
+# pooled share would follow the department's mix of infection types rather
+# than what it tests, so the text gives the shares per type. A type missing
+# from either table is absent from the result, and the text must then omit
+# its clause.
+agent_type_fields <- function(suffix) {
+  detection <- benchmark_data$infectious_agent_detection_rate_per_inf_type_table
+  infections <- benchmark_data$n_infections
+  n_col <- paste0("n", suffix)
+  total_col <- paste0("total", suffix)
+  pick <- function(tbl, col, key_col, type) {
+    if (is.null(tbl) || !col %in% names(tbl)) return(NULL)
+    v <- tbl[[col]][tbl[[key_col]] == type]
+    if (length(v) == 1L) v else NULL
+  }
+  types <- c("bsi", "hap", "nec", "ssi")
+  with_agent <- stats::setNames(lapply(
+    types, \(t) pick(detection, n_col, "inf", t)), types)
+  totals <- stats::setNames(lapply(
+    types, \(t) pick(infections, total_col, "inf_type", t)), types)
+  format_agent_type_fields(with_agent, totals, sR)
+}
+dR$own <- c(dR$own, list(agentTypes = agent_type_fields("_own")))
+
 # The reference data's severe-infection figures, a sentence the nosocomial
 # infections introduction adds when the report carries reference data. A
 # reference dataset that carries no incidence-density table, or no count in it,
 # has no figure to give, and the sentence is left out: interpolate_translation()
 # refuses a value that is not there.
 reference_severe_infections <- dR$ref[c("numberOfSevereInfections", "numberOfPatients",
-                                        "averageSevereInfectionsPerPatient")]
+                                        "numberOfPatientsWithSevereInfection")]
 nosocomial_reference_comparison <- if (!is.null(dR$ref) &&
                                        all(lengths(reference_severe_infections) == 1L))
   paste0(" ", interpolate_translation(
     sR$nosocomial_reference_comparison,
     infection_count = dR$ref$numberOfSevereInfections,
-    patient_count = dR$ref$numberOfPatients,
-    average = dR$ref$averageSevereInfectionsPerPatient)) else ""
+    infected_count = dR$ref$numberOfPatientsWithSevereInfection,
+    patient_count = dR$ref$numberOfPatients)) else ""
 
 # Detect metadata differences for highlighting
 metadata_diff <- if (!is.null(dR$ref)) {

@@ -1396,8 +1396,8 @@ format_dataset_resources <- function(metadata, counts, sR) {
       counts$n_patient_days / counts$n_patients
     ),
     numberOfSevereInfections = format_integer(counts$n_severe_infections),
-    averageSevereInfectionsPerPatient = fmt_decimal(
-      counts$n_severe_infections / counts$n_patients
+    numberOfPatientsWithSevereInfection = format_integer(
+      counts$n_patients_with_severe_infection
     )
   )
 
@@ -1407,14 +1407,6 @@ format_dataset_resources <- function(metadata, counts, sR) {
   }
   if (!is.null(counts$n_infections_with_agent)) {
     result$numberOfInfectionsWithAgent <- format_integer(counts$n_infections_with_agent)
-  }
-  if (!is.null(counts$n_infections_overall)) {
-    result$overallNumberOfInfections <- format_integer(counts$n_infections_overall)
-  }
-  if (!is.null(counts$n_infections_with_agent) && !is.null(counts$n_infections_overall)) {
-    result$infectiousAgentDetectionRate <- fmt_decimal(
-      counts$n_infections_with_agent / counts$n_infections_overall * 100
-    )
   }
 
   # Surgery fields (optional — present in Reference-Report)
@@ -1443,6 +1435,45 @@ format_dataset_resources <- function(metadata, counts, sR) {
   }
 
   result
+}
+
+#' Format the per-infection-type infectious-agent counts and their shares
+#'
+#' The infectious-agent sections of both reports give, per infection type, the
+#' infections in which an infectious agent was recorded, the type's infections,
+#' and the share between them. A pooled share over all types would follow each
+#' department's mix of infection types rather than what the departments test.
+#' A type without a count in one of the inputs is absent from the result; a
+#' text printing a type must then also omit its clause, as a present count
+#' with an absent total leaves no share to print.
+#'
+#' @param with_agent Named list of the counts of infections with an infectious
+#'   agent recorded, by type key (`bsi`, `hap`, `nec`, `ssi`).
+#' @param totals Named list of the infection counts of the same keys.
+#' @param sR String resources; the percent symbol is appended where present.
+#' @return Named list per type, of the formatted `count`, `total` and `share`.
+format_agent_type_fields <- function(with_agent, totals, sR = NULL) {
+  types <- intersect(names(with_agent), names(totals))
+  types <- types[!vapply(types, \(t) is.null(with_agent[[t]]) ||
+                                     is.null(totals[[t]]), logical(1))]
+  fmt <- function(x) format(x, digits = 2, nsmall = 1, scientific = FALSE)
+  lapply(types, function(type) {
+    count <- with_agent[[type]]
+    total <- totals[[type]]
+    share <- if (total > 0) {
+      paste0(fmt(count / total * 100),
+             if (!is.null(sR$percent_symbol)) sR$percent_symbol)
+    } else {
+      # No infection of the type: no share to take, the same placeholder the
+      # tables print where a rate's denominator is empty.
+      if (!is.null(sR$not_available)) sR$not_available else "n/a"
+    }
+    list(
+      count = format_integer(count),
+      total = format_integer(total),
+      share = share
+    )
+  }) |> stats::setNames(types)
 }
 
 #' Escape text for insertion into LaTeX as literal text

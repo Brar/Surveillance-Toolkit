@@ -87,32 +87,19 @@ headings:
   presence_of_risk_and_protective_factors: Presence of Risk and Protective Factors in Your Department
 
 nosocomial_reference_comparison: >-
-  In the reference data, {infection_count} severe infections were recorded in
-  {patient_count} patients, an average of {average} infections per patient.
+  In the reference data, {infection_count} severe infections were recorded, and
+  {infected_count} of {patient_count} patients had at least one.
 
 outlier:
 
-  # ── Existing interpretation strings ───────────────────────────
-  agent_detection_per_inf_type_all_zero: >-
-    No pathogens were detected across any infection type during the
-    surveillance period.
-  agent_detection_per_inf_type_interpretation_all_above: >-
-    Pathogen detection rates are above the reference range across
-    infection types. Higher detection rates may reflect thorough
-    microbiological workup practices.
-
   # ── Agent detection interpretation ─────────────────────────────────
-  agent_detection_per_inf_type_interpretation_all_below: >-
-    Pathogen detection rates are below the reference range across
-    infection types. Lower detection rates may reflect differences in
-    microbiological sampling practices or laboratory capacity.
   agent_detection_per_inf_type_interpretation_some_above: >-
-    Higher pathogen detection rates may reflect thorough
-    microbiological workup practices for these infection types.
+    Higher shares of infections with an infectious agent recorded may reflect
+    thorough microbiological workup practices for these infection types.
   agent_detection_per_inf_type_interpretation_some_below: >-
-    Lower pathogen detection rates may reflect differences in
-    microbiological sampling practices or laboratory capacity for
-    these infection types.
+    Lower shares of infections with an infectious agent recorded may reflect
+    differences in microbiological sampling practices or laboratory capacity
+    for these infection types.
 
   # ── Zero early-exit strings (only for hierarchical total metrics) ─
   antibiotic_rate_ab_zero: >-
