@@ -74,6 +74,13 @@ In the maintenance window, the dry run's plan, hazards and live-only objects dec
    list — and record, option by option, how a reopened form will read under them.
 4. **`OptionCodeChange` hazards** are the four antibiotic codes of step 1; the deployment proceeds knowing step 4's
    data fix follows in the same window, before forms reopen for entry against the renamed options.
+5. **The ATC option-group renames and the AWaRe description rewrites carry no hazard line**: the hazard table knows
+   renames of *options*, not of option *groups* or group *sets*, so the groups whose names the 2026 ATC/DDD index now
+   supplies (`J04AB` "Antibiotics", `P01AB` "Nitroimidazole derivatives") and the three AWaRe groups and the
+   `WHO_AWARE` group set with their re-summarized descriptions deploy as ordinary changed writes. Nothing refers to
+   them by name — every consumer filters on their codes — and the deployment drops live translations of the changed
+   properties, which these strings never had; read the plan's `optionGroups changed` count against the package and
+   the `DroppedTranslations` list against this expectation.
 
 ## Step 4 — Rewrite the four antibiotic codes in the collected data
 
