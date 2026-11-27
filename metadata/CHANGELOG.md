@@ -13,6 +13,12 @@ it as the GitHub Release body, so a release cannot be cut for a version this fil
 
 ## [Unreleased]
 
+### Changed
+
+- The antibiotics metadata follows WHO's AWaRe classification of 2025: the option `J01CR03`
+  (ticarcillin/clavulanic acid) moves to Watch, and the three AWaRe groups' and the `WHO_AWARE`
+  group-set's descriptions re-summarize the 2025 definitions.
+
 ## [0.2.0-alpha] - 2026-11-09
 
 ### Added

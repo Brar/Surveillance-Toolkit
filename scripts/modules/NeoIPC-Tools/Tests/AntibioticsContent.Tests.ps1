@@ -13,9 +13,10 @@
     Metadata.Tests.ps1, which exercises the generators against fixtures, is the same as
     MetadataContent.Tests.ps1's: content drift that a synthetic fixture cannot see.
 
-    The motivating defect is the empty aware_category of J01CR03: a substance without a category is
-    silently left out of every WHO_AWARE option group by the generator's membership walk, which
-    reads only non-empty categories — a green build hides a substance that no AWaRe group names.
+    The property the cross-reference holds: every option carries one of the three AWaRe categories
+    and the category the 2025 classification gives it — a substance without a category is silently
+    left out of every WHO_AWARE option group by the generator's membership walk, which reads only
+    non-empty categories, so a green build would hide a substance that no AWaRe group names.
 
 .EXAMPLE
     Invoke-Pester -Path scripts/modules/NeoIPC-Tools/Tests/AntibioticsContent.Tests.ps1
@@ -32,7 +33,7 @@ Describe 'Antibiotics list (metadata/common/antibiotics)' {
 
         # Pair each NeoIPC option with its row in the WHO extract. The two sides mark route
         # differently: the extract names its parenteral and oral entries X_IV / X_oral — twelve
-        # substances split that way, six of them under the ATC code of the non-J01 group the oral
+        # substances split that way, ten of them under the ATC code of the non-J01 group the oral
         # form belongs to — while NeoIPC marks a route in the option id (X_O / X_P) only where it
         # splits a substance across two options, in a display name "(i. v.)" where it holds only
         # the parenteral form, or nowhere at all where the substance has one systemic row of its
@@ -61,12 +62,12 @@ Describe 'Antibiotics list (metadata/common/antibiotics)' {
             $whoByAtc[$atc].Add([pscustomobject]@{ Route = $route; Name = (ConvertTo-NormalizedSubstanceName $w.antibiotic); Row = $w })
         }
 
-        $script:Uncategorised = [System.Collections.Generic.List[string]]::new()
+        $script:Uncategorized = [System.Collections.Generic.List[string]]::new()
         $script:NotIn2025 = [System.Collections.Generic.List[string]]::new()
         $script:CategoryDiffers = [System.Collections.Generic.List[string]]::new()
         foreach ($s in $script:Substances) {
             if ($s.aware_category -notin @('Access', 'Watch', 'Reserve')) {
-                $script:Uncategorised.Add("$($s.id) ($($s.name)) : '$($s.aware_category)'")
+                $script:Uncategorized.Add("$($s.id) ($($s.name)) : '$($s.aware_category)'")
             }
             $route = ''
             if ($s.id -cmatch '^(.+)_(O|P)$' -and $Matches[1] -eq $s.atc_code) { $route = $Matches[2] }
@@ -101,7 +102,7 @@ Describe 'Antibiotics list (metadata/common/antibiotics)' {
     }
 
     It 'places every substance in exactly one of the three AWaRe categories' {
-        $script:Uncategorised.Count | Should -Be 0 -Because ('substances without an AWaRe category drop out of every WHO_AWARE option group silently: ' + ($script:Uncategorised -join ' | '))
+        $script:Uncategorized.Count | Should -Be 0 -Because ('substances without an AWaRe category drop out of every WHO_AWARE option group silently: ' + ($script:Uncategorized -join ' | '))
     }
 
     It 'holds every substance in the AWaRe category the 2025 classification gives it' {
