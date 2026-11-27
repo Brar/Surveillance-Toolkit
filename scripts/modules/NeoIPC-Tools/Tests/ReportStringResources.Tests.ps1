@@ -50,13 +50,18 @@
       size and the column widths, the column groups, and the validation summary's column of
       warnings, with the note on data built before warnings were counted apart. CI's R has no gt, so
       this part runs only where gt is installed and is skipped elsewhere; the parts above it need no gt.
-    - The Validation Report's day-of-onset sentences and the two problem details they cite: that the
-      stay rules name no admission type and keep the third-day boundary in the one sentence the header
-      and the NeoIPC app show, that the first-three-days-of-life sentences name the admission form as
-      where their day comes from, that the stay detail names whose cut-off the report applies to every
-      admission, and that the early-onset detail states the Protocol's own 72-hour boundary, counts
-      from the admission rather than reading the stored day, confines the derivation to the admissions
-      which record a day of life, and offers no advice to correct that value for any other stay.
+    - The Validation Report's day-of-onset sentences and the two problem details they cite and the
+      solution one of them sends the reader to: that the stay rules name no admission type and keep
+      the third-day boundary in the one sentence the header and the NeoIPC app show, that the
+      first-three-days-of-life sentences name the admission form as where their day comes from, that
+      the stay detail names whose cut-off the report applies to every admission and credits the
+      Protocol with no exception to it, that the early-onset detail states the Protocol's own
+      72-hour boundary and the days of life the report flags as its reading of it, counts from the
+      admission rather than reading the stored day, confines the derivation to the admissions which
+      record a day of life, offers no advice to correct that value for any other stay, and promises
+      no module this repository's metadata does not carry, that the placeholder comments of all six
+      rules state the range of the derived day, and that the solution for the day of life at
+      admission leads through both the value the platform sets and the one the team records.
 
     The report's other setup checks call neoipcr, which no CI runner installs, and are not covered here.
 
@@ -1285,6 +1290,39 @@ for (id in c("30", "34", "38")) {
         $detail | Should -Match 'transferred or readmitted' -Because (
             'the day-of-stay cut-off stands in the Protocol for a transferred or readmitted infant, ' +
             'and the detail has to say whose cut-off the report applies to every admission')
+        $detail | Should -Not -Match 'Protocol''s own exception' -Because (
+            'the Protocol sets the exception for its 72-hour window after birth and states none for ' +
+            'the day-3 cut-off, so the detail may not credit one to it for the stay rule')
+        $detail | Should -Match 'exception the NeoIPC support team has accepted keeps a record out' -Because (
+            'the exception list is the report''s own mechanism for these rules, and the detail has to ' +
+            'say what an accepted exception does without attributing it to the Protocol')
+    }
+
+    It 'states the range of the derived day in each rule''s translator comment' {
+        # The placeholder comments are the translators' only notice of what values reach {dol} and
+        # {dos}; the rules derive the day from the dates and the decided bound leaves only the
+        # first three days of life and the first two days of the stay open to them. The comment
+        # wraps, so the file is collapsed before the ranges are counted.
+        $yaml = Get-Content -LiteralPath (Join-Path $repoRoot 'reports' 'Validation-Report' 'content' '_sR.yaml') -Raw
+        $flat = ($yaml -replace '(?m)^\s*#\s*', ' ') -replace '\s+', ' '
+        $dol = [regex]::Matches($flat, '\{dol\}[^.]*?1, 2, or 3, the day of birth being day 1\.')
+        $dos = [regex]::Matches($flat, '\{dos\}[^.]*?1 or 2, the day of admission being day 1\.')
+        $dol.Count | Should -Be 3 -Because (
+            'rules 29, 33 and 37 each derive a day of life the report flags, all three within the ' +
+            'first three days of life, and no other rule shows a {dol} that is derived')
+        $dos.Count | Should -Be 3 -Because (
+            'rules 30, 34 and 38 each derive a day of the stay before its third day, so 1 or 2, ' +
+            'and no other rule shows a {dos} that is derived')
+    }
+
+    It 'leads through a wrong recorded day of life at admission for a transfer or readmission too' {
+        $solution = (Get-Content -LiteralPath (Join-Path $repoRoot 'reports' 'Validation-Report' 'en' '_solution_0018.Rmd') -Raw) -replace '\s+', ' '
+        $solution | Should -Match 'transferred or readmitted on or after the day of birth' -Because (
+            'problem detail 19 sends a reader whose admission form records the day of life there, ' +
+            'which is the transfer or readmission case, to this solution')
+        $solution | Should -Match 'a value the team records' -Because (
+            'the platform sets day 1 only for the other admission types, so the solution has to say ' +
+            'this value is corrected by recording it, not by reopening for the platform to set it')
     }
 
     It 'states the early-onset detail in the Protocol''s own terms and its own derivation' {
@@ -1292,6 +1330,12 @@ for (id in c("30", "34", "38")) {
         $detail | Should -Match 'within 72 hours after birth' -Because (
             'the Protocol sets the early-onset boundary as a 72-hour window after birth, which the ' +
             'day-of-life filter only approximates')
+        $detail | Should -Match 'flags an infection on day of life 1, 2, or 3, the day of birth being day 1' -Because (
+            'the Protocol speaks in hours and the rules flag whole days, and the reader has to be ' +
+            'told which days of life a finding in fact means')
+        $detail | Should -Not -Match 'early-onset infection module' -Because (
+            'this repository''s metadata carries one program with no early-onset stage, so the ' +
+            'detail may not offer its readers a module they cannot opt into')
         $detail | Should -Match 'counts the days from the admission to the date of the infection' -Because (
             'the detail has to tell the partner how the report arrives at the day of life it judged, ' +
             'and that it counts from the admission rather than reading the stored value')

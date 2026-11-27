@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: NeoIPC-Support@charite.de\n"
-"POT-Creation-Date: 2026-11-26 18:41+0100\n"
+"POT-Creation-Date: 2026-11-27 22:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Language-Team: none\n"
 "Language: en\n"
@@ -5472,7 +5472,7 @@ msgstr ""
 #. type: Plain text
 #: reports/Validation-Report/en/_problem_detail_0019.Rmd:6
 #, markdown-text, no-wrap
-msgid "The purpose of NeoIPC surveillance is to monitor the infections with a potential for prevention in the neonatal department. Most early-onset infections come from pregnancy and delivery rather than from the department, so the NeoIPC Surveillance Protocol asks that an infection whose first symptoms occur within 72 hours after birth is not recorded in the core module. The Protocol allows that cut-off to be set aside for an infection which is clearly hospital-acquired despite the early timing — a clear catheter infection, for example — and such a record, once the NeoIPC support team has accepted it as an exception, stays out of these findings. A department which wants to monitor early-onset infections can record them separately by opting into the Protocol's early-onset infection module.\n"
+msgid "The purpose of NeoIPC surveillance is to monitor the infections with a potential for prevention in the neonatal department. Most early-onset infections come from pregnancy and delivery rather than from the department, so the NeoIPC Surveillance Protocol asks that an infection whose first symptoms occur within 72 hours after birth is not recorded in the core module. The Protocol allows that cut-off to be set aside for an infection which is clearly hospital-acquired despite the early timing — a clear catheter infection, for example — and such a record, once the NeoIPC support team has accepted it as an exception, stays out of these findings.\n"
 msgstr ""
 
 #. type: Plain text
@@ -5491,7 +5491,7 @@ msgstr ""
 #. type: Plain text
 #: reports/Validation-Report/en/_problem_detail_0019.Rmd:11
 #, markdown-text, no-wrap
-msgid "The report does not read the day of life stored on the infection form. It counts the days from the admission to the date of the infection, taking the day of admission as day of life 1; only an admission the form records as a transfer or readmission after the day of birth starts instead from the day of life recorded on the admission form. Where that recorded day is itself wrong, correcting it changes the day the report derives (see @sec-solution-18); for any other admission the day rests on the admission date alone.\n"
+msgid "The report reads the 72 hours as whole days and flags an infection on day of life 1, 2, or 3, the day of birth being day 1. It does not read the day of life stored on the infection form. It counts the days from the admission to the date of the infection, taking the day of admission as day of life 1; only an admission the form records as a transfer or readmission after the day of birth starts instead from the day of life recorded on the admission form. Where that recorded day is itself wrong, correcting it changes the day the report derives (see @sec-solution-18); for any other admission the day rests on the admission date alone.\n"
 msgstr ""
 
 #. type: Title ###
@@ -5503,7 +5503,7 @@ msgstr ""
 #. type: Plain text
 #: reports/Validation-Report/en/_problem_detail_0020.Rmd:4
 #, markdown-text, no-wrap
-msgid "An infection which occurred before the third day of the stay was most probably already present when the infant came to the department, and the surveillance does not record it. For an infant transferred or readmitted to the department the NeoIPC Surveillance Protocol sets exactly this cut-off: an infection counts as hospital-acquired only where the symptoms begin on or after day 3 of the stay, the day of admission counting as day 1. This report applies that cut-off to every admission, since an infection before the third day of a stay is most probably not acquired in the department; the Protocol's own exception for an infection which is clearly hospital-acquired stands, and an accepted exception stays out of these findings.\n"
+msgid "An infection which occurred before the third day of the stay was most probably already present when the infant came to the department, and the surveillance does not record it. For an infant transferred or readmitted to the department the NeoIPC Surveillance Protocol sets exactly this cut-off: an infection counts as hospital-acquired only where the symptoms begin on or after day 3 of the stay, the day of admission counting as day 1. This report applies that cut-off to every admission, since an infection before the third day of a stay is most probably not acquired in the department; an exception the NeoIPC support team has accepted keeps a record out of these findings.\n"
 msgstr ""
 
 #. type: Title ###
@@ -6515,7 +6515,7 @@ msgid "Correcting the Day of Life at Admission {#sec-solution-18}"
 msgstr ""
 
 #. type: Plain text
-#: reports/Validation-Report/en/_solution_0018.Rmd:14
+#: reports/Validation-Report/en/_solution_0018.Rmd:16
 #, markdown-text, no-wrap
 msgid ""
 "The day of life on the infection and procedure forms of an enrolment is calculated from the day of life at admission recorded on its admission form, so a wrong value there makes the day of life on those forms wrong too.\n"
@@ -6525,4 +6525,6 @@ msgid ""
 "Check that the form now shows 1 and complete it again (see @sec-solution-8).\n"
 "Then, for each infection and procedure form of the enrolment, reopen it for editing if it is completed (see @sec-solution-9), refresh the page as described in @sec-solution-11 so that the platform calculates the form's day of life again, and complete it again if it was completed (see @sec-solution-8).\n"
 "If you reopened the enrolment to edit its forms, complete it again as well (see @sec-solution-4).\n"
+"For an infant transferred or readmitted on or after the day of birth, the day of life at admission is a value the team records on the admission form, not one the platform sets; if the recorded value is wrong, reopen the admission form for editing (see @sec-solution-9), correct the day of life, and complete it again (see @sec-solution-8).\n"
+"The infection and procedure forms of the enrolment then need the same treatment as above: reopen them if completed (see @sec-solution-9), refresh the page (see @sec-solution-11) so the platform calculates their day of life again, and complete them again (see @sec-solution-8), completing a reopened enrolment too (see @sec-solution-4).\n"
 msgstr ""

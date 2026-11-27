@@ -26,6 +26,17 @@ it as the GitHub Release body, so a release cannot be cut for a version this fil
   both stayed before, and the render helpers write a failed child's error lines to the error
   stream instead of the console. A build that fails now gives its reason on the error stream,
   quiet or not: each error the build collects, once, and the failed status with it.
+- The Validation Report's early-onset and stay rules 29, 30, 33, 34, 37 and 38 tell the reader how
+  the report arrives at the day it judged: descriptions, summaries and problem details 19 and 20
+  say the day of life and the day of the stay are derived from the dates and the admission form
+  rather than read off the infection form, and name the cut-off each finding rests on — the
+  Protocol's 72-hour window after birth, and the Protocol's day-3 cut-off for transferred or
+  readmitted infants, which the report applies to every admission. Problem detail 19 states the
+  window the rules flag (day of life 1, 2, or 3), and solution 18 now also leads through a wrong
+  day of life recorded on a transfer or readmission.
+- The German Validation Report shows problem detail 19 in English until the rewritten source is
+  translated: po4a's keep threshold dropped the stale German file, and the report says so with a
+  warning where it falls back.
 
 ## [0.3.0-alpha] - 2026-10-09
 
