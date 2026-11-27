@@ -792,10 +792,9 @@ infant born late in the day reaches day 4 well before 72 hours have passed. The 
 — the day of life recorded on the admission form, type 1 and 2 admissions and an admission without a
 type recording day 1 and type 3 its recorded value, advanced by the days from the admission in the
 enrolment to the infection date — instead of reading the day stored on the infection form, which
-rules 27, 31 and 35
-check against the dates; a type-3 admission that records no day of life gives no day to derive, and
-rule 46 flags that admission. SSI is deliberately
-outside the rule: a surgical site infection is hospital-acquired by its nature. The protocol should
+rules 27, 31 and 35 check against the dates; a type-3 admission that records no day of life gives no
+day to derive, and rule 46 flags that admission. SSI is deliberately outside the rule: a surgical
+site infection is hospital-acquired by its nature. The protocol should
 state the window in days of life, as the rules apply it. Documented.
 
 ### G24 — Completeness beyond the record set
