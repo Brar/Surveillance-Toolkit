@@ -1300,26 +1300,27 @@ for (id in c("30", "34", "38")) {
 
     It 'states the range of the derived day in each rule''s translator comment' {
         # The placeholder comments are the translators' only notice of what values reach {dol} and
-        # {dos}; the rules derive the day from the dates and the decided bound leaves only the
-        # first three days of life and the first two days of the stay open to them. The comment
-        # wraps, so the file is collapsed before the ranges are counted.
+        # {dos}: the rules filter below 4 and below 3, and until the decided bound that leaves only
+        # the upper limit stated. The comment wraps, so the file is collapsed before the ranges are
+        # counted.
         $yaml = Get-Content -LiteralPath (Join-Path $repoRoot 'reports' 'Validation-Report' 'content' '_sR.yaml') -Raw
         $flat = ($yaml -replace '(?m)^\s*#\s*', ' ') -replace '\s+', ' '
-        $dol = [regex]::Matches($flat, '\{dol\}[^.]*?1, 2, or 3, the day of birth being day 1\.')
-        $dos = [regex]::Matches($flat, '\{dos\}[^.]*?1 or 2, the day of admission being day 1\.')
+        $dol = [regex]::Matches($flat, '\{dol\}[^.]*?a whole number below 4, the day of birth being day 1\.')
+        $dos = [regex]::Matches($flat, '\{dos\}[^.]*?a whole number below 3, the day of admission being day 1\.')
         $dol.Count | Should -Be 3 -Because (
-            'rules 29, 33 and 37 each derive a day of life the report flags, all three within the ' +
-            'first three days of life, and no other rule shows a {dol} that is derived')
+            'rules 29, 33 and 37 each derive a day of life the report flags below 4, and no other ' +
+            'rule shows a {dol} that is derived')
         $dos.Count | Should -Be 3 -Because (
-            'rules 30, 34 and 38 each derive a day of the stay before its third day, so 1 or 2, ' +
-            'and no other rule shows a {dos} that is derived')
+            'rules 30, 34 and 38 each derive a day of the stay before its third day, and no other ' +
+            'rule shows a {dos} that is derived')
     }
 
     It 'leads through a wrong recorded day of life at admission for a transfer or readmission too' {
         $solution = (Get-Content -LiteralPath (Join-Path $repoRoot 'reports' 'Validation-Report' 'en' '_solution_0018.Rmd') -Raw) -replace '\s+', ' '
-        $solution | Should -Match 'transferred or readmitted on or after the day of birth' -Because (
+        $solution | Should -Match 'transferred or readmitted after the day of birth' -Because (
             'problem detail 19 sends a reader whose admission form records the day of life there, ' +
-            'which is the transfer or readmission case, to this solution')
+            'which is the admission type 3 case, to this solution, and a type-2 infant on the day ' +
+            'of birth is the case the platform itself sets to day 1')
         $solution | Should -Match 'a value the team records' -Because (
             'the platform sets day 1 only for the other admission types, so the solution has to say ' +
             'this value is corrected by recording it, not by reopening for the platform to set it')
@@ -1330,15 +1331,16 @@ for (id in c("30", "34", "38")) {
         $detail | Should -Match 'within 72 hours after birth' -Because (
             'the Protocol sets the early-onset boundary as a 72-hour window after birth, which the ' +
             'day-of-life filter only approximates')
-        $detail | Should -Match 'flags an infection on day of life 1, 2, or 3, the day of birth being day 1' -Because (
+        $detail | Should -Match 'flags an infection on a day of life below 4, the day of birth being day 1' -Because (
             'the Protocol speaks in hours and the rules flag whole days, and the reader has to be ' +
             'told which days of life a finding in fact means')
         $detail | Should -Not -Match 'early-onset infection module' -Because (
             'this repository''s metadata carries one program with no early-onset stage, so the ' +
             'detail may not offer its readers a module they cannot opt into')
-        $detail | Should -Match 'counts the days from the admission to the date of the infection' -Because (
+        $detail | Should -Match 'counts the days from the admission in the enrolment to the date of the infection' -Because (
             'the detail has to tell the partner how the report arrives at the day of life it judged, ' +
-            'and that it counts from the admission rather than reading the stored value')
+            'that it counts from the admission date in the enrolment rather than reading the stored ' +
+            'day, and whose admission date moves the day when the two disagree')
         $detail | Should -Match 'records as a transfer or readmission after the day of birth' -Because (
             'only such an admission contributes a recorded day of life to the derivation')
         $detail | Should -Not -Match 'if[^.]*wrong[^.]*correct it' -Because (

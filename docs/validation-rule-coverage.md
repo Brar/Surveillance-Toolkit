@@ -786,12 +786,13 @@ dedicated rule would only re-express those with a calendar filter. Documented.
 `sec-collect-infection-data-collection`.
 
 An infection whose first symptoms occur within 72 hours after birth is not recorded in the core
-module. Rules 29, 33, and 37 flag a BSI, pneumonia, or NEC on day of life 1, 2, or 3, the day of
+module. Rules 29, 33, and 37 flag a BSI, pneumonia, or NEC on a day of life below 4, the day of
 birth as day 1; the data model has calendar days, not hours, so this is the closest reading, and an
 infant born late in the day reaches day 4 well before 72 hours have passed. The rules derive that day
 — the day of life recorded on the admission form, type 1 and 2 admissions and an admission without a
-type recording day 1 and type 3 its recorded value, advanced by the days from the admission to the
-infection date — instead of reading the day stored on the infection form, which rules 27, 31 and 35
+type recording day 1 and type 3 its recorded value, advanced by the days from the admission in the
+enrolment to the infection date — instead of reading the day stored on the infection form, which
+rules 27, 31 and 35
 check against the dates; a type-3 admission that records no day of life gives no day to derive, and
 rule 46 flags that admission. SSI is deliberately
 outside the rule: a surgical site infection is hospital-acquired by its nature. The protocol should
@@ -1050,7 +1051,7 @@ publications. None constrains a record; none is checkable.
 | `sec-collect-infection-data-collection` | The 72-hour cut-off is ignored when an infection beginning before 72 hours is clearly hospital-acquired or one starting after 72 hours is clearly vertical (the exception list keeps such a record out of the findings of rules 29, 30, 33, 34, 37 and 38). | Not checkable | — | — |  |
 | `sec-collect-infection-data-collection` | *(derived)* An infection excluded by the 72-hour cut-off is recorded, if at all, as an early-onset infection in the early-onset module rather than in the core module. | Not checkable | — | — |  |
 | `sec-collect-infection-data-collection` | For a transferred or readmitted patient a sepsis, pneumonia or NEC is nosocomial only when the day of symptom onset is on or after day 3 of the hospital stay (rules 30, 34 and 38 apply the cut-off to every admission, a decided departure from the Protocol's wording, which sets the cut-off for patients transferred or readmitted; an SSI is attributed to its procedure's follow-up window by rule 19, which may span a readmission). | Covered | 30, 34, 38 | `NEOIPC_BSI_LOS_LESS_THAN_2`, `NEOIPC_HAP_LOS_LESS_THAN_2`, `NEOIPC_NEC_LOS_LESS_THAN_2` (the capture-time rules check admission type 3 only) |  |
-| `sec-collect-infection-data-collection` | The day of admission counts as day 1 of the hospital stay. | Covered | 30, 34, 38 | `NEOIPC_ADM_SET_LOS`, `NEOIPC_BSI_SET_LOS`, `NEOIPC_HAP_SET_LOS`, `NEOIPC_NEC_SET_LOS`, `NEOIPC_SURGERY_SET_LOS`, `NEOIPC_SSI_SET_LOS` (the program rules store the day of occurrence from 0, one below the stay's own day as the protocol counts it, and rules 28, 32, 36, 40 and 42 report an event whose stored day disagrees with the elapsed day count between enrolment and event, not the 0-based convention itself; rules 30, 34 and 38 count the stay's day from the dates, day 1 with the day of admission) |  |
+| `sec-collect-infection-data-collection` | The day of admission counts as day 1 of the hospital stay. | Covered | 30, 34, 38 | `NEOIPC_ADM_SET_LOS`, `NEOIPC_BSI_SET_LOS`, `NEOIPC_HAP_SET_LOS`, `NEOIPC_NEC_SET_LOS`, `NEOIPC_SURGERY_SET_LOS`, `NEOIPC_SSI_SET_LOS` (the program rules store the day of occurrence from 0, one below the stay's own day as the protocol counts it, and rules 28, 32, 36, 40 and 42 report an event whose stored day disagrees with the elapsed day count between enrolment and event, not the 0-based convention itself; rules 30, 34 and 38 count the stay's day from the dates, day 1 with the admission day in the enrolment) |  |
 | `sec-collect-infection-data-collection` | *(derived)* The elements of an infection definition occur within a 7–10 day timeframe with no more than 2–3 days between elements. | Not checkable | — | — |  |
 | `sec-collect-infection-data-collection` | A new pathogen isolated in the same organ system while a recorded infection is present is not recorded as a new infection. | Partial | 49 | — | G7 |
 | `sec-collect-infection-data-collection` | The same type of infection is registered again only after a minimum of 14 days and a period without relevant symptoms of infection. | Partial | 49 | the four infection stages are repeatable without an interval | G7 |
