@@ -11,20 +11,21 @@
     Tagging Project's status table (https://latex3.github.io/tagging-project/tagging-status/)
     records scrartcl as incompatible with tagging — it emits every heading as ordinary paragraph
     text — and article as compatible, together with fancyhdr, float, placeins, geometry,
-    graphicx, fontspec and the table packages the reports draw. Declaring ua-2 while the class
-    cannot tag asserts a conformance the file does not have, so the declaration belongs to the
-    same change as the class: this gate reads it with powershell-yaml from the master
-    configuration, where Quarto resolves it into \DocumentMetadata.
+    graphicx, fontspec and the table packages the reports draw. Quarto turns tagging on only for
+    a standard that requires tagged structure, so a ua-2 declaration belongs to the same change
+    as a verified ground for it; with the caption package — which Quarto's own pandoc filters
+    load into the reports' PDF renders — recorded currently-incompatible, no report declares ua-2
+    and all five hold archival a-4. This gate reads each report's declaration and the class that
+    grounds it with powershell-yaml from the master configuration, where Quarto resolves the
+    declaration into \DocumentMetadata and the class into the \documentclass line.
 
     The Partner Certificate lays its single page out with the textpos package, which that table
-    records as currently incompatible: under tagging its structure would be wrong. The
-    Certificate therefore migrates to article and fancyhdr like the others but declares archival
-    a-4 alone.
+    records as currently incompatible: under tagging its structure would be wrong, so its a-4
+    declaration stands apart from the other reports', no matter what they declare.
 
     What this holds:
       1. each report's `_quarto.yml` sets `documentclass: article` and declares its standard
-         under `format: pdf:` — all five article, the Partner, Patient Data, Reference and
-         Validation Reports `[a-4, ua-2]`, the Partner Certificate `[a-4]`;
+         under `format: pdf:` — all five article, and each `[a-4]` alone;
       2. no checked-in profile or local override sets `documentclass` or `pdf-standard` for a
          report, since Quarto merges profiles into the master's configuration (mergeProfiles in
          quarto-cli's src/project/project-profile.ts) and a language profile generated from
@@ -45,10 +46,10 @@
 BeforeDiscovery {
     $reports = @(
         @{ Name = 'Partner-Certificate'; PdfStandard = @('a-4') }
-        @{ Name = 'Partner-Report'; PdfStandard = @('a-4', 'ua-2') }
-        @{ Name = 'Patient-Data-Report'; PdfStandard = @('a-4', 'ua-2') }
-        @{ Name = 'Reference-Report'; PdfStandard = @('a-4', 'ua-2') }
-        @{ Name = 'Validation-Report'; PdfStandard = @('a-4', 'ua-2') }
+        @{ Name = 'Partner-Report'; PdfStandard = @('a-4') }
+        @{ Name = 'Patient-Data-Report'; PdfStandard = @('a-4') }
+        @{ Name = 'Reference-Report'; PdfStandard = @('a-4') }
+        @{ Name = 'Validation-Report'; PdfStandard = @('a-4') }
     )
 }
 

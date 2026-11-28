@@ -13,15 +13,16 @@ format:
     # LuaLaTeX pinned: `pdf-standard` reaches LaTeX as \DocumentMetadata, which
     # needs LuaLaTeX. Pinning it here keeps every render path on one engine.
     pdf-engine: lualatex
-    # ua-2 declared alongside archival a-4: ua-2 requires tagged structure, which
-    # Quarto turns on with tagging=on for it. The article class is recorded as
-    # compatible with LaTeX tagging in the LaTeX Tagging Project's status table
-    # (https://latex3.github.io/tagging-project/tagging-status/), as are the
-    # packages named in this configuration; scripts/Test-ReportPdfTagging.ps1
-    # checks a rendered file's structure tree against the declaration. A package
-    # that table records as incompatible — textpos, in the Partner Certificate —
-    # keeps ua-2 out of the report that loads it.
-    pdf-standard: [a-4, ua-2]
+    # archival a-4: Quarto turns tagging on only for a standard that requires
+    # tagged structure, and Quarto's own pandoc filters load the caption
+    # package — which the LaTeX Tagging Project's status table
+    # (https://latex3.github.io/tagging-project/tagging-status/) records as
+    # currently incompatible with tagging — into the reports' PDF renders, so
+    # no accessibility claim stands verified here. The article class itself is
+    # recorded as compatible; with tagging off,
+    # scripts/Test-ReportPdfTagging.ps1 fails a rendered file that carries
+    # structure its declaration does not claim.
+    pdf-standard: [a-4]
     mainfont: "Noto Sans"
     monofont: "Noto Sans"
     fontsize: 10pt
@@ -34,6 +35,16 @@ format:
       - left=25mm
       - right=25mm
       - heightrounded
+      # geometry computes the top margin when it loads, before the header
+      # block below runs, so the height the header occupies is its option,
+      # not a later \setlength: raising \headheight after geometry left the
+      # text block below the declared top margin and pushed the footer off
+      # the page. A 4 cm logo with the line box around it needs 54.02 pt,
+      # rounded up to 54.1 pt, and the head must fit above the body inside
+      # the 25 mm top margin, which takes the default 25 pt headsep down to
+      # 10 pt.
+      - headheight=54.1pt
+      - headsep=10pt
     include-in-header:
       text: |
         \usepackage{float}
@@ -45,9 +56,6 @@ format:
         \fancyhf{}
         \fancyhead[L]{\includegraphics[width=4cm]{../logos/LOGO_NEOIPC_2.png}}
         \fancyfoot[R]{\thepage}
-        % The 4 cm header logo is 50 pt tall, and \headheight below it makes
-        % fancyhdr warn and clip the image.
-        \setlength{\headheight}{51pt}
         % The reports carry a rule above the footer on every page including the
         % title page: \footrulewidth draws it on both page styles, and the plain
         % (title) page carries the same outer page number and no header.

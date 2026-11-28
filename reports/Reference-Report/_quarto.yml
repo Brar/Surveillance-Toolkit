@@ -26,15 +26,16 @@ format:
     # needs LuaLaTeX. Pinning it here keeps every render path on one engine (the
     # .NET service injects the same value on its own path).
     pdf-engine: lualatex
-    # ua-2 declared alongside archival a-4: ua-2 requires tagged structure, which
-    # Quarto turns on with tagging=on for it. The article class is recorded as
-    # compatible with LaTeX tagging in the LaTeX Tagging Project's status table
-    # (https://latex3.github.io/tagging-project/tagging-status/), as are the
-    # packages named in this configuration; scripts/Test-ReportPdfTagging.ps1
-    # checks a rendered file's structure tree against the declaration. A package
-    # that table records as incompatible — textpos, in the Partner Certificate —
-    # keeps ua-2 out of the report that loads it.
-    pdf-standard: [a-4, ua-2]
+    # archival a-4: Quarto turns tagging on only for a standard that requires
+    # tagged structure, and Quarto's own pandoc filters load the caption
+    # package — which the LaTeX Tagging Project's status table
+    # (https://latex3.github.io/tagging-project/tagging-status/) records as
+    # currently incompatible with tagging — into the reports' PDF renders, so
+    # no accessibility claim stands verified here. The article class itself is
+    # recorded as compatible; with tagging off,
+    # scripts/Test-ReportPdfTagging.ps1 fails a rendered file that carries
+    # structure its declaration does not claim.
+    pdf-standard: [a-4]
     # PDF/A-4 requires every font to be embedded. R's pdf() device, which
     # Quarto's `fig-format: pdf` selects, writes a figure's text in the standard
     # Helvetica without embedding it; the Cairo device embeds the fonts it uses.
@@ -66,6 +67,12 @@ format:
       - left=25mm
       - right=25mm
       - heightrounded
+      # geometry computes the top margin when it loads, before the header
+      # block below runs, so the height the header occupies is its option,
+      # not a later \setlength: raising \headheight after geometry has left
+      # the text block ~39 pt below the declared top margin. A 4 cm logo
+      # with the line box around it needs 54.02 pt, rounded up to 54.1 pt.
+      - headheight=54.1pt
     number-sections: true
     include-in-header:
       text: |
@@ -85,9 +92,6 @@ format:
           \raggedright
           \hspace{1.6cm}\parbox{0.8\textwidth}{\FooterText}
         }
-        % The 4 cm header logo is 50 pt tall, and \headheight below it makes
-        % fancyhdr warn and clip the image.
-        \setlength{\headheight}{51pt}
         % The reports carry a rule above the footer on every page including the
         % title page: \footrulewidth draws it on both page styles, the plain
         % (title) page mirrors the fancy footer, and with \headrule emptied the

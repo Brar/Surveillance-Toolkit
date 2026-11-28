@@ -16,15 +16,16 @@ format:
     # LuaLaTeX pinned: `pdf-standard` reaches LaTeX as \DocumentMetadata, which
     # needs LuaLaTeX. Pinning it here keeps every render path on one engine.
     pdf-engine: lualatex
-    # ua-2 declared alongside archival a-4: ua-2 requires tagged structure, which
-    # Quarto turns on with tagging=on for it. The article class is recorded as
-    # compatible with LaTeX tagging in the LaTeX Tagging Project's status table
-    # (https://latex3.github.io/tagging-project/tagging-status/), as are the
-    # packages named in this configuration; scripts/Test-ReportPdfTagging.ps1
-    # checks a rendered file's structure tree against the declaration. A package
-    # that table records as incompatible — textpos, in the Partner Certificate —
-    # keeps ua-2 out of the report that loads it.
-    pdf-standard: [a-4, ua-2]
+    # archival a-4: Quarto turns tagging on only for a standard that requires
+    # tagged structure, and Quarto's own pandoc filters load the caption
+    # package — which the LaTeX Tagging Project's status table
+    # (https://latex3.github.io/tagging-project/tagging-status/) records as
+    # currently incompatible with tagging — into the reports' PDF renders, so
+    # no accessibility claim stands verified here. The article class itself is
+    # recorded as compatible; with tagging off,
+    # scripts/Test-ReportPdfTagging.ps1 fails a rendered file that carries
+    # structure its declaration does not claim.
+    pdf-standard: [a-4]
     mainfont: "Noto Sans"
     monofont: "Noto Sans"
     fontsize: 10pt
