@@ -1310,8 +1310,9 @@ for (id in c("30", "34", "38")) {
     It 'states the range of the derived day in each rule''s translator comment' {
         # The placeholder comments are the translators' only notice of what values reach {dol} and
         # {dos}: the rules judge a day of life of 1, 2, or 3 and a day of the stay of 1 or 2, and
-        # leave an infection dated before the stay's first day to rules 12 to 14. The comment wraps,
-        # so the file is collapsed before the ranges are counted.
+        # leave an infection dated before the stay's first day to rules 12 to 14, which report it
+        # only where the enrolment's admission and surveillance-end events bound the window. The
+        # comment wraps, so the file is collapsed before the ranges are counted.
         $yaml = Get-Content -LiteralPath (Join-Path $repoRoot 'reports' 'Validation-Report' 'content' '_sR.yaml') -Raw
         $flat = ($yaml -replace '(?m)^\s*#\s*', ' ') -replace '\s+', ' '
         $dol = [regex]::Matches($flat, '\{dol\}[^.]*?a whole number from 1 to 3, the day of birth being day 1\.')

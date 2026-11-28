@@ -788,17 +788,19 @@ dedicated rule would only re-express those with a calendar filter. Documented.
 
 An infection whose first symptoms occur within 72 hours after birth is not recorded in the core
 module. Rules 29, 33, and 37 flag a BSI, pneumonia, or NEC on days 1 to 3 of life, the day of
-birth as day 1; an infection dated before the stay's first day derives no such day and is left to
-rules 12 to 14, which report the event's date outside the enrolment window. The data model has
-calendar days, not hours, so this is the closest reading, and an infant born late in the day
-reaches day 4 well before 72 hours have passed. The rules derive that day
-— the day of life recorded on the admission form, type 1 and 2 admissions and an admission without a
-type recording day 1 and type 3 its recorded value, advanced by the days from the admission in the
-enrolment to the infection date — instead of reading the day stored on the infection form, which
-rules 27, 31, and 35 check against the dates; a type-3 admission that records no day of life gives no
-day to derive, and rule 46 flags that admission. SSI is deliberately outside the rule: a surgical
-site infection is hospital-acquired by its nature. The protocol should
-state the window in days of life, as the rules apply it. Documented.
+birth as day 1. An infection dated before the stay's first day derives a day of life below the
+admission's own; with a type-3 admission's recorded day of life, that derived day can still fall on
+days 1 to 3, so only the rules' date filter excludes such an infection and leaves it to rules 12 to
+14, which report the event's date outside the enrolment window. The data model has calendar days,
+not hours, so this is the closest reading, and an infant born late in the day reaches day 4 well
+before 72 hours have passed. The rules derive that day — the day of life recorded on the admission
+form, type 1 and 2 admissions and an admission without a type recording day 1 and type 3 its
+recorded value, advanced by the days from the admission in the enrolment to the infection date —
+instead of reading the day stored on the infection form, which rules 27, 31, and 35 check against
+the dates; a type-3 admission that records no day of life gives no day to derive, and rule 46 flags
+that admission. SSI is deliberately outside the rule: a surgical site infection is hospital-acquired
+by its nature. The protocol should state the window in days of life, as the rules apply it.
+Documented.
 
 ### G24 — Completeness beyond the record set
 
@@ -826,16 +828,13 @@ The audit surfaces the following points where the protocol text, the configurati
 not say the same thing, or where a rule encodes a reading the protocol does not settle. None is
 changed here; the protocol is normative and a conflict between it and the code is fixed in the code.
 
-- **Rules 30, 34, and 38** flag a sepsis, pneumonia, or NEC on day 1 or 2 of a
-  stay, whatever the admission type, without looking at prior enrolments. A
-  patient discharged and readmitted the next day with an event on day 2 of the
-  new stay is flagged, although the infection most likely belongs to the
-  previous stay rather than being community-acquired; the finding's framing can
-  lead a reviewer to recode rather than to attribute it to the earlier
-  enrolment. NeoIPC's decided rules settle the filter: an infection before its
-  third stay-day is community-acquired whatever the admission type, so the rules
-  keep it and spare no next-day readmission; open is the Protocol's own wording,
-  which sets this cut-off only for transferred or readmitted patients.
+- **Rules 30, 34, and 38** flag a sepsis, pneumonia, or NEC on day 1 or 2 of a stay, whatever the
+  admission type, without looking at prior enrolments. A patient discharged and readmitted the next
+  day with an event on day 2 of the new stay is flagged, and the finding's framing can lead a
+  reviewer to recode rather than to attribute it to the earlier enrolment. The NeoIPC Surveillance's
+  decided rule settles the filter: an infection on a day of the stay below 3 is community-acquired
+  whatever the admission type, so the rules keep it and spare no next-day readmission; open is the
+  Protocol's own wording, which sets this cut-off only for transferred or readmitted patients.
 - **Rules 43 and 44** question an enrolment still active more than 120 days after its enrolment date.
   The protocol defines the end of surveillance as death, transfer or discharge and sets no maximum
   stay, so the threshold is a plausibility threshold, not a protocol rule, and a genuinely long stay
