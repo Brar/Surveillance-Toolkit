@@ -101,17 +101,25 @@ function Get-NeoIPCReferenceDatasetDepartmentCount {
     if (-not $rscript) {
         throw "Reading the department count of '$(Split-Path -Leaf $DatasetFilePath)' needs Rscript on PATH."
     }
-    $decoder = 'p <- commandArgs(trailingOnly = TRUE)[[1]]; dataset <- jsonlite::unserializeJSON(readLines(p, warn = FALSE)); count <- dataset$n_departments; if (is.null(count)) quit(save = "no", status = 3); cat(as.character(count))'
-    $reported = @(& $rscript.Source --vanilla -e $decoder $DatasetFilePath 2>&1 | ForEach-Object { "$_" })
-    if ($LASTEXITCODE -eq 3) {
+    $decoder = 'p <- commandArgs(trailingOnly = TRUE)[[1]]; dataset <- jsonlite::unserializeJSON(readLines(p, warn = FALSE)); count <- dataset$n_departments; if (is.null(count)) quit(save = "no", status = 3); if (!(is.numeric(count) && length(count) == 1L && !is.na(count))) quit(save = "no", status = 4); cat(format(count, scientific = FALSE))'
+    $reported = @(& $rscript.Source --vanilla -e $decoder $DatasetFilePath 2>&1)
+    $exitCode = $LASTEXITCODE
+    # Merged stderr arrives as ErrorRecords; a warning R prints while succeeding must not
+    # contaminate the count it printed on stdout.
+    $printed = @($reported | Where-Object { $_ -isnot [System.Management.Automation.ErrorRecord] } | ForEach-Object { "$_" })
+    if ($exitCode -eq 3) {
         throw "The dataset file '$(Split-Path -Leaf $DatasetFilePath)' carries no n_departments field."
     }
-    if ($LASTEXITCODE -ne 0) {
-        throw "The dataset file '$(Split-Path -Leaf $DatasetFilePath)' is not a serialized reference dataset (R reported: $(($reported | Where-Object { $_ } | Select-Object -First 1)))."
+    if ($exitCode -eq 4) {
+        throw "The dataset file '$(Split-Path -Leaf $DatasetFilePath)' carries no single whole-number n_departments field."
     }
-    $text = ($reported -join '').Trim()
-    if ($text -notmatch '^-?\d+$') {
+    if ($exitCode -ne 0) {
+        throw "The dataset file '$(Split-Path -Leaf $DatasetFilePath)' is not a serialized reference dataset (R reported: $(($reported | Where-Object { "$_" } | Select-Object -First 1)))."
+    }
+    $text = ($printed -join '').Trim()
+    $count = 0L
+    if ($text -notmatch '^\d+$' -or -not [long]::TryParse($text, [ref]$count) -or $count -lt [int]::MinValue -or $count -gt [int]::MaxValue) {
         throw "The dataset file '$(Split-Path -Leaf $DatasetFilePath)' gave no whole-number department count (R printed: '$text')."
     }
-    return [int]$text
+    return [int]$count
 }

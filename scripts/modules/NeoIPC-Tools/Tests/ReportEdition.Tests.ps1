@@ -97,13 +97,21 @@ writeLines(jsonlite::serializeJSON(ds), args[[1]])
 nodata <- structure(list(metadata = list(period = "2024-2025")),
                     class = c("neoipcr_ref_ds", "neoipcr_rep_ds", "list"))
 writeLines(jsonlite::serializeJSON(nodata), args[[2]])
+wrong <- structure(list(n_departments = "5"),
+                   class = c("neoipcr_ref_ds", "neoipcr_rep_ds", "list"))
+writeLines(jsonlite::serializeJSON(wrong), args[[3]])
+huge <- structure(list(n_departments = 9999999999),
+                  class = c("neoipcr_ref_ds", "neoipcr_rep_ds", "list"))
+writeLines(jsonlite::serializeJSON(huge), args[[4]])
 '@ | Set-Content -LiteralPath $gen -Encoding utf8NoBOM
         $script:WithCount = Join-Path $TestDrive 'with-count.json'
         $script:WithoutCount = Join-Path $TestDrive 'without-count.json'
+        $script:WrongType = Join-Path $TestDrive 'wrong-type.json'
+        $script:HugeCount = Join-Path $TestDrive 'huge-count.json'
         $script:PlainJson = Join-Path $TestDrive 'plain.json'
         '{"n_departments": 26}' | Set-Content -LiteralPath $PlainJson -Encoding utf8NoBOM
         if (Get-Command -Name Rscript -ErrorAction SilentlyContinue) {
-            & Rscript --vanilla $gen $WithCount $WithoutCount
+            & Rscript --vanilla $gen $WithCount $WithoutCount $WrongType $HugeCount
             if ($LASTEXITCODE -ne 0) {
                 throw "The R fixture writer failed with exit code $LASTEXITCODE."
             }
@@ -125,6 +133,18 @@ writeLines(jsonlite::serializeJSON(nodata), args[[2]])
         $message = ''
         try { Get-NeoIPCReferenceDatasetDepartmentCount -DatasetFilePath $PlainJson } catch { $message = $_.Exception.Message }
         $message | Should -Match ([regex]::Escape([System.IO.Path]::GetFileName($PlainJson))) -Because 'a gate may not count a document R cannot unserialize'
+    }
+
+    It 'refuses a dataset whose count is no number' -Skip:(-not $script:RscriptAvailable) {
+        $message = ''
+        try { Get-NeoIPCReferenceDatasetDepartmentCount -DatasetFilePath $WrongType } catch { $message = $_.Exception.Message }
+        $message | Should -Match ([regex]::Escape([System.IO.Path]::GetFileName($WrongType))) -Because 'a string that looks like a number is not a count'
+    }
+
+    It 'refuses a count no whole department count can be' -Skip:(-not $script:RscriptAvailable) {
+        $message = ''
+        try { Get-NeoIPCReferenceDatasetDepartmentCount -DatasetFilePath $HugeCount } catch { $message = $_.Exception.Message }
+        $message | Should -Match ([regex]::Escape([System.IO.Path]::GetFileName($HugeCount))) -Because 'a value beyond the range of department counts must refuse by naming the file, not by a cast error'
     }
 }
 
