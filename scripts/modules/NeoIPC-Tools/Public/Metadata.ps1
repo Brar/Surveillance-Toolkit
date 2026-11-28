@@ -17,7 +17,9 @@ function ConvertFrom-NeoIPCMetadataJson {
         column, expressions externalized under expressions/). What stays excluded — because a richer file is its
         canonical source and it is generated at build instead — is: the two domain option sets (NEOIPC_PATHOGENS,
         NEOIPC_ANTIMICROBIAL_SUBSTANCES) + their options (from the infectious-agents YAML / antibiotics CSVs), the
-        antibiotic option groups / group-sets, and the superseded (retired) HAP aggregate rule + its actions.
+        antibiotic option groups / group-sets, and the superseded (retired) HAP aggregate rule + its actions —
+        that rule while it is still active: a directory may carry its inert retirement copy, and that row ships
+        like any other (docs/metadata-deployment.md §5).
         Idempotent: replaces only the per-type files it owns. No DHIS2 API calls.
     .PARAMETER Path
         Path to the DHIS2 metadata.json export.

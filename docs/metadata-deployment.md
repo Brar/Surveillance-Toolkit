@@ -464,10 +464,33 @@ names the programs whose versions are pending (section 3).
 A rule deleted on the server keeps running in Tracker Capture (section 2.9), so a rule is retired in two
 deployments:
 
-1. The package makes the rule inert: condition `false`, no actions. The deployment writes the rule first, which
-   deletes its actions, and moves the program's version, so every client reloads the rule as inert.
+1. The package makes the rule inert: condition `false`, no actions. Nothing then runs its effects, on either
+   server line: each engine takes a rule's actions only when the evaluated condition reads as the string `true`
+   (2.40: `Boolean.parseBoolean(...)` in `RuleConditionEvaluator` on the `origin/legacy` branch of
+   `dhis2/rule-engine`, the line the deployed 2.1.8.3 comes from; 2.41 and later: `...toBoolean()` in the Kotlin
+   `getRuleEvaluationResults` of `src/commonMain/kotlin/org/hisp/dhis/rules/engine/RuleConditionEvaluator.kt` at
+   v3.8.2), and either line's expression grammar knows only the exact lowercase boolean constants — they are
+   registered as fragment constants (`constant(NodeType.BOOLEAN, "false")` in `ExpressionGrammar.java:141` of the
+   Java-era 1.0.x expression-parser that rule-engine 2.1.8.3 uses, and in `ExpressionGrammar.kt:148-150` of the
+   Kotlin-era one — and a bare condition resolves them by exact-name lookup over the registered fragments, so a
+   spelling like `False` is a parse failure and never fires, no casing slips a live rule past either gate, and the
+   tooling reads only lowercase `false` as inert; and an inert rule lists no actions, so there is no effect for
+   any engine to produce. (rule-engine v3.8.2 declares expression-parser 1.4.3, whose grammar lines are
+   byte-identical to the workspace's pinned v1.4.4.) The deployment writes the rule first, which deletes its
+   actions, and moves the program's version, so every client reloads the rule as inert; on an instance where the
+    rule is live, its dropped actions are an `OrphanDelete` hazard the run acknowledges only once the inerting is
+    confirmed as the intent (section 4). The build ships such an inert rule as an ordinary directory row — a retired rule is
+   dropped from the package only while it is **active**, so the row that makes it inert lands the write on the
+   deployed rule's UID, which the row itself must carry: the tooling identifies the rule by name, and a row under
+   a different UID becomes no second live rule — DHIS2 rejects a second rule of the same name in the same program
+   (error `E4057`, `ProgramRuleObjectBundleHook`), which fails the whole deployment. The round-trip comparator
+   does not compare the retired rule where the two sides legitimately differ — one side carries it active, the
+   other inert or absent, the shapes of this two-step retirement — and does compare it where both sides carry it
+   inert, so drift in the shipped row, its UID among its fields, surfaces as a change.
 2. A later deployment, once clients have synchronized, lists the rule in `-Delete`. A rule in `-Delete` that is not
-   inert on the instance is an `ActiveRuleDelete` hazard, deleted only when that is acknowledged.
+   inert on the instance is an `ActiveRuleDelete` hazard, deleted only when that is acknowledged. That deletion needs
+   the package of a **later** release, one that no longer carries the rule at all: the deployment refuses a
+   `-Delete` entry for an object the package it is given still carries.
 
 ## 6. Deploying to Production
 

@@ -680,10 +680,15 @@ function Test-NeoIPCDeployInertRule {
     # deployments, because clients keep running a cached rule after the server deletes it (Tracker Capture stores
     # rules in IndexedDB and only ever upserts them): the first makes it inert and moves the program version, so
     # clients reload it as inert, and a later one deletes it.
+    # The comparison is case-sensitive because lowercase false is the only spelling DHIS2 reads as boolean false:
+    # dhis2/expression-parser registers the constant exactly ('constant(NodeType.BOOLEAN, "false")' in
+    # ExpressionGrammar.kt) and a bare condition resolves it by exact-name lookup over the registered fragments,
+    # so any other spelling is no false literal at all — a rule written 'False' is a parse failure and broken
+    # metadata, never an inert one to ship or to detach.
     [CmdletBinding()]
     [OutputType([bool])]
     param([Parameter(Mandatory)][System.Collections.IDictionary]$Rule)
-    ([string]$Rule['condition']).Trim() -eq 'false' -and (Get-NeoIPCDeployRefIdList $Rule['programRuleActions']).Count -eq 0
+    ([string]$Rule['condition']).Trim() -ceq 'false' -and (Get-NeoIPCDeployRefIdList $Rule['programRuleActions']).Count -eq 0
 }
 
 # The references that keep DHIS2 from deleting what they point at, by the type that holds them: referring type ->
