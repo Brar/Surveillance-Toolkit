@@ -21,10 +21,31 @@ agent-type-clauses:
   # latter beginning in mid-sentence; {ssi_alone} is the same clause opening a
   # sentence of its own where no pneumonia clause precedes it. The code joins
   # the sentences and closes the text with the final full stop.
+  # Keys ending in _total_one agree with one infection of the type, keys
+  # ending in _tested_one with one tested infection, and keys ending in
+  # _not_tested stand where none of the type's infections was tested and so
+  # name no figure for the agent; the code selects them from the raw counts,
+  # and English takes the plural at zero.
   bsi: "Of the {total} episodes of primary sepsis/BSI, {count} ({share}) had an infectious agent recorded"
+  bsi_total_one: "Of the {total} episode of primary sepsis/BSI, {count} ({share}) had an infectious agent recorded"
   hap: "Of the {total} pneumonias, {tested} ({tested_share}) were tested microbiologically, and the test recorded an infectious agent in {count} ({share}) of them"
+  hap_tested_one: "Of the {total} pneumonias, {tested} ({tested_share}) was tested microbiologically, and the test recorded an infectious agent in {count} ({share}) of them"
+  hap_total_one: "Of the {total} pneumonia, {tested} ({tested_share}) were tested microbiologically, and the test recorded an infectious agent in {count} ({share}) of them"
+  hap_total_one_tested_one: "Of the {total} pneumonia, {tested} ({tested_share}) was tested microbiologically, and the test recorded an infectious agent in {count} ({share}) of them"
+  hap_not_tested: "Of the {total} pneumonias, {tested} ({tested_share}) were tested microbiologically"
+  hap_total_one_not_tested: "Of the {total} pneumonia, {tested} ({tested_share}) were tested microbiologically"
   ssi: "of the {total} SSIs, {tested} ({tested_share}) were tested, and the test recorded one in {count} ({share})"
+  ssi_tested_one: "of the {total} SSIs, {tested} ({tested_share}) was tested, and the test recorded one in {count} ({share})"
+  ssi_total_one: "of the {total} SSI, {tested} ({tested_share}) were tested, and the test recorded one in {count} ({share})"
+  ssi_total_one_tested_one: "of the {total} SSI, {tested} ({tested_share}) was tested, and the test recorded one in {count} ({share})"
+  ssi_not_tested: "of the {total} SSIs, {tested} ({tested_share}) were tested"
+  ssi_total_one_not_tested: "of the {total} SSI, {tested} ({tested_share}) were tested"
   ssi_alone: "Of the {total} SSIs, {tested} ({tested_share}) were tested, and the test recorded one in {count} ({share})"
+  ssi_alone_tested_one: "Of the {total} SSIs, {tested} ({tested_share}) was tested, and the test recorded one in {count} ({share})"
+  ssi_alone_total_one: "Of the {total} SSI, {tested} ({tested_share}) were tested, and the test recorded one in {count} ({share})"
+  ssi_alone_total_one_tested_one: "Of the {total} SSI, {tested} ({tested_share}) was tested, and the test recorded one in {count} ({share})"
+  ssi_alone_not_tested: "Of the {total} SSIs, {tested} ({tested_share}) were tested"
+  ssi_alone_total_one_not_tested: "Of the {total} SSI, {tested} ({tested_share}) were tested"
 carbr_label: "Carbapenem resistance (CARBR)"
 colr_label: "Colistin resistance (COLR)"
 countryNames:
@@ -115,7 +136,11 @@ patient_days: "Patient days"
 percent_symbol: "%"
 si: "Severe infection"
 surgical_procedures: "Surgical Procedures"
+# The clause the nosocomial openings add after the severe infections.
+# Translators: {patient_count} is the patients, {infected_count} those with at
+# least one severe infection. The _one key agrees with one patient.
 nosocomial_patients_clause: ", and {infected_count} of {patient_count} patients had at least one"
+nosocomial_patients_clause_one: ", and {infected_count} of {patient_count} patient had at least one"
 nos_footnote: "n.o.s. = not otherwise specified; isolates identified to genus but not species level."
 sparse_data_footnote: "Fewer than {threshold} events; interpret rate and confidence interval with caution."
 sparse_data_footnote_no_ci: "Fewer than {threshold} events; interpret rate with caution."

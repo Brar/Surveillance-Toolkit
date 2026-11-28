@@ -86,9 +86,13 @@ headings:
   gestational_age_distribution: Gestational Age Distribution
   presence_of_risk_and_protective_factors: Presence of Risk and Protective Factors in Your Department
 
-nosocomial_reference_comparison: >-
-  In the reference data, {infection_count} severe infections were recorded, and
-  {infected_count} of {patient_count} patients had at least one.
+# The reference comparison the nosocomial introduction adds: this sentence,
+# then the shared `nosocomial_patients_clause` of common.yaml when the
+# reference dataset carries the patients' count, then the final full stop.
+# Translators: {infection_count} is the severe infections recorded in the
+# reference; the _one key agrees with one.
+nosocomial_reference_infections: "In the reference data, {infection_count} severe infections were recorded"
+nosocomial_reference_infections_one: "In the reference data, {infection_count} severe infection was recorded"
 
 outlier:
 

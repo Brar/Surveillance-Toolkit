@@ -1464,7 +1464,8 @@ format_dataset_resources <- function(metadata, counts, sR) {
 #' rather than what the departments test. A type without a count in one of the
 #' inputs, or with no infection of it at all, is absent from the result, and
 #' the text then omits its clause; a tested count of 0 leaves the share among
-#' the tested without a denominator, and prints the placeholder.
+#' the tested without a denominator, and the clause assembler takes the form
+#' that names no figure for the agent.
 #'
 #' @param with_agent Named list of the infections with an infectious agent
 #'   recorded, by type key (`bsi`, `hap`, `ssi`).
@@ -1474,7 +1475,8 @@ format_dataset_resources <- function(metadata, counts, sR) {
 #'   resources' `decimal_mark`, the unit separator and the percent symbol of
 #'   the resources.
 #' @return Named list per type, of the formatted `count`, `tested`, `total`,
-#'   `tested_share` and `share`.
+#'   `tested_share` and `share`, and the raw `total_n` and `tested_n` the
+#'   clause selection reads.
 format_agent_type_fields <- function(with_agent, tested, totals, sR = NULL) {
   types <- intersect(names(with_agent), names(tested))
   types <- intersect(types, names(totals))
@@ -1498,7 +1500,11 @@ format_agent_type_fields <- function(with_agent, tested, totals, sR = NULL) {
       tested = format_integer(n_tested),
       total = format_integer(total),
       tested_share = fmt_pct(if (total > 0) n_tested / total * 100 else 0),
-      share = if (n_tested > 0) fmt_pct(count / n_tested * 100) else not_available
+      share = if (n_tested > 0) fmt_pct(count / n_tested * 100) else not_available,
+      # The raw counts the clause selection reads: the formatted figures carry
+      # digit-group separators and cannot be compared.
+      total_n = total,
+      tested_n = n_tested
     )
   }) |> stats::setNames(types)
 }
@@ -1508,43 +1514,157 @@ format_agent_type_fields <- function(with_agent, tested, totals, sR = NULL) {
 #' The sentences of the section's opening, as the template's review settled
 #' them: the BSI sentence stands alone, and the pneumonia and SSI clauses join
 #' into one sentence over a semicolon. A type absent from the fields leaves
-#' its clause out, and no sentence stands where none of its types is present.
+#' its clause out, and no sentence stands where none of its types is present;
+#' the tail then stands alone, so the paragraph still refers to the table.
+#' Each clause takes the form that agrees with its counts: one infection of
+#' the type, one tested infection, and none tested at all, where the sentence
+#' names no figure for the agent.
 #' @param fields The result of [format_agent_type_fields()].
 #' @param sR String resources; the `agent-type-clauses` block gives them.
 #' @param tail Text closed by the final full stop, the sentence's table
 #'   reference where the report prints one.
-#' @return One character string, empty where no type is present.
+#' @return One character string; where no type is present, the tail alone
+#'   closed, or empty where no tail was given.
 agent_type_clauses <- function(fields, sR, tail = "") {
-  out <- character(0)
+  clauses <- character(0)
   if (!is.null(fields$bsi)) {
-    out <- c(out, interpolate_translation(
-      sR$`agent-type-clauses`$bsi, total = fields$bsi$total,
-      count = fields$bsi$count, share = fields$bsi$share))
+    clauses <- c(clauses, if (fields$bsi$total_n == 1) {
+      interpolate_translation(
+        sR$`agent-type-clauses`$bsi_total_one, total = fields$bsi$total,
+        count = fields$bsi$count, share = fields$bsi$share)
+    } else {
+      interpolate_translation(
+        sR$`agent-type-clauses`$bsi, total = fields$bsi$total,
+        count = fields$bsi$count, share = fields$bsi$share)
+    })
   }
   mid <- character(0)
   if (!is.null(fields$hap)) {
-    mid <- c(mid, interpolate_translation(
-      sR$`agent-type-clauses`$hap, total = fields$hap$total,
-      tested = fields$hap$tested, tested_share = fields$hap$tested_share,
-      count = fields$hap$count, share = fields$hap$share))
-  }
-  if (!is.null(fields$ssi)) {
     # Each clause is interpolated by name so the placeholders and the values
     # stay visible beside each other.
-    mid <- c(mid, if (length(mid) > 0L) {
+    mid <- c(mid, if (fields$hap$tested_n == 0) {
+      if (fields$hap$total_n == 1) {
+        interpolate_translation(
+          sR$`agent-type-clauses`$hap_total_one_not_tested,
+          total = fields$hap$total, tested = fields$hap$tested,
+          tested_share = fields$hap$tested_share)
+      } else {
+        interpolate_translation(
+          sR$`agent-type-clauses`$hap_not_tested,
+          total = fields$hap$total, tested = fields$hap$tested,
+          tested_share = fields$hap$tested_share)
+      }
+    } else if (fields$hap$total_n == 1 && fields$hap$tested_n == 1) {
       interpolate_translation(
-        sR$`agent-type-clauses`$ssi, total = fields$ssi$total,
-        tested = fields$ssi$tested, tested_share = fields$ssi$tested_share,
+        sR$`agent-type-clauses`$hap_total_one_tested_one,
+        total = fields$hap$total, tested = fields$hap$tested,
+        tested_share = fields$hap$tested_share,
+        count = fields$hap$count, share = fields$hap$share)
+    } else if (fields$hap$total_n == 1) {
+      interpolate_translation(
+        sR$`agent-type-clauses`$hap_total_one,
+        total = fields$hap$total, tested = fields$hap$tested,
+        tested_share = fields$hap$tested_share,
+        count = fields$hap$count, share = fields$hap$share)
+    } else if (fields$hap$tested_n == 1) {
+      interpolate_translation(
+        sR$`agent-type-clauses`$hap_tested_one,
+        total = fields$hap$total, tested = fields$hap$tested,
+        tested_share = fields$hap$tested_share,
+        count = fields$hap$count, share = fields$hap$share)
+    } else {
+      interpolate_translation(
+        sR$`agent-type-clauses`$hap,
+        total = fields$hap$total, tested = fields$hap$tested,
+        tested_share = fields$hap$tested_share,
+        count = fields$hap$count, share = fields$hap$share)
+    })
+  }
+  if (!is.null(fields$ssi)) {
+    # The SSI clause begins mid-sentence behind the pneumonia clause and opens
+    # a sentence of its own alone, so it carries both families of forms.
+    mid <- c(mid, if (fields$ssi$tested_n == 0) {
+      if (length(mid) > 0L) {
+        if (fields$ssi$total_n == 1) {
+          interpolate_translation(
+            sR$`agent-type-clauses`$ssi_total_one_not_tested,
+            total = fields$ssi$total, tested = fields$ssi$tested,
+            tested_share = fields$ssi$tested_share)
+        } else {
+          interpolate_translation(
+            sR$`agent-type-clauses`$ssi_not_tested,
+            total = fields$ssi$total, tested = fields$ssi$tested,
+            tested_share = fields$ssi$tested_share)
+        }
+      } else if (fields$ssi$total_n == 1) {
+        interpolate_translation(
+          sR$`agent-type-clauses`$ssi_alone_total_one_not_tested,
+          total = fields$ssi$total, tested = fields$ssi$tested,
+          tested_share = fields$ssi$tested_share)
+      } else {
+        interpolate_translation(
+          sR$`agent-type-clauses`$ssi_alone_not_tested,
+          total = fields$ssi$total, tested = fields$ssi$tested,
+          tested_share = fields$ssi$tested_share)
+      }
+    } else if (length(mid) > 0L) {
+      if (fields$ssi$total_n == 1 && fields$ssi$tested_n == 1) {
+        interpolate_translation(
+          sR$`agent-type-clauses`$ssi_total_one_tested_one,
+          total = fields$ssi$total, tested = fields$ssi$tested,
+          tested_share = fields$ssi$tested_share,
+          count = fields$ssi$count, share = fields$ssi$share)
+      } else if (fields$ssi$total_n == 1) {
+        interpolate_translation(
+          sR$`agent-type-clauses`$ssi_total_one,
+          total = fields$ssi$total, tested = fields$ssi$tested,
+          tested_share = fields$ssi$tested_share,
+          count = fields$ssi$count, share = fields$ssi$share)
+      } else if (fields$ssi$tested_n == 1) {
+        interpolate_translation(
+          sR$`agent-type-clauses`$ssi_tested_one,
+          total = fields$ssi$total, tested = fields$ssi$tested,
+          tested_share = fields$ssi$tested_share,
+          count = fields$ssi$count, share = fields$ssi$share)
+      } else {
+        interpolate_translation(
+          sR$`agent-type-clauses`$ssi,
+          total = fields$ssi$total, tested = fields$ssi$tested,
+          tested_share = fields$ssi$tested_share,
+          count = fields$ssi$count, share = fields$ssi$share)
+      }
+    } else if (fields$ssi$total_n == 1 && fields$ssi$tested_n == 1) {
+      interpolate_translation(
+        sR$`agent-type-clauses`$ssi_alone_total_one_tested_one,
+        total = fields$ssi$total, tested = fields$ssi$tested,
+        tested_share = fields$ssi$tested_share,
+        count = fields$ssi$count, share = fields$ssi$share)
+    } else if (fields$ssi$total_n == 1) {
+      interpolate_translation(
+        sR$`agent-type-clauses`$ssi_alone_total_one,
+        total = fields$ssi$total, tested = fields$ssi$tested,
+        tested_share = fields$ssi$tested_share,
+        count = fields$ssi$count, share = fields$ssi$share)
+    } else if (fields$ssi$tested_n == 1) {
+      interpolate_translation(
+        sR$`agent-type-clauses`$ssi_alone_tested_one,
+        total = fields$ssi$total, tested = fields$ssi$tested,
+        tested_share = fields$ssi$tested_share,
         count = fields$ssi$count, share = fields$ssi$share)
     } else {
       interpolate_translation(
-        sR$`agent-type-clauses`$ssi_alone, total = fields$ssi$total,
-        tested = fields$ssi$tested, tested_share = fields$ssi$tested_share,
+        sR$`agent-type-clauses`$ssi_alone,
+        total = fields$ssi$total, tested = fields$ssi$tested,
+        tested_share = fields$ssi$tested_share,
         count = fields$ssi$count, share = fields$ssi$share)
     })
   }
-  if (length(mid) > 0L) out <- c(out, paste(mid, collapse = "; "))
-  if (length(out) == 0L) "" else paste0(paste(out, collapse = ". "), tail, ".")
+  if (length(mid) > 0L) clauses <- c(clauses, paste(mid, collapse = "; "))
+  if (length(clauses) == 0L) {
+    if (nzchar(tail)) paste0(trimws(tail), ".") else ""
+  } else {
+    paste0(paste(clauses, collapse = ". "), tail, ".")
+  }
 }
 
 #' Escape text for insertion into LaTeX as literal text

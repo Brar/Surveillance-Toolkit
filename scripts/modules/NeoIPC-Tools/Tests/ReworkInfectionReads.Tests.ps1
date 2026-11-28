@@ -142,15 +142,45 @@ cat(if (ok) "PASS" else "FAIL", "\n")
             foreach ($file in 'Reference-Report/_setup.qmd', 'Partner-Report/_setup.qmd') {
                 $text = Get-ReportSource $file
                 $text | Should -Match 'n_patients_with_severe_infection' -Because "$file reads the slot"
-                $text | Should -Match 'NEOIPC-PERMANENT\(dataset-format\)' -Because "$file marks the stored-dataset path the clause guard walks"
+                # The marker beside the clause guard, not merely somewhere in
+                # the file: an older marker for another read must not stand in
+                # for the one this path needs.
+                $text | Should -Match 'NEOIPC-PERMANENT\(dataset-format\)[\s\S]{0,700}?interpolate_translation\(\s*sR\$nosocomial_patients_clause' -Because "$file marks the stored-dataset path the clause guard walks, at the guard"
             }
         }
 
-        It 'the reference comparison names the patients with at least one' {
+        It 'the reference comparison stands without the patients count' {
+            $text = Get-ReportSource 'Partner-Report/_setup.qmd'
+            # The reference infection figure and the patients clause stand on
+            # their own guards: a stored reference dataset without the slot
+            # still has the figure, and only the clause leaves.
+            $text | Should -Match 'ref_counts\$n_severe_infections\) == 1L' -Because 'the reference sentence guards only the infection count'
+            $text | Should -Match 'numberOfPatientsWithSevereInfection\) == 1L' -Because 'the patients clause guards the patients count on its own'
             $sR = Get-EnglishStringLayer 'Partner-Report/content/_sR.yaml'
-            $sR.nosocomial_reference_comparison | Should -Match 'had at least one'
-            (Get-StringPlaceholders $sR.nosocomial_reference_comparison) |
-                Sort-Object | Should -Be @('infected_count', 'infection_count', 'patient_count') -Because 'the comparison gives the counts, not the mean'
+            $sR.nosocomial_reference_infections | Should -Not -Match 'patient' -Because 'the reference sentence itself carries no patient figure'
+            (Get-StringPlaceholders $sR.nosocomial_reference_infections) |
+                Sort-Object | Should -Be @('infection_count') -Because 'the reference sentence gives only the infection count'
+            $common = Get-EnglishStringLayer 'common.yaml'
+            $common.nosocomial_patients_clause | Should -Match 'had at least one' -Because 'the shared clause the comparison reuses names the patients'
+        }
+
+        It 'the count-dependent clauses carry their singular forms' {
+            $common = Get-EnglishStringLayer 'common.yaml'
+            $common.nosocomial_patients_clause_one | Should -Match '\bpatient had\b' -Because 'one patient reads "1 of 1 patient"'
+            $clauseBlock = $common.'agent-type-clauses'
+            foreach ($base in 'bsi', 'hap', 'ssi', 'ssi_alone') {
+                $clauseBlock.$base | Should -Not -BeNullOrEmpty
+            }
+            foreach ($key in 'bsi_total_one', 'hap_tested_one', 'hap_total_one',
+                              'hap_not_tested', 'hap_total_one_not_tested',
+                              'ssi_tested_one', 'ssi_total_one', 'ssi_not_tested',
+                              'ssi_total_one_not_tested', 'ssi_alone_tested_one',
+                              'ssi_alone_total_one', 'ssi_alone_not_tested',
+                              'ssi_alone_total_one_not_tested') {
+                $clauseBlock.$key | Should -Not -BeNullOrEmpty -Because "common.yaml carries the singular or untested form $key"
+            }
+            $sR = Get-EnglishStringLayer 'Partner-Report/content/_sR.yaml'
+            $sR.nosocomial_reference_infections_one | Should -Match 'severe infection was recorded'
         }
     }
 }
@@ -276,6 +306,18 @@ Describe 'The exposed patients and their days are a table of their own' {
             $partner | Should -Match 'tbl-patients-exposed`\$mean' -Because 'the mean days column is headed for the mean it holds, not a rate'
         }
 
+        It 'the interval bounds are formatted before the merges splice them' {
+            foreach ($file in 'Reference-Report/tables/_tbl-patients-exposed.qmd',
+                              'Partner-Report/tables/_tbl-patients-exposed.qmd') {
+                $text = Get-ReportSource $file
+                # The cols_merge calls splice what fmt_number printed, so the
+                # format must cover every value column but the counts: an
+                # enumerated whitelist drops a bound column and the raw value
+                # reaches the cell. Negation is what keeps the coverage total.
+                $text | Should -Match '(?s)fmt_number\(\s*columns\s*=\s*!\s*tidyselect::any_of\(' -Because "$file formats every value column but the counts, so no merged interval bound reaches the cell unformatted"
+            }
+        }
+
         It 'both table files label all eight factors' {
             # The labels themselves are the shared glossary terms and derived
             # sentence-case variants, not a second copy in the table's block;
@@ -349,9 +391,16 @@ sR <- list(percent_symbol = "%", unit_separator = "", not_available = "n/a",
            digit_group_separator = " ",
            `agent-type-clauses` = list(
              bsi = "Of the {total} episodes of primary sepsis/BSI, {count} ({share}) had an infectious agent recorded",
+             bsi_total_one = "Of the {total} episode of primary sepsis/BSI, {count} ({share}) was recorded",
              hap = "Of the {total} pneumonias, {tested} ({tested_share}) were tested microbiologically, and the test recorded an infectious agent in {count} ({share}) of them",
+             hap_total_one_tested_one = "Of the {total} pneumonia, {tested} ({tested_share}) was tested microbiologically, and the test recorded an infectious agent in {count} ({share}) of it",
+             hap_not_tested = "Of the {total} pneumonias, none was tested microbiologically",
              ssi = "of the {total} SSIs, {tested} ({tested_share}) were tested, and the test recorded one in {count} ({share})",
-             ssi_alone = "Of the {total} SSIs, {tested} ({tested_share}) were tested, and the test recorded one in {count} ({share})"))
+             ssi_total_one_tested_one = "of the {total} SSI, {tested} ({tested_share}) was tested, and the test recorded one in {count} ({share})",
+             ssi_not_tested = "of the {total} SSIs, none was tested",
+             ssi_alone = "Of the {total} SSIs, {tested} ({tested_share}) were tested, and the test recorded one in {count} ({share})",
+             ssi_alone_total_one_tested_one = "Of the {total} SSI, {tested} ({tested_share}) was tested, and the test recorded one in {count} ({share})",
+             ssi_alone_not_tested = "Of the {total} SSIs, none was tested"))
 fields <- format_agent_type_fields(
   with_agent = list(hap = 8L, ssi = 1L),
   tested = list(hap = 20L, ssi = 2L),
@@ -360,15 +409,30 @@ joined <- agent_type_clauses(fields, sR)
 tailed <- agent_type_clauses(fields, sR, tail = " (@tbl-agent-per-infection-rate)")
 alone <- agent_type_clauses(list(ssi = fields$ssi), sR)
 none <- agent_type_clauses(list(), sR)
+tailOnly <- agent_type_clauses(list(), sR, tail = " (@tbl-agent-per-infection-rate)")
+untested <- agent_type_clauses(format_agent_type_fields(
+  with_agent = list(hap = 0L, ssi = 0L),
+  tested = list(hap = 0L, ssi = 0L),
+  totals = list(hap = 40L, ssi = 5L), sR = sR), sR)
+singular <- agent_type_clauses(format_agent_type_fields(
+  with_agent = list(bsi = 1L, hap = 1L, ssi = 1L),
+  tested = list(bsi = 1L, hap = 1L, ssi = 1L),
+  totals = list(bsi = 1L, hap = 1L, ssi = 1L), sR = sR), sR)
 ok <- startsWith(joined, "Of the 40 pneumonias") &&
       grepl("; of the 5 SSIs", joined, fixed = TRUE) &&
       grepl("\\.$", joined) && !grepl(";;", joined) &&
       grepl("\\(@tbl-agent-per-infection-rate\\)\\.$", tailed) &&
       startsWith(alone, "Of the 5 SSIs") &&
-      identical(none, "")
+      identical(none, "") &&
+      identical(tailOnly, "(@tbl-agent-per-infection-rate).") &&
+      identical(untested, paste0("Of the 40 pneumonias, none was tested microbiologically",
+                                 "; of the 5 SSIs, none was tested.")) &&
+      grepl("episode of primary sepsis/BSI, 1 (100.0%) was recorded", singular, fixed = TRUE) &&
+      grepl("Of the 1 pneumonia, 1 (100.0%) was tested", singular, fixed = TRUE) &&
+      grepl("; of the 1 SSI, 1 (100.0%) was tested", singular, fixed = TRUE)
 cat(if (ok) "PASS" else "FAIL", "\n")
 '@
-            $out | Should -MatchExactly '\bPASS\b' -Because 'pneumonia and SSI join one sentence over a semicolon, the SSI clause opens its own sentence alone, the table reference closes the text, and absent types leave no sentence'
+            $out | Should -MatchExactly '\bPASS\b' -Because 'pneumonia and SSI join one sentence over a semicolon, the SSI clause opens its own sentence alone, the table reference closes the text even without any clause, none tested takes the form naming no figure, one infection takes the singular, and absent types leave no sentence'
         }
     }
 

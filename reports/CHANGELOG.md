@@ -21,12 +21,12 @@ it as the GitHub Release body, so a release cannot be cut for a version this fil
   at least one day of it and the mean days among the infants exposed to it,
   the quartiles of the reference beside it in the Partner Report and the
   reference's own in the Reference Report. The mean prints without an
-  interval: the calculated datasets carry none for it. The Partner Report now
-  defaults the secondary bloodstream infection table and the antibiotic
-  utilization table on, where both needed a parameter.
+  interval: the calculated datasets carry none for it.
 
 ### Changed
 
+- The Partner Report now defaults the secondary bloodstream infection table
+  and the antibiotic utilization table on, where both needed a parameter.
 - The nosocomial infections section of both reports opens with the counts the
   methods define, the severe infections recorded and the infants among all
   infants with at least one among them. The patients with at least one stand
@@ -44,11 +44,8 @@ it as the GitHub Release body, so a release cannot be cut for a version this fil
   a recognized pathogen or a common commensal, clinical sepsis, and surgical
   and medical NEC. The footnote of the recognized-pathogen row gives the
   bloodstream infections whose positive culture names an infectious agent the
-  list cannot classify, and the surgical NEC footnote gives the criterion of
+  list cannot classify, and   the surgical NEC footnote gives the criterion of
   the NeoIPC Core Protocol, extensive bowel necrosis over 2 cm of bowel.
-
-### Changed
-
 - `Build-ValidationReport.ps1` whose filter matches no department warns, reports the build
   cancelled in its build report, and ends with exit code 1, where it ended with 0 and no report;
   a batch calling it can now tell an empty scope from a build that ran.

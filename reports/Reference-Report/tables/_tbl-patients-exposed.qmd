@@ -80,10 +80,11 @@ if (is.null(pe_data)) {
       table.font.size = if (ci_config == "none") 10 else 9,
       footnotes.marks = "extended"
     ) |>
+    # Every value column but the counts, the interval bounds included: the
+    # merges below splice what these formats print, so an unformatted bound
+    # would reach the cell at full precision and the wrong decimal mark.
     fmt_number(
-      columns = tidyselect::all_of(c(
-        "pooled_exp", "q1_exp", "q2_exp", "q3_exp",
-        "pooled_days", "q1_days", "q2_days", "q3_days")),
+      columns = !tidyselect::any_of(c("count_exp", "count_days")),
       decimals = 1,
       sep_mark = sR$digit_group_separator,
       min_sep_threshold = 2,
