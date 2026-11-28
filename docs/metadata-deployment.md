@@ -479,8 +479,11 @@ deployments:
     byte-identical to the workspace's pinned v1.4.4.) The deployment writes the rule first, which deletes its
     actions, and moves the program's version, so every client reloads the rule as inert; on an instance where the
     rule is live, its dropped actions are an `OrphanDelete` hazard the run acknowledges only once the inerting is
-    confirmed as the intent (section 4). The build ships such an inert rule as an ordinary directory row — a
-    retired rule is dropped from the package only while it is **active**, so the row that makes it inert lands the
+    confirmed as the intent (section 4). Dropping an action removes its own references, not their targets: from
+    2.42 a notification action holds its template through a real foreign key, so the write here leaves the
+    template standing, and deleting a template any action still refers to fails the request whole (section 2.6,
+    item 4). The build ships such an inert rule as an ordinary directory row — a retired rule is dropped from the
+    package only while it is **active**, so the row that makes it inert lands the
     write on the deployed rule's UID, which the row itself must carry: the tooling identifies the rule by name,
     and a row under a different UID is no silent second rule — DHIS2 rejects a second rule of the same name in the
     same program (error `E4057`, `ProgramRuleObjectBundleHook`), which fails the whole deployment. The directory
