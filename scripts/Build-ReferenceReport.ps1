@@ -19,7 +19,8 @@
     DHIS2 username and password. Online set; DataFile mode needs no credentials.
 
 .PARAMETER DataFile
-    Render from this previously exported dataset rather than querying DHIS2.
+    Render from this previously exported dataset rather than querying DHIS2. The floor of
+contributing departments still counts this file, which R reads, so Rscript stays required.
 
 .PARAMETER OutputFormats
     One or more of pdf, html, docx, json. Defaults to pdf.
@@ -334,12 +335,9 @@ if (-not $quartoCmd) {
     throw 'Quarto CLI not found in PATH.'
 }
 
-$rscriptCmd = $null
-if (-not $isDataFileMode) {
-    $rscriptCmd = Get-Command -Name Rscript -ErrorAction SilentlyContinue
-    if (-not $rscriptCmd) {
-        throw 'Rscript not found in PATH.'
-    }
+$rscriptCmd = Get-Command -Name Rscript -ErrorAction SilentlyContinue
+if (-not $rscriptCmd) {
+    throw 'Rscript not found in PATH.'
 }
 
 $OutputFormats = $OutputFormats | ForEach-Object { $_ -split ',' } |
@@ -397,6 +395,11 @@ $authForEnv = if (-not $isDataFileMode) { Resolve-NeoIPCAuth -Token $Token } els
 # (empty) dictionary, so the scriptblock reads the resolved arrays via closure.
 $debugRequested   = $PSBoundParameters.ContainsKey('Debug')
 $verboseRequested = $PSBoundParameters.ContainsKey('Verbose')
+# Snapshot whether the two hide switches were named at all, for the preset overrides in
+# the render scriptblock below: there $PSBoundParameters is the scriptblock's own empty
+# dictionary, so mere presence cannot be asked from inside it.
+$hideIntroductionTextsRequested = $PSBoundParameters.ContainsKey('HideIntroductionTexts')
+$hideMethodsTextsRequested = $PSBoundParameters.ContainsKey('HideMethodsTexts')
 $logLevel =
     if ($Quiet) { 'quiet' }
     elseif ($debugRequested) { 'debug' }
@@ -459,8 +462,14 @@ if ($ReportingCountries) { $qmdParams.reportingCountries = ($ReportingCountries 
 if ($ValidationExceptionFile) { $qmdParams.validationExceptionFile = $ValidationExceptionFile }
 $qmdParams.testUnitFilter = (-not $IncludeTestUnits)
 $qmdParams.defaultPatientFilter = (-not $IncludeNonCorePatients)
-if ($HideIntroductionTexts.IsPresent) { $qmdParams['includeIntroductionTexts'] = 'false' }
-if ($HideMethodsTexts.IsPresent) { $qmdParams['includeMethodsTexts'] = 'false' }
+# The switch's bound value, not mere presence: -HideIntroductionTexts:$false names the
+# parameter explicitly and must lift a preset's false, so the call wins in both directions.
+if ($hideIntroductionTextsRequested) {
+    $qmdParams['includeIntroductionTexts'] = if ($HideIntroductionTexts) { 'false' } else { 'true' }
+}
+if ($hideMethodsTextsRequested) {
+    $qmdParams['includeMethodsTexts'] = if ($HideMethodsTexts) { 'false' } else { 'true' }
+}
 if ($SparseDataThreshold) { $qmdParams['sparseDataThreshold'] = $SparseDataThreshold }
 if ($ConfidenceIntervals) {
     $qmdParams['includeConfidenceIntervals'] = $ConfidenceIntervals -join ','
@@ -559,8 +568,10 @@ try {
     # The floor of contributing departments: pooled figures from a dataset built
     # by too few departments would show their own rates, not a reference, so a
     # build whose dataset falls below the floor warns with the count it found,
-    # renders nothing, and its own finally reports it as cancelled. A -WhatIf
-    # preview has generated no dataset to count, so it previews as planned.
+    # renders nothing, and its own finally reports it as cancelled. An online
+    # -WhatIf preview has generated no dataset to count and previews as planned;
+    # a -DataFile preview names a real file and counts it, which is the same read
+    # the real build would make.
     $floorDatasetPath = if ($isDataFileMode) { $resolvedDataFilePath } else { $jsonFilePath }
     if (Test-Path -LiteralPath $floorDatasetPath) {
         $contributingDepartments = Get-NeoIPCReferenceDatasetDepartmentCount -DatasetFilePath $floorDatasetPath

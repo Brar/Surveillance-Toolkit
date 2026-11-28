@@ -80,40 +80,51 @@ Describe 'Get-NeoIPCReportPreset' {
 }
 
 Describe 'Get-NeoIPCReferenceDatasetDepartmentCount' {
+    # R decodes the serialized dataset, so these cases run only where Rscript is present.
+    # Decided during discovery, so that it can gate -Skip.
+    $script:RscriptAvailable = [bool](Get-Command -Name Rscript -ErrorAction SilentlyContinue)
+
     BeforeAll {
-        # The fixtures carry the shape the report generators really write: Generate-ReferenceData.R
-        # hands the object to jsonlite::serializeJSON, so the file is a data/attributes/class
-        # envelope and every scalar inside it is wrapped in one of its own.
+        # The fixtures come from serializeJSON's own writer, run in R now. The serialized
+        # shape belongs to the installed jsonlite and has shifted across package versions,
+        # so a hand-written fixture can pin a shape no writer writes.
+        $gen = Join-Path $TestDrive 'make-datasets.R'
+        @'
+args <- commandArgs(trailingOnly = TRUE)
+ds <- structure(list(n_departments = 26L, metadata = list(period = "2024-2025")),
+                class = c("neoipcr_ref_ds", "neoipcr_rep_ds", "list"))
+writeLines(jsonlite::serializeJSON(ds), args[[1]])
+nodata <- structure(list(metadata = list(period = "2024-2025")),
+                    class = c("neoipcr_ref_ds", "neoipcr_rep_ds", "list"))
+writeLines(jsonlite::serializeJSON(nodata), args[[2]])
+'@ | Set-Content -LiteralPath $gen -Encoding utf8NoBOM
         $script:WithCount = Join-Path $TestDrive 'with-count.json'
-        '{"data": {"metadata": {"data": {"period": "2024"}, "attributes": null, "class": ["list"]},' +
-            ' "n_departments": {"data": 26, "attributes": null, "class": ["integer"]}},' +
-            ' "attributes": {"names": ["metadata", "n_departments"]},' +
-            ' "class": ["neoipcr_ref_ds", "neoipcr_rep_ds", "list"]}' |
-            Set-Content -LiteralPath $WithCount -Encoding utf8NoBOM
         $script:WithoutCount = Join-Path $TestDrive 'without-count.json'
-        '{"data": {"metadata": {"data": {}, "attributes": null, "class": ["list"]}},' +
-            ' "attributes": {"names": ["metadata"]},' +
-            ' "class": ["neoipcr_ref_ds", "neoipcr_rep_ds", "list"]}' |
-            Set-Content -LiteralPath $WithoutCount -Encoding utf8NoBOM
         $script:PlainJson = Join-Path $TestDrive 'plain.json'
         '{"n_departments": 26}' | Set-Content -LiteralPath $PlainJson -Encoding utf8NoBOM
+        if (Get-Command -Name Rscript -ErrorAction SilentlyContinue) {
+            & Rscript --vanilla $gen $WithCount $WithoutCount
+            if ($LASTEXITCODE -ne 0) {
+                throw "The R fixture writer failed with exit code $LASTEXITCODE."
+            }
+        }
     }
 
-    It 'reads the department count out of the serializeJSON envelope' {
+    It 'reads the department count out of a dataset as its own writer serializes it' -Skip:(-not $script:RscriptAvailable) {
         Get-NeoIPCReferenceDatasetDepartmentCount -DatasetFilePath $WithCount | Should -Be 26
     }
 
-    It 'stops with an error that names the file on a dataset that carries no count' {
+    It 'stops with an error that names the file on a serialized dataset that carries no count' -Skip:(-not $script:RscriptAvailable) {
         $message = ''
         try { Get-NeoIPCReferenceDatasetDepartmentCount -DatasetFilePath $WithoutCount } catch { $message = $_.Exception.Message }
         $message | Should -Not -BeNullOrEmpty
         $message | Should -Match ([regex]::Escape([System.IO.Path]::GetFileName($WithoutCount))) -Because 'the operator must see which file lacks the count'
     }
 
-    It 'refuses a plain JSON document that is no serialized dataset' {
+    It 'refuses a plain JSON document that is no serialized dataset' -Skip:(-not $script:RscriptAvailable) {
         $message = ''
         try { Get-NeoIPCReferenceDatasetDepartmentCount -DatasetFilePath $PlainJson } catch { $message = $_.Exception.Message }
-        $message | Should -Match ([regex]::Escape([System.IO.Path]::GetFileName($PlainJson))) -Because 'a gate may not count a shape no report generator writes'
+        $message | Should -Match ([regex]::Escape([System.IO.Path]::GetFileName($PlainJson))) -Because 'a gate may not count a document R cannot unserialize'
     }
 }
 
@@ -137,11 +148,23 @@ Describe 'The Reference Report edition preset' {
         $edition.includeSurgicalProcedureRateTable | Should -BeFalse
     }
 
-    It 'lists no parameter that the Reference Report document does not declare' {
-        $qmd = Get-Content -LiteralPath (Join-Path $RepoRoot 'reports/Reference-Report/Reference-Report.qmd') -Raw
+    It 'lists no parameter that the Reference Report document does not declare' -Skip:(-not (Get-Module -ListAvailable powershell-yaml)) {
+        # The document's parameter block is YAML, so it is read with the YAML parser the
+        # module tests use elsewhere, not with a regex over its text.
+        Import-Module powershell-yaml
+        $lines = Get-Content -LiteralPath (Join-Path $RepoRoot 'reports/Reference-Report/Reference-Report.qmd')
+        $open = [Array]::FindIndex([string[]]$lines, [Predicate[string]] { param($l) $l -match '^---\s*$' })
+        if ($open -lt 0) { throw 'the Reference Report document carries no YAML frontmatter to read its parameters from' }
+        $close = -1
+        for ($i = $open + 1; $i -lt $lines.Count; $i++) {
+            if ($lines[$i] -match '^---\s*$') { $close = $i; break }
+        }
+        if ($close -lt 0) { throw 'the Reference Report document has no closing YAML frontmatter marker' }
+        $document = ConvertFrom-Yaml (($lines[($open + 1)..($close - 1)] -join [Environment]::NewLine))
+        $declared = @($document.params.Keys)
         $edition = ((Get-Content -LiteralPath $ReferencePresetsPath -Raw) | ConvertFrom-Json).presets.'class-range-edition'
         foreach ($key in @($edition.PSObject.Properties.Name)) {
-            $qmd | Should -Match ("(?m)^  {0}:" -f [regex]::Escape($key)) -Because "the preset may only set a parameter the document declares: $key"
+            $declared | Should -Contain $key -Because 'the preset may only set a parameter the document declares'
         }
     }
 

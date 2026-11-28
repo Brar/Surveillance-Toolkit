@@ -68,12 +68,12 @@ Read the number of departments a serialized reference dataset was built from.
 .DESCRIPTION
 Reads the n_departments field a serialized NeoIPC reference dataset carries: the number of
 distinct departments its enrolments sit in, which is the count of departments whose patient
-records ended their surveillance within the dataset's period. The dataset files the report
-generators write come from jsonlite::serializeJSON, which wraps the R object in a
-data/attributes/class envelope and every scalar in one of its own, so the field is read as
-data.n_departments and an integer value is unwrapped once more. A file that is no serialized
-dataset, or carries no n_departments within its data, is refused with an error naming the
-file, since a build gate cannot decide on a count it cannot read.
+records ended their surveillance within the dataset's period. The count is decoded in R by
+jsonlite::unserializeJSON, the reader of the format jsonlite::serializeJSON writes: the
+serialized shape is jsonlite's own and differs across its package versions, and only R's
+reader tracks its writer. A file that is no serialized dataset, or carries no
+n_departments within it, is refused with an error naming the file, since a build gate cannot
+decide on a count it cannot read. Rscript must be on PATH.
 
 .PARAMETER DatasetFilePath
 The dataset's JSON file, path of an existing file.
@@ -97,21 +97,21 @@ function Get-NeoIPCReferenceDatasetDepartmentCount {
     if (-not (Test-Path -LiteralPath $DatasetFilePath)) {
         throw "The dataset file '$DatasetFilePath' does not exist."
     }
-    $document = (Get-Content -LiteralPath $DatasetFilePath -Raw) | ConvertFrom-Json
-    # serializeJSON's envelope puts the object's fields under data and names its class;
-    # a document without that envelope is no serialized dataset and carries no count this
-    # gate may trust.
-    if (-not $document.PSObject.Properties['data'] -or -not $document.PSObject.Properties['class']) {
-        throw "The dataset file '$(Split-Path -Leaf $DatasetFilePath)' is not a serialized reference dataset."
+    $rscript = Get-Command -Name Rscript -ErrorAction SilentlyContinue
+    if (-not $rscript) {
+        throw "Reading the department count of '$(Split-Path -Leaf $DatasetFilePath)' needs Rscript on PATH."
     }
-    $fields = $document.data
-    $count = $fields.PSObject.Properties['n_departments']
-    if ($null -eq $count -or $null -eq $count.Value) {
+    $decoder = 'p <- commandArgs(trailingOnly = TRUE)[[1]]; dataset <- jsonlite::unserializeJSON(readLines(p, warn = FALSE)); count <- dataset$n_departments; if (is.null(count)) quit(save = "no", status = 3); cat(as.character(count))'
+    $reported = @(& $rscript.Source --vanilla -e $decoder $DatasetFilePath 2>&1 | ForEach-Object { "$_" })
+    if ($LASTEXITCODE -eq 3) {
         throw "The dataset file '$(Split-Path -Leaf $DatasetFilePath)' carries no n_departments field."
     }
-    $value = $count.Value
-    if ($value -is [pscustomobject] -and $value.PSObject.Properties['data']) {
-        $value = $value.data
+    if ($LASTEXITCODE -ne 0) {
+        throw "The dataset file '$(Split-Path -Leaf $DatasetFilePath)' is not a serialized reference dataset (R reported: $(($reported | Where-Object { $_ } | Select-Object -First 1)))."
     }
-    return [int]$value
+    $text = ($reported -join '').Trim()
+    if ($text -notmatch '^-?\d+$') {
+        throw "The dataset file '$(Split-Path -Leaf $DatasetFilePath)' gave no whole-number department count (R printed: '$text')."
+    }
+    return [int]$text
 }

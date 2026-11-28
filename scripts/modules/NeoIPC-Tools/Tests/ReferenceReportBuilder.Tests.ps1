@@ -24,6 +24,9 @@ BeforeAll {
     # Shape-valid version-2 personal access token, per Test-DHIS2PersonalAccessToken; the checksum
     # is DHIS2's to verify and nothing is ever sent, so this synthetic value names no credential.
     $script:SyntheticToken = 'd2p_' + ('a' * 44) + 'ABC123'
+    # The floor gate decodes the dataset in R, so the stub Rscript must forward those calls
+    # to the real one; the path is resolved here, before any run leads PATH with the stubs.
+    $script:RealRscript = (Get-Command -Name Rscript -ErrorAction SilentlyContinue).Source
 
     # A child pwsh whose PATH leads with the stubs, run with -File; returns the child's exit code,
     # stdout, and stderr. The fake-* environment variables tell the stubs where to log and what to
@@ -35,10 +38,12 @@ BeforeAll {
         $savedQuartoLog = ${env:NEOIPC_FAKE_QUARTO_LOG}
         $savedRscriptLog = ${env:NEOIPC_FAKE_RSCRIPT_LOG}
         $savedDataset = ${env:NEOIPC_FAKE_RSCRIPT_DATASET}
+        $savedRealRscript = ${env:NEOIPC_FAKE_RSCRIPT_REAL}
         try {
             $env:PATH = "$StubsDir$([System.IO.Path]::PathSeparator)$savedPath"
             ${env:NEOIPC_FAKE_QUARTO_LOG} = $QuartoLog
             ${env:NEOIPC_FAKE_RSCRIPT_LOG} = $RscriptLog
+            ${env:NEOIPC_FAKE_RSCRIPT_REAL} = $RealRscript
             if ($DatasetForRscript) { ${env:NEOIPC_FAKE_RSCRIPT_DATASET} = $DatasetForRscript }
             else { [Environment]::SetEnvironmentVariable('NEOIPC_FAKE_RSCRIPT_DATASET', [NullString]::Value, 'Process') }
             $stdout = & $PwshPath -NoProfile -NonInteractive -File $BuilderPath @Arguments 2>&1
@@ -49,7 +54,7 @@ BeforeAll {
         }
         finally {
             $env:PATH = $savedPath
-            $restore = @{ NEOIPC_FAKE_QUARTO_LOG = $savedQuartoLog; NEOIPC_FAKE_RSCRIPT_LOG = $savedRscriptLog; NEOIPC_FAKE_RSCRIPT_DATASET = $savedDataset }
+            $restore = @{ NEOIPC_FAKE_QUARTO_LOG = $savedQuartoLog; NEOIPC_FAKE_RSCRIPT_LOG = $savedRscriptLog; NEOIPC_FAKE_RSCRIPT_DATASET = $savedDataset; NEOIPC_FAKE_RSCRIPT_REAL = $savedRealRscript }
             foreach ($name in $restore.Keys) {
                 if ($null -eq $restore[$name]) { [Environment]::SetEnvironmentVariable($name, [NullString]::Value, 'Process') }
                 else { [Environment]::SetEnvironmentVariable($name, $restore[$name], 'Process') }
@@ -76,7 +81,26 @@ BeforeAll {
     }
 }
 
-Describe 'The builder edition surface' {
+# Decided during discovery, so that it can gate -Skip: every build below runs the floor
+# gate, which decodes its dataset in R.
+$script:RscriptAvailable = [bool](Get-Command -Name Rscript -ErrorAction SilentlyContinue)
+
+Describe 'The builder edition surface: parameter surface' {
+    It 'has a Preset parameter whose tab-completion lists the presets.json names' {
+        $command = Get-Command -Name $BuilderPath
+        $command.Parameters.Keys | Should -Contain 'Preset'
+        $completer = @($command.Parameters['Preset'].Attributes |
+            Where-Object { $_ -is [System.Management.Automation.ArgumentCompleterAttribute] })
+        $completer.Count | Should -Be 1
+        # Completers arrive as an AutocompleteInfo wrapping the script block; call the block as
+        # tab-completion would and read the preset names it offers.
+        $scriptBlock = $completer[0].ScriptBlock
+        $names = @(& $scriptBlock 'Build-ReferenceReport.ps1' 'Preset' '' $null @{})
+        $names | Should -Contain 'class-range-edition'
+    }
+}
+
+Describe 'The builder edition surface: render decisions' -Skip:(-not $script:RscriptAvailable) {
     BeforeAll {
         $script:StubsDir = Join-Path $TestDrive 'stubs'
         New-Item -ItemType Directory -Path $StubsDir | Out-Null
@@ -90,6 +114,12 @@ exit 0
 #!/usr/bin/env pwsh
 #Requires -Version 7.6
 Add-Content -LiteralPath ${env:NEOIPC_FAKE_RSCRIPT_LOG} -Value $args
+# Only the generation call is stubbed: an expression call is the floor gate decoding a
+# dataset in R, which only the real Rscript can answer.
+if ($args -ccontains '-e') {
+    & $env:NEOIPC_FAKE_RSCRIPT_REAL @args
+    exit $LASTEXITCODE
+}
 $fileIndex = [Array]::IndexOf($args, '--file')
 if ($fileIndex -ge 0 -and $fileIndex + 1 -lt $args.Count) {
     Copy-Item -LiteralPath ${env:NEOIPC_FAKE_RSCRIPT_DATASET} -Destination $args[$fileIndex + 1] -Force
@@ -100,29 +130,24 @@ exit 0
         $script:QuartoLog = Join-Path $TestDrive 'quarto-args.txt'
         $script:RscriptLog = Join-Path $TestDrive 'rscript-args.txt'
 
-        # The datasets carry the serializeJSON envelope Generate-ReferenceData.R really writes:
-        # fields under data, each scalar wrapped in a data/attributes/class envelope of its own.
+        # The datasets are what Generate-ReferenceData.R's writer really produces, made here
+        # by the same R that reads them: the serialized shape belongs to the installed
+        # jsonlite and has shifted across package versions, so a hand-written fixture can
+        # pin a shape no writer writes.
+        $gen = Join-Path $TestDrive 'make-datasets.R'
+        @'
+args <- commandArgs(trailingOnly = TRUE)
+writeLines(jsonlite::serializeJSON(structure(list(n_departments = 5L),
+             class = c("neoipcr_ref_ds", "neoipcr_rep_ds", "list"))), args[[1]])
+writeLines(jsonlite::serializeJSON(structure(list(n_departments = 4L),
+             class = c("neoipcr_ref_ds", "neoipcr_rep_ds", "list"))), args[[2]])
+'@ | Set-Content -LiteralPath $gen -Encoding utf8NoBOM
         $script:Dataset5 = Join-Path $TestDrive 'dataset-5.json'
-        '{"data": {"n_departments": {"data": 5, "attributes": null, "class": ["integer"]}},' +
-            ' "attributes": {"names": ["n_departments"]},' +
-            ' "class": ["neoipcr_ref_ds", "neoipcr_rep_ds", "list"]}' | Set-Content -LiteralPath $Dataset5 -Encoding utf8NoBOM
-        $script:Dataset2 = Join-Path $TestDrive 'dataset-2.json'
-        '{"data": {"n_departments": {"data": 2, "attributes": null, "class": ["integer"]}},' +
-            ' "attributes": {"names": ["n_departments"]},' +
-            ' "class": ["neoipcr_ref_ds", "neoipcr_rep_ds", "list"]}' | Set-Content -LiteralPath $Dataset2 -Encoding utf8NoBOM
-    }
-
-    It 'has a Preset parameter whose tab-completion lists the presets.json names' {
-        $command = Get-Command -Name $BuilderPath
-        $command.Parameters.Keys | Should -Contain 'Preset'
-        $completer = @($command.Parameters['Preset'].Attributes |
-            Where-Object { $_ -is [System.Management.Automation.ArgumentCompleterAttribute] })
-        $completer.Count | Should -Be 1
-        # Completers arrive as an AutocompleteInfo wrapping the script block; call the block as
-        # tab-completion would and read the preset names it offers.
-        $scriptBlock = $completer[0].ScriptBlock
-        $names = @(& $scriptBlock 'Build-ReferenceReport.ps1' 'Preset' '' $null @{})
-        $names | Should -Contain 'class-range-edition'
+        $script:Dataset4 = Join-Path $TestDrive 'dataset-4.json'
+        & Rscript --vanilla $gen $Dataset5 $Dataset4
+        if ($LASTEXITCODE -ne 0) {
+            throw "The R fixture writer failed with exit code $LASTEXITCODE."
+        }
     }
 
     Context 'DataFile mode renders with the preset applied' {
@@ -164,6 +189,22 @@ exit 0
         }
     }
 
+    Context 'DataFile mode lifts a preset false with the switch given false outright' {
+        BeforeAll {
+            Remove-Item -LiteralPath $QuartoLog -ErrorAction SilentlyContinue
+            $script:Out = Join-Path $TestDrive 'out-explicitfalse'
+            $script:Result = & $InvokeBuilder $StubsDir $QuartoLog $RscriptLog $null @(
+                '-DataFile', $Dataset5, '-OutputDir', $Out, '-Preset', 'minimal', '-HideIntroductionTexts:$false'
+            )
+        }
+
+        It 'renders the introduction texts the preset turned off' {
+            $Result.Exit | Should -Be 0
+            $params = & $QuartoParams $QuartoLog
+            @($params | Where-Object { $_ -like 'includeIntroductionTexts:*' }) | Should -BeExactly 'includeIntroductionTexts:true'
+        }
+    }
+
     It 'refuses a name the presets file lacks, without rendering' {
         Remove-Item -LiteralPath $QuartoLog -ErrorAction SilentlyContinue
         $Out = Join-Path $TestDrive 'out-badname'
@@ -181,13 +222,15 @@ exit 0
         BeforeAll {
             Remove-Item -LiteralPath $QuartoLog -ErrorAction SilentlyContinue
             $script:Out = Join-Path $TestDrive 'out-floor'
+            # A dataset one department below the floor, and one of exactly five below: the
+            # pair pins the floor at five, where 2 and 5 would also pass a floor of four.
             $script:Result = & $InvokeBuilder $StubsDir $QuartoLog $RscriptLog $null @(
-                '-DataFile', $Dataset2, '-OutputDir', $Out, '-JsonReport'
+                '-DataFile', $Dataset4, '-OutputDir', $Out, '-JsonReport'
             )
         }
 
-        It 'ends the build with a nonzero code' {
-            $Result.Exit | Should -Not -Be 0
+        It 'ends the build with the builder''s cancellation exit code' {
+            $Result.Exit | Should -Be 1
         }
 
         It 'warns about the department count' {
@@ -259,7 +302,7 @@ exit 0
         BeforeAll {
             Remove-Item -LiteralPath $QuartoLog, $RscriptLog -ErrorAction SilentlyContinue
             $script:Out = Join-Path $TestDrive 'out-online-floor'
-            $script:Result = & $InvokeBuilder $StubsDir $QuartoLog $RscriptLog $Dataset2 @(
+            $script:Result = & $InvokeBuilder $StubsDir $QuartoLog $RscriptLog $Dataset4 @(
                 '-Token', $SyntheticToken, '-OutputDir', $Out, '-JsonReport',
                 '-ReportingPeriodFrom', '2024-01-01', '-ReportingPeriodTo', '2026-10-31'
             )
@@ -267,7 +310,7 @@ exit 0
 
         It 'never reaches the render' {
             Test-Path -LiteralPath $QuartoLog | Should -BeFalse
-            $Result.Exit | Should -Not -Be 0
+            $Result.Exit | Should -Be 1
         }
 
         It 'reports the build as cancelled' {
