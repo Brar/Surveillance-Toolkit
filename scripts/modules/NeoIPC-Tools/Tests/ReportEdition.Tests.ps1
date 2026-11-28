@@ -181,10 +181,18 @@ writeLines(jsonlite::serializeJSON(partial), args[[5]])
     It 'quotes R error, not a line printed before it' -Skip:(-not $script:RscriptAvailable) {
         # A failing R often prints a startup warning before its error; the refusal must
         # carry the error, which arrives on stderr.
+        # A PATH lookup on Windows takes Rscript.cmd through PATHEXT; on Unix it takes
+        # only the bare name with the executable bit, and its shebang needs LF endings.
         $stubDir = Join-Path $TestDrive 'stub-rscript'
         New-Item -ItemType Directory -Path $stubDir | Out-Null
-        "@echo off`r`necho During startup - Warning messages:`r`necho cannot open the connection at line 3 1>&2`r`nexit /b 1" |
-            Set-Content -LiteralPath (Join-Path $stubDir 'Rscript.cmd') -Encoding ascii
+        if ($IsWindows) {
+            "@echo off`r`necho During startup - Warning messages:`r`necho cannot open the connection at line 3 1>&2`r`nexit /b 1" |
+                Set-Content -LiteralPath (Join-Path $stubDir 'Rscript.cmd') -Encoding ascii
+        } else {
+            "#!/bin/sh`necho 'During startup - Warning messages:'`necho 'cannot open the connection at line 3' >&2`nexit 1" |
+                Set-Content -LiteralPath (Join-Path $stubDir 'Rscript') -Encoding ascii
+            chmod +x (Join-Path $stubDir 'Rscript')
+        }
         $savedPath = $env:PATH
         try {
             $env:PATH = "$stubDir$([System.IO.Path]::PathSeparator)$savedPath"
