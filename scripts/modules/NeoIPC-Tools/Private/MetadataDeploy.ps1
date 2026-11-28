@@ -692,15 +692,20 @@ function Test-NeoIPCDeployInertRule {
 }
 
 function Assert-NeoIPCInertRetirementWrite {
-    # A retired rule written with condition 'false' but actions still attached is a mis-written retirement, not an
+    # A retired rule written with condition 'false' but actions still attached is a miswritten retirement, not an
     # inert write: every consumer reads it as active (so the generated paths shed the retirement write in silence),
     # while a directory ships its rows verbatim and the deployment then re-creates the dead actions under the
-    # supposedly-inert rule. The retirement's first write is either complete — 'false', no actions — or the live
-    # rule; no build path ships the intermediate, so each refuses it here rather than reading it as one state or
-    # the other.
+    # supposedly-inert rule. A wrongly-cased spelling ('False') is the same fault in another shape: the grammar
+    # registers the constant exactly lowercase, so DHIS2 cannot even parse the condition — the row is neither the
+    # live rule nor the inert write. No build path ships either intermediate, so each refuses it here rather than
+    # reading it as one state or the other.
     [CmdletBinding()]
     param([Parameter(Mandatory)][System.Collections.IDictionary]$Rule)
-    if (([string]$Rule['condition']).Trim() -ceq 'false' -and (Get-NeoIPCDeployRefIdList $Rule['programRuleActions']).Count -gt 0) {
+    $condition = ([string]$Rule['condition']).Trim()
+    if ($condition -ieq 'false' -and $condition -cne 'false') {
+        throw "Program rule '$([string]$Rule['name'])' carries condition '$([string]$Rule['condition'])', which DHIS2 does not read as boolean false: its grammar registers the constant exactly lowercase 'false', so the rule is neither live nor inert; write the inert condition exactly 'false' or restore the rule's live condition."
+    }
+    if ($condition -ceq 'false' -and (Get-NeoIPCDeployRefIdList $Rule['programRuleActions']).Count -gt 0) {
         throw "Program rule '$([string]$Rule['name'])' is written inert (condition 'false') but still carries actions; the retirement's inert write carries none, so give the row its actions' removal or its live condition."
     }
 }

@@ -723,7 +723,7 @@ function Get-NeoIPCMetadataGeneratedKeys {
     # A retired rule is shed while ACTIVE — the per-slot resistance rules supersede it; an inert copy is the
     # retirement's first write and ships. Resolve, within the package, two id sets the two consumers need separately:
     #   - RetiredRuleIds   = ids of RETIRED rules — the emit and the comparator exclude their actions; the rules
-    #     themselves the emit drops while active and the comparator skips either way, by name;
+    #     themselves the emit drops while active and the comparator judges per its retired-rule rules, by name;
     #   - GeneratedRuleIds = ids of ALL generated rules (matrix + retired) — the classified-diff gate selects these
     #     + their actions to validate the generators' output against the deployed export.
     $retiredNames = [System.Collections.Generic.HashSet[string]]::new($ordinal)
@@ -754,9 +754,9 @@ function Test-NeoIPCMetadataGeneratedExcluded {
     # (slot-normalized name in RetiredRuleNames, not yet inert — an inert copy is the retirement's first write and
     # ships as a row), any action owned by a retired rule (owning programRule id in RetiredRuleIds, dropped
     # whether the rule is active or inert), and the antibiotic option-group
-    # domain (code shape). The comparator shares the predicate for actions but holds a retired RULE out of the
-    # id-matched compare either way, so a directory's inert copy and an export's live one never compare (a
-    # both-inert pair is still compared by name, case 3 of Compare-NeoIPCMetadataCore); $GeneratedKeys is one
+    # domain (code shape). The comparator shares the predicate for actions; for a retired RULE it classifies the
+    # row's retirement shape and holds out every pair with an active side, so a shipped inert row that is lost or
+    # un-inerted opposite it surfaces (rule 3 of Compare-NeoIPCMetadataCore); $GeneratedKeys is one
     # Get-NeoIPCMetadataGeneratedKeys context.
     [CmdletBinding()]
     [OutputType([bool])]
@@ -770,8 +770,8 @@ function Test-NeoIPCMetadataGeneratedExcluded {
         # the directory may carry an INERT copy (condition 'false', no actions), the first deployment of the
         # two-deployment retirement (docs/metadata-deployment.md §5), and that row must ship so the deployment
         # lands the inert write on the deployed rule's UID — while a retired rule's actions are shed either way.
-        # A retired rule written inert but still carrying actions is no inert write: Assert-NeoIPCInertRetirementWrite
-        # refuses it rather than shedding the retirement in silence.
+        # A retired rule written inert but still carrying actions, or with a wrongly-cased inert condition, is no
+        # inert write: Assert-NeoIPCInertRetirementWrite refuses it rather than shedding the retirement in silence.
         # (2) The antibiotic option-group domain, generated from the curation CSVs.
         # ($GeneratedKeys carries the per-package retired-rule ids for the action-side check.)
         'programRules'         {
@@ -1060,33 +1060,45 @@ function Compare-NeoIPCMetadataCore {
     $domainSetIds = Get-NeoIPCMetadataDomainOptionSetIds -Package $Reference
     $domainSetIds.UnionWith((Get-NeoIPCMetadataDomainOptionSetIds -Package $Difference))
     # The RETIRED rule (superseded; docs/metadata-deployment.md §5) is held apart from the id-matched compare and
-    # judged by NAME, so the legitimate shapes of the two-deployment retirement are not differences: (1) an ACTIVE
-    # copy is skipped on either side — the export holds it active, and a directory never emits an active retired
-    # rule; (2) an INERT copy is likewise skipped unless the other side carries the same rule inert too; (3) when
-    # BOTH sides carry it inert, their copies are compared by name, so drift in the shipped row — a wrong UID
-    # among its fields included — surfaces as Changed. RetiredRuleNames is package-independent; RetiredRuleIds
-    # (the retired rule's name-less actions by owning-rule id) is resolved per side, so union it — the export side
-    # carries the actions, a directory side does not. The matrix families ARE materialized, so they are compared
-    # like any other object — not skipped here.
+    # judged by NAME, its retirement shape classified per side: 'active' — the live rule the export side
+    # legitimately still holds; 'inert' — the shipped retirement write; 'misspelled' and 'miswritten' — the
+    # intermediates no build path ships, Read-NeoIPCMetadataDirectoryPackage and Assert-NeoIPCInertRetirementWrite
+    # refusing them on the paths that build. Only the shapes the retirement legitimately forms are
+    # non-differences, three rules: rule 1, an ACTIVE copy on either side holds the name out — the export holds
+    # the rule active while a directory carries it inert or not yet at all; rule 2, two INERT copies are compared
+    # by name, so drift in the shipped row — a wrong UID among its fields included — surfaces as Changed; rule 3,
+    # an INERT copy opposite anything else — missing, misspelled, miswritten — is a difference, so a shipped row
+    # cannot be lost or un-inerted in silence.
+    # RetiredRuleNames is package-independent; RetiredRuleIds (the retired rule's name-less actions by owning-rule
+    # id) is resolved per side, so union it — the export side carries the actions, a directory side does not. The
+    # matrix families ARE materialized, so they are compared like any other object — not skipped here.
     $generatedKeys = Get-NeoIPCMetadataGeneratedKeys -Package $Reference
     $generatedKeys.RetiredRuleIds.UnionWith((Get-NeoIPCMetadataGeneratedKeys -Package $Difference).RetiredRuleIds)
     $retiredRuleNames = $generatedKeys.RetiredRuleNames
     function Test-NeoIPCRetiredRuleName($o) { $retiredRuleNames.Contains((ConvertTo-NeoIPCSubstanceUnpaddedName ([string]$o['name']))) }
+    function Get-NeoIPCRetiredRuleShape($o) {
+        $condition = ([string]$o['condition']).Trim()
+        if ($condition -ieq 'false' -and $condition -cne 'false') { return 'misspelled' }
+        if (Test-NeoIPCDeployInertRule -Rule $o) { return 'inert' }
+        if ($condition -ceq 'false') { return 'miswritten' }      # exact 'false' with actions still attached
+        'active'
+    }
+    function Add-NeoIPCRetiredRule([System.Collections.IDictionary]$Into, $o) {
+        $n = (ConvertTo-NeoIPCSubstanceUnpaddedName ([string]$o['name']))
+        $Into[$n] = [pscustomobject]@{ Shape = (Get-NeoIPCRetiredRuleShape $o); Id = [string]$o['id']; Object = (Remove-NeoIPCMetadataNoise -Object $o) }
+    }
     foreach ($type in $types) {
         if (-not $script:NeoIPCMetadataTypeMaps.Contains($type)) { continue }                  # out-of-scope top-level key
         if ($script:NeoIPCMetadataTypeMaps[$type].Nesting -eq 'NestedOnly') { continue }        # compared via its parent
         if ($script:NeoIPCMetadataExcludedTypes -contains $type -or $script:NeoIPCMetadataDeferredTypes -contains $type) { continue }
-        # Case 3's held-out inert copies, keyed by slot-normalized name (never by id: an id drift is a finding).
-        $refRetiredInert = @{}
-        $difRetiredInert = @{}
+        # The retired rule's per-side shapes, keyed by slot-normalized name (never by id: an id drift is a finding).
+        $refRetired = @{}
+        $difRetired = @{}
         $refById = @{}
         foreach ($o in @($Reference[$type])) {
             if ($o -isnot [System.Collections.IDictionary] -or $script:NeoIPCMetadataDefaultUids -contains [string]$o['id']) { continue }
             if (Test-NeoIPCMetadataDomainExcluded -Type $type -Object $o -DomainSetIds $domainSetIds) { continue }
-            if ($type -eq 'programRules' -and (Test-NeoIPCRetiredRuleName $o)) {
-                if (Test-NeoIPCDeployInertRule -Rule $o) { $refRetiredInert[(ConvertTo-NeoIPCSubstanceUnpaddedName ([string]$o['name']))] = (Remove-NeoIPCMetadataNoise -Object $o) }
-                continue
-            }
+            if ($type -eq 'programRules' -and (Test-NeoIPCRetiredRuleName $o)) { Add-NeoIPCRetiredRule $refRetired $o; continue }
             if (Test-NeoIPCMetadataGeneratedExcluded -Type $type -Object $o -GeneratedKeys $generatedKeys) { continue }
             $refById[[string]$o['id']] = (Remove-NeoIPCMetadataNoise -Object $o)
         }
@@ -1094,10 +1106,7 @@ function Compare-NeoIPCMetadataCore {
         foreach ($o in @($Difference[$type])) {
             if ($o -isnot [System.Collections.IDictionary] -or $script:NeoIPCMetadataDefaultUids -contains [string]$o['id']) { continue }
             if (Test-NeoIPCMetadataDomainExcluded -Type $type -Object $o -DomainSetIds $domainSetIds) { continue }
-            if ($type -eq 'programRules' -and (Test-NeoIPCRetiredRuleName $o)) {
-                if (Test-NeoIPCDeployInertRule -Rule $o) { $difRetiredInert[(ConvertTo-NeoIPCSubstanceUnpaddedName ([string]$o['name']))] = (Remove-NeoIPCMetadataNoise -Object $o) }
-                continue
-            }
+            if ($type -eq 'programRules' -and (Test-NeoIPCRetiredRuleName $o)) { Add-NeoIPCRetiredRule $difRetired $o; continue }
             if (Test-NeoIPCMetadataGeneratedExcluded -Type $type -Object $o -GeneratedKeys $generatedKeys) { continue }
             $difById[[string]$o['id']] = (Remove-NeoIPCMetadataNoise -Object $o)
         }
@@ -1107,15 +1116,22 @@ function Compare-NeoIPCMetadataCore {
             if (-not $difById.ContainsKey($id)) { continue }
             $a = (ConvertTo-NeoIPCMetadataCanonical $refById[$id]) | ConvertTo-Json -Compress -Depth 40
             $b = (ConvertTo-NeoIPCMetadataCanonical $difById[$id]) | ConvertTo-Json -Compress -Depth 40
-            if ($a -ne $b) { $diffs.Add([pscustomobject]@{ Type = $type; Id = $id; Kind = 'Changed'; Reference = $a; Difference = $b }) }
+            # Case-SENSITIVE, matching the ordinal keying of the canonicalization: metadata values are case-
+            # sensitive (a UID or a condition 'false' is not 'False'), so a case-only drift is a change, not noise.
+            if ($a -cne $b) { $diffs.Add([pscustomobject]@{ Type = $type; Id = $id; Kind = 'Changed'; Reference = $a; Difference = $b }) }
         }
         if ($type -eq 'programRules') {
-            # Case 3: both sides carry the retired rule inert — compare the shipped row against its counterpart.
-            foreach ($n in $refRetiredInert.Keys) {
-                if (-not $difRetiredInert.ContainsKey($n)) { continue }
-                $a = (ConvertTo-NeoIPCMetadataCanonical $refRetiredInert[$n]) | ConvertTo-Json -Compress -Depth 40
-                $b = (ConvertTo-NeoIPCMetadataCanonical $difRetiredInert[$n]) | ConvertTo-Json -Compress -Depth 40
-                if ($a -ne $b) { $diffs.Add([pscustomobject]@{ Type = 'programRules'; Id = [string]$refRetiredInert[$n]['id']; Kind = 'Changed'; Reference = $a; Difference = $b }) }
+            foreach ($n in @($refRetired.Keys + $difRetired.Keys) | Select-Object -Unique) {
+                $r = $refRetired[$n]
+                $d = $difRetired[$n]
+                if (($r -and $r.Shape -eq 'active') -or ($d -and $d.Shape -eq 'active')) { continue }   # rule 1
+                if (-not $r) { $diffs.Add([pscustomobject]@{ Type = 'programRules'; Id = $d.Id; Kind = 'Added' }); continue }
+                if (-not $d) { $diffs.Add([pscustomobject]@{ Type = 'programRules'; Id = $r.Id; Kind = 'Removed' }); continue }
+                $a = (ConvertTo-NeoIPCMetadataCanonical $r.Object) | ConvertTo-Json -Compress -Depth 40
+                $b = (ConvertTo-NeoIPCMetadataCanonical $d.Object) | ConvertTo-Json -Compress -Depth 40
+                # Case-sensitive here as in the id-matched compare above — it is what tells the inert write's 'false'
+                # from a side that came back 'False'.
+                if ($a -cne $b) { $diffs.Add([pscustomobject]@{ Type = 'programRules'; Id = $r.Id; Kind = 'Changed'; Reference = $a; Difference = $b }) }
             }
         }
     }

@@ -110,7 +110,7 @@ function Add-NeoIPCGeneratedOptionMetadata {
         Splice the still-generated OPTION-DOMAIN families into a directory-sourced config — export-free.
     .DESCRIPTION
         The export-independent build path. The matrix families (per-slot DEs / PRVs / rules / actions) are now
-        MATERIALISED in the directory config, so only the option-domain stays generated from its richer directory
+        MATERIALIZED in the directory config, so only the option-domain stays generated from its richer directory
         source: the NEOIPC_PATHOGENS option set + options (from the infectious-agent YAML + the UID sidecar), the
         NEOIPC_ANTIMICROBIAL_SUBSTANCES option set + options, the 34 ATC-4 + 3 AWaRe option groups, and the
         ATC5 / WHO_AWARE option-group-sets (from the antibiotics curation CSVs, whose `uid` columns carry the

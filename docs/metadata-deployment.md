@@ -476,19 +476,24 @@ deployments:
    spelling like `False` is a parse failure and never fires, no casing slips a live rule past either gate, and the
    tooling reads only lowercase `false` as inert; and an inert rule lists no actions, so there is no effect for
    any engine to produce. (rule-engine v3.8.2 declares expression-parser 1.4.3, whose grammar lines are
-   byte-identical to the workspace's pinned v1.4.4.) The deployment writes the rule first, which deletes its
-   actions, and moves the program's version, so every client reloads the rule as inert; on an instance where the
+    byte-identical to the workspace's pinned v1.4.4.) The deployment writes the rule first, which deletes its
+    actions, and moves the program's version, so every client reloads the rule as inert; on an instance where the
     rule is live, its dropped actions are an `OrphanDelete` hazard the run acknowledges only once the inerting is
-    confirmed as the intent (section 4). The build ships such an inert rule as an ordinary directory row — a retired rule is
-   dropped from the package only while it is **active**, so the row that makes it inert lands the write on the
-   deployed rule's UID, which the row itself must carry: the tooling identifies the rule by name, and a row under
-   a different UID becomes no second live rule — DHIS2 rejects a second rule of the same name in the same program
-   (error `E4057`, `ProgramRuleObjectBundleHook`), which fails the whole deployment. A row that writes the rule
-   inert while still carrying actions is no inert write but a mis-written retirement: every build path refuses it,
-   since shipping it would re-create the dead actions the inerting is there to remove. The round-trip comparator
-   does not compare the retired rule where the two sides legitimately differ — one side carries it active, the
-   other inert or absent, the shapes of this two-step retirement — and does compare it where both sides carry it
-   inert, so drift in the shipped row, its UID among its fields, surfaces as a change.
+    confirmed as the intent (section 4). The build ships such an inert rule as an ordinary directory row — a
+    retired rule is dropped from the package only while it is **active**, so the row that makes it inert lands the
+    write on the deployed rule's UID, which the row itself must carry: the tooling identifies the rule by name,
+    and a row under a different UID is no silent second rule — DHIS2 rejects a second rule of the same name in the
+    same program (error `E4057`, `ProgramRuleObjectBundleHook`), which fails the whole deployment. The directory
+    holds a retired rule in no other shape: a wrongly-cased spelling such as `False` is no false condition at all
+    (a parse failure, as above), a row still carrying its actions is no inert write, a live row ships live
+    metadata so the deployment silently does not retire the rule, and a second row of the name is no retirement
+    either — so reading a directory refuses all of them, and the generated paths refuse the wrongly-cased and
+    action-carrying shapes with the same diagnosis. The round-trip comparator holds the retired rule out where the
+    two sides legitimately differ — one side carries it active, the other inert or absent, the shapes of this
+    two-step retirement — and compares it by name wherever neither side holds it active, case-sensitively like any
+    metadata value, so drift in the shipped row, its UID among its fields, surfaces as a change and a side
+    carrying it inert opposite a row lost or un-inerted is a difference; the live opposite is the retirement's
+    own shape and is held out, and a directory that carried the rule live is already refused on read.
 2. A later deployment, once clients have synchronized, lists the rule in `-Delete`. A rule in `-Delete` that is not
    inert on the instance is an `ActiveRuleDelete` hazard, deleted only when that is acknowledged. That deletion needs
    the package of a **later** release, one that no longer carries the rule at all: the deployment refuses a

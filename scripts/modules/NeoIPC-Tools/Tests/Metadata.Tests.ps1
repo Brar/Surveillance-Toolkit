@@ -76,7 +76,7 @@ InModuleScope 'NeoIPC-Tools' {
             $o2 = ConvertFrom-NeoIPCMetadataJsonText -Json ($back | ConvertTo-Json -Depth 40)
             $a = (ConvertTo-NeoIPCMetadataCanonical (Remove-NeoIPCMetadataNoise -Object $o1 -WarningAction SilentlyContinue)) | ConvertTo-Json -Compress -Depth 40
             $b = (ConvertTo-NeoIPCMetadataCanonical (Remove-NeoIPCMetadataNoise -Object $o2 -WarningAction SilentlyContinue)) | ConvertTo-Json -Compress -Depth 40
-            @{ Equal = ($a -eq $b); Row = $row; Back = $back; A = $a; B = $b }
+            @{ Equal = ($a -ceq $b); Row = $row; Back = $back; A = $a; B = $b }
         }
 
         # Seed the module-scoped sharing-profile registry the row converter consults, built the same way
@@ -727,9 +727,10 @@ InModuleScope 'NeoIPC-Tools' {
             # 'false', no actions — docs/metadata-deployment.md §5), and that row must ship so the deployment
             # lands it on the deployed rule's UID.
             Test-NeoIPCMetadataGeneratedExcluded -Type 'programRules' -Object ([ordered]@{ name = 'NeoIPC HAP - set pathogen attribute variables'; condition = 'false'; programRuleActions = @() }) -GeneratedKeys $gk | Should -BeFalse
-            # ...and only that exact spelling is inert: the DHIS2 grammar matches the boolean literal `false`
-            # case-sensitively, so a rule written 'False' is broken metadata and stays excluded like any active one.
-            Test-NeoIPCMetadataGeneratedExcluded -Type 'programRules' -Object ([ordered]@{ name = 'NeoIPC HAP - set pathogen attribute variables'; condition = 'False'; programRuleActions = @() }) -GeneratedKeys $gk | Should -BeTrue
+            # ...and only that exact spelling is inert. A wrongly-cased 'False' is no false condition to DHIS2's
+            # grammar, so the rule is neither the live rule nor the inert write: the predicate refuses it rather than
+            # reading it as one state or the other.
+            { Test-NeoIPCMetadataGeneratedExcluded -Type 'programRules' -Object ([ordered]@{ name = 'NeoIPC HAP - set pathogen attribute variables'; condition = 'False'; programRuleActions = @() }) -GeneratedKeys $gk } | Should -Throw "*restore the rule's live condition*"
             Test-NeoIPCMetadataGeneratedExcluded -Type 'programRuleActions' -Object ([ordered]@{ programRule = [ordered]@{ id = 'rlHapAggr01' } }) -GeneratedKeys $gk | Should -BeTrue
             Test-NeoIPCMetadataGeneratedExcluded -Type 'programRuleActions' -Object ([ordered]@{ programRule = [ordered]@{ id = 'rlBizInf001' } }) -GeneratedKeys $gk | Should -BeFalse
             # The antibiotic option-domain stays generated from the curation CSVs -> excluded by code shape.
@@ -740,7 +741,7 @@ InModuleScope 'NeoIPC-Tools' {
             Test-NeoIPCMetadataGeneratedExcluded -Type 'optionGroupSets' -Object ([ordered]@{ code = 'WHO_AWARE' }) -GeneratedKeys $gk | Should -BeTrue
         }
         It 'the exclusion predicate refuses a retired rule written inert but still carrying its actions' {
-            # A mis-written retirement reads as active to every consumer: the generated paths would shed the
+            # A miswritten retirement reads as active to every consumer: the generated paths would shed the
             # retirement write in silence and the directory would ship the row verbatim, so the deployment
             # re-creates its dead actions under the supposedly-inert rule. The predicate that decides the shed —
             # and, with it, every path that consults it — refuses the intermediate instead of reading it as one
@@ -815,10 +816,9 @@ InModuleScope 'NeoIPC-Tools' {
             @(Compare-NeoIPCMetadataCore -Reference $rebuilt -Difference $baseline).Count | Should -Be 0
         }
         It 'the comparator skips the retired rule in EITHER state (live export side vs inert directory side)' {
-            # Case 2 of the comparator header: the export carries the rule active with its dead actions, the
-            # directory carries it inert without them. The active side is name-skipped and the inert side is not
-            # compared unless the other side is inert too, so this pair is equal — the retirement's legitimate
-            # asymmetry is a known non-difference.
+            # Rule 1 of the comparator header: the export carries the rule active with its dead actions, the
+            # directory carries it inert without them. The active side holds the name out of the compare, so this
+            # pair is equal — the retirement's legitimate asymmetry is a known non-difference.
             $live  = ConvertFrom-NeoIPCMetadataJsonText -Json ($script:genPkg | ConvertTo-Json -Depth 40)
             $inert = ConvertFrom-NeoIPCMetadataJsonText -Json ($script:genPkg | ConvertTo-Json -Depth 40)
             $r = @($inert['programRules']) | Where-Object { [string]$_['id'] -eq 'rlHapAggr01' }
@@ -828,9 +828,9 @@ InModuleScope 'NeoIPC-Tools' {
             @(Compare-NeoIPCMetadataCore -Reference $inert -Difference $live).Count | Should -Be 0
         }
         It 'the comparator compares the retired rule when BOTH sides carry it inert' {
-            # Case 3 of the comparator header: two directory sides that each carry the retirement's inert write are
+            # Rule 2 of the comparator header: two directory sides that each carry the retirement's inert write are
             # compared, matched by name. Identical inert copies are equal; two inert copies that differ surface as
-            # exactly one Changed — this is what a silently-dropped or edited inert condition can no longer hide in.
+            # exactly one Changed — this is where a dropped or edited inert condition would hide, so it cannot.
             function New-InertPkg {
                 $p = ConvertFrom-NeoIPCMetadataJsonText -Json ($script:genPkg | ConvertTo-Json -Depth 40)
                 $r = @($p['programRules']) | Where-Object { [string]$_['id'] -eq 'rlHapAggr01' }
@@ -854,8 +854,45 @@ InModuleScope 'NeoIPC-Tools' {
             (@($d['programRules']) | Where-Object { [string]$_['id'] -eq 'rlHapAggr01' })['id'] = 'rlHapAggr99'
             @(Compare-NeoIPCMetadataCore -Reference $a -Difference $d | Where-Object { $_.Kind -eq 'Changed' }).Count | Should -Be 1
         }
+        It 'the comparator reports a shipped inert retired rule that the other side lost' {
+            # Rule 3 of the comparator header against a side that simply dropped the row: an inert copy opposite
+            # anything that is not the live rule is a difference, so the retirement write cannot vanish from a
+            # package in silence.
+            function New-InertPkg {
+                $p = ConvertFrom-NeoIPCMetadataJsonText -Json ($script:genPkg | ConvertTo-Json -Depth 40)
+                $r = @($p['programRules']) | Where-Object { [string]$_['id'] -eq 'rlHapAggr01' }
+                $r['condition'] = 'false'; $r['programRuleActions'] = @()
+                $p['programRuleActions'] = @(@($p['programRuleActions']) | Where-Object { [string]$_['id'] -ne 'acHapAggr01' })
+                $p
+            }
+            $a = New-InertPkg
+            $lost = New-InertPkg
+            $lost['programRules'] = @(@($lost['programRules']) | Where-Object { [string]$_['id'] -ne 'rlHapAggr01' })
+            @(Compare-NeoIPCMetadataCore -Reference $a -Difference $lost | Where-Object { $_.Kind -eq 'Removed' -and $_.Id -eq 'rlHapAggr01' }).Count | Should -Be 1
+            @(Compare-NeoIPCMetadataCore -Reference $lost -Difference $a | Where-Object { $_.Kind -eq 'Added' -and $_.Id -eq 'rlHapAggr01' }).Count | Should -Be 1
+        }
+        It 'the comparator reports a shipped inert retired rule the other side un-inerted' {
+            # Rule 3 again, against a side that broke the row rather than losing it: a wrongly-cased condition is
+            # no inert write either, so it is compared, not held out — and here it differs.
+            function New-InertPkg {
+                $p = ConvertFrom-NeoIPCMetadataJsonText -Json ($script:genPkg | ConvertTo-Json -Depth 40)
+                $r = @($p['programRules']) | Where-Object { [string]$_['id'] -eq 'rlHapAggr01' }
+                $r['condition'] = 'false'; $r['programRuleActions'] = @()
+                $p['programRuleActions'] = @(@($p['programRuleActions']) | Where-Object { [string]$_['id'] -ne 'acHapAggr01' })
+                $p
+            }
+            $a = New-InertPkg
+            $broke = New-InertPkg
+            (@($broke['programRules']) | Where-Object { [string]$_['id'] -eq 'rlHapAggr01' })['condition'] = 'False'
+            @(Compare-NeoIPCMetadataCore -Reference $a -Difference $broke | Where-Object { $_.Kind -eq 'Changed' }).Count | Should -Be 1
+            # ...and the row written 'true' is the live rule, the retirement's legitimate opposite shape: held out,
+            # not a difference.
+            $live = New-InertPkg
+            (@($live['programRules']) | Where-Object { [string]$_['id'] -eq 'rlHapAggr01' })['condition'] = 'true'
+            @(Compare-NeoIPCMetadataCore -Reference $a -Difference $live).Count | Should -Be 0
+        }
         It 'the emitted inert retired rule keeps its false condition and empty actions through a round trip' {
-            # The property the comparator's case-2 skip could otherwise mask: the inert row's own condition and
+            # The property the comparator's active-side hold-out could otherwise mask: the inert row's own condition and
             # empty actions survive emit AND rebuild, so the object the deployment reads is still inert. A lost
             # condition cell would turn it back into an excluded active rule, so it is pinned on the rebuilt
             # package object (the deployment's input), not the flat cell string.
@@ -2273,7 +2310,7 @@ InModuleScope 'NeoIPC-Tools' {
             { New-NeoIPCMetadataPackage -MetadataDirectory $script:asmDir -OverlayPath (Join-Path $TestDrive 'no-such-overlay') -WarningAction SilentlyContinue } | Should -Throw '*Overlay directory not found*'
         }
         It 'throws when the directory carries a retired rule written inert but still listing its actions' {
-            # The build ships directory rows verbatim, so a mis-written retirement (condition 'false' with actions
+            # The build ships directory rows verbatim, so a miswritten retirement (condition 'false' with actions
             # still listed) must stop the production artifact rather than reach an instance, where the deployment
             # would re-create those dead actions under the rule the retirement was written to silence.
             $misDir = Join-Path $TestDrive 'asm-misinert'
@@ -2283,10 +2320,52 @@ InModuleScope 'NeoIPC-Tools' {
               'rlHapAggr01,,NeoIPC HAP - set pathogen attribute variables,false,,acHapAggr01') | Set-TestFileContent -LiteralPath (Join-Path $misCommon 'programRules.csv') -Encoding utf8
             @('id,programRule,programRuleActionType',
               'acHapAggr01,rlHapAggr01,ASSIGN') | Set-TestFileContent -LiteralPath (Join-Path $misCommon 'programRuleActions.csv') -Encoding utf8
-            { New-NeoIPCMetadataPackage -MetadataDirectory $misDir -Play -SkipGeneration -PassThru -WarningAction SilentlyContinue } | Should -Throw '*written inert*still carries actions*'
+            { New-NeoIPCMetadataPackage -MetadataDirectory $misDir -Play -SkipGeneration -PassThru -WarningAction SilentlyContinue } | Should -Throw '*written inert*lists actions*'
+        }
+        It 'throws when the directory carries the retired rule still live' {
+            # The directory ships its rows verbatim, so a live retired row reaches the instance as live metadata:
+            # the deployment keeps the rule running and the retirement silently never happens.
+            $liveDir = Join-Path $TestDrive 'asm-live-retired'
+            Copy-Item -LiteralPath $script:asmDir -Destination $liveDir -Recurse
+            @('id,code,name,condition,priority,programRuleActions',
+              'rlHapAggr01,,NeoIPC HAP - set pathogen attribute variables,#{Some program data element},,acHapAggr01') | Set-TestFileContent -LiteralPath (Join-Path (Join-Path $liveDir 'common') 'programRules.csv') -Encoding utf8
+            @('id,programRule,programRuleActionType',
+              'acHapAggr01,rlHapAggr01,ASSIGN') | Set-TestFileContent -LiteralPath (Join-Path (Join-Path $liveDir 'common') 'programRuleActions.csv') -Encoding utf8
+            { New-NeoIPCMetadataPackage -MetadataDirectory $liveDir -Play -SkipGeneration -PassThru -WarningAction SilentlyContinue } | Should -Throw "*is retired but the directory carries its condition as*"
+        }
+        It 'throws when the directory spells the retired rule inert condition with the wrong case' {
+            # 'False' is a parse failure to DHIS2, never a false condition: the row is neither live nor inert, and
+            # shipping it would leave a broken rule where the retirement was intended.
+            $caseDir = Join-Path $TestDrive 'asm-case-retired'
+            Copy-Item -LiteralPath $script:asmDir -Destination $caseDir -Recurse
+            @('id,code,name,condition,priority,programRuleActions',
+              'rlHapAggr01,,NeoIPC HAP - set pathogen attribute variables,False,,') | Set-TestFileContent -LiteralPath (Join-Path (Join-Path $caseDir 'common') 'programRules.csv') -Encoding utf8
+            { New-NeoIPCMetadataPackage -MetadataDirectory $caseDir -Play -SkipGeneration -PassThru -WarningAction SilentlyContinue } | Should -Throw '*write the inert write exactly or drop the row*'
+        }
+        It 'throws when the directory carries two rows of the retired name' {
+            # One retirement is one row; a second live row beside the inert one would ship a duplicate name that
+            # DHIS2 only rejects at deployment (E4057), aborting the whole import there instead of here.
+            $twoDir = Join-Path $TestDrive 'asm-two-retired'
+            Copy-Item -LiteralPath $script:asmDir -Destination $twoDir -Recurse
+            @('id,code,name,condition,priority,programRuleActions',
+              'rlHapAggr01,,NeoIPC HAP - set pathogen attribute variables,false,,',
+              'rlHapAggr99,,NeoIPC HAP - set pathogen attribute variables,#{Some program data element},,') | Set-TestFileContent -LiteralPath (Join-Path (Join-Path $twoDir 'common') 'programRules.csv') -Encoding utf8
+            { New-NeoIPCMetadataPackage -MetadataDirectory $twoDir -Play -SkipGeneration -PassThru -WarningAction SilentlyContinue } | Should -Throw '*carries 2 rows for the retired program rule*'
+        }
+        It 'ConvertTo-NeoIPCMetadataJson refuses the same miswritten retired rows it reads' {
+            # The JSON half shares the directory read, so the round-trip gate and the refresh see the same refusal
+            # as the build — a miswritten row cannot pass through the write side unread.
+            $misDir = Join-Path $TestDrive 'asm-json-refusal'
+            Copy-Item -LiteralPath $script:asmDir -Destination $misDir -Recurse
+            $misCommon = Join-Path $misDir 'common'
+            @('id,code,name,condition,priority,programRuleActions',
+              'rlHapAggr01,,NeoIPC HAP - set pathogen attribute variables,false,,acHapAggr01') | Set-TestFileContent -LiteralPath (Join-Path $misCommon 'programRules.csv') -Encoding utf8
+            @('id,programRule,programRuleActionType',
+              'acHapAggr01,rlHapAggr01,ASSIGN') | Set-TestFileContent -LiteralPath (Join-Path $misCommon 'programRuleActions.csv') -Encoding utf8
+            { ConvertTo-NeoIPCMetadataJson -Path $misCommon } | Should -Throw '*written inert*lists actions*'
         }
         It 'throws when the directory keeps an inert retired rule but its action rows survive beside it' {
-            # The same mis-write in the directory's own shape: the rule row reads as a finished inert write, but
+            # The same fault in the directory's own shape: the rule row reads as a finished inert write, but
             # the action rows still point at it and ship verbatim, so the deployment re-attaches them to the
             # supposedly-inert rule.
             $rowDir = Join-Path $TestDrive 'asm-inert-rows'
