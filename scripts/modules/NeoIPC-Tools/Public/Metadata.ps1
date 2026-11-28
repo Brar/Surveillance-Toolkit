@@ -531,6 +531,31 @@ function New-NeoIPCMetadataPackage {
     # authored types (the org-unit scaffold, users): they are read separately below from the selected overlay.
     $config = Read-NeoIPCMetadataDirectoryPackage -Path $commonDir
     foreach ($t in $script:NeoIPCMetadataExcludedTypes) { if ($config.Contains($t)) { $config.Remove($t) } }
+    # The directory ships its rows verbatim, so a retired rule written inert (condition 'false') but still carrying
+    # actions reaches the instance here and the deployment re-creates those dead actions: refuse the mis-written
+    # retirement where the production artifact is built. Names match slot-normalized, as everywhere else. The
+    # actions live in their own rows here, so a cleared actions cell does not settle the question — an inert rule
+    # must have no action row pointing at it either.
+    $retiredRuleNames = [System.Collections.Generic.HashSet[string]]::new(
+        [string[]]@($script:NeoIPCMetadataRetiredRuleNames | ForEach-Object { ConvertTo-NeoIPCSubstanceUnpaddedName $_ }), [System.StringComparer]::Ordinal)
+    $inertRetiredRuleIds = @{}
+    foreach ($rule in @($config['programRules'])) {
+        if ($rule -isnot [System.Collections.IDictionary]) { continue }
+        $ruleName = [string]$rule['name']
+        if (-not $ruleName -or -not $retiredRuleNames.Contains((ConvertTo-NeoIPCSubstanceUnpaddedName $ruleName))) { continue }
+        Assert-NeoIPCInertRetirementWrite -Rule $rule
+        if (Test-NeoIPCDeployInertRule -Rule $rule) { $inertRetiredRuleIds[[string]$rule['id']] = $ruleName }
+    }
+    if ($inertRetiredRuleIds.Count -gt 0) {
+        foreach ($action in @($config['programRuleActions'])) {
+            if ($action -isnot [System.Collections.IDictionary]) { continue }
+            $owner = $action['programRule']
+            $ownerId = if ($owner -is [System.Collections.IDictionary]) { [string]$owner['id'] } else { [string]$owner }
+            if ($ownerId -and $inertRetiredRuleIds.ContainsKey($ownerId)) {
+                throw "Program rule '$($inertRetiredRuleIds[$ownerId])' is written inert (condition 'false') while its action rows are still present; the retirement's inert write carries no action, so delete the rows or give the rule its live condition."
+            }
+        }
+    }
 
     # userRole NAME -> real UID, from the directory config (for the authored user role assignments).
     $roleUid = @{}

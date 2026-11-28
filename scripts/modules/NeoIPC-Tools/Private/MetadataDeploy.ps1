@@ -691,6 +691,20 @@ function Test-NeoIPCDeployInertRule {
     ([string]$Rule['condition']).Trim() -ceq 'false' -and (Get-NeoIPCDeployRefIdList $Rule['programRuleActions']).Count -eq 0
 }
 
+function Assert-NeoIPCInertRetirementWrite {
+    # A retired rule written with condition 'false' but actions still attached is a mis-written retirement, not an
+    # inert write: every consumer reads it as active (so the generated paths shed the retirement write in silence),
+    # while a directory ships its rows verbatim and the deployment then re-creates the dead actions under the
+    # supposedly-inert rule. The retirement's first write is either complete — 'false', no actions — or the live
+    # rule; no build path ships the intermediate, so each refuses it here rather than reading it as one state or
+    # the other.
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][System.Collections.IDictionary]$Rule)
+    if (([string]$Rule['condition']).Trim() -ceq 'false' -and (Get-NeoIPCDeployRefIdList $Rule['programRuleActions']).Count -gt 0) {
+        throw "Program rule '$([string]$Rule['name'])' is written inert (condition 'false') but still carries actions; the retirement's inert write carries none, so give the row its actions' removal or its live condition."
+    }
+}
+
 # The references that keep DHIS2 from deleting what they point at, by the type that holds them: referring type ->
 # property -> referenced type. The deletion handlers veto the delete of a stage or stage section that a rule, a rule
 # variable or a rule action refers to, and of an option set a data element uses; foreign keys refuse the delete of an

@@ -483,7 +483,9 @@ deployments:
    dropped from the package only while it is **active**, so the row that makes it inert lands the write on the
    deployed rule's UID, which the row itself must carry: the tooling identifies the rule by name, and a row under
    a different UID becomes no second live rule — DHIS2 rejects a second rule of the same name in the same program
-   (error `E4057`, `ProgramRuleObjectBundleHook`), which fails the whole deployment. The round-trip comparator
+   (error `E4057`, `ProgramRuleObjectBundleHook`), which fails the whole deployment. A row that writes the rule
+   inert while still carrying actions is no inert write but a mis-written retirement: every build path refuses it,
+   since shipping it would re-create the dead actions the inerting is there to remove. The round-trip comparator
    does not compare the retired rule where the two sides legitimately differ — one side carries it active, the
    other inert or absent, the shapes of this two-step retirement — and does compare it where both sides carry it
    inert, so drift in the shipped row, its UID among its fields, surfaces as a change.

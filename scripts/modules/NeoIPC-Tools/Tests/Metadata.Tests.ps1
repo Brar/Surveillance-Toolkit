@@ -739,6 +739,15 @@ InModuleScope 'NeoIPC-Tools' {
             Test-NeoIPCMetadataGeneratedExcluded -Type 'optionGroupSets' -Object ([ordered]@{ code = 'ATC5' }) -GeneratedKeys $gk | Should -BeTrue
             Test-NeoIPCMetadataGeneratedExcluded -Type 'optionGroupSets' -Object ([ordered]@{ code = 'WHO_AWARE' }) -GeneratedKeys $gk | Should -BeTrue
         }
+        It 'the exclusion predicate refuses a retired rule written inert but still carrying its actions' {
+            # A mis-written retirement reads as active to every consumer: the generated paths would shed the
+            # retirement write in silence and the directory would ship the row verbatim, so the deployment
+            # re-creates its dead actions under the supposedly-inert rule. The predicate that decides the shed —
+            # and, with it, every path that consults it — refuses the intermediate instead of reading it as one
+            # state or the other.
+            $gk = Get-NeoIPCMetadataGeneratedKeys -Package (ConvertFrom-NeoIPCMetadataJsonText -Json ($script:genPkg | ConvertTo-Json -Depth 40))
+            { Test-NeoIPCMetadataGeneratedExcluded -Type 'programRules' -Object ([ordered]@{ name = 'NeoIPC HAP - set pathogen attribute variables'; condition = 'false'; programRuleActions = @([ordered]@{ id = 'acHapAggr01' }) }) -GeneratedKeys $gk } | Should -Throw '*written inert*still carries actions*'
+        }
         It 'the emit materializes the matrix families + business and drops only the retired aggregate' {
             $work = ConvertFrom-NeoIPCMetadataJsonText -Json ($script:genPkg | ConvertTo-Json -Depth 40)
             $rows = ConvertFrom-NeoIPCMetadataPackage -Package $work
@@ -2262,6 +2271,32 @@ InModuleScope 'NeoIPC-Tools' {
         }
         It 'production throws when the -OverlayPath does not exist' {
             { New-NeoIPCMetadataPackage -MetadataDirectory $script:asmDir -OverlayPath (Join-Path $TestDrive 'no-such-overlay') -WarningAction SilentlyContinue } | Should -Throw '*Overlay directory not found*'
+        }
+        It 'throws when the directory carries a retired rule written inert but still listing its actions' {
+            # The build ships directory rows verbatim, so a mis-written retirement (condition 'false' with actions
+            # still listed) must stop the production artifact rather than reach an instance, where the deployment
+            # would re-create those dead actions under the rule the retirement was written to silence.
+            $misDir = Join-Path $TestDrive 'asm-misinert'
+            Copy-Item -LiteralPath $script:asmDir -Destination $misDir -Recurse
+            $misCommon = Join-Path $misDir 'common'
+            @('id,code,name,condition,priority,programRuleActions',
+              'rlHapAggr01,,NeoIPC HAP - set pathogen attribute variables,false,,acHapAggr01') | Set-TestFileContent -LiteralPath (Join-Path $misCommon 'programRules.csv') -Encoding utf8
+            @('id,programRule,programRuleActionType',
+              'acHapAggr01,rlHapAggr01,ASSIGN') | Set-TestFileContent -LiteralPath (Join-Path $misCommon 'programRuleActions.csv') -Encoding utf8
+            { New-NeoIPCMetadataPackage -MetadataDirectory $misDir -Play -SkipGeneration -PassThru -WarningAction SilentlyContinue } | Should -Throw '*written inert*still carries actions*'
+        }
+        It 'throws when the directory keeps an inert retired rule but its action rows survive beside it' {
+            # The same mis-write in the directory's own shape: the rule row reads as a finished inert write, but
+            # the action rows still point at it and ship verbatim, so the deployment re-attaches them to the
+            # supposedly-inert rule.
+            $rowDir = Join-Path $TestDrive 'asm-inert-rows'
+            Copy-Item -LiteralPath $script:asmDir -Destination $rowDir -Recurse
+            $rowCommon = Join-Path $rowDir 'common'
+            @('id,code,name,condition,priority,programRuleActions',
+              'rlHapAggr01,,NeoIPC HAP - set pathogen attribute variables,false,,') | Set-TestFileContent -LiteralPath (Join-Path $rowCommon 'programRules.csv') -Encoding utf8
+            @('id,programRule,programRuleActionType',
+              'acHapAggr01,rlHapAggr01,ASSIGN') | Set-TestFileContent -LiteralPath (Join-Path $rowCommon 'programRuleActions.csv') -Encoding utf8
+            { New-NeoIPCMetadataPackage -MetadataDirectory $rowDir -Play -SkipGeneration -PassThru -WarningAction SilentlyContinue } | Should -Throw '*written inert*action rows are still present*'
         }
         It 'production reads the supplied -OverlayPath instead of play/' {
             # An overlay with a DIFFERENT user set proves the overlay (not play/) is the variant source.
@@ -4753,6 +4788,14 @@ Hierarchies:
             $out = Add-NeoIPCGeneratedMetadata -Config $cfg -Export ([ordered]@{})
             @($out['programRules'] | Where-Object { [string]$_['id'] -eq 'ruleAgg' }).Count | Should -Be 1
             @($out['programRuleActions'] | Where-Object { [string]$_['id'] -eq 'actAgg' }).Count | Should -Be 0
+        }
+        It 'throws when the stale aggregate is written inert but still carries its actions' {
+            # Between the two states the assembler refuses to decide: keeping the row ships the actions the
+            # inerting exists to remove, dropping it sheds the retirement write in silence.
+            $cfg = New-SpliceConfig
+            $agg = @($cfg['programRules']) | Where-Object { [string]$_['id'] -eq 'ruleAgg' }
+            $agg['condition'] = 'false'; $agg['programRuleActions'] = @([ordered]@{ id = 'actAgg' })
+            { Add-NeoIPCGeneratedMetadata -Config $cfg -Export ([ordered]@{}) } | Should -Throw '*written inert*still carries actions*'
         }
         It 'salvages a non-family-target hand-authored action onto the regenerated rule' {
             $out = Add-NeoIPCGeneratedMetadata -Config (New-SpliceConfig) -Export ([ordered]@{})

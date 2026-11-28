@@ -346,7 +346,7 @@ function Add-NeoIPCGeneratedMetadata {
     # write onto the deployed rule's UID. Its actions stay dropped either way. The name is matched slot-normalized,
     # as the directory emit and the comparator match it too, so those consumers agree on which deployed rule is the
     # stale aggregate whatever spacing the source carries.
-    $staleAggregateRuleNames = New-NeoIPCKeySet @((ConvertTo-NeoIPCSubstanceUnpaddedName 'NeoIPC HAP - set pathogen attribute variables'))
+    $staleAggregateRuleNames = New-NeoIPCKeySet @($script:NeoIPCMetadataRetiredRuleNames | ForEach-Object { ConvertTo-NeoIPCSubstanceUnpaddedName $_ })
     $genRuleNames  = New-NeoIPCKeySet @($genRules | ForEach-Object { [string]$_['name'] })
     $genRuleIds    = New-NeoIPCKeySet @($genRules | ForEach-Object { [string]$_['id'] })
     $genActionIds  = New-NeoIPCKeySet @($genActions | ForEach-Object { [string]$_['id'] })
@@ -367,6 +367,12 @@ function Add-NeoIPCGeneratedMetadata {
     $staleAggregateRuleIds = New-NeoIPCKeySet @(@($Config['programRules']) | Where-Object {
             $_ -is [System.Collections.IDictionary] -and $staleAggregateRuleNames.Contains((ConvertTo-NeoIPCSubstanceUnpaddedName ([string]$_['name'])))
         } | ForEach-Object { [string]$_['id'] })
+    foreach ($staleRule in @($Config['programRules'])) {
+        if ($staleRule -is [System.Collections.IDictionary] -and
+            $staleAggregateRuleNames.Contains((ConvertTo-NeoIPCSubstanceUnpaddedName ([string]$staleRule['name'])))) {
+            Assert-NeoIPCInertRetirementWrite -Rule $staleRule
+        }
+    }
     $keptRules = @(@($Config['programRules']) | Where-Object {
             $_ -is [System.Collections.IDictionary] -and
             -not ($genRuleNames.Contains([string]$_['name']) -or $genRuleIds.Contains([string]$_['id'])) -and

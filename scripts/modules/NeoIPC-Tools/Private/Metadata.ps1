@@ -770,9 +770,15 @@ function Test-NeoIPCMetadataGeneratedExcluded {
         # the directory may carry an INERT copy (condition 'false', no actions), the first deployment of the
         # two-deployment retirement (docs/metadata-deployment.md §5), and that row must ship so the deployment
         # lands the inert write on the deployed rule's UID — while a retired rule's actions are shed either way.
+        # A retired rule written inert but still carrying actions is no inert write: Assert-NeoIPCInertRetirementWrite
+        # refuses it rather than shedding the retirement in silence.
         # (2) The antibiotic option-group domain, generated from the curation CSVs.
         # ($GeneratedKeys carries the per-package retired-rule ids for the action-side check.)
-        'programRules'         { return $GeneratedKeys.RetiredRuleNames.Contains((ConvertTo-NeoIPCSubstanceUnpaddedName ([string]$Object['name']))) -and -not (Test-NeoIPCDeployInertRule -Rule $Object) }
+        'programRules'         {
+            $retired = $GeneratedKeys.RetiredRuleNames.Contains((ConvertTo-NeoIPCSubstanceUnpaddedName ([string]$Object['name'])))
+            if ($retired) { Assert-NeoIPCInertRetirementWrite -Rule $Object }
+            return $retired -and -not (Test-NeoIPCDeployInertRule -Rule $Object)
+        }
         'programRuleActions' {
             $pr = $Object['programRule']
             $rid = if ($pr -is [System.Collections.IDictionary]) { [string]$pr['id'] } else { [string]$pr }
