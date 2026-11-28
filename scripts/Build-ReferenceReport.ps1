@@ -31,6 +31,14 @@
     territory subtag (de_AT) additionally sets the children's LC_ALL to that locale's UTF-8 form.
     Tab-completion lists the locales the report ships.
 
+.PARAMETER Preset
+    A named parameter preset from the report's presets.json, seeded over the document's own defaults
+    before the parameters given on the command line: every parameter this call names explicitly
+    overrides the preset's value for it, and the preset's remaining parameters still apply. Tab-completion
+    lists the preset names the file carries. The two inclusion filters stand apart: the builder sets
+    testUnitFilter and defaultPatientFilter on every build from -IncludeTestUnits and
+    -IncludeNonCorePatients, so a preset carrying them would not take effect here.
+
 .PARAMETER OutputDir
     Directory the reports, the generated data, and the build report are written to. A relative path resolves
     against the caller's current location, and the directory is created when it does not exist yet. Defaults
@@ -153,6 +161,16 @@ param(
     })]
     [Parameter()]
     [string[]]$OutputLocales = @('en'),
+    [ArgumentCompleter({
+        param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
+        $presetsPath = Join-Path $PSScriptRoot '..' 'reports' 'Reference-Report' 'presets.json'
+        if (-not (Test-Path -LiteralPath $presetsPath)) { return }
+        @(((Get-Content -LiteralPath $presetsPath -Raw) | ConvertFrom-Json).presets.PSObject.Properties.Name) |
+            Where-Object { $_ -like "$wordToComplete*" } |
+            Sort-Object
+    })]
+    [Parameter()]
+    [string]$Preset,
     [Parameter()]
     [string]$OutputDir = $null,
     [Parameter(ParameterSetName='Online')]
@@ -280,6 +298,20 @@ $scriptTimestamp = (Get-Date -AsUTC).ToString("yyyy-MM-dd_HHmmss'Z'")
 $repoRootDirPath = Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '..')
 $reportDirPath = Resolve-Path -LiteralPath (Join-Path $repoRootDirPath 'reports/Reference-Report')
 
+# This build refuses a dataset with fewer than this many contributing departments:
+# pooled figures from one or two would show those departments' own rates instead of
+# a reference. The count comes from the dataset the build acquires, before anything
+# renders. Renderers other than this builder carry their own treatment of the count.
+$minimumContributingDepartments = 5
+
+# Resolve the named preset to its render parameters here, so a name the presets file
+# does not carry ends the build before it starts asking for credentials. The
+# parameters seed $qmdParams below, under the explicit assignments, which win.
+$presetParameters = $null
+if ($Preset) {
+    $presetParameters = Get-NeoIPCReportPreset -PresetsFilePath (Join-Path $reportDirPath 'presets.json') -Name $Preset
+}
+
 # Resolve OutputDir relative to the caller's location ($PWD); fall back to the report's _output.
 if ($OutputDir) {
     # Resolve a relative -OutputDir against the caller's location ($PWD), not .NET's
@@ -327,7 +359,6 @@ foreach ($locale in $OutputLocales) {
 
 $wantsJson = $OutputFormats -contains 'json'
 $renderFormats = $OutputFormats | Where-Object { $_ -ne 'json' }
-$renderCount = $renderFormats.Count * $OutputLocales.Count
 
 if ($isDataFileMode) {
     # DataFile mode: data already exists, resolve its path
@@ -338,10 +369,12 @@ if ($isDataFileMode) {
     $backupFilePath = $null
     Write-Verbose "DataFile mode: rendering from $resolvedDataFilePath"
 } else {
-    $needsJson = $false
-    if ($wantsJson -or $renderCount -gt 1 -or $BackupDataset) {
-        $needsJson = $true
-    }
+    # An online build acquires its dataset through R even when it asks for no
+    # json output: the floor of contributing departments counts the dataset
+    # before anything renders, and the render then shows the very dataset the
+    # gate counted — one import either way. An acquired dataset that asked for
+    # no json stays an intermediate, removed when the build ends clean.
+    $needsJson = $true
 
     $jsonFilePath = Join-Path $outputDirPath "${scriptTimestamp}_NeoIPC-Surveillance-Reference-Report.json"
     $jsonIntermediate = $needsJson -and (-not $wantsJson)
@@ -407,6 +440,15 @@ if (-not $isDataFileMode -and $BackupDataset -and [string]::IsNullOrWhiteSpace($
 }
 
 $qmdParams = @{}
+# The preset seeds values for parameters this call does not name; the assignments that
+# follow set every parameter given on the command line, so an explicit parameter wins
+# over the preset's value for it. The two filter parameters below belong to the call
+# itself and are set on every build, whatever any preset holds.
+if ($presetParameters) {
+    foreach ($presetParameter in $presetParameters.GetEnumerator()) {
+        $qmdParams[$presetParameter.Key] = $presetParameter.Value
+    }
+}
 if ($ReportingPeriodFrom) { $qmdParams.reportingPeriodFrom = $ReportingPeriodFrom }
 if ($ReportingPeriodTo) { $qmdParams.reportingPeriodTo = $ReportingPeriodTo }
 if ($BirthWeightFrom) { $qmdParams.birthWeightFrom = $BirthWeightFrom }
@@ -514,6 +556,20 @@ try {
         }
     }
 
+    # The floor of contributing departments: pooled figures from a dataset built
+    # by too few departments would show their own rates, not a reference, so a
+    # build whose dataset falls below the floor warns with the count it found,
+    # renders nothing, and its own finally reports it as cancelled. A -WhatIf
+    # preview has generated no dataset to count, so it previews as planned.
+    $floorDatasetPath = if ($isDataFileMode) { $resolvedDataFilePath } else { $jsonFilePath }
+    if (Test-Path -LiteralPath $floorDatasetPath) {
+        $contributingDepartments = Get-NeoIPCReferenceDatasetDepartmentCount -DatasetFilePath $floorDatasetPath
+        if ($contributingDepartments -lt $minimumContributingDepartments) {
+            Write-Warning ("Fewer than {0} departments contribute to this build's dataset (found {1}); this build renders no Reference Report." -f $minimumContributingDepartments, $contributingDepartments)
+            return
+        }
+    }
+
     $quartoArgsCommon = @()
     $quartoArgsCommon += $quartoVerbosityArgs
     $outputDirRelative = [System.IO.Path]::GetRelativePath($reportDirPath, $outputDirPath)
@@ -584,7 +640,10 @@ catch {
     Write-Error $_.Exception.Message
 }
 finally {
-    if ($jsonIntermediate -and $errors.Count -eq 0 -and (Test-Path -LiteralPath $jsonFilePath)) {
+    # The intermediate dataset of a build that completed is removed; a cancelled
+    # build keeps it, because the build report names its path as what the build
+    # acquired and a below-floor operator needs it to inspect the count.
+    if ($jsonIntermediate -and $buildCompleted -and $errors.Count -eq 0 -and (Test-Path -LiteralPath $jsonFilePath)) {
         if ($PSCmdlet.ShouldProcess($jsonFilePath, 'Remove intermediate JSON')) {
             Remove-Item -LiteralPath $jsonFilePath -Force
         }
