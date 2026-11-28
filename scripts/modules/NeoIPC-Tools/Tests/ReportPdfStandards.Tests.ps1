@@ -32,9 +32,12 @@
          `_quarto-en.yml` inherits whatever its source holds;
        3. nothing under `reports/` but `CHANGELOG.md` names KOMA-Script or its machinery — the
           classes, `scrlayer-scrpage` and its layer and font commands, its `footsepline` class
-          option, `wrapfig` (incompatible with tagging and used nowhere), the `\ihead` / `\ifoot`
-          / `\ofoot` / `\cfoot` / `\pagemark` furniture — no checked-in source loads the class,
-          its page furniture, or wrapfig.
+          option, `wrapfig` (incompatible with tagging and used nowhere), and the `\ihead` /
+          `\ifoot` / `\ofoot` / `\pagemark` furniture. `\cfoot` names scrlayer-scrpage and
+          fancyhdr alike, and bare `koma` is the German word for coma, so neither joins the
+          needles; a returning KOMA class or package answers to the rest;
+       4. the report table covers exactly the directories under `reports/` that hold a
+          `_quarto.yml`, so a new report cannot grow beside the gate ungated.
 
     What this cannot see is whether a rendered PDF carries the tag tree the declaration asserts;
     scripts/Test-ReportPdfTagging.ps1 inspects rendered files for that.
@@ -101,9 +104,9 @@ Describe 'Nothing under reports/ names KOMA-Script or its machinery' {
         # its history and is not rewritten, so it stays out of the scan.
         $needles = @(
             'scrartcl', 'scrbook', 'scrreprt', 'scrlayer', 'scrheadings', 'scrbase',
-            'koma-script', 'komascript', 'komafont', 'KOMA',
+            'koma-script', 'komascript', 'komafont',
             'footsepline', 'wrapfig',
-            '\ModifyLayer', '\ihead', '\ifoot', '\ofoot', '\cfoot', '\pagemark'
+            '\ModifyLayer', '\ihead', '\ifoot', '\ofoot', '\pagemark'
         )
         $sources = Get-ChildItem -LiteralPath $reportsDir -Recurse -Include `
             '*.qmd', '*.Rmd', '*.R', '*.tex', '*.lua', '*.yml', '*.yaml', '*.json', '*.md' |
@@ -116,5 +119,18 @@ Describe 'Nothing under reports/ names KOMA-Script or its machinery' {
                 }
         }
         $hits | Should -BeNullOrEmpty
+    }
+}
+
+Describe 'The report table covers the reports that exist' -ForEach @(@{ Table = $reports }) {
+    It 'holds one row per directory under reports/ with a _quarto.yml' {
+        # A directory outside the table escapes the per-report tests; a row without its
+        # directory fails those tests on the missing _quarto.yml.
+        $configured = @(
+            Get-ChildItem -LiteralPath $reportsDir -Directory |
+                Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName '_quarto.yml') } |
+                ForEach-Object Name | Sort-Object
+        )
+        $configured | Should -Be @($Table.Name | Sort-Object)
     }
 }

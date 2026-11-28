@@ -40,7 +40,9 @@
     whatever the build names it inside the report's output directory, must be handed in under a
     name containing the directory's (so Reference-Report.pdf or Reference-Report.de.pdf is
     accepted for the Reference Report). Every missing file fails the run: a green result always
-    means all five were inspected.
+    means all five were inspected. The run also fails when the report table and the `reports/`
+    directories of the checkout holding this script disagree, so a report cannot join the tree on
+    one side of the gate only.
 
 .EXAMPLE
     pwsh scripts/Test-ReportPdfTagging.ps1 -RenderedDir tmp/renders
@@ -81,6 +83,22 @@ $reports = @(
     @{ Name = 'Reference-Report'; Ua2 = $false }
     @{ Name = 'Validation-Report'; Ua2 = $false }
 )
+
+# The table must hold exactly the reports this checkout configures: a directory with a
+# _quarto.yml outside the table would render ungated, and a row whose directory is gone inspects
+# a PDF no build produces any more.
+$configured = @(
+    Get-ChildItem -LiteralPath (Join-Path (Split-Path -Parent $PSScriptRoot) 'reports') -Directory |
+        Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName '_quarto.yml') } |
+        ForEach-Object Name
+)
+$drift = @(Compare-Object -ReferenceObject @($configured | Sort-Object) -DifferenceObject @($reports.Name | Sort-Object))
+if ($drift) {
+    $untabled = @($drift | Where-Object SideIndicator -eq '<=' | ForEach-Object InputObject) -join ', '
+    $obsolete = @($drift | Where-Object SideIndicator -eq '=>' | ForEach-Object InputObject) -join ', '
+    Write-Error "the report table and reports/ disagree: untabled [$untabled], obsolete [$obsolete]" -ErrorAction Continue
+    exit 1
+}
 
 $resolved = (Resolve-Path -LiteralPath $RenderedDir).Path
 $pdfs = Get-ChildItem -LiteralPath $resolved -File -Filter '*.pdf'
