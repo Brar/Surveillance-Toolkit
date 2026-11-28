@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: NeoIPC-Support@charite.de\n"
-"POT-Creation-Date: 2026-11-27 23:08+0100\n"
+"POT-Creation-Date: 2026-11-28 08:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Language-Team: none\n"
 "Language: en\n"
@@ -5491,7 +5491,7 @@ msgstr ""
 #. type: Plain text
 #: reports/Validation-Report/en/_problem_detail_0019.Rmd:11
 #, markdown-text, no-wrap
-msgid "The report reads the 72 hours as whole days and flags an infection on a day of life below 4, the day of birth being day 1. It does not read the day of life stored on the infection form. It counts the days from the admission in the enrolment to the date of the infection, taking that day of admission as day of life 1; only an admission the form records as a transfer or readmission after the day of birth starts instead from the day of life recorded on the admission form. Where that recorded day is itself wrong, correcting it changes the day the report derives (see @sec-solution-18); for any other admission the day rests on that admission date alone.\n"
+msgid "The report reads the 72 hours as whole days and flags an infection on a day of life of 1, 2, or 3, the day of birth being day 1. It does not read the day of life stored on the infection form. It counts the days from the admission in the enrolment to the date of the infection, taking that day of admission as day of life 1; only an admission the form records as a transfer or readmission after the day of birth starts instead from the day of life recorded on the admission form. Where that recorded day is itself wrong, correcting it changes the day the report derives (see @sec-solution-18); for any other admission the day rests on that admission date alone.\n"
 msgstr ""
 
 #. type: Title ###
@@ -5503,7 +5503,7 @@ msgstr ""
 #. type: Plain text
 #: reports/Validation-Report/en/_problem_detail_0020.Rmd:4
 #, markdown-text, no-wrap
-msgid "An infection which occurred before the third day of the stay was most probably already present when the infant came to the department, and the surveillance does not record it. For an infant transferred or readmitted to the department the NeoIPC Surveillance Protocol sets exactly this cut-off: an infection counts as hospital-acquired only where the symptoms begin on or after day 3 of the stay, the day of admission counting as day 1. This report applies that cut-off to every admission, since an infection before the third day of a stay is most probably not acquired in the department; an exception the NeoIPC support team has accepted keeps a record out of these findings.\n"
+msgid "An infection which occurred before the third day of the stay — day 1 or day 2 of it — was most probably already present when the infant came to the department, and the surveillance does not record it. For an infant transferred or readmitted to the department the NeoIPC Surveillance Protocol sets exactly this cut-off: an infection counts as hospital-acquired only where the symptoms begin on or after day 3 of the stay, the day of admission counting as day 1. This report applies that cut-off to every admission, since an infection before the third day of a stay is most probably not acquired in the department; an exception the NeoIPC support team has accepted keeps a record out of these findings.\n"
 msgstr ""
 
 #. type: Title ###

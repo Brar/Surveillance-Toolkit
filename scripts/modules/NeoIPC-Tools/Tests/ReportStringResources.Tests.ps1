@@ -1229,8 +1229,8 @@ Describe 'The Validation Report''s day-of-onset texts' -Skip:(-not $env:CI -and 
 
     BeforeAll {
         # The sentences of the six onset rules, each prefixed with its rule id and the kind of sentence,
-        # the groups separated by a marker. The stay rules (30, 34 and 38) judge every admission and
-        # derive the day of the stay from the dates; the early-onset rules (29, 33 and 37) derive the
+        # the groups separated by a marker. The stay rules (30, 34, and 38) judge every admission and
+        # derive the day of the stay from the dates; the early-onset rules (29, 33, and 37) derive the
         # day of life and never read the one stored on the infection form. No Rscript run is free, so
         # one run prints all twelve sentences; the marker separates them because a run's line breaks
         # reach the caller as whatever the platform writes.
@@ -1285,6 +1285,15 @@ for (id in c("30", "34", "38")) {
 
     It 'states the stay rule for every admission in its problem detail' {
         $detail = (Get-Content -LiteralPath (Join-Path $repoRoot 'reports' 'Validation-Report' 'en' '_problem_detail_0020.Rmd') -Raw) -replace '\s+', ' '
+        $detail | Should -Match 'The Infection Occurred Before the Third Day of the Stay' -Because (
+            'the heading names the stay and its third day as the boundary and no admission type, ' +
+            'the restriction the rule no longer carries')
+        $detail | Should -Match 'only where one of them was entered as the wrong date' -Because (
+            'the detail asks for a date correction only where a date really stands wrong, not as a ' +
+            'blanket instruction')
+        $detail | Should -Match 'before the third day of the stay — day 1 or day 2 of it' -Because (
+            'a whole day of the stay below 3 is day 1 or day 2, and the detail has to say which ' +
+            'days of the stay a finding in fact means')
         $detail | Should -Match 'to every admission' -Because (
             'the stay rule judges every admission, and the detail a finding cites has to say so')
         $detail | Should -Match 'transferred or readmitted' -Because (
@@ -1300,18 +1309,18 @@ for (id in c("30", "34", "38")) {
 
     It 'states the range of the derived day in each rule''s translator comment' {
         # The placeholder comments are the translators' only notice of what values reach {dol} and
-        # {dos}: the rules filter below 4 and below 3, and until the decided bound that leaves only
-        # the upper limit stated. The comment wraps, so the file is collapsed before the ranges are
-        # counted.
+        # {dos}: the rules judge a day of life of 1, 2, or 3 and a day of the stay of 1 or 2, and
+        # leave an infection dated before the stay's first day to rules 12 to 14. The comment wraps,
+        # so the file is collapsed before the ranges are counted.
         $yaml = Get-Content -LiteralPath (Join-Path $repoRoot 'reports' 'Validation-Report' 'content' '_sR.yaml') -Raw
         $flat = ($yaml -replace '(?m)^\s*#\s*', ' ') -replace '\s+', ' '
-        $dol = [regex]::Matches($flat, '\{dol\}[^.]*?a whole number below 4, the day of birth being day 1\.')
-        $dos = [regex]::Matches($flat, '\{dos\}[^.]*?a whole number below 3, the day of admission being day 1\.')
+        $dol = [regex]::Matches($flat, '\{dol\}[^.]*?a whole number from 1 to 3, the day of birth being day 1\.')
+        $dos = [regex]::Matches($flat, '\{dos\}[^.]*?a whole number 1 or 2, the day of admission being day 1\.')
         $dol.Count | Should -Be 3 -Because (
-            'rules 29, 33 and 37 each derive a day of life the report flags below 4, and no other ' +
-            'rule shows a {dol} that is derived')
+            'rules 29, 33, and 37 each derive a day of life the report flags on days 1 to 3, and no ' +
+            'other rule shows a {dol} that is derived')
         $dos.Count | Should -Be 3 -Because (
-            'rules 30, 34 and 38 each derive a day of the stay before its third day, and no other ' +
+            'rules 30, 34, and 38 each derive a day of the stay before its third day, and no other ' +
             'rule shows a {dos} that is derived')
     }
 
@@ -1324,14 +1333,26 @@ for (id in c("30", "34", "38")) {
         $solution | Should -Match 'a value the team records' -Because (
             'the platform sets day 1 only for the other admission types, so the solution has to say ' +
             'this value is corrected by recording it, not by reopening for the platform to set it')
+        $solution | Should -Match 'need the same treatment as above' -Because (
+            'a wrong recorded day of life reaches the derived day wherever that day is used, so the ' +
+            'solution has to send the reader through the infection and procedure forms as well')
     }
 
     It 'states the early-onset detail in the Protocol''s own terms and its own derivation' {
         $detail = (Get-Content -LiteralPath (Join-Path $repoRoot 'reports' 'Validation-Report' 'en' '_problem_detail_0019.Rmd') -Raw) -replace '\s+', ' '
+        $detail | Should -Match 'read as an entry error' -Because (
+            'an early-onset finding is a notice that the surveillance does not count the infection, ' +
+            'not a claim of an entry error, and the detail opens by saying so')
         $detail | Should -Match 'within 72 hours after birth' -Because (
             'the Protocol sets the early-onset boundary as a 72-hour window after birth, which the ' +
             'day-of-life filter only approximates')
-        $detail | Should -Match 'flags an infection on a day of life below 4, the day of birth being day 1' -Because (
+        $detail | Should -Match 'distorts their own statistics and the reference data' -Because (
+            'the detail has to say why recording early-onset infections matters beyond the finding ' +
+            'itself: the department''s statistics and the reference data both take the distortion')
+        $detail | Should -Match 'only where one of them was entered as the wrong date' -Because (
+            'the detail asks for a date correction only where a date really stands wrong, not as a ' +
+            'blanket instruction')
+        $detail | Should -Match 'flags an infection on a day of life of 1, 2, or 3, the day of birth being day 1' -Because (
             'the Protocol speaks in hours and the rules flag whole days, and the reader has to be ' +
             'told which days of life a finding in fact means')
         $detail | Should -Not -Match 'early-onset infection module' -Because (

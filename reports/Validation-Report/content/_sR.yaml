@@ -625,8 +625,8 @@ problems:
     summary: The day of occurrence after admission stored in the sepsis form does not match the value calculated from the dates.
   "29":
     # Translators:
-    # `{dol}` is replaced by the day of life on which the sepsis occurred, a whole number below 4,
-    # the day of birth being day 1. The report derives it rather than reading it off the sepsis
+    # `{dol}` is replaced by the day of life on which the sepsis occurred, a whole number from 1 to
+    # 3, the day of birth being day 1. The report derives it rather than reading it off the sepsis
     # form: it counts the days from the admission in the enrolment to the sepsis date, starting from
     # the day of life recorded on the admission form for an admission recorded as a transfer or
     # readmission after the day of birth and from day 1 for every other admission. Keep it as
@@ -643,8 +643,8 @@ problems:
     summary: A sepsis occurred within the first three days of life.
   "30":
     # Translators:
-    # `{dos}` is replaced by the day of the stay on which the sepsis occurred, a whole number below
-    # 3, the day of admission being day 1. The report derives the day by counting from the admission
+    # `{dos}` is replaced by the day of the stay on which the sepsis occurred, a whole number 1 or
+    # 2, the day of admission being day 1. The report derives the day by counting from the admission
     # in the enrolment to the sepsis date, rather than reading the day of occurrence stored on the
     # sepsis form. Keep it as written.
     description: >-
@@ -687,8 +687,8 @@ problems:
     summary: The day of occurrence after admission stored in the pneumonia form does not match the value calculated from the dates.
   "33":
     # Translators:
-    # `{dol}` is replaced by the day of life on which the pneumonia occurred, a whole number below
-    # 4, the day of birth being day 1. The report derives it rather than reading it off the
+    # `{dol}` is replaced by the day of life on which the pneumonia occurred, a whole number from 1
+    # to 3, the day of birth being day 1. The report derives it rather than reading it off the
     # pneumonia form: it counts the days from the admission in the enrolment to the pneumonia date,
     # starting from the day of life recorded on the admission form for an admission recorded as a
     # transfer or readmission after the day of birth and from day 1 for every other admission. Keep
@@ -705,8 +705,8 @@ problems:
     summary: A pneumonia occurred within the first three days of life.
   "34":
     # Translators:
-    # `{dos}` is replaced by the day of the stay on which the pneumonia occurred, a whole number
-    # below 3, the day of admission being day 1. The report derives the day by counting from the
+    # `{dos}` is replaced by the day of the stay on which the pneumonia occurred, a whole number 1
+    # or 2, the day of admission being day 1. The report derives the day by counting from the
     # admission in the enrolment to the pneumonia date, rather than reading the day of occurrence
     # stored on the pneumonia form. Keep it as written.
     description: >-
@@ -752,7 +752,7 @@ problems:
   "37":
     # Translators:
     # `{dol}` is replaced by the day of life on which the necrotizing enterocolitis occurred, a
-    # whole number below 4, the day of birth being day 1. The report derives it rather than reading
+    # whole number from 1 to 3, the day of birth being day 1. The report derives it rather than reading
     # it off the necrotizing enterocolitis form: it counts the days from the admission in the
     # enrolment to that form's date, starting from the day of life recorded on the admission form
     # for an admission recorded as a transfer or readmission after the day of birth and from day 1
@@ -770,7 +770,7 @@ problems:
   "38":
     # Translators:
     # `{dos}` is replaced by the day of the stay on which the necrotizing enterocolitis occurred, a
-    # whole number below 3, the day of admission being day 1. The report derives the day by counting
+    # whole number 1 or 2, the day of admission being day 1. The report derives the day by counting
     # from the admission in the enrolment to that form's date, rather than reading the day of
     # occurrence stored on it. Keep it as written.
     description: >-

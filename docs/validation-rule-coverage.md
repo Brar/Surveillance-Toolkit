@@ -593,8 +593,9 @@ against none of the three, the depth being a compulsory value (G11). None of the
 eligibility rule, so the import's pass removes the patient of a form they flag whichever patients were
 requested. No other rule counts a definition's findings: rules 7 to 11 read only the completion status;
 rules 12 to 15 and 27 to 42 read dates and day counts, besides the day of life recorded on the
-admission form as the base of the expected day for rules 27, 31, 35, 39 and 41 and, for rules 29, 33
-and 37, the admission type as well (G23).
+admission form as the base of the expected day for rules 27, 31, 35, 39, and 41 and, for rules 29,
+33, and 37, the admission type as well, a type-3 admission contributing its recorded day of life as
+the base of the derived day (G23).
 
 The dataset holds the inputs of the three definitions the rules check: the items of the sepsis, NEC
 and SSI forms, the antibiotic-treatment flag among them, and the infectious-agent findings. It cannot
@@ -786,13 +787,15 @@ dedicated rule would only re-express those with a calendar filter. Documented.
 `sec-collect-infection-data-collection`.
 
 An infection whose first symptoms occur within 72 hours after birth is not recorded in the core
-module. Rules 29, 33, and 37 flag a BSI, pneumonia, or NEC on a day of life below 4, the day of
-birth as day 1; the data model has calendar days, not hours, so this is the closest reading, and an
-infant born late in the day reaches day 4 well before 72 hours have passed. The rules derive that day
+module. Rules 29, 33, and 37 flag a BSI, pneumonia, or NEC on days 1 to 3 of life, the day of
+birth as day 1; an infection dated before the stay's first day derives no such day and is left to
+rules 12 to 14, which report the event's date outside the enrolment window. The data model has
+calendar days, not hours, so this is the closest reading, and an infant born late in the day
+reaches day 4 well before 72 hours have passed. The rules derive that day
 — the day of life recorded on the admission form, type 1 and 2 admissions and an admission without a
 type recording day 1 and type 3 its recorded value, advanced by the days from the admission in the
 enrolment to the infection date — instead of reading the day stored on the infection form, which
-rules 27, 31 and 35 check against the dates; a type-3 admission that records no day of life gives no
+rules 27, 31, and 35 check against the dates; a type-3 admission that records no day of life gives no
 day to derive, and rule 46 flags that admission. SSI is deliberately outside the rule: a surgical
 site infection is hospital-acquired by its nature. The protocol should
 state the window in days of life, as the rules apply it. Documented.
@@ -829,9 +832,10 @@ changed here; the protocol is normative and a conflict between it and the code i
   new stay is flagged, although the infection most likely belongs to the
   previous stay rather than being community-acquired; the finding's framing can
   lead a reviewer to recode rather than to attribute it to the earlier
-  enrolment. Whether to suppress the finding when a prior enrolment of the
-  patient ended within a few days of this admission is the authority's call;
-  the rules keep the blunt filter until then.
+  enrolment. NeoIPC's decided rules settle the filter: an infection before its
+  third stay-day is community-acquired whatever the admission type, so the rules
+  keep it and spare no next-day readmission; open is the Protocol's own wording,
+  which sets this cut-off only for transferred or readmitted patients.
 - **Rules 43 and 44** question an enrolment still active more than 120 days after its enrolment date.
   The protocol defines the end of surveillance as death, transfer or discharge and sets no maximum
   stay, so the threshold is a plausibility threshold, not a protocol rule, and a genuinely long stay
