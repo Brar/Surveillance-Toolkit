@@ -186,6 +186,14 @@ get_string_resources <- function(x) {
     }
   }
 
+  # The report language's decimal mark, the same one gt prints in the tables
+  # through options(gt.locale). A text formatter cannot read the mark from
+  # the session: the Windows output routines ignore LC_NUMERIC and R's
+  # formatting family follows options("OutDec") instead of the locale. The
+  # languages these reports ship — German, Greek, Spanish (Spain), Estonian,
+  # Italian — take the comma; English takes the dot.
+  sR$decimal_mark <- if (localeObj$language %in% c("de", "el", "es", "et", "it")) "," else "."
+
   return(sR)
 }
 
@@ -1463,8 +1471,8 @@ format_dataset_resources <- function(metadata, counts, sR) {
 #' @param tested Named list of the tested infections of the same keys.
 #' @param totals Named list of the infection counts of the same keys.
 #' @param sR String resources; the percent is formatted with one decimal at the
-#'   session locale's decimal mark, the unit separator and the percent symbol
-#'   of the resources.
+#'   resources' `decimal_mark`, the unit separator and the percent symbol of
+#'   the resources.
 #' @return Named list per type, of the formatted `count`, `tested`, `total`,
 #'   `tested_share` and `share`.
 format_agent_type_fields <- function(with_agent, tested, totals, sR = NULL) {
@@ -1475,7 +1483,8 @@ format_agent_type_fields <- function(with_agent, tested, totals, sR = NULL) {
                                      !is.null(totals[[t]]) &&
                                      totals[[t]] > 0, logical(1))]
   fmt_pct <- function(x) {
-    paste0(sprintf("%.1f", x),
+    mark <- if (!is.null(sR$decimal_mark)) sR$decimal_mark else "."
+    paste0(sub(".", mark, sprintf("%.1f", x), fixed = TRUE),
            if (!is.null(sR$unit_separator)) sR$unit_separator else "",
            if (!is.null(sR$percent_symbol)) sR$percent_symbol else "")
   }

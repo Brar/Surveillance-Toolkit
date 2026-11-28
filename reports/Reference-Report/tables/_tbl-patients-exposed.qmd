@@ -1,4 +1,5 @@
 ```{r}
+#| output: asis
 #| label: tbl-patients-exposed
 #| tbl-cap: !expr 'sR$`tbl-patients-exposed`$`tbl-cap`'
 #| tbl-cap-location: top

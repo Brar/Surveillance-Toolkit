@@ -64,7 +64,8 @@ if (!is.null(benchmark_data$incidence_density_rate_table) &&
 
   tbl <- tbl_data |>
     # The footnote below reads it from tbl_data; the table does not print it.
-    dplyr::select(-tidyselect::any_of(c("n_ref", "n_agent_unclassified_own"))) |>
+    dplyr::select(-tidyselect::any_of(
+      c("n_ref", "n_agent_unclassified_own", "n_agent_unclassified_ref"))) |>
     dplyr::rename(
       !!sR$table_headers$count := "n_own",
       !!sR$table_headers$rate := "pooled_own",

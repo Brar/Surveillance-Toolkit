@@ -94,7 +94,10 @@ BeforeAll {
 
 Describe 'The infection section opens with counts, not a mean' {
 
-    Context 'the dataset resources carry the counts' -Skip:(-not $env:CI -and -not $rscript) {
+    # The skip re-asks for Rscript at discovery, where Pester evaluates -Skip;
+    # a BeforeAll variable is still unset at that moment, as in
+    # ReportInterpolationHygiene.Tests.ps1.
+    Context 'the dataset resources carry the counts' -Skip:(-not $env:CI -and -not (Get-Command Rscript -ErrorAction SilentlyContinue)) {
 
         It 'Rscript is present on CI because the behavioural half needs it' {
             $rscript | Should -Not -BeNullOrEmpty -Because 'the behavioural half of this gate needs Rscript'
@@ -163,7 +166,7 @@ Describe 'The sepsis and NEC kinds are rows of the incidence-density table' {
             }
             $dropPatterns = @{
                 'Reference-Report/tables/_tbl-incidence-density-rates.qmd' = 'any_of\("n_agent_unclassified"\)'
-                'Partner-Report/tables/_tbl-incidence-density-rates.qmd' = 'any_of\(c\("n_ref", "n_agent_unclassified_own"\)\)'
+                'Partner-Report/tables/_tbl-incidence-density-rates.qmd' = 'any_of\(\s*c\("n_ref", "n_agent_unclassified_own", "n_agent_unclassified_ref"\)\)'
             }
             foreach ($file in $countColumns.Keys | Sort-Object) {
                 $text = Get-ReportSource $file
@@ -243,11 +246,17 @@ Describe 'The exposed patients and their days are a table of their own' {
             }
         }
 
-        It 'the reference table prints its no-data note when the dataset lacks the table' {
+        It 'both table files print their no-data note when the dataset lacks the table' {
             $text = Get-ReportSource 'Reference-Report/tables/_tbl-patients-exposed.qmd'
             $text | Should -Match 'tryCatch' -Because 'a dataset saved before the table aborts the getter, and the note must stand where the table cannot'
-            $text | Should -Match 'NEOIPC-PERMANENT\(dataset-format\)' -Because 'a stored reference dataset outlives every release'
-            $text | Should -Match 'no_data_table\(sR\$`tbl-patients-exposed`\$no_data\)'
+            # Both files read a stored dataset that may predate the table slot,
+            # and both must carry that path under the dataset-format marker.
+            foreach ($file in 'Reference-Report/tables/_tbl-patients-exposed.qmd',
+                              'Partner-Report/tables/_tbl-patients-exposed.qmd') {
+                $text = Get-ReportSource $file
+                $text | Should -Match 'NEOIPC-PERMANENT\(dataset-format\)' -Because "$($file): a stored dataset outlives every release"
+                $text | Should -Match 'no_data_table\(sR\$`tbl-patients-exposed`\$no_data\)'
+            }
         }
 
         It 'the Partner labels stand only for columns the table has' {
@@ -286,7 +295,7 @@ Describe 'The exposed patients and their days are a table of their own' {
 
 Describe 'The infectious-agent texts quote the types, not the pooled share' {
 
-    Context 'the pooled read is gone' -Skip:(-not $env:CI -and -not $rscript) {
+    Context 'the pooled read is gone' -Skip:(-not $env:CI -and -not (Get-Command Rscript -ErrorAction SilentlyContinue)) {
 
         It 'Rscript is present on CI because the behavioural half needs it' {
             $rscript | Should -Not -BeNullOrEmpty -Because 'the behavioural half of this gate needs Rscript'
@@ -319,7 +328,12 @@ dropped <- format_agent_type_fields(
   with_agent = list(bsi = 10L, hap = NULL, ssi = 1L),
   tested = list(bsi = 50L, hap = 20L, ssi = 1L),
   totals = list(bsi = 50L, hap = 40L, ssi = 0L), sR = sR)
+comma <- modifyList(sR, list(decimal_mark = ","))
+commaFields <- format_agent_type_fields(
+  with_agent = list(bsi = 10L), tested = list(bsi = 50L),
+  totals = list(bsi = 50L), sR = comma)
 ok <- identical(fields$bsi$share, "20.0 %") &&
+      identical(commaFields$bsi$share, "20,0 %") &&
       identical(fields$hap$tested_share, "50.0 %") &&
       identical(fields$hap$share, "40.0 %") &&
       identical(fields$ssi$share, "n/a") &&

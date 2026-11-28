@@ -6,6 +6,10 @@
 
 # The dataset table arrives long, one row per factor and measure; the table
 # gives each measure its own columns over the eight factors.
+# NEOIPC-PERMANENT(dataset-format): never let this read fail. A stored
+# reference dataset outlives every release, and one saved before the table
+# existed has no slot to read, so the no-data note stands where the table
+# cannot be built.
 if (!is.null(benchmark_data$patients_exposed_table)) {
 
   pe_data <- benchmark_data$patients_exposed_table
