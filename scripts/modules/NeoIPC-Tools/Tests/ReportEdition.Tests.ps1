@@ -85,6 +85,39 @@ Describe 'Get-NeoIPCReferenceDatasetDepartmentCount' {
     $script:RscriptAvailable = [bool](Get-Command -Name Rscript -ErrorAction SilentlyContinue)
 
     BeforeAll {
+        function New-NeoIPCFailingRscriptStub {
+            # Writes an executable that prints the given lines and exits with the given code,
+            # shadowing Rscript on PATH. A PATH lookup on Windows takes Rscript.cmd through
+            # PATHEXT; on Unix it takes only the bare name with the executable bit, and its
+            # shebang needs LF endings.
+            param(
+                [string]$Directory,
+                [string[]]$StdoutLines = @(),
+                [string[]]$StderrLines = @(),
+                [Parameter(Mandatory)][int]$ExitCode
+            )
+        New-Item -ItemType Directory -Path $Directory | Out-Null
+        if ($IsWindows) {
+            $lines = @('@echo off') + @($StderrLines | ForEach-Object { "echo $_ 1>&2" }) +
+                @($StdoutLines | ForEach-Object { "echo $_" }) + @("exit /b $ExitCode")
+            ($lines -join "`r`n") | Set-Content -LiteralPath (Join-Path $Directory 'Rscript.cmd') -Encoding ascii
+        } else {
+            $lines = @('#!/bin/sh')
+            foreach ($line in $StderrLines) {
+                $lines += "echo '$($line.Replace("'", "'\''"))' >&2"
+            }
+            foreach ($line in $StdoutLines) {
+                $lines += "echo '$($line.Replace("'", "'\''"))'"
+            }
+            $lines += "exit $ExitCode"
+            ($lines -join "`n") | Set-Content -LiteralPath (Join-Path $Directory 'Rscript') -Encoding ascii
+            chmod +x (Join-Path $Directory 'Rscript')
+        }
+            return $Directory
+        }
+    }
+
+    BeforeAll {
         # The fixtures come from serializeJSON's own writer, run in R now. The serialized
         # shape belongs to the installed jsonlite and has shifted across package versions,
         # so a hand-written fixture can pin a shape no writer writes.
@@ -106,16 +139,18 @@ writeLines(jsonlite::serializeJSON(huge), args[[4]])
 partial <- structure(list(n_departments_contributing = 7L),
                      class = c("neoipcr_ref_ds", "neoipcr_rep_ds", "list"))
 writeLines(jsonlite::serializeJSON(partial), args[[5]])
+writeLines(jsonlite::serializeJSON(5L), args[[6]])
 '@ | Set-Content -LiteralPath $gen -Encoding utf8NoBOM
         $script:WithCount = Join-Path $TestDrive 'with-count.json'
         $script:WithoutCount = Join-Path $TestDrive 'without-count.json'
         $script:WrongType = Join-Path $TestDrive 'wrong-type.json'
         $script:HugeCount = Join-Path $TestDrive 'huge-count.json'
         $script:PartialName = Join-Path $TestDrive 'partial-name.json'
+        $script:ScalarContent = Join-Path $TestDrive 'scalar-content.json'
         $script:PlainJson = Join-Path $TestDrive 'plain.json'
         '{"n_departments": 26}' | Set-Content -LiteralPath $PlainJson -Encoding utf8NoBOM
         if (Get-Command -Name Rscript -ErrorAction SilentlyContinue) {
-            & Rscript --vanilla $gen $WithCount $WithoutCount $WrongType $HugeCount $PartialName
+            & Rscript --vanilla $gen $WithCount $WithoutCount $WrongType $HugeCount $PartialName $ScalarContent
             if ($LASTEXITCODE -ne 0) {
                 throw "The R fixture writer failed with exit code $LASTEXITCODE."
             }
@@ -159,6 +194,17 @@ writeLines(jsonlite::serializeJSON(partial), args[[5]])
         $message | Should -Match 'n_departments' -Because 'the refusal says which field is missing'
     }
 
+    It 'quotes R''s own message for serialized content that is no list' -Skip:(-not $script:RscriptAvailable) {
+        # A serialized scalar unserializes successfully and fails only in the extraction;
+        # the decoder must isolate that too. The failing call's stderr dump repeats the
+        # extraction expression in every locale; R's condition message does not.
+        $message = ''
+        try { Get-NeoIPCReferenceDatasetDepartmentCount -DatasetFilePath $ScalarContent } catch { $message = $_.Exception.Message }
+        $message | Should -Match ([regex]::Escape([System.IO.Path]::GetFileName($ScalarContent))) -Because 'the operator must see which file is no dataset'
+        $message | Should -Match 'not a serialized reference dataset' -Because 'content that is no list is no dataset'
+        $message | Should -Not -Match 'dataset\[\[' -Because "the refusal quotes the message R isolates, not the stderr dump of the failing call: $message"
+    }
+
     It 'reports the missing field itself when native failures throw' -Skip:(-not $script:RscriptAvailable) {
         # The exit codes are the diagnosis, so the reader turns the native-command error
         # preference off around its Rscript call; a machine-wide Stop preference may not
@@ -178,27 +224,49 @@ writeLines(jsonlite::serializeJSON(partial), args[[5]])
         $message | Should -Match 'carries no n_departments field' -Because 'the diagnosis survives a Stop preference, which a bare exit code would not'
     }
 
-    It 'quotes R error, not a line printed before it' -Skip:(-not $script:RscriptAvailable) {
-        # A failing R often prints a startup warning before its error; the refusal must
-        # carry the error, which arrives on stderr.
-        # A PATH lookup on Windows takes Rscript.cmd through PATHEXT; on Unix it takes
-        # only the bare name with the executable bit, and its shebang needs LF endings.
-        $stubDir = Join-Path $TestDrive 'stub-rscript'
-        New-Item -ItemType Directory -Path $stubDir | Out-Null
-        if ($IsWindows) {
-            "@echo off`r`necho During startup - Warning messages:`r`necho cannot open the connection at line 3 1>&2`r`nexit /b 1" |
-                Set-Content -LiteralPath (Join-Path $stubDir 'Rscript.cmd') -Encoding ascii
-        } else {
-            "#!/bin/sh`necho 'During startup - Warning messages:'`necho 'cannot open the connection at line 3' >&2`nexit 1" |
-                Set-Content -LiteralPath (Join-Path $stubDir 'Rscript') -Encoding ascii
-            chmod +x (Join-Path $stubDir 'Rscript')
-        }
+    It 'quotes the error R isolates, not the startup warning it puts on stderr' -Skip:(-not $script:RscriptAvailable) {
+        # R prints startup warnings on stderr before anything the decoder says; the decoder
+        # prints its own failure on stdout under status 6, so that and not the warning is
+        # what the refusal quotes. The stub plays that R: warning on stderr first, error
+        # on stdout, status 6.
+        $stubDir = New-NeoIPCFailingRscriptStub -Directory (Join-Path $TestDrive 'stub-status6') `
+            -StderrLines @('During startup - Warning messages:') -StdoutLines @('cannot open the connection at line 3') -ExitCode 6
         $savedPath = $env:PATH
         try {
             $env:PATH = "$stubDir$([System.IO.Path]::PathSeparator)$savedPath"
             $message = ''
             try { Get-NeoIPCReferenceDatasetDepartmentCount -DatasetFilePath $WithCount } catch { $message = $_.Exception.Message }
-            $message | Should -Match 'cannot open the connection' -Because "the refusal quotes R's stderr, not the startup noise before it: $message"
+            $message | Should -Match 'cannot open the connection' -Because "the refusal quotes the message R isolates on stdout: $message"
+            $message | Should -Not -Match 'During startup' -Because 'the startup warning on stderr is no diagnosis'
+        } finally {
+            $env:PATH = $savedPath
+        }
+    }
+
+    It 'names jsonlite when R lacks it' -Skip:(-not $script:RscriptAvailable) {
+        $stubDir = New-NeoIPCFailingRscriptStub -Directory (Join-Path $TestDrive 'stub-status5') `
+            -ExitCode 5
+        $savedPath = $env:PATH
+        try {
+            $env:PATH = "$stubDir$([System.IO.Path]::PathSeparator)$savedPath"
+            $message = ''
+            try { Get-NeoIPCReferenceDatasetDepartmentCount -DatasetFilePath $WithCount } catch { $message = $_.Exception.Message }
+            $message | Should -Match 'jsonlite' -Because "an R without the package is the lacking environment, not a bad dataset: $message"
+            $message | Should -Not -Match 'not a serialized' -Because 'the file is no dataset in this failure'
+        } finally {
+            $env:PATH = $savedPath
+        }
+    }
+
+    It 'quotes the error on stderr when the Rscript call itself fails' -Skip:(-not $script:RscriptAvailable) {
+        $stubDir = New-NeoIPCFailingRscriptStub -Directory (Join-Path $TestDrive 'stub-crash') `
+            -StderrLines @('Fatal error: R cannot start') -ExitCode 1
+        $savedPath = $env:PATH
+        try {
+            $env:PATH = "$stubDir$([System.IO.Path]::PathSeparator)$savedPath"
+            $message = ''
+            try { Get-NeoIPCReferenceDatasetDepartmentCount -DatasetFilePath $WithCount } catch { $message = $_.Exception.Message }
+            $message | Should -Match 'R cannot start' -Because "the last resort quotes what the failing call reported: $message"
         } finally {
             $env:PATH = $savedPath
         }

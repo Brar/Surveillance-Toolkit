@@ -796,7 +796,7 @@ $pairs = Build-QmdParamPairs -Values @{
 ### Report Editions and the Department Floor
 
 ```powershell
-# The render parameters one preset of a report's presets.json switches off,
+# The render parameters one preset of a report's presets.json sets,
 # to seed a build with (Build-ReferenceReport.ps1 -Preset does this itself)
 $preset = Get-NeoIPCReportPreset -PresetsFilePath ./reports/Reference-Report/presets.json -Name 'class-range-edition'
 
@@ -927,3 +927,4 @@ runs `msgfmt -c` (via WSL on Windows) when gettext is available.
 | Play data | `New-NeoIPCPlayDataPackage`, `Import-NeoIPCPlayData`, `Export-NeoIPCPlayDataCsv` |
 | Metadata generation | `New-NeoIPCPathogenOptionSet`, `New-NeoIPCPathogenDataElement`, `New-NeoIPCPathogenVariable`, `New-NeoIPCPathogenRule`, `New-NeoIPCPathogenFieldGatingVariable`, `New-NeoIPCPathogenFieldGatingRule`, `New-NeoIPCPathogenVirusVariable`, `New-NeoIPCPathogenVirusRule`, `New-NeoIPCSubstanceDataElement`, `New-NeoIPCSubstanceVariable`, `New-NeoIPCSubstanceRule`, `New-NeoIPCAntimicrobialOptionSet`, `New-NeoIPCAntibioticOptionGroup`, `New-NeoIPCAntibioticOptionGroupSet`, `Export-NeoIPCAntibioticTranslation`, `Compare-NeoIPCGeneratedMetadata`, `Update-NeoIPCGeneratedMetadataDirectory` |
 | Data dictionary | `Export-NeoIPCDataDictionary` |
+| Report Editions | `Get-NeoIPCReportPreset`, `Get-NeoIPCReferenceDatasetDepartmentCount` |

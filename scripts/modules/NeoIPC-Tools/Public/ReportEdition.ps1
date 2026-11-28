@@ -104,8 +104,13 @@ function Get-NeoIPCReferenceDatasetDepartmentCount {
     # R's $ matches a list's names partially, so only the exact [[ read can tell
     # n_departments from a field whose name merely starts with it. Status 5 separates an
     # R without jsonlite from a file that is no dataset, and status 4 a wrong-typed
-    # count from a missing one.
-    $decoder = 'p <- commandArgs(trailingOnly = TRUE)[[1]]; if (!requireNamespace("jsonlite", quietly = TRUE)) quit(save = "no", status = 5); dataset <- jsonlite::unserializeJSON(readLines(p, warn = FALSE)); count <- dataset[["n_departments", exact = TRUE]]; if (is.null(count)) quit(save = "no", status = 3); if (!(is.numeric(count) && length(count) == 1L && !is.na(count))) quit(save = "no", status = 4); cat(format(count, scientific = FALSE))'
+    # count from a missing one. The decoder isolates every failure of its own read in the
+    # handler h and prints the message on stdout under status 6, where the refusal can
+    # quote it without the startup warnings R puts on stderr; matching stderr's "Error"
+    # would quote nothing in a German R, which says "Fehler". The extraction is inside
+    # the isolation because serialized content of no list (a scalar) unserializes
+    # successfully and fails only when indexed.
+    $decoder = 'p <- commandArgs(trailingOnly = TRUE)[[1]]; h <- function(e) { cat(conditionMessage(e)); quit(save = "no", status = 6) }; if (!requireNamespace("jsonlite", quietly = TRUE)) quit(save = "no", status = 5); dataset <- tryCatch(jsonlite::unserializeJSON(readLines(p, warn = FALSE)), error = h); count <- tryCatch(dataset[["n_departments", exact = TRUE]], error = h); if (is.null(count)) quit(save = "no", status = 3); if (!(is.numeric(count) && length(count) == 1L && !is.na(count))) quit(save = "no", status = 4); cat(format(count, scientific = FALSE))'
     # The exit codes are the diagnosis, so a global native-command error preference must
     # not throw over them; the assignment is local to this function's scope.
     $nativeUseErrorActionPreference = $PSNativeCommandUseErrorActionPreference
@@ -128,9 +133,19 @@ function Get-NeoIPCReferenceDatasetDepartmentCount {
     if ($exitCode -eq 4) {
         throw "The dataset file '$(Split-Path -Leaf $DatasetFilePath)' carries no single whole-number n_departments field."
     }
+    if ($exitCode -eq 6) {
+        # The decoder isolated its own failure and printed the message on stdout; stderr
+        # may hold startup warnings before it.
+        $cause = (@($printed | Where-Object { $_ }) -join ' ')
+        if (-not $cause) {
+            $cause = 'R isolated the failure but printed no message'
+        }
+        throw "The dataset file '$(Split-Path -Leaf $DatasetFilePath)' is not a serialized reference dataset (R reported: $cause)."
+    }
     if ($exitCode -ne 0) {
-        # Quote what R put on stderr — its error — not the first line of the output, which
-        # a startup warning, for instance, places before it.
+        # R isolates its own read failures under status 6, so only a failure of the
+        # Rscript call itself — R not starting, the expression never running — reaches
+        # this last resort, and its stderr is all the report there is.
         $errorLines = @($reported | Where-Object { $_ -is [System.Management.Automation.ErrorRecord] } | ForEach-Object { "$_" } | Where-Object { $_ })
         $cause = if ($errorLines) { $errorLines[0] } else { @($printed | Where-Object { $_ })[0] }
         throw "The dataset file '$(Split-Path -Leaf $DatasetFilePath)' is not a serialized reference dataset (R reported: $cause)."
