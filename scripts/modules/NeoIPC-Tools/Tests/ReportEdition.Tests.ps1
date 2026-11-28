@@ -103,15 +103,19 @@ writeLines(jsonlite::serializeJSON(wrong), args[[3]])
 huge <- structure(list(n_departments = 9999999999),
                   class = c("neoipcr_ref_ds", "neoipcr_rep_ds", "list"))
 writeLines(jsonlite::serializeJSON(huge), args[[4]])
+partial <- structure(list(n_departments_contributing = 7L),
+                     class = c("neoipcr_ref_ds", "neoipcr_rep_ds", "list"))
+writeLines(jsonlite::serializeJSON(partial), args[[5]])
 '@ | Set-Content -LiteralPath $gen -Encoding utf8NoBOM
         $script:WithCount = Join-Path $TestDrive 'with-count.json'
         $script:WithoutCount = Join-Path $TestDrive 'without-count.json'
         $script:WrongType = Join-Path $TestDrive 'wrong-type.json'
         $script:HugeCount = Join-Path $TestDrive 'huge-count.json'
+        $script:PartialName = Join-Path $TestDrive 'partial-name.json'
         $script:PlainJson = Join-Path $TestDrive 'plain.json'
         '{"n_departments": 26}' | Set-Content -LiteralPath $PlainJson -Encoding utf8NoBOM
         if (Get-Command -Name Rscript -ErrorAction SilentlyContinue) {
-            & Rscript --vanilla $gen $WithCount $WithoutCount $WrongType $HugeCount
+            & Rscript --vanilla $gen $WithCount $WithoutCount $WrongType $HugeCount $PartialName
             if ($LASTEXITCODE -ne 0) {
                 throw "The R fixture writer failed with exit code $LASTEXITCODE."
             }
@@ -145,6 +149,51 @@ writeLines(jsonlite::serializeJSON(huge), args[[4]])
         $message = ''
         try { Get-NeoIPCReferenceDatasetDepartmentCount -DatasetFilePath $HugeCount } catch { $message = $_.Exception.Message }
         $message | Should -Match ([regex]::Escape([System.IO.Path]::GetFileName($HugeCount))) -Because 'a value beyond the range of department counts must refuse by naming the file, not by a cast error'
+    }
+
+    It 'refuses a field whose name only starts like n_departments' -Skip:(-not $script:RscriptAvailable) {
+        # R's $ matches list names partially; the reader must not.
+        $message = ''
+        try { Get-NeoIPCReferenceDatasetDepartmentCount -DatasetFilePath $PartialName } catch { $message = $_.Exception.Message }
+        $message | Should -Match ([regex]::Escape([System.IO.Path]::GetFileName($PartialName))) -Because 'n_departments_contributing is no n_departments'
+        $message | Should -Match 'n_departments' -Because 'the refusal says which field is missing'
+    }
+
+    It 'reports the missing field itself when native failures throw' -Skip:(-not $script:RscriptAvailable) {
+        # The exit codes are the diagnosis, so the reader turns the native-command error
+        # preference off around its Rscript call; a machine-wide Stop preference may not
+        # throw over them. The module function resolves both preferences from global
+        # scope, not the caller's, so the test sets globals and restores them.
+        $savedNative = $PSNativeCommandUseErrorActionPreference
+        $savedEap = $ErrorActionPreference
+        $message = ''
+        try {
+            $Global:PSNativeCommandUseErrorActionPreference = $true
+            $Global:ErrorActionPreference = 'Stop'
+            Get-NeoIPCReferenceDatasetDepartmentCount -DatasetFilePath $WithoutCount
+        } catch { $message = $_.Exception.Message } finally {
+            $Global:PSNativeCommandUseErrorActionPreference = $savedNative
+            $Global:ErrorActionPreference = $savedEap
+        }
+        $message | Should -Match 'carries no n_departments field' -Because 'the diagnosis survives a Stop preference, which a bare exit code would not'
+    }
+
+    It 'quotes R error, not a line printed before it' -Skip:(-not $script:RscriptAvailable) {
+        # A failing R often prints a startup warning before its error; the refusal must
+        # carry the error, which arrives on stderr.
+        $stubDir = Join-Path $TestDrive 'stub-rscript'
+        New-Item -ItemType Directory -Path $stubDir | Out-Null
+        "@echo off`r`necho During startup - Warning messages:`r`necho cannot open the connection at line 3 1>&2`r`nexit /b 1" |
+            Set-Content -LiteralPath (Join-Path $stubDir 'Rscript.cmd') -Encoding ascii
+        $savedPath = $env:PATH
+        try {
+            $env:PATH = "$stubDir$([System.IO.Path]::PathSeparator)$savedPath"
+            $message = ''
+            try { Get-NeoIPCReferenceDatasetDepartmentCount -DatasetFilePath $WithCount } catch { $message = $_.Exception.Message }
+            $message | Should -Match 'cannot open the connection' -Because "the refusal quotes R's stderr, not the startup noise before it: $message"
+        } finally {
+            $env:PATH = $savedPath
+        }
     }
 }
 

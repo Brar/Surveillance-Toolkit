@@ -20,7 +20,8 @@
 
 .PARAMETER DataFile
     Render from this previously exported dataset rather than querying DHIS2. The floor of
-contributing departments still counts this file, which R reads, so Rscript stays required.
+    contributing departments counts this file just as it counts an online build's, which R
+    reads, so this mode needs Rscript too.
 
 .PARAMETER OutputFormats
     One or more of pdf, html, docx, json. Defaults to pdf.

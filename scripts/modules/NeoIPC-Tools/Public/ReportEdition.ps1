@@ -73,7 +73,7 @@ jsonlite::unserializeJSON, the reader of the format jsonlite::serializeJSON writ
 serialized shape is jsonlite's own and differs across its package versions, and only R's
 reader tracks its writer. A file that is no serialized dataset, or carries no
 n_departments within it, is refused with an error naming the file, since a build gate cannot
-decide on a count it cannot read. Rscript must be on PATH.
+decide on a count it cannot read. Rscript must be on PATH and its R must carry jsonlite.
 
 .PARAMETER DatasetFilePath
 The dataset's JSON file, path of an existing file.
@@ -101,12 +101,27 @@ function Get-NeoIPCReferenceDatasetDepartmentCount {
     if (-not $rscript) {
         throw "Reading the department count of '$(Split-Path -Leaf $DatasetFilePath)' needs Rscript on PATH."
     }
-    $decoder = 'p <- commandArgs(trailingOnly = TRUE)[[1]]; dataset <- jsonlite::unserializeJSON(readLines(p, warn = FALSE)); count <- dataset$n_departments; if (is.null(count)) quit(save = "no", status = 3); if (!(is.numeric(count) && length(count) == 1L && !is.na(count))) quit(save = "no", status = 4); cat(format(count, scientific = FALSE))'
-    $reported = @(& $rscript.Source --vanilla -e $decoder $DatasetFilePath 2>&1)
-    $exitCode = $LASTEXITCODE
+    # R's $ matches a list's names partially, so only the exact [[ read can tell
+    # n_departments from a field whose name merely starts with it. Status 5 separates an
+    # R without jsonlite from a file that is no dataset, and status 4 a wrong-typed
+    # count from a missing one.
+    $decoder = 'p <- commandArgs(trailingOnly = TRUE)[[1]]; if (!requireNamespace("jsonlite", quietly = TRUE)) quit(save = "no", status = 5); dataset <- jsonlite::unserializeJSON(readLines(p, warn = FALSE)); count <- dataset[["n_departments", exact = TRUE]]; if (is.null(count)) quit(save = "no", status = 3); if (!(is.numeric(count) && length(count) == 1L && !is.na(count))) quit(save = "no", status = 4); cat(format(count, scientific = FALSE))'
+    # The exit codes are the diagnosis, so a global native-command error preference must
+    # not throw over them; the assignment is local to this function's scope.
+    $nativeUseErrorActionPreference = $PSNativeCommandUseErrorActionPreference
+    $PSNativeCommandUseErrorActionPreference = $false
+    try {
+        $reported = @(& $rscript.Source --vanilla -e $decoder $DatasetFilePath 2>&1)
+        $exitCode = $LASTEXITCODE
+    } finally {
+        $PSNativeCommandUseErrorActionPreference = $nativeUseErrorActionPreference
+    }
     # Merged stderr arrives as ErrorRecords; a warning R prints while succeeding must not
     # contaminate the count it printed on stdout.
     $printed = @($reported | Where-Object { $_ -isnot [System.Management.Automation.ErrorRecord] } | ForEach-Object { "$_" })
+    if ($exitCode -eq 5) {
+        throw "Reading the department count of '$(Split-Path -Leaf $DatasetFilePath)' needs R's jsonlite package, which the R on this machine does not carry."
+    }
     if ($exitCode -eq 3) {
         throw "The dataset file '$(Split-Path -Leaf $DatasetFilePath)' carries no n_departments field."
     }
@@ -114,7 +129,11 @@ function Get-NeoIPCReferenceDatasetDepartmentCount {
         throw "The dataset file '$(Split-Path -Leaf $DatasetFilePath)' carries no single whole-number n_departments field."
     }
     if ($exitCode -ne 0) {
-        throw "The dataset file '$(Split-Path -Leaf $DatasetFilePath)' is not a serialized reference dataset (R reported: $(($reported | Where-Object { "$_" } | Select-Object -First 1)))."
+        # Quote what R put on stderr — its error — not the first line of the output, which
+        # a startup warning, for instance, places before it.
+        $errorLines = @($reported | Where-Object { $_ -is [System.Management.Automation.ErrorRecord] } | ForEach-Object { "$_" } | Where-Object { $_ })
+        $cause = if ($errorLines) { $errorLines[0] } else { @($printed | Where-Object { $_ })[0] }
+        throw "The dataset file '$(Split-Path -Leaf $DatasetFilePath)' is not a serialized reference dataset (R reported: $cause)."
     }
     $text = ($printed -join '').Trim()
     $count = 0L
